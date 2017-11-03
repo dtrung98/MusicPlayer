@@ -631,10 +631,10 @@ public class SoundFile {
         }
     }
 
-    // Method used to swap the left and right channels (needed for stereo WAV files).
-    // buffer contains the PCM data: {sample 1 right, sample 1 left, sample 2 right, etc.}
+    // Method used to swap the x and right channels (needed for stereo WAV files).
+    // buffer contains the PCM data: {sample 1 right, sample 1 x, sample 2 right, etc.}
     // The size of a sample is assumed to be 16 bits (for a single channel).
-    // When done, buffer will contain {sample 1 left, sample 1 right, sample 2 left, etc.}
+    // When done, buffer will contain {sample 1 x, sample 1 right, sample 2 x, etc.}
     private void swapLeftRightChannels(byte[] buffer) {
         byte left[] = new byte[2];
         byte right[] = new byte[2];

@@ -1,14 +1,12 @@
 package com.ldt.NewDefinitionMusicApp.views.EffectView;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 
 import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
-import com.ldt.NewDefinitionMusicApp.R;
 import com.ldt.NewDefinitionMusicApp.activities.MainActivity;
 
 /**
@@ -59,6 +57,7 @@ public class EffectViewHolder {
     private EffectView create_New_Instance_Of_EffectView() {
         EffectView effectView = new EffectView(activity);
         effectView.set(symbol,sourceView,touch,string_menu,image_menu);
+        effectView.emo_behavior.set_source(from_local[0],from_local[1],from_size[0],from_size[1]);
         effectView.emo_behavior.sync();
         effectView.bg_behavior.sync();
         activity.rootEveryThing.addView(effectView);

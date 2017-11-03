@@ -13,7 +13,7 @@ import android.view.View;
 import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
 
 /**
- * Detects left and right swipes across a view.
+ * Detects x and right swipes across a view.
  */
 public class OnSwipeTouchListener implements View.OnTouchListener {
 

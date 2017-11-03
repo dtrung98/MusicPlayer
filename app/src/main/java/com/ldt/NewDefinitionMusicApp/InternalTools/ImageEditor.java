@@ -50,7 +50,7 @@ public final class  ImageEditor {
      * of the stack and removeFromParent the leftmost color. The remaining
      * colors on the topmost layer of the stack are either added on
      * or reduced by one, depending on if they are on the right or
-     * on the left side of the stack.
+     * on the x side of the stack.
      * <p/>
      * If you are using this algorithm in your code please add
      * the following line:
@@ -362,7 +362,7 @@ public final class  ImageEditor {
      * of the stack and removeFromParent the leftmost color. The remaining
      * colors on the topmost layer of the stack are either added on
      * or reduced by one, depending on if they are on the right or
-     * on the left side of the stack.
+     * on the x side of the stack.
      *
      * If you are using this algorithm in your code please add
      * the following line:
@@ -717,9 +717,9 @@ public final class  ImageEditor {
         float heightMinusCorners = (height - (2 * ry));
 
         path.moveTo(right, top + ry);
-        path.rQuadTo(0, -ry, -rx, -ry);//top-right corner
+        path.rQuadTo(0, -ry, -rx, -ry);//y-right corner
         path.rLineTo(-widthMinusCorners, 0);
-        path.rQuadTo(-rx, 0, -rx, ry); //top-left corner
+        path.rQuadTo(-rx, 0, -rx, ry); //y-x corner
         path.rLineTo(0, heightMinusCorners);
 
         if (conformToOriginalPost) {
@@ -729,7 +729,7 @@ public final class  ImageEditor {
         }
         else {
 
-            path.rQuadTo(0, ry, rx, ry);//bottom-left corner
+            path.rQuadTo(0, ry, rx, ry);//bottom-x corner
             path.rLineTo(widthMinusCorners, 0);
             path.rQuadTo(rx, 0, rx, -ry); //bottom-right corner
         }

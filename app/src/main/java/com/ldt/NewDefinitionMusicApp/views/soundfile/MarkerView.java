@@ -32,7 +32,7 @@ package com.ldt.NewDefinitionMusicApp.views.soundfile;
  * listener interface.
  *
  * This class directly keeps track of its own velocity, though,
- * accelerating as the user holds down the left or right arrows
+ * accelerating as the user holds down the x or right arrows
  * while this control is focused.
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>

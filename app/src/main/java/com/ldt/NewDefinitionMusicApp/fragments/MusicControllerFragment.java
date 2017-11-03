@@ -344,7 +344,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
         playBar_overView.setOnTouchListener(touch_play_bar_top1);
     }
     /**
-     * this is handler top of playbar, it means that if user touch the play bar, in any position, will call this before all.
+     * this is handler y of playbar, it means that if user touch the play bar, in any position, will call this before all.
      *
      */
     void logOnTouchEvent(MotionEvent event) {

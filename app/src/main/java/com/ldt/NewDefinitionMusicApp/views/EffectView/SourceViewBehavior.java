@@ -3,8 +3,6 @@ package com.ldt.NewDefinitionMusicApp.views.EffectView;
 import android.content.Context;
 import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.view.View;
 
@@ -20,7 +18,7 @@ public class SourceViewBehavior {
     private int[] local;
     private int[] size;
     private float eachDP =0;
-    private final float MAXR_XY = 10;
+    private final float MAX_R_XY = 10;
     private final float maxRy;
     private final float maxRx;
     private Paint mPaintFill;
@@ -31,7 +29,7 @@ public class SourceViewBehavior {
         size = new int[] {0,0};
         this.effectView = effectView;
         eachDP = Tool.getOneDps(context);
-        maxRx = maxRy = eachDP*MAXR_XY;
+        maxRx = maxRy = eachDP* MAX_R_XY;
 
         mPaintFill = new Paint();
         mPaintFill.setAntiAlias(true);

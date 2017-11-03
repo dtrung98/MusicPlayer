@@ -689,8 +689,8 @@ public class MainScreenFragment extends FragmentPlus {
         }
 
         /**
-         * Set different margins for the items inside the recyclerView: no top margin for the first row
-         * and no left margin for the first column.
+         * Set different margins for the items inside the recyclerView: no y margin for the first row
+         * and no x margin for the first column.
          */
         @Override
         public void getItemOffsets(Rect outRect, View view,

@@ -349,6 +349,7 @@ public class StickyScrollView extends ScrollView {
                 }
 
                 // only compute the left offset when we start sticking.
+                // only compute the x offset when we start sticking.
                 stickyViewLeftOffset = getLeftForViewRelativeOnlyChild(viewThatShouldStick);
                 startStickingView(viewThatShouldStick);
             }

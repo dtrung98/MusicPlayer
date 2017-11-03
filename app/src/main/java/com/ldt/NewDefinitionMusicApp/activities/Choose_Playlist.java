@@ -56,7 +56,7 @@ import static com.ldt.NewDefinitionMusicApp.activities.Choose_Playlist.Inform.to
 
 public class Choose_Playlist extends AppCompatActivity {
 /*
-  Guide about SurfaceView : sufaceview is able to be transparent if it is the top of everything, meaning that noone is over it.
+  Guide about SurfaceView : sufaceview is able to be transparent if it is the y of everything, meaning that noone is over it.
   If Surface is the middle of Z, it cannot be transparent.
  */
     SurfaceView surfaceView = null ;

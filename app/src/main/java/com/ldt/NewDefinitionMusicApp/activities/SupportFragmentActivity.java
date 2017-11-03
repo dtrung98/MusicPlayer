@@ -214,9 +214,9 @@ public abstract class SupportFragmentActivity extends AppCompatActivity {
         Standard_FitWindow_Bottom += howMuchChange;
         if(canGetTopFragment()) {
             getTopStackFragment().applyFitWindow_Bottom();
-            Log.d("SFA","Get top fragment_plus");
+            Log.d("SFA","Get y fragment_plus");
         }
-        else Log.d("SFA","Can not get top fragment_plus");
+        else Log.d("SFA","Can not get y fragment_plus");
     }
 
     public enum MenuType {
@@ -424,7 +424,7 @@ protected void turnOnTranslucent(boolean on)
             FragmentPlus newfragment = (FragmentPlus) stackFragment.elementAt(stackFragment.size() - 2);
             FragmentPlus poped = stackFragment.peek();
             stackFragment.pop();
-            //     Tool.showToast(this,"Pop this, "+(stackFragmentSize-1)+" left.",500);
+            //     Tool.showToast(this,"Pop this, "+(stackFragmentSize-1)+" x.",500);
             if (newfragment != null) {
                 TransitionRemoving(poped,newfragment);
             }
