@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+
+    android:id="@+id/rootView_f"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        android:id="@+id/lnr_z1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:weightSum="40"
+        android:layout_y="0dp"
+        android:layout_x="0dp"
+        android:background="@android:color/white">
+
+        <RelativeLayout
+            android:id="@+id/ontop_art_f"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20">
+            <ImageView
+                android:id="@+id/album_art_f"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_image"
+                android:background="#00ffffff"/>
+            <RelativeLayout
+                android:id="@+id/frame_over_avatar_f"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <ImageButton
+                android:id="@+id/image_down_player_f"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="7dp"
+                android:padding="6dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+
+                android:scaleType="centerInside"
+                android:src="@drawable/down_player" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:orientation="vertical"
+            android:background="#a0ffffff">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_weight="40"
+                    android:background="#30000000" />
+
+                <TextView
+                    android:id="@+id/track_f"
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#ED4A6B" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_weight="60"
+                    android:background="#15000000" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:text="2:55"
+                    android:textColor="#244"
+                    android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="12dp"
+                    android:text="-0:15"
+                    android:textColor="#244"
+                    android:textSize="15dp" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:weightSum="26">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="8"
+                    android:orientation="vertical"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:id="@+id/player_song_title_f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="2dp"
+                        android:layout_weight="3"
+                        android:gravity="bottom"
+                        android:text="TT - Twice"
+                        android:textColor="@android:color/black"
+                        android:textSize="18dp" />
+
+                    <TextView
+                        android:id="@+id/player_song_artist_f"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="TWICE - NhacCuaTui.Com"
+                        android:textColor="#244"
+                        android:textSize="13dp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="8">
+                    <ImageView
+                        android:id="@+id/love_f"
+                        android:layout_width="23dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/heart"
+                        android:layout_marginLeft="10dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                    <ImageView
+
+                        android:id="@+id/list_f"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/list"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+                    <LinearLayout
+                        android:layout_toRightOf="@id/love_f"
+                        android:layout_toLeftOf="@id/list_f"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <ImageButton
+                                android:id="@+id/player_pre_button_f"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:padding="6dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/pref"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+                            <ImageButton
+
+                                android:id="@+id/player_pause_play_button_f"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:padding="7dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/play"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+                            <ImageButton
+                                android:id="@+id/player_next_play_button_f"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:padding="7dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/next"
+                                android:background="?attr/selectableItemBackgroundBorderless"/>
+                        </FrameLayout>
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    />
+
+                <RelativeLayout
+
+                    android:layout_marginLeft="-5dp"
+                    android:layout_marginRight="-5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:background="@drawable/shape_ani_shadow_top"
+                    >
+                    <ImageView
+                        android:id="@+id/share_f"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@drawable/share_black"
+                        android:layout_marginLeft="10dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                    <ImageView
+                        android:id="@+id/more_f"
+
+                        android:layout_width="40dp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:paddingBottom="9dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/more"
+                        android:layout_alignParentRight="true" />
+                    <LinearLayout
+                        android:layout_toRightOf="@id/share_f"
+                        android:layout_toLeftOf="@id/more_f"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+                        <FrameLayout
+                            android:id="@+id/ex1_f"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"/>
+
+                        <ImageButton
+                            android:id="@+id/imageButton_f"
+                            android:layout_width="40dp"
+                            android:padding="10dp"
+                            android:layout_height="40dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:src="@drawable/shufflel"
+                            android:scaleType="centerInside"/>
+
+                        <FrameLayout
+                            android:id="@+id/ex2_f"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"/>
+                        <ImageButton
+                            android:layout_width="40dp"
+                            android:padding="10dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/repeat"
+                            android:scaleType="centerInside"
+                            android:background="?attr/selectableItemBackgroundBorderless"/>
+                        <FrameLayout
+                            android:id="@+id/ex3_f"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</AbsoluteLayout>

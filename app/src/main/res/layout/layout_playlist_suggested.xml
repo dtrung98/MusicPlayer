@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <TextView
+        android:tag="sticky|-hastransparancy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/playlist_showing_name"
+        android:textSize="@dimen/title_text_size"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/title_text_margin_left"
+        android:layout_marginLeft="@dimen/title_text_margin_left"
+        android:textStyle="bold"
+        android:text="@string/title_playlist_suggest"
+        android:textColor="@android:color/black"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginStart="@dimen/title_text_margin_left"
+        android:layout_marginLeft="@dimen/title_text_margin_left"
+        android:background="#aaaaaaaa"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:id="@+id/titleList"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/playlist_suggested_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hint_playlist_suggested"
+            android:textColor="#222"
+            android:textSize="12sp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp" />
+    </FrameLayout>
+<LinearLayout
+    android:weightSum="2"
+    android:orientation="horizontal"
+    android:id="@+id/albumList"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/album_box1"
+        android:layout_width="10dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <com.makeramen.roundedimageview.RoundedImageView
+            app:riv_corner_radius="0dp"
+            app:riv_border_width="1px"
+            app:riv_border_color="#aaa"
+            android:id="@+id/album1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/photo" />
+        <TextView
+            android:id="@+id/name_album1"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/album1"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="14dp" android:text="Wall-e Sound Track"/>
+        <TextView
+            android:id="@+id/artist_album1"
+            android:layout_below="@id/name_album1"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="#444"
+            android:layout_marginTop="2dp"
+            android:textSize="12dp"
+            android:text="Disney - Pixar"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/album_box2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <com.makeramen.roundedimageview.RoundedImageView
+            app:riv_corner_radius="0dp"
+            app:riv_border_width="1px"
+            app:riv_border_color="#aaa"
+            android:id="@+id/album2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/tfboys"/>
+
+        <TextView
+            android:id="@+id/name_album2"
+            android:layout_below="@id/album2"
+            android:layout_marginTop="5dp"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:text="Noi Nay Co Anh"/>
+        <TextView
+            android:id="@+id/artist_album2"
+            android:layout_below="@id/name_album2"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="#444"
+            android:layout_marginTop="2dp"
+            android:textSize="12dp"
+            android:text="Son Tung M_TP"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_toRightOf="@id/album_box1"
+        android:layout_toLeftOf="@id/album_box2"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <com.makeramen.roundedimageview.RoundedImageView
+            app:riv_corner_radius="0dp"
+            app:riv_border_width="1px"
+            app:riv_border_color="#aaa"
+            android:id="@+id/album3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="#EADFCB"
+            android:src="@drawable/default_image2"/>
+        <TextView
+            android:id="@+id/name_album3"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:textSize="14dp"
+            android:text="Cẩm nang tôi luyện tuổi .."
+            android:layout_below="@+id/album3"
+            android:layout_alignLeft="@+id/artist_album3"
+            android:layout_alignStart="@+id/artist_album3" />
+        <TextView
+            android:id="@+id/artist_album3"
+            android:layout_below="@id/name_album3"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:textColor="#444"
+            android:layout_marginTop="2dp"
+            android:textSize="12dp"
+            android:text="Thap Dai Kim Khuc"/>
+    </RelativeLayout>
+</LinearLayout>
+</LinearLayout>

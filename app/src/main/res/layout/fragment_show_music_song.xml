@@ -1,0 +1,42 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ldt.NewDefinitionMusicApp.fragments.ShowMusicSongs"
+    android:clickable="true"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/show_music_song_firstLinearLayout"
+        android:layout_marginTop="0dp">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="75dp">
+            <Button
+                android:id="@+id/show_music_song_button_click2Show"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:text="Click To Show Album"
+                android:layout_gravity="center"
+                android:background="@color/FlatGreen"/>
+        </FrameLayout>
+        <TextView
+            android:id="@+id/show_music_song_label_albumList"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:text="Hide This Fragment"
+            android:gravity="center|right"
+            android:paddingRight="10dp"
+            android:background="#ffffffee"/>
+        <ListView
+            android:id="@+id/show_music_song_listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</FrameLayout>

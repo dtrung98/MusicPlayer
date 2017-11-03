@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/music_controller_play_bar_frm"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <View
+            android:id="@+id/music_controller_PlayBar_TrackBar"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginRight="100dp"
+            android:background="#444"
+            android:layout_marginLeft="20dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginStart="20dp" />
+        <TextView
+            android:id="@+id/music_controller_playBar_nameOfSong"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:gravity="bottom"
+            android:lines="1"
+            android:text="TextView of Title"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:layout_marginStart="55dp" />
+        <TextView
+            android:id="@+id/music_controller_playBar_nameOfArtist"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginRight="105dp"
+            android:layout_marginTop="27dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="This line is the text of artist"
+            android:textColor="#888"
+            android:textSize="10sp" />
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp">
+            <com.ldt.NewDefinitionMusicApp.views.PlayPauseButton
+                android:id="@+id/play_pause_custom"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center" />
+            <View
+                android:id="@+id/play_pause_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+        <ImageView
+            android:id="@+id/music_controller_playBar_list"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="right"
+            android:padding="16dp"
+            android:src="@drawable/listblack"
+            android:background="@drawable/circle_background"
+            android:clickable="true"
+            android:focusable="true"/>
+    </FrameLayout>
+    <ImageView
+        android:id="@+id/music_controller_iconAvatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/heart" />
+</FrameLayout>
+

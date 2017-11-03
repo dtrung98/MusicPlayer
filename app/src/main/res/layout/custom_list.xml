@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="61dp"
+    android:background="@drawable/default_background"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+<RelativeLayout
+    android:id="@+id/containerOfImageSong"
+    android:layout_width="60dp"
+    android:layout_height="60dp">
+    <ImageView
+        android:id="@+id/imageSong"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside" />
+</RelativeLayout>
+
+    <LinearLayout
+   android:layout_toRightOf="@id/containerOfImageSong"
+        android:orientation="vertical"
+        android:weightSum="2"
+        android:layout_width="wrap_content"
+        android:layout_toLeftOf="@+id/moreLayout"
+        android:layout_height="60dp">
+        <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/title_song_list"
+            android:layout_toRightOf="@id/imageSong"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@android:color/black"
+            android:gravity="bottom"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="2dp"
+            android:textSize="18dp"
+            android:text="Knock"/>
+        <TextView
+            android:maxLines="1"
+            android:layout_marginRight="7dp"
+            android:ellipsize="end"
+            android:layout_toRightOf="@id/imageSong"
+            android:id="@+id/artist_song_list"
+            android:layout_width="match_parent"
+            android:gravity="top"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textSize="13dp"
+            android:textColor="#244"
+            android:text="TWICE - Nhac Cua Tui.Com"/>
+    </LinearLayout>
+<FrameLayout
+    android:layout_alignParentRight="true"
+    android:id="@+id/moreLayout"
+    android:layout_width="15dp"
+    android:layout_height="60dp">
+    <ImageView
+        android:id="@+id/more_inList"
+        android:layout_width="15dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/more"
+        android:scaleType="centerInside"/>
+</FrameLayout>
+
+</RelativeLayout>

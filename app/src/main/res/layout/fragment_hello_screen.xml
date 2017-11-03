@@ -1,0 +1,49 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ldt.NewDefinitionMusicApp.activities.SplashActivity"
+    android:clickable="true"
+    android:background="@android:color/white">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="@dimen/title_text_margin_left"
+        android:textStyle="bold"
+        android:textSize="@dimen/title_text_size"
+        android:textColor="@android:color/black"
+        android:text="Bubble Page"/>
+            <ImageView
+                android:id="@+id/helloScreen_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="100dp"
+                android:layout_gravity="center"
+                android:padding="20dp"
+                android:src="@drawable/splash_icon_mini" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="#FE7879"
+
+                android:textSize="@dimen/title_text_size"
+                android:textStyle="bold"
+                android:text="Music app player"
+                android:layout_marginBottom="20dp"/>
+            <TextView
+                android:layout_marginTop="20dp"
+                android:id="@+id/touchMeToContinue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#6C6C6C"
+                android:textSize="15sp"
+                android:padding="10dp"
+                android:text="Touch me to continue "
+                android:layout_gravity="bottom|center"
+                android:gravity="center"
+                android:background="#E0E0E0"
+                android:layout_marginBottom="100dp" />
+
+</FrameLayout>

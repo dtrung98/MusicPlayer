@@ -1,0 +1,99 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/splash_background</item>
+
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorPrimary">@color/FlatWhite</item>
+        <item name="colorAccent">#FF5676</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <!--item name="android:fontFamily">@font/hn</item-->
+        <!-- Status bar stuff. -->
+    </style>
+
+    <style name="FlatRedTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatRed</item>
+        <item name="colorPrimaryDark">@color/FlatRed</item>
+        <item name="colorAccent">@color/FlatRed</item>
+    </style>
+    <style name="Flat_OrangeTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatOrange</item>
+        <item name="colorPrimaryDark">@color/FlatOrange</item>
+        <item name="colorAccent">@color/FlatOrange</item>
+    </style>
+    <style name="Flat_YellowTheme" parent="Theme.AppCompat.NoActionBar">
+    <item name="colorPrimary">@color/FlatYellow</item>
+    <item name="colorPrimaryDark">@color/FlatYellow</item>
+        <item name="colorAccent">@color/FlatYellow</item>
+</style>
+    <style name="Flat_GreenTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatGreen</item>
+        <item name="colorPrimaryDark">@color/FlatGreen</item>
+        <item name="colorAccent">@color/FlatGreen</item>
+    </style>
+    <style name="Flat_TealBlueTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatTealBlue</item>
+        <item name="colorPrimaryDark">@color/FlatTealBlue</item>
+        <item name="colorAccent">@color/FlatTealBlue</item>
+    </style>
+    <style name="Flat_BlueTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatBlue</item>
+        <item name="colorPrimaryDark">@color/FlatBlue</item>
+        <item name="colorAccent">@color/FlatBlue</item>
+    </style>
+    <style name="Flat_PurpleTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatPurple</item>
+        <item name="colorPrimaryDark">@color/FlatPurple</item>
+        <item name="colorAccent">@color/FlatPurple</item>
+    </style>
+    <style name="Flat_PinkTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/FlatPink</item>
+        <item name="colorPrimaryDark">@color/FlatPink</item>
+        <item name="colorAccent">@color/FlatPink</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="SplashThemeX" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <!-- Splash Screen theme. -->
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <!--item name="android:windowLightStatusBar" tools:targetApi="m">true</item-->
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/FlatWhite</item>
+        <item name ="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
+    </style>
+
+    <style name="AudioFileInfoOverlayText">
+        <item name="android:paddingLeft">4px</item>
+        <item name="android:paddingBottom">4px</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="ToolbarBackground">
+        <item name="android:background">#FFF5F5F5</item>
+    </style>
+
+    <style name="HorizontalDividerTop">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">#666677</item>
+    </style>
+
+    <style name="HorizontalDividerBottom">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1px</item>
+        <item name="android:background">#000022</item>
+    </style>
+</resources>

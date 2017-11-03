@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="wf_waveform_color" format="color"/>
+
+    <declare-styleable name="WaveFormView">
+        <attr name="wf_waveform_color"/>
+        <attr name="wf_waveform_max_scale" format="float"/>
+
+        <attr name="wf_time_text_color" format="color"/>
+        <attr name="wf_time_text_size" format="dimension"/>
+
+        <attr name="wf_time_label_color" format="color"/>
+        <attr name="wf_time_label_height" format="dimension"/>
+        <attr name="wf_time_label_width" format="dimension"/>
+        <attr name="wf_time_label_min_space" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="WaveFormThumbView">
+        <attr name="wf_waveform_color"/>
+        <attr name="wf_waveform_highlight_color" format="color"/>
+
+    </declare-styleable>
+    <declare-styleable name="SupportDarkenFrameLayout">
+        <attr name="how_dark" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="BlurringView">
+        <attr name="blurRadius" format="integer"/>
+        <attr name="downsampleFactor" format="integer"/>
+        <attr name="overlayColor" format="color"/>
+    </declare-styleable>
+</resources>

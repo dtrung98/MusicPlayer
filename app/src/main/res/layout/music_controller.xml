@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ldt.NewDefinitionMusicApp.views.CustomSDFL4MusicController
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/music_controller_root_frm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@android:color/transparent"
+    tools:context="com.ldt.NewDefinitionMusicApp.fragments.MusicControllerFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--android:background="#ccffffff"-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <include
+            android:tag="linear layout contains center pad"
+            layout="@layout/music_controller_center"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include layout="@layout/music_controller_bar_n_avatar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="27"
+            android:orientation="vertical">
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="15"
+                android:visibility="invisible"/>
+            <FrameLayout
+                android:id="@+id/example_frame_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="12" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+
+    </FrameLayout>
+    </FrameLayout>
+        <View
+            android:id="@+id/navigation_color_control_music_controller"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#FBA633"
+            android:visibility="invisible"/>
+    </LinearLayout>
+</com.ldt.NewDefinitionMusicApp.views.CustomSDFL4MusicController>

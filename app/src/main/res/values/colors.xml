@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="BackwardColorHeavy">#B0000000</color>
+    <color name="BackwardColor">#A0000000</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name = "Gray">#22000000</color>
+    <color name="NearlyWhite">#44ffffff</color>
+    <color name="FlatRed">#FF3B30</color>
+    <color name="FlatGreen">#4CD964</color>
+    <color name="FlatOrange">#FF9500</color>
+    <color name="FlatYellow">#FFCC00</color>
+    <color name="FlatTealBlue">#5AC8FA</color>
+    <color name="FlatPurple">#5856D6</color>
+    <color name="FlatPink">#FF2D55</color>
+    <color name="FlatBlue">#007AFF</color>
+    <item name="yellow" type="color">#F7B500</item>
+    <item name="yellow_dark" type="color">#AC7E00</item>
+   <item name="FlatWhite" type="color">#F5F5F5</item>
+    <item name="SplashBackground" type ="color">#fff0f0f0</item>
+    <integer-array name="androidcolors">
+        <item>@color/yellow</item>
+        <item>@color/yellow_dark</item>
+    </integer-array>
+    <color name="waveform_selected">#FB5606</color>
+    <color name="waveform_unselected">#A7B2B9</color>
+    <color name="waveform_unselected_bkgnd_overlay">#A1725E</color>
+    <color name="selection_border">#ffffff</color>
+    <color name="playback_indicator">#ffff66</color>
+    <color name="grid_line">#6D6D6D</color>
+    <color name="timecode">#000000</color>
+    <color name="timecode_shadow">#aa000000</color>
+</resources>

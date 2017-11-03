@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="music_controller_withFrameLayout" type="id"/>
+    <item name="playlist_controller_withFrameLayout" type="id"/>
+    <item name = "show_music_songs_withFrameLayout" type = "id"/>
+    <item name = "id1_withFrameLayout" type = "id"/>
+    <item name = "id2_withFrameLayout" type = "id"/>
+    <item name = "id3_withFrameLayout" type = "id"/>
+    <item name = "id4_withFrameLayout" type = "id"/>
+    <item name = "id5_withFrameLayout" type = "id"/>
+    <item name = "id6_withFrameLayout" type = "id"/>
+    <item name = "id7_withFrameLayout" type = "id"/>
+    <item name = "id8_withFrameLayout" type = "id"/>
+    <item name = "id9_withFrameLayout" type = "id"/>
+    <item name = "id10_withFrameLayout" type = "id"/>
+    <item name = "id11_withFrameLayout" type = "id"/>
+    <item name = "id12_withFrameLayout" type = "id"/>
+    <item name = "id13_withFrameLayout" type = "id"/>
+    <item name = "id14_withFrameLayout" type = "id"/>
+    <item name = "id15_withFrameLayout" type = "id"/>
+    <item name="media_player_service" type ="id"/>
+
+</resources>

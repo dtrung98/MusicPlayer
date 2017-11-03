@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ldt.NewDefinitionMusicApp.views.RootScreen_FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:visibility="gone"
+    android:id="@+id/rootEveryThing"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context="com.ldt.NewDefinitionMusicApp.activities.MainActivity">
+    <!-- back_wall_containerswitch_page_containeriner chứa layout khung nền-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/back_wall_container"/>
+    <!-- container_of_containerswitch_page_containeriner cha của switch_page_containeriner :
+           fragment,control,status_bar,navigation_bar -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/container_of_container">
+        <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
+
+        <com.ldt.NewDefinitionMusicApp.views.roundClippingFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:id="@+id/fragment_switch_container" />
+        <!-- vì lý do android lolipop trở xuống không có icon màu đen cho status bar
+        cho nên cần một thanh translucent màu hơi đen ở background-->
+        <View
+            android:id="@+id/status_color_4Lollipop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#25000000"
+            android:visibility="gone"/>
+        <!--switch_page_containeriner này chứa 2 control là music, và playlist -->
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/control_container"/>
+
+        <View
+
+        android:id="@+id/navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_gravity="bottom"
+        android:background="#15000000"/>
+
+    </FrameLayout>
+</com.ldt.NewDefinitionMusicApp.views.RootScreen_FrameLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="140dp"
+    android:orientation="horizontal"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@drawable/default_background">
+    <ImageView
+    android:id="@+id/item_album_view_image"
+    android:layout_width="140dp"
+    android:layout_height="140dp"
+    android:layout_gravity="center"
+    android:scaleType="fitXY" />
+    <LinearLayout
+        android:paddingLeft="14dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:orientation="vertical"
+        android:paddingRight="14dp">
+
+        <TextView
+            android:id="@+id/item_album_view_title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="Best Of Boy Band Pop"
+            android:textColor="@android:color/black"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/item_album_view_aritst"
+            android:text="Apple Music Pop"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="top"
+            android:textColor="#444"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+    </LinearLayout>
+</LinearLayout>

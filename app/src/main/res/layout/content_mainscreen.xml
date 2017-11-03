@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ldt.NewDefinitionMusicApp.views.StickyScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/myScroll"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_below="@+id/title_bar"
+android:layout_alignParentStart="true"
+android:scrollbars="none"
+android:layout_alignParentLeft="true">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include layout="@layout/layout_playlist_suggested"/>
+    <include layout="@layout/random_big_title"/>
+    <include layout = "@layout/layout_playlist_showing"/>
+</LinearLayout>
+</com.ldt.NewDefinitionMusicApp.views.StickyScrollView>
