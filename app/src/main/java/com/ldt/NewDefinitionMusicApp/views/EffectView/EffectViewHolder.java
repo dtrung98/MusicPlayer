@@ -141,7 +141,7 @@ public class EffectViewHolder {
 
     public boolean run(View v, MotionEvent event) { // gọi khi đã chắc chắn là long press
         if (!isInLongPressed()) return false;
-        int result = effectView.handlerEvent(v, event);
+        int result = effectView.handlingEvent(v, event);
         if (result != -1) {
             // trả về kết quả
             whichCall.onReceivedResult(command,result);

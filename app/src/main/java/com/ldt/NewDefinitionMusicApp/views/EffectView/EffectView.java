@@ -1,8 +1,10 @@
 package com.ldt.NewDefinitionMusicApp.views.EffectView;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.RectF;
 
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -14,6 +16,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
+import com.ldt.NewDefinitionMusicApp.MediaData.FormatDefinition.C_PointF;
+import com.ldt.NewDefinitionMusicApp.MediaData.FormatDefinition.C_RectF;
+
+import org.jetbrains.annotations.Contract;
 
 
 /**
@@ -22,10 +28,12 @@ import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
 
 public class EffectView extends View {
 
-    public int handlerEvent(View v, MotionEvent event)
+    public int handlingEvent(View v, MotionEvent event)
     {
         if(event.getAction()!=MotionEvent.ACTION_UP) {
-            property.setTouch(event.getRawX(),event.getRawY());
+            property.touch_runtime[0] = event.getRawX();
+            property.touch_runtime[1] = event.getRawY();
+         //   property.setTouch(event.getRawX(),event.getRawY());
             emo_behavior.sync();
             bg_behavior.sync();
             invalidate();
@@ -62,16 +70,17 @@ public class EffectView extends View {
         init();
     }
 
-    String[] command;
     Property property = new Property();
     EmotionBehavior emo_behavior;
     BackgroundBehavior bg_behavior;
     SourceViewBehavior sour_view_behavior;
+
     private void init() {
         property.setDp(Tool.getOneDps(getContext()));
+
         bg_behavior = new BackgroundBehavior(this);
         emo_behavior = new EmotionBehavior(this);
-        sour_view_behavior = new SourceViewBehavior(getContext(),this);
+        sour_view_behavior = new SourceViewBehavior(this);
     }
 
     public void destroy() {
@@ -84,13 +93,12 @@ public class EffectView extends View {
         sour_view_behavior = null;
         bg_behavior = null;
     }
-    int[] resDrawable;
-    public void set(ImageView symbol,View sourceView, float[] pos_in_screen, String[] command, int[] resDrawable) {
+
+    public void set(ImageView symbol,View sourceView, float[] pos_in_screen, String[] menu_string, int[] menu_image) {
         emo_behavior.setIconView(symbol);
         sour_view_behavior.setSourceView(sourceView);
         property.setTouch(pos_in_screen[0], pos_in_screen[1]);
-        this.command = command;
-        this.resDrawable = resDrawable;
+        property.setMenu(menu_string,menu_image);
     }
    float getBackgroundAlphaPercent() {
         return bg_behavior.getBackgroundPc();
@@ -99,10 +107,11 @@ public class EffectView extends View {
 
         float width,height;
         float oneDp;
-        RectF rectView;
+        C_RectF rectView;
         float length_dp_50;
         float length_dp_75;
         float length_dp_100;
+
         void setDp(float oneDp) {
             this.oneDp = oneDp;
             length_dp_50 = oneDp*50;
@@ -110,23 +119,100 @@ public class EffectView extends View {
             length_dp_100 = oneDp*100;
         }
         Property() {
-            touchX = touchY = -50;
-
+            touchX = touchY = -1;
+            touch_runtime = new float[] {-1,-1};
+            oneDp = Tool.getOneDps(getContext());
+            menu_satellite_radius = 100*oneDp;
+            menu_item_width = 25*oneDp;
+            int[] s = Tool.getScreenSize(true);
+            width = s[0];
+            height= s[1];
+            rectView= new C_RectF(0,0,s[0],s[1]);
         }
         float touchX,touchY;
+        C_PointF touch;
         void setTouch(float touchX,float touchY) {
             this.touchX = touchX;
             this.touchY = touchY;
+            touch = new C_PointF(touchX,touchY);
+        }
+        final float menu_satellite_radius; //
+        final float menu_item_width;
+        float[] delta_width;
+        C_PointF[] delta_item_pos;
+        C_PointF[] item_pos;
+        float[] touch_runtime;
+        String[] menu_string;
+        int[] menu_image_id;
+        int menu_number = 0;
+        Bitmap[] menu_bitmap;
+
+        void setMenu(String[] menu_string,int[] menu_image_id) {
+            this.menu_string = menu_string;
+            this.menu_image_id = menu_image_id;
+            this.menu_number = menu_image_id.length;
+            delta_width = new float[menu_number];
+            menu_bitmap = new Bitmap[menu_number];
+            Resources resources = getResources();
+            for (int i = 0; i < menu_number;i++) {
+                delta_width[i] = menu_item_width;
+                menu_bitmap[i] = BitmapFactory.decodeResource(resources,menu_image_id[i]);
+            }
+            setItemPos();
+        }
+        void setItemPos() {
+            item_pos = new C_PointF[menu_number];
+            delta_item_pos = new C_PointF[menu_number];
+            // touchX, touchY
+            Boolean above = menuIsAboveOrBelow();
+            Boolean left = (touchX<width/2);
+            float measureDegree = getTotalDegree();
+            item_pos[0] = getFirstPoint(measureDegree,left,above);
+            float first_deg = touch.calculateDegree(item_pos[0]) - 90;
+            Log.d("EffectView","first_deg = "+first_deg);
         }
 
+        private C_PointF getFirstPoint(float measureDegree,boolean left,boolean above) {
+            float curDeg = measureDegree/2;
+            if(left) curDeg = -curDeg;
+            C_PointF measure =touch.getPointAround(menu_satellite_radius,curDeg);
+       //     Log.d("EffectView",width+"");
+      //      Log.d("EffectView","Before : ( "+((left) ? "left": "right")+", "+curDeg +" ) "+measure.x+" : "+measure.y);
+        //   if(true) return measure;
+
+            if(measure.x<length_dp_50||measure.x > width - length_dp_50) {
+                if (left)
+                    measure.x = length_dp_50;
+                else
+                    measure.x = width - length_dp_50;
+                float temp1 = (float) Math.sqrt(menu_satellite_radius * menu_satellite_radius - Math.pow(touchX - measure.x, 2));
+                measure.y = (above) ? touchY - temp1 : touchY + temp1;
+            } else if (!above) {
+                measure.y = 2*touchY - measure.y;
+            }
+        //    Log.d("EffectView","After : "+measure.x+" : "+measure.y);
+            return measure;
+        }
+
+        private final float eachDegree =40.0f;
+
+        private float getTotalDegree() {
+            return eachDegree*(menu_number-1);
+        }
+
+        private float getMinDistance() {
+            return menu_satellite_radius + menu_item_width/2 +100*oneDp;
+        }
+
+        @Contract(pure = true)
+        private boolean menuIsAboveOrBelow() {
+            return touchY>getMinDistance();
+        }
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        Log.d("EffectView","onSizeChanged()");
-        property.width = getMeasuredWidth();
-        property.height= getMeasuredHeight();
-        property.rectView= new RectF(0,0,property.width,property.height);
+
     }
 
     @Override

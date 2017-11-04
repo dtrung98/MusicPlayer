@@ -9,12 +9,11 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 
-import android.util.Log;
-
 import android.widget.ImageView;
 
 import com.ldt.NewDefinitionMusicApp.InternalTools.ImageEditor;
-import com.ldt.NewDefinitionMusicApp.InternalTools.Tool.C_RectF;
+import com.ldt.NewDefinitionMusicApp.MediaData.FormatDefinition.C_RectF;
+
 
 /**
  * Created by trung on 11/2/2017.
@@ -27,7 +26,6 @@ public class EmotionBehavior {
     ImageView iconView;
     private Bitmap icon_remix,icon_org;
     private float wish_width;
-    private PointF touchPos;
     private C_RectF from_rect;
     private boolean haveIcon = false;
     private EffectView.Property property;
@@ -39,8 +37,7 @@ public class EmotionBehavior {
     {
         this.effectView = effectView;
         property = effectView.property;
-        wish_width = property.length_dp_50/4;
-        touchPos = new PointF(0,0);
+        wish_width = property.length_dp_50/2;
         from_rect = new C_RectF(0,0,0,0);
         gradient_shadow_shader = new RadialGradient(0,0,property.length_dp_50/4, 0x10ffffff,0x50ffffff, Shader.TileMode.MIRROR);
         gradient_shadow_Paint = new Paint();
@@ -52,17 +49,44 @@ public class EmotionBehavior {
         solid_Paint.setColor(0xaaaaaaaa);
     }
     void sync() {
-            touchPos.set(property.touchX,property.touchY);
+
     }
-    public void set_source(float x,float y,float w,float h) {
+    void set_source(float x, float y, float w, float h) {
        from_rect.x = x;
        from_rect.y = y;
        from_rect.width =w;
        from_rect.height = h;
     }
     public void draw(Canvas canvas) {
-        Log.d("EffectViewHolder", touchPos.x+" | "+ touchPos.y);
         draw_symbol_icon(canvas,solid_Paint,gradient_shadow_Paint);
+        draw_menu_item(canvas,solid_Paint);
+        draw_touch_runtime(canvas,solid_Paint);
+    }
+    private void draw_menu_item(Canvas canvas, Paint solid_Paint) {
+        if(property.menu_number<=0) return;
+     //   for(int i=0;i<property.menu_number;i++)
+       //     canvas.drawBitmap(property.menu_bitmap[i],200*i,200*i,null);
+        canvas.save();
+        canvas.drawRect(property.length_dp_50,0,property.width- property.length_dp_50,property.height,solid_Paint);
+        canvas.translate(property.item_pos[0].x,property.item_pos[0].y);
+        draw_circle_stroke(canvas,solid_Paint,20*property.oneDp,0,0,6*property.oneDp,0x80000000);
+        canvas.restore();
+    }
+    private void draw_circle_stroke(Canvas canvas,Paint solid_Paint, float R,float x,float y,float _stroke,int _color) {
+        Paint.Style style = solid_Paint.getStyle();
+        float stroke = solid_Paint.getStrokeWidth();
+        int color = solid_Paint.getColor();
+        solid_Paint.setColor(_color);
+        solid_Paint.setStyle(Paint.Style.STROKE);
+        solid_Paint.setStrokeWidth(_stroke);
+        canvas.drawCircle(x,y,R,solid_Paint);
+        solid_Paint.setStrokeWidth(stroke);
+        solid_Paint.setStyle(style);
+        solid_Paint.setColor(color);
+    }
+    private void draw_touch_runtime(Canvas canvas, Paint solid_Paint) {
+        if(property.touch_runtime[0]==-1) return;
+        draw_circle_stroke(canvas,solid_Paint,20*property.oneDp,property.touch_runtime[0],property.touch_runtime[1],6*property.oneDp,0x70ffffff);
     }
     private void draw_symbol_icon(Canvas canvas,Paint solid_Paint_X,Paint gradient_shadow_Paint_X)
     {
@@ -70,7 +94,7 @@ public class EmotionBehavior {
         canvas.save();
         float pc = effectView.getBackgroundAlphaPercent();
         if(pc==1) {
-            canvas.translate(touchPos.x, touchPos.y);
+            canvas.translate(property.touchX, property.touchY);
             solid_Paint_X.setColor(Color.WHITE);
             solid_Paint_X.setStyle(Paint.Style.FILL);
             canvas.drawCircle(0, 0, property.length_dp_50 / 4, solid_Paint_X); // vẽ nền trắng
@@ -83,11 +107,16 @@ public class EmotionBehavior {
             canvas.drawCircle(0, 0, property.length_dp_50 / 4, solid_Paint_X); // áp
         }
         else {
+            float dis_x = property.touchX - from_rect.x-from_rect.width/2;
+            float dis_y = property.touchY - from_rect.y-from_rect.height/2;
 
-            float dis_x = touchPos.x - from_rect.x;
-            float dis_y = touchPos.y - from_rect.y;
-
+            float tyLe_w = wish_width/from_rect.width - 1;
+            float tyLe_h = wish_width/from_rect.height - 1;
+            float scale_x = 1 + tyLe_w*pc
+                    ,scale_y = 1 + tyLe_h*pc;
             canvas.translate(from_rect.x+pc*dis_x,from_rect.y+pc*dis_y);
+
+            canvas.scale(scale_x,scale_y,from_rect.width/2,from_rect.height/2);
             iconView.draw(canvas);
         }
         canvas.restore();

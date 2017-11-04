@@ -371,9 +371,11 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
     private EffectViewHolder effectViewHolder;
     private View.OnTouchListener touch_play_bar_top1 = new View.OnTouchListener()
     {
+
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (v.getId() == R.id.music_controller_play_bar_frm) {
+            if (v.getId() == R.id.music_controller_play_bar_frm||true) {
+                v.performClick();
                 if (effectViewHolder == null) effectViewHolder = getMainActivity().effectViewHolder;
                 logOnTouchEvent(event);
 

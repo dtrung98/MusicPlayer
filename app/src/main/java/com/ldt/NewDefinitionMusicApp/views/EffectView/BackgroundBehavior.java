@@ -37,10 +37,10 @@ public class BackgroundBehavior {
     private int background_alpha=0;
     private float background_pc = 0;
     boolean prepare2End = false;
-    private void set_background_alpha(int bA)
+    private void set_background_alpha(float bA)
     {
-        Log.d("EffectView",""+background_alpha+" >> " +bA);
-        background_alpha = bA;
+
+        background_alpha = (int) bA;
     }
     void drawBackgroundAlpha(Canvas canvas) {
         int BACKGROUND_ALPHA_MAX = 0xee;
@@ -57,10 +57,10 @@ public class BackgroundBehavior {
             else { // ket thuc
                 va = ValueAnimator.ofFloat(1,0);
             }
-            va.setDuration(250);
+            va.setDuration(300);
             va.addUpdateListener(animation -> {
                 background_pc = (float)animation.getAnimatedValue();
-                set_background_alpha((int)background_pc*BACKGROUND_ALPHA_MAX);
+                set_background_alpha(background_pc*BACKGROUND_ALPHA_MAX);
                 invalidate();
             });
             va.addListener(new Animator.AnimatorListener() {
