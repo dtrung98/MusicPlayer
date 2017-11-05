@@ -39,7 +39,7 @@ public class SourceViewBehavior {
         mPaintFill.setMaskFilter(bmf);
         mPaintStroke = new Paint();
         mPaintStroke.setAntiAlias(true);
-        mPaintStroke.setColor(0xffaaaaaa);
+        mPaintStroke.setColor(0xff444444);
         mPaintStroke.setStyle(Paint.Style.STROKE);
         mPaintStroke.setStrokeWidth(1);
 
@@ -59,7 +59,7 @@ public class SourceViewBehavior {
         //int color = mPaintFill.getColor();
        // mPaintFill.setColor(0xffdddddd);
        // canvas.drawRect(0,0,size[0],size[1],mPaintFill);
-        canvas.scale(1-0.09f*pc,1-0.09f*pc,size[0]/2,size[1]/2);
+        canvas.scale(1-0.06f*pc,1-0.06f*pc,size[0]/2,size[1]/2);
        // mPaintFill.setColor(color);
   //     canvas.drawPath(ImageEditor.RoundedRect(0,0,size[0],size[1],maxRx,maxRy,false), mPaintFill);
         canvas.drawPath(ImageEditor.RoundedRect(0,0,size[0],size[1],maxRx,maxRy,false),mPaintStroke);

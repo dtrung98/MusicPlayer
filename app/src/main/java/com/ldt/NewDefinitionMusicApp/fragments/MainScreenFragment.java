@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.support.annotation.IntRange;
+import android.view.MotionEvent;
 import android.view.animation.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,6 +49,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ldt.NewDefinitionMusicApp.InternalTools.ImageEditor;
 import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
@@ -68,6 +70,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Timer;
 import com.ldt.NewDefinitionMusicApp.MediaData.FormatDefinition.Album;
+import com.ldt.NewDefinitionMusicApp.views.EffectView.EffectViewHolder;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -711,6 +714,51 @@ public class MainScreenFragment extends FragmentPlus {
         OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                                                @Override
+                                                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                                                    MusicControllerFragment.logOnTouchEvent("recyclerView (onIntercept.... )",e);
+                                                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                                                    if(recyclerView.getChildLayoutPosition(child)!=-1) {
+                                                        getMainActivity().effectViewHolder.detectLongPress(effectViewListener,"",child,e);
+                                                        return true;
+                                                    }
+                                                    return false;
+                                                }
+
+                                                @Override
+                                                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+                                                    MusicControllerFragment.logOnTouchEvent("recyclerView ( onTouchEvent )",e);
+                                                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                                                    getMainActivity().effectViewHolder.detectLongPress(effectViewListener,"",child,e);
+                                                    boolean d = getMainActivity().effectViewHolder.run(child,e)|| normal(child,e);
+
+                                                }
+
+                                                @Override
+                                                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+                                                    Log.d("recyclerView","onRequestDisallowInterceptTouchEvent");
+                                                }
+                                                public boolean normal(View v,MotionEvent e) {
+                                                    // do whatever
+                                                  if(true)  return true;
+                                                    int position = recyclerView.getChildLayoutPosition(v);
+                                                    if(position==-1) return false;
+                                                    ex_service_intent = new Intent(getActivity(), MediaService.class);
+                                                    ex_service_intent.putExtra("DanhSachPhat_Data", getData(DanhSachPhat));
+                                                    ex_service_intent.putExtra("NowPlaying", position);
+                                                    //   OverScrollDecoratorHelper.setUpOverScroll(Song_list);
+
+                                                    //     getActivity().startService(ex_service_intent);
+                                                    NowPlaying_int = position;
+                                                    ChangeBackground(NowPlaying_int);
+                                                    ((MainActivity) getActivity()).Control_Music_Song_Player(DanhSachPhat, NowPlaying_int);
+                                                    ((MainActivity) getActivity()).Init_UpDown_musicController();
+                                                    ((MainActivity)getActivity()).control_music_controller_up();
+                                                    return true;
+                                                }
+                                            });
+/*
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -734,10 +782,31 @@ public class MainScreenFragment extends FragmentPlus {
                         // do whatever
                     }
                 }));
-
+*/
     }
+    String[] long_press_menu_random_string = new String[] {"Play","Add","More"};
+    int[] long_press_menu_random_image_id = new int[] {R.drawable.play,R.drawable.back,R.drawable.more_black};
+    public EffectViewHolder.EffectViewListener effectViewListener = new EffectViewHolder.EffectViewListener() {
+        @Override
+        public ImageView getImageView(String command) {
+            return null;
+        }
 
+        @Override
+        public String[] getStringCommand(String command) {
+            return long_press_menu_random_string;
+        }
 
+        @Override
+        public int[] getImageResources(String command) {
+            return long_press_menu_random_image_id;
+        }
+
+        @Override
+        public void onReceivedResult(String command, int result) {
+            Tool.showToast(getActivity(),getStringCommand(command)[result],500);
+        }
+    };
     private void setAlbumArrayList_ListView() {
 
         playlist_BigList.setAdapter(new album_view_adapter());

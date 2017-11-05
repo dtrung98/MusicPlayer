@@ -26,7 +26,7 @@ public class EffectViewHolder {
     public interface EffectViewListener {
         ImageView getImageView(String command);
         String[] getStringCommand(String command);
-        int[] getImageResourses(String command);
+        int[] getImageResources(String command);
         void onReceivedResult(String command,int result);
     }
     private EffectViewListener whichCall;
@@ -81,11 +81,13 @@ public class EffectViewHolder {
             touch[1] = event.getRawY();
 
             this.symbol =whichCall.getImageView(command);
-            symbol.getLocationOnScreen(from_local);
-            from_size[0] =  symbol.getMeasuredWidth();
-            from_size[1] = symbol.getMeasuredHeight();
+            if(symbol!=null) {
+                symbol.getLocationOnScreen(from_local);
+                from_size[0] = symbol.getMeasuredWidth();
+                from_size[1] = symbol.getMeasuredHeight();
+            }
             this.string_menu = whichCall.getStringCommand(command);
-            this.image_menu = whichCall.getImageResourses(command);
+            this.image_menu = whichCall.getImageResources(command);
             status =Status.NOPE;
             this.event = null;
     }
@@ -129,7 +131,7 @@ public class EffectViewHolder {
         public void run() {
            if(isTheFirstTime()) setTheFirstTime(event);
             status = Status.IN_LONG_PRESSED;
-            symbol.setVisibility(View.INVISIBLE);
+           if(symbol!=null) symbol.setVisibility(View.INVISIBLE);
             if (effectView == null)
                 effectView = create_New_Instance_Of_EffectView();
         }

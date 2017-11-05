@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlurMaskFilter;
 import android.graphics.Canvas;
 
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -85,7 +88,6 @@ public class EffectView extends View {
 
     public void destroy() {
         removeFromParent();
-        emo_behavior.iconView.setVisibility(VISIBLE);
         emo_behavior.destroy();
         sour_view_behavior.destroy();
         bg_behavior.destroy();
@@ -123,11 +125,17 @@ public class EffectView extends View {
             touch_runtime = new float[] {-1,-1};
             oneDp = Tool.getOneDps(getContext());
             menu_satellite_radius = 100*oneDp;
-            menu_item_width = 25*oneDp;
+            menu_item_width = 70*oneDp;
             int[] s = Tool.getScreenSize(true);
             width = s[0];
             height= s[1];
             rectView= new C_RectF(0,0,s[0],s[1]);
+            mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            solidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            mShadowPaint.setColor(0x80777777);
+            mShadowPaint.setStyle(Paint.Style.FILL);
+
+            mShadowPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
         }
         float touchX,touchY;
         C_PointF touch;
@@ -145,31 +153,66 @@ public class EffectView extends View {
         String[] menu_string;
         int[] menu_image_id;
         int menu_number = 0;
-        Bitmap[] menu_bitmap;
+        Bitmap menu_item_background;
+        Bitmap[] menu_item_bitmap;
 
+        Paint mShadowPaint ,solidPaint ;
+        float mShadowDepth = 5;
+        static final int BLUR_RADIUS = 5;
         void setMenu(String[] menu_string,int[] menu_image_id) {
             this.menu_string = menu_string;
             this.menu_image_id = menu_image_id;
             this.menu_number = menu_image_id.length;
             delta_width = new float[menu_number];
-            menu_bitmap = new Bitmap[menu_number];
+            menu_item_bitmap = new Bitmap[menu_number];
             Resources resources = getResources();
+            menu_item_background = getMenu_item_background();
             for (int i = 0; i < menu_number;i++) {
                 delta_width[i] = menu_item_width;
-                menu_bitmap[i] = BitmapFactory.decodeResource(resources,menu_image_id[i]);
+                menu_item_bitmap[i] = BitmapFactory.decodeResource(resources,menu_image_id[i]);
             }
             setItemPos();
         }
+        public Bitmap getMenu_item_background() {
+            Bitmap bitmap = Bitmap.createBitmap((int)menu_item_width,(int)menu_item_width, Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(bitmap);
+
+            solidPaint.setColor(Color.WHITE);
+            solidPaint.setStyle(Paint.Style.FILL);
+
+            c.translate(BLUR_RADIUS, BLUR_RADIUS);
+            //     c.drawRoundRect(sShadowRectF, sShadowRectF.width() / 40,
+//                sShadowRectF.height() / 40, mShadowPaint);
+            float miw_2 = menu_item_width/2;
+            c.drawCircle(miw_2,miw_2,miw_2-20,mShadowPaint);
+            c.drawCircle(miw_2,miw_2-5,miw_2-20,solidPaint);
+            return bitmap;
+        }
+        public boolean  above,left;
         void setItemPos() {
             item_pos = new C_PointF[menu_number];
             delta_item_pos = new C_PointF[menu_number];
             // touchX, touchY
-            Boolean above = menuIsAboveOrBelow();
-            Boolean left = (touchX<width/2);
+            above = menuIsAboveOrBelow();
+            left = (touchX<width/2);
             float measureDegree = getTotalDegree();
             item_pos[0] = getFirstPoint(measureDegree,left,above);
-            float first_deg = touch.calculateDegree(item_pos[0]) - 90;
+            float first_deg = touch.calculateDegree(item_pos[0]);
             Log.d("EffectView","first_deg = "+first_deg);
+            setItemPos(above,left,first_deg);
+        }
+        private void setItemPos(boolean above,boolean left,float first_deg) {
+            if      ((above&&!left)
+                    ||   // căn ngựoc chiều kim đồng hồ
+                    (!above&&left))
+            {
+                for(int i=1;i<menu_number;i++)
+                    item_pos[i] = touch.getPointAround(menu_satellite_radius,first_deg- i*eachDegree);
+            }
+            else { // căn xuoi chiều kim đồng
+                for(int i=1;i<menu_number;i++)
+                    item_pos[i] = touch.getPointAround(menu_satellite_radius,first_deg+ i*eachDegree);
+            }
         }
 
         private C_PointF getFirstPoint(float measureDegree,boolean left,boolean above) {
@@ -201,7 +244,7 @@ public class EffectView extends View {
         }
 
         private float getMinDistance() {
-            return menu_satellite_radius + menu_item_width/2 +100*oneDp;
+            return menu_satellite_radius + menu_item_width/2 +length_dp_50;
         }
 
         @Contract(pure = true)

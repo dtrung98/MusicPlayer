@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +12,8 @@ import android.widget.ImageView;
 
 import com.ldt.NewDefinitionMusicApp.InternalTools.ImageEditor;
 import com.ldt.NewDefinitionMusicApp.MediaData.FormatDefinition.C_RectF;
+
+import static android.view.View.VISIBLE;
 
 
 /**
@@ -63,14 +64,54 @@ public class EmotionBehavior {
         draw_touch_runtime(canvas,solid_Paint);
     }
     private void draw_menu_item(Canvas canvas, Paint solid_Paint) {
-        if(property.menu_number<=0) return;
-     //   for(int i=0;i<property.menu_number;i++)
-       //     canvas.drawBitmap(property.menu_bitmap[i],200*i,200*i,null);
+        float pc = effectView.getBackgroundAlphaPercent();
+        if (property.menu_number <= 0||pc<=0) return;
         canvas.save();
-        canvas.drawRect(property.length_dp_50,0,property.width- property.length_dp_50,property.height,solid_Paint);
-        canvas.translate(property.item_pos[0].x,property.item_pos[0].y);
-        draw_circle_stroke(canvas,solid_Paint,20*property.oneDp,0,0,6*property.oneDp,0x80000000);
+
+        //  Paint.Style style = solid_Paint.getStyle();
+        // solid_Paint.setStyle(Paint.Style.STROKE);
+        // canvas.drawRect(property.length_dp_50,0,property.width- property.length_dp_50,property.height,solid_Paint);
+        canvas.translate(property.touchX, property.touchY);
+        canvas.scale(pc,pc);
+        int alpha  = solid_Paint.getAlpha();
+        float alpha_after = (pc>1) ? 255 : pc*255;
+        solid_Paint.setAlpha((int) alpha_after);
+        for (int i = 0; i < property.menu_number; i++) {
+            float cur_x = property.item_pos[i].x - property.touchX;
+            float cur_y = property.item_pos[i].y - property.touchY;
+
+            canvas.drawBitmap(property.menu_item_background,(cur_x-property.menu_item_width/2)*pc,(cur_y-property.menu_item_width/2)*pc,solid_Paint);
+            //     draw_circle_fill_n_stroke(canvas, solid_Paint,property.oneDp, 20 * property.oneDp, cur_x*pc, cur_y*pc,  ((int)(255*alpha))<<24|0x00ffffff,((int)(255*alpha))<<24|0x00777777);
+        }
+        solid_Paint.setAlpha(alpha);
         canvas.restore();
+
+    }
+    private void draw_circle_fill_n_stroke(Canvas canvas, Paint solid_Paint,float _stroke, float R, float x, float y, int _fillColor,int _strokeColor) {
+        Paint.Style style = solid_Paint.getStyle();
+        float stroke = solid_Paint.getStrokeWidth();
+        int color = solid_Paint.getColor();
+        solid_Paint.setColor(_fillColor);
+        solid_Paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(x,y,R,solid_Paint);
+        solid_Paint.setColor(_strokeColor);
+        solid_Paint.setStyle(Paint.Style.STROKE);
+        solid_Paint.setStrokeWidth(_stroke);
+        canvas.drawCircle(x,y,R,solid_Paint);
+        solid_Paint.setStrokeWidth(stroke);
+        solid_Paint.setStyle(style);
+        solid_Paint.setColor(color);
+    }
+    private void draw_circle_fill(Canvas canvas, Paint solid_Paint, float R, float x, float y, int _color) {
+        Paint.Style style = solid_Paint.getStyle();
+        float stroke = solid_Paint.getStrokeWidth();
+        int color = solid_Paint.getColor();
+        solid_Paint.setColor(_color);
+        solid_Paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(x,y,R,solid_Paint);
+        solid_Paint.setStrokeWidth(stroke);
+        solid_Paint.setStyle(style);
+        solid_Paint.setColor(color);
     }
     private void draw_circle_stroke(Canvas canvas,Paint solid_Paint, float R,float x,float y,float _stroke,int _color) {
         Paint.Style style = solid_Paint.getStyle();
@@ -123,6 +164,7 @@ public class EmotionBehavior {
     }
     void setIconView(ImageView iconView)
     {
+        if(iconView==null) {haveIcon = false; return;}
         this.iconView = iconView;
 
         icon_org = ((BitmapDrawable)iconView.getDrawable()).getBitmap();
@@ -134,6 +176,7 @@ public class EmotionBehavior {
     }
 
     void destroy() {
+        if(haveIcon)iconView.setVisibility(VISIBLE);
         gradient_shadow_shader = null;
         gradient_shadow_Paint = null;
         solid_Paint= null;

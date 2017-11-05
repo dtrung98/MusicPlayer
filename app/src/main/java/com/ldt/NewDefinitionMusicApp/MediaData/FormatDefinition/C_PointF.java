@@ -21,7 +21,11 @@ public class C_PointF extends PointF {
     }
 
     public float calculateDegree(C_PointF point) {
-       return (float) getAngle(point);
+       float angle = (float) getAngle(point);
+       angle += 90;
+       if(angle>360) angle%=360;
+       if(angle > 180) angle =- (360 - angle);
+       return angle;
     }
     /**
      * Fetches angle relative to screen centre point
@@ -33,7 +37,7 @@ public class C_PointF extends PointF {
     private double getAngle(C_PointF screenPoint) {
         double dx = screenPoint.x - x;
         // Minus to correct for coord re-mapping
-        double dy = -(screenPoint.y + y);
+        double dy = -(screenPoint.y - y);
 
         double inRads = Math.atan2(dy, dx);
 

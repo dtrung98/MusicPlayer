@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.ldt.NewDefinitionMusicApp.InternalTools.Animation;
+
 /**
  * Created by trung on 11/2/2017.
  */
@@ -57,7 +59,8 @@ public class BackgroundBehavior {
             else { // ket thuc
                 va = ValueAnimator.ofFloat(1,0);
             }
-            va.setDuration(300);
+            va.setInterpolator(Animation.getInterpolator(4));
+            va.setDuration(450);
             va.addUpdateListener(animation -> {
                 background_pc = (float)animation.getAnimatedValue();
                 set_background_alpha(background_pc*BACKGROUND_ALPHA_MAX);

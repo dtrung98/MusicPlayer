@@ -347,7 +347,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
      * this is handler y of playbar, it means that if user touch the play bar, in any position, will call this before all.
      *
      */
-    void logOnTouchEvent(MotionEvent event) {
+   public static void logOnTouchEvent(String mark,MotionEvent event) {
         String log;
         switch (event.getAction())
         {
@@ -362,7 +362,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
             case MotionEvent.ACTION_CANCEL: log="ACTION_CANCEL";break;
             default: log= "OTHER";
         }
-        Log.d("onTouchEvent",log);
+        Log.d(mark,log);
 
     }
    final String[] menu =  new String[]{"More", "Slide Up", "Close"};
@@ -377,7 +377,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
             if (v.getId() == R.id.music_controller_play_bar_frm||true) {
                 v.performClick();
                 if (effectViewHolder == null) effectViewHolder = getMainActivity().effectViewHolder;
-                logOnTouchEvent(event);
+                logOnTouchEvent("MSF",event);
 
                 effectViewHolder.detectLongPress(MusicControllerFragment.this, "",v,event);
 
@@ -576,7 +576,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
 
     @Override
     public ImageView getImageView(String command) {
-        return iconAvatar;
+        return null;
     }
 
     @Override
@@ -585,7 +585,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
     }
 
     @Override
-    public int[] getImageResourses(String command) {
+    public int[] getImageResources(String command) {
         return image_menu;
     }
 
