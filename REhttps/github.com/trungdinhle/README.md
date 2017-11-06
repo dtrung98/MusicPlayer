@@ -1,4 +1,11 @@
-# RD Music Player
+# RD Music Player - Redefined Music Player
+This is a  music player which has a pretty UI&UX design.
+## Installing
+The app's now available in Google Play Store, download and install apk file from here.
+```
+http://play.google.com/something
+```
+### Demo
 </br>
 <div align="center">
    <table align="center" border="0" width="720">
@@ -26,4 +33,18 @@ src="https://user-images.githubusercontent.com/33343210/32425024-caf45124-c2e2-1
 </table>
   </div>
 </br>
+## Authors
+
+* **Le Dinh Trung (ldt)** - *Initial work* - [trungdinhle](https://github.com/trungdinhle)
+
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone who's code was used
+* Inspiration
+* etc
 
