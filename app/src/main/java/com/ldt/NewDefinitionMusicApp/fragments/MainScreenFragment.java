@@ -714,6 +714,7 @@ public class MainScreenFragment extends FragmentPlus {
         OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(recyclerView);
+        /*
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                                                 @Override
                                                 public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
@@ -758,7 +759,8 @@ public class MainScreenFragment extends FragmentPlus {
                                                     return true;
                                                 }
                                             });
-/*
+        */
+///*
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -782,7 +784,7 @@ public class MainScreenFragment extends FragmentPlus {
                         // do whatever
                     }
                 }));
-*/
+//*/
     }
     String[] long_press_menu_random_string = new String[] {"Play","Add","More"};
     int[] long_press_menu_random_image_id = new int[] {R.drawable.play,R.drawable.back,R.drawable.more_black};

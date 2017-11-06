@@ -366,7 +366,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
 
     }
    final String[] menu =  new String[]{"More", "Slide Up", "Close"};
-    final int[] image_menu = new int[] {R.drawable.pin_black,R.drawable.up_black,R.drawable.more_black};
+    final int[] image_menu = new int[] {R.drawable.exit_controller,R.drawable.repeat,R.drawable.more_black};
 
     private EffectViewHolder effectViewHolder;
     private View.OnTouchListener touch_play_bar_top1 = new View.OnTouchListener()

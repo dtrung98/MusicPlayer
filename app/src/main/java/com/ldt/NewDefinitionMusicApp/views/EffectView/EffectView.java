@@ -158,7 +158,7 @@ public class EffectView extends View {
 
         Paint mShadowPaint ,solidPaint ;
         float mShadowDepth = 5;
-        static final int BLUR_RADIUS = 5;
+        float BLUR_RADIUS = 5;
         void setMenu(String[] menu_string,int[] menu_image_id) {
             this.menu_string = menu_string;
             this.menu_image_id = menu_image_id;
@@ -176,16 +176,16 @@ public class EffectView extends View {
         public Bitmap getMenu_item_background() {
             Bitmap bitmap = Bitmap.createBitmap((int)menu_item_width,(int)menu_item_width, Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(bitmap);
-
+           // c.drawColor(0xff5CD315);
             solidPaint.setColor(Color.WHITE);
             solidPaint.setStyle(Paint.Style.FILL);
 
-            c.translate(BLUR_RADIUS, BLUR_RADIUS);
+           // c.translate(BLUR_RADIUS, BLUR_RADIUS);
             //     c.drawRoundRect(sShadowRectF, sShadowRectF.width() / 40,
 //                sShadowRectF.height() / 40, mShadowPaint);
             float miw_2 = menu_item_width/2;
-            c.drawCircle(miw_2,miw_2,miw_2-20,mShadowPaint);
-            c.drawCircle(miw_2,miw_2-5,miw_2-20,solidPaint);
+            c.drawCircle(miw_2-1,miw_2+3,miw_2-20,mShadowPaint);
+            c.drawCircle(miw_2-1,miw_2,miw_2-20,solidPaint);
             return bitmap;
         }
         public boolean  above,left;

@@ -62,8 +62,11 @@ public class SourceViewBehavior {
         canvas.scale(1-0.06f*pc,1-0.06f*pc,size[0]/2,size[1]/2);
        // mPaintFill.setColor(color);
   //     canvas.drawPath(ImageEditor.RoundedRect(0,0,size[0],size[1],maxRx,maxRy,false), mPaintFill);
-        canvas.drawPath(ImageEditor.RoundedRect(0,0,size[0],size[1],maxRx,maxRy,false),mPaintStroke);
+        int alpha = mPaintStroke.getAlpha();
+        mPaintStroke.setAlpha(50+(int)pc*205);
+        canvas.drawPath(ImageEditor.RoundedRect(0,0,size[0],size[1],maxRx*pc,maxRy*pc,false),mPaintStroke);
         sourceView.draw(canvas);
+        mPaintStroke.setAlpha(alpha);
         canvas.restore();
     }
     void destroy() {

@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 
@@ -76,13 +78,30 @@ public class EmotionBehavior {
         int alpha  = solid_Paint.getAlpha();
         float alpha_after = (pc>1) ? 255 : pc*255;
         solid_Paint.setAlpha((int) alpha_after);
+       double padding = 0.5f/Math.sqrt(2);
         for (int i = 0; i < property.menu_number; i++) {
-            float cur_x = property.item_pos[i].x - property.touchX;
-            float cur_y = property.item_pos[i].y - property.touchY;
+            float centerX = property.item_pos[i].x - property.touchX;
+            float centerY = property.item_pos[i].y - property.touchY;
+            float cur_x = centerX*pc - property.menu_item_width/2 ;
+            float cur_y = centerY*pc - property.menu_item_width/2;
 
-            canvas.drawBitmap(property.menu_item_background,(cur_x-property.menu_item_width/2)*pc,(cur_y-property.menu_item_width/2)*pc,solid_Paint);
-            //     draw_circle_fill_n_stroke(canvas, solid_Paint,property.oneDp, 20 * property.oneDp, cur_x*pc, cur_y*pc,  ((int)(255*alpha))<<24|0x00ffffff,((int)(255*alpha))<<24|0x00777777);
-        }
+            canvas.drawBitmap(property.menu_item_background,cur_x,cur_y,solid_Paint);
+            float _distance = (float) (property.menu_item_width*padding/2);
+            float des_l = centerX*pc- _distance,
+                    des_t =centerY*pc - _distance,
+                    des_r = des_l + 2*_distance,
+                     des_b =des_t + 2*_distance;
+          //  canvas.drawRect(des_l,des_t,des_r,des_b,solid_Paint);
+            canvas.drawBitmap(
+                    property.menu_item_bitmap[i],
+                    new Rect(0,0,property.menu_item_bitmap[i].getWidth(),property.menu_item_bitmap[i].getHeight()),
+                    new Rect(
+                            (int)  des_l
+                            ,(int) des_t
+                            ,(int) des_r
+                            ,(int) des_b)
+                    ,solid_Paint);
+            }
         solid_Paint.setAlpha(alpha);
         canvas.restore();
 
