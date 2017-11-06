@@ -38,6 +38,7 @@ src="https://user-images.githubusercontent.com/33343210/32425024-caf45124-c2e2-1
 </table>
   </div>
 </br>
+
 ## Authors
 
 * **Le Dinh Trung (ldt)** - *Initial work* - [trungdinhle](https://github.com/trungdinhle)
