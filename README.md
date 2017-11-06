@@ -1,16 +1,16 @@
 # RD Music Player - Redefined Music Player
 This is a  music player which has a pretty UI&UX design
-<tr>
-   <td> Live Splashscreen</td>
-   <td> One activity, all fragments, amazing animation</td>
-   <td> Play control's able to open anywhere</td>
-   <td> long pressed shorcut</td>
-## Installing
+## Features
+   * Live Splashscreen
+   * One activity, all fragments, amazing animation
+   * Play control's able to open anywhere
+   * long pressed shorcut
+### Installing
 The app's now available in Google Play Store, download and install apk file from here. It's compatible with API Level 16 (Android 4.1) devices or higher.
 ```
 http://play.google.com/something
 ```
-### Screenshots
+## Screenshots
 </br>
 <div align="center">
    <table align="center" border="0" width="720">
@@ -43,11 +43,11 @@ src="https://user-images.githubusercontent.com/33343210/32425024-caf45124-c2e2-1
 * **Le Dinh Trung (ldt)** - *Initial work* - [trungdinhle](https://github.com/trungdinhle)
 
 
-## License
+### License
 
 This project is licensed under the GNU License - see the [LICENSE.md](https://github.com/LICENSE.md) file for details
 
-## Acknowledgments
+### Acknowledgments
 
 * Hat tip to anyone who's code was used
 * Inspiration
