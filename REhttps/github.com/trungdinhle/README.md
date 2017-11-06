@@ -9,6 +9,8 @@ src="https://user-images.githubusercontent.com/33343210/32365878-4f86e14a-c0ae-1
        <td><img width="360"
 src="https://user-images.githubusercontent.com/33343210/32367540-085bf45c-c0b5-11e7-9a2f-d9fc0c1bb196.gif"/>
     </td>
+     <td> <img width="360"
+src="https://user-images.githubusercontent.com/33343210/32425020-bba00588-c2e2-11e7-8fb2-765fd1e24d17.png"/></td>
      </tr>
   </table>
   </div>
