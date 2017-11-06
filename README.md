@@ -1,10 +1,14 @@
 # RD Music Player - Redefined Music Player
 This is a  music player which has a pretty UI&UX design
 ## Features
-* Live Splashscreen
-* One activity, all fragments, amazing animation
-* Play control's able to open anywhere
-* Long pressed shorcut
+
+* Live SplashScreen
+* One activity, all fragments with amazing animation
+* Play Controller is able to be opened anywhere
+* Long tap to show shortcut
+* Learn your hobby, automatically create new playlist
+* etc
+
 ### Installing
 The app's now available in Google Play Store, download and install apk file from here. It's compatible with API Level 16 (Android 4.1) devices or higher.
 ```
