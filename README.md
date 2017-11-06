@@ -34,10 +34,12 @@ src="https://user-images.githubusercontent.com/33343210/32425020-bba00588-c2e2-1
 <div align="center">
   <table align="center" border="0" width="720">
   <tr>
-    <td> <img width="300"
+    <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/32425020-bba00588-c2e2-11e7-8fb2-765fd1e24d17.png"/></td>
-    <td> <img width="300"
+    <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/32425024-caf45124-c2e2-11e7-8534-997f0acc85ce.png"/></td>
+     <td> <img width="360"
+src="https://user-images.githubusercontent.com/33343210/32426427-e303e64e-c2ec-11e7-9197-df308dc52d41.png"/></td>
   </tr>
 </table>
   </div>
