@@ -20,12 +20,19 @@ public class C_PointF extends PointF {
         return  p;
     }
 
-    public float calculateDegree(C_PointF point) {
+    public float fromCPointFToDegree_From0h(C_PointF point) {
        float angle = (float) getAngle(point);
        angle += 90;
        if(angle>360) angle%=360;
        if(angle > 180) angle =- (360 - angle);
        return angle;
+    }
+    public float fromCPointFToDegree_From0h(float s_x,float s_y) {
+        float angle = (float) getAngle(s_x,s_y);
+        angle += 90;
+        if(angle>360) angle%=360;
+        if(angle > 180) angle =- (360 - angle);
+        return angle;
     }
     /**
      * Fetches angle relative to screen centre point
@@ -49,6 +56,21 @@ public class C_PointF extends PointF {
 
         return Math.toDegrees(inRads);
     }
+    private double getAngle(float s_x,float s_y) {
+        double dx = s_x - x;
+        // Minus to correct for coord re-mapping
+        double dy = -(s_y - y);
+
+        double inRads = Math.atan2(dy, dx);
+
+        // We need to map to coord system when 0 degree is at 3 O'clock, 270 at 12 O'clock
+        if (inRads < 0)
+            inRads = Math.abs(inRads);
+        else
+            inRads = 2 * Math.PI - inRads;
+
+        return Math.toDegrees(inRads);
+    }
     private C_PointF() {
 
     }
@@ -61,5 +83,10 @@ public class C_PointF extends PointF {
         this.x = p.x;
         this.y = p.y;
     }
-
+    public double getDistance(C_PointF c) {
+        return Math.sqrt(Math.pow(x-c.x, 2) + Math.pow((y-c.y), 2));
+    }
+    public double getDistance(float s_x,float s_y) {
+        return Math.sqrt(Math.pow( x - s_x, 2 ) + Math.pow( y - s_y, 2 ));
+    }
 }

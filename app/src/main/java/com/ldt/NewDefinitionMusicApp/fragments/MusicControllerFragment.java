@@ -396,12 +396,81 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
     }
 
     public boolean IsInitAvatarIcon = true;
+    public boolean appearBar = true;
+    public boolean inAnimator_alpha_pb = false;
+  private boolean checkAgain = false;
+  private float pc_check = 0;
+    private void alpha_playBar_toggle_transition(boolean playBar_toOn,float pc) {
+        if(inAnimator_alpha_pb) {checkAgain = true;pc_check = pc;return;}
 
+        ValueAnimator va;
+        if(playBar_toOn) va = ValueAnimator.ofFloat(0,1);
+        else va = ValueAnimator.ofFloat(1,0);
+        va.setDuration(600);
+        va.setStartDelay(200);
+        va.addUpdateListener(animation -> {
+            float d = (float) animation.getAnimatedValue();
+            if(d>1) d = 1;
+            else if(d<0) d = 0;
+            playBar_overView.setAlpha(d);
+            toggle.setAlpha(1 - d);
+        });
+
+        va.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation, boolean isReverse) {
+                inAnimator_alpha_pb = true;
+               if(playBar_overView.getVisibility()==View.INVISIBLE) {
+                   playBar_overView.setVisibility(View.VISIBLE);
+
+               }
+                else if(toggle.getVisibility()==View.INVISIBLE) {
+                   toggle.setVisibility(View.VISIBLE);
+
+               }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(playBar_overView.getAlpha()==0) {
+                    playBar_overView.setVisibility(View.INVISIBLE);
+                    appearBar = false;
+                }
+                else if(toggle.getAlpha()==0) {
+                    toggle.setVisibility(View.INVISIBLE);
+                    appearBar = true;
+                }
+               inAnimator_alpha_pb = false;
+                if(checkAgain) {
+                    checkAgain = false;
+
+                    setAlphaOfPB(pc_check);
+                }
+            }
+        });
+        va.start();
+    }
+    public void setAlphaOfPB(float pc) {
+        // Setting alpha for play bar.
+        if (appearBar&&pc>=0.5f) {
+            if (playBar_overView.getAlpha()>0)
+                //  disappear the playbar and appear the toggle
+                alpha_playBar_toggle_transition(false,pc);
+        }
+        else if (!appearBar&&pc<0.5f) {
+            if (toggle.getAlpha() >0) {
+                // disappear the toggle and appear the playbar
+                alpha_playBar_toggle_transition(true,pc);
+            }
+        }
+    }
     public void setAlphaOfPlayBar(float pc) {
+        setAlphaOfPB(pc);
+        if(true) return;
         float ForPlayBar = 1 - 2 * pc;
         float ForToggle = 2 * pc - 1;
-        // Setting alpha for play bar.
 
+        // Setting alpha for play bar.
         if (ForPlayBar <= 0)
             playBar_overView.setVisibility(View.INVISIBLE);
         else {
@@ -592,10 +661,10 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
     @Override
     public void onReceivedResult(String command,int result) {
         switch (result) {
-            case 1 :Tool.showToast(getActivity(),"More",1000);break;
-            case 2 :Tool.showToast(getActivity(),"More",1000);break;
-            case 3 :Tool.showToast(getActivity(),"More",1000);break;
-            default: Tool.showToast(getActivity(),"Cancel",1000);break;
+            case 1 :Tool.showToast(getActivity(),"One",1000);break;
+            case  2:Tool.showToast(getActivity(),"Two",1000);break;
+            case 3 :Tool.showToast(getActivity(),"Three",1000);break;
+            default : Tool.showToast(getActivity(),"Cancel",1000);break;
         }
     }
 }

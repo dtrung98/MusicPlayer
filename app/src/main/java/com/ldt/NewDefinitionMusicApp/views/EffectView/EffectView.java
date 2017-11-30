@@ -34,17 +34,16 @@ public class EffectView extends View {
     public int handlingEvent(View v, MotionEvent event)
     {
         if(event.getAction()!=MotionEvent.ACTION_UP) {
-            property.touch_runtime[0] = event.getRawX();
-            property.touch_runtime[1] = event.getRawY();
+            property.setTouch_runtime(event.getRawX(),event.getRawY());
          //   property.setTouch(event.getRawX(),event.getRawY());
-            emo_behavior.sync();
-            bg_behavior.sync();
-            invalidate();
+            boolean b =  bg_behavior.sync();
+            boolean e = emo_behavior.sync(b);
+           if(b||e) invalidate();
             return -1;
         }
         else  {
             prepareAndEnd();
-            return iChooseThis;
+            return iChooseThis();
         }
     }
 
@@ -53,7 +52,15 @@ public class EffectView extends View {
         invalidate();
     }
 
-    int iChooseThis=0;
+    /**
+     *
+     * @return -1 means still handler event
+     * 0 means cancel
+     * 1,2,3... means the result
+     */
+    private int iChooseThis() {
+     return emo_behavior.whichSelected +1;
+    }
     public void removeFromParent() {
         ((ViewGroup)getParent()).removeView(this);
     }
@@ -106,7 +113,6 @@ public class EffectView extends View {
         return bg_behavior.getBackgroundPc();
    }
     class Property {
-
         float width,height;
         float oneDp;
         C_RectF rectView;
@@ -120,6 +126,7 @@ public class EffectView extends View {
             length_dp_75 = oneDp*75;
             length_dp_100 = oneDp*100;
         }
+
         Property() {
             touchX = touchY = -1;
             touch_runtime = new float[] {-1,-1};
@@ -132,7 +139,7 @@ public class EffectView extends View {
             rectView= new C_RectF(0,0,s[0],s[1]);
             mShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
             solidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-            mShadowPaint.setColor(0x80777777);
+            mShadowPaint.setColor(0x70777777);
             mShadowPaint.setStyle(Paint.Style.FILL);
 
             mShadowPaint.setMaskFilter(new BlurMaskFilter(BLUR_RADIUS, BlurMaskFilter.Blur.NORMAL));
@@ -149,14 +156,25 @@ public class EffectView extends View {
         float[] delta_width;
         C_PointF[] delta_item_pos;
         C_PointF[] item_pos;
-        float[] touch_runtime;
+        float[] item_angle;
+
+        float[] getTouch_runtime() {
+            return touch_runtime;
+        }
+
+        void setTouch_runtime(float x, float y) {
+            this.touch_runtime[0] =x ;
+            this.touch_runtime[1] = y ;
+        }
+
+        private float[] touch_runtime;
         String[] menu_string;
         int[] menu_image_id;
         int menu_number = 0;
         Bitmap menu_item_background;
         Bitmap[] menu_item_bitmap;
 
-        Paint mShadowPaint ,solidPaint ;
+        Paint mShadowPaint ,solidPaint;
         float mShadowDepth = 5;
         float BLUR_RADIUS = 5;
         void setMenu(String[] menu_string,int[] menu_image_id) {
@@ -173,10 +191,10 @@ public class EffectView extends View {
             }
             setItemPos();
         }
-        public Bitmap getMenu_item_background() {
+        Bitmap getMenu_item_background() {
             Bitmap bitmap = Bitmap.createBitmap((int)menu_item_width,(int)menu_item_width, Bitmap.Config.ARGB_8888);
             Canvas c = new Canvas(bitmap);
-           // c.drawColor(0xff5CD315);
+         //   c.drawColor(0xff5CD315);
             solidPaint.setColor(Color.WHITE);
             solidPaint.setStyle(Paint.Style.FILL);
 
@@ -188,31 +206,41 @@ public class EffectView extends View {
             c.drawCircle(miw_2-1,miw_2,miw_2-20,solidPaint);
             return bitmap;
         }
-        public boolean  above,left;
+        boolean  above,left;
         void setItemPos() {
             item_pos = new C_PointF[menu_number];
             delta_item_pos = new C_PointF[menu_number];
+            item_angle = new float[menu_number];
             // touchX, touchY
             above = menuIsAboveOrBelow();
             left = (touchX<width/2);
-            float measureDegree = getTotalDegree();
+            float measureDegree = getTotalAngle();
             item_pos[0] = getFirstPoint(measureDegree,left,above);
-            float first_deg = touch.calculateDegree(item_pos[0]);
+            float first_deg = touch.fromCPointFToDegree_From0h(item_pos[0]);
             Log.d("EffectView","first_deg = "+first_deg);
-            setItemPos(above,left,first_deg);
+            setFinalItemAngle(above,left,first_deg);
+            setFinalItemPos();
         }
-        private void setItemPos(boolean above,boolean left,float first_deg) {
+        private void setFinalItemAngle(boolean above, boolean left, float first_deg) {
+            item_angle[0] = first_deg;
             if      ((above&&!left)
                     ||   // căn ngựoc chiều kim đồng hồ
                     (!above&&left))
             {
+
                 for(int i=1;i<menu_number;i++)
-                    item_pos[i] = touch.getPointAround(menu_satellite_radius,first_deg- i*eachDegree);
+                    item_angle[i] = first_deg - i* eachAngle;
             }
             else { // căn xuoi chiều kim đồng
                 for(int i=1;i<menu_number;i++)
-                    item_pos[i] = touch.getPointAround(menu_satellite_radius,first_deg+ i*eachDegree);
+                    item_angle[i] = first_deg + i* eachAngle;
+
             }
+        }
+        private void setFinalItemPos() {
+            for(int i=1;i<menu_number;i++)
+                item_pos[i] = touch.getPointAround(menu_satellite_radius,item_angle[i]);
+
         }
 
         private C_PointF getFirstPoint(float measureDegree,boolean left,boolean above) {
@@ -237,10 +265,10 @@ public class EffectView extends View {
             return measure;
         }
 
-        private final float eachDegree =40.0f;
+        final float eachAngle =40.0f;
 
-        private float getTotalDegree() {
-            return eachDegree*(menu_number-1);
+        private float getTotalAngle() {
+            return eachAngle *(menu_number-1);
         }
 
         private float getMinDistance() {

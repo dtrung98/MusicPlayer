@@ -19,7 +19,6 @@
         android:layout_height="match_parent"
         android:id="@+id/container_of_container">
         <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
-
         <com.ldt.NewDefinitionMusicApp.views.roundClippingFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,15 +37,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/control_container"/>
-
         <View
-
         android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         android:layout_gravity="bottom"
-        android:background="#15000000"/>
-
+        android:background="#15000000"
+        />
     </FrameLayout>
 </com.ldt.NewDefinitionMusicApp.views.RootScreen_FrameLayout>

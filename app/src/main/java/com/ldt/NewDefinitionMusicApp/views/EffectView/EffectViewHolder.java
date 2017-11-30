@@ -58,8 +58,8 @@ public class EffectViewHolder {
         EffectView effectView = new EffectView(activity);
         effectView.set(symbol,sourceView,touch,string_menu,image_menu);
         effectView.emo_behavior.set_source(from_local[0],from_local[1],from_size[0],from_size[1]);
-        effectView.emo_behavior.sync();
-        effectView.bg_behavior.sync();
+        //effectView.emo_behavior.sync();
+        //effectView.bg_behavior.sync();
         activity.rootEveryThing.addView(effectView);
         return effectView;
     }
@@ -127,7 +127,7 @@ public class EffectViewHolder {
         }
     }
 
-    Runnable mLongPressed = new Runnable() {
+    private Runnable mLongPressed = new Runnable() {
         public void run() {
            if(isTheFirstTime()) setTheFirstTime(event);
             status = Status.IN_LONG_PRESSED;
@@ -143,13 +143,17 @@ public class EffectViewHolder {
 
     public boolean run(View v, MotionEvent event) { // gọi khi đã chắc chắn là long press
         if (!isInLongPressed()) return false;
+        if(effectView==null&&(event.getAction()==MotionEvent.ACTION_UP||event.getAction()==MotionEvent.ACTION_CANCEL)) {
+            return false;
+        }
         int result = effectView.handlingEvent(v, event);
         if (result != -1) {
             // trả về kết quả
+          //  if(result!=0)
             whichCall.onReceivedResult(command,result);
             setNull();
             return true;
         }
-        return true; // 0 mean it stills handler the event
+        return true; // true mean it stills handler the event
     }
 }

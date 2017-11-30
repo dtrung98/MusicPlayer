@@ -110,11 +110,10 @@ public class BackgroundBehavior {
         property = null;
     }
 
-    public void sync() {
-
+    boolean sync() {
+        return false;
     }
-
-    public float getBackgroundPc() {
+    float getBackgroundPc() {
         return background_pc;
     }
 }
