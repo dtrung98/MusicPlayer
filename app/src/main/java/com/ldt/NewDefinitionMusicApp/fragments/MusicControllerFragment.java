@@ -37,6 +37,7 @@ import com.ldt.NewDefinitionMusicApp.views.EffectView.EffectViewHolder;
 import com.ldt.NewDefinitionMusicApp.views.PlayPauseButton;
 import com.ldt.NewDefinitionMusicApp.activities.MainActivity;
 import com.ldt.NewDefinitionMusicApp.R;
+import com.ldt.NewDefinitionMusicApp.views.animated_icon.SlideMarkButton;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -316,7 +317,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
     public PlayPauseButton playBar_pause_custom;
     public TextView playBar_nameOfSong, playBar_artistOfSong;
     public ImageView inList;
-    public ImageView toggle;
+    public SlideMarkButton toggle;
     public ImageView inPrev, inNext, inPause;
     public View playBar_TrackBar;
    public FrameLayout example_frame_layout;

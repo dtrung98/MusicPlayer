@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <ImageView
+    <com.ldt.NewDefinitionMusicApp.views.animated_icon.SlideMarkButton
         android:id="@+id/music_controller_toggle"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:layout_gravity="center"
-        android:src="@drawable/shape_sharpen"
+        android:background="#8831AD4A"
         android:alpha="0"/>
     <View
         android:id="@+id/border_shape4avatar"
