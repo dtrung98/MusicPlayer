@@ -10,7 +10,7 @@ This is a  music player which has a pretty UI&UX design
 * etc
 
 ### Installing
-The app's now available in Google Play Store, download and install apk file from here. It's compatible with API Level 16 (Android 4.1) devices or higher.
+The app's now available in Google Play Store, download and install apk file from [here](http://play.google.com/something). It's compatible with API Level 16 (Android 4.1) devices or higher.
 ```
 http://play.google.com/something
 ```
@@ -51,7 +51,7 @@ src="https://user-images.githubusercontent.com/33343210/32426896-ecd40b42-c2ef-1
 
 ### License
 
-This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](https://github.com/trungdinhle/LICENSE.md) file for details
+This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](/LICENSE) file for details
 
 ### Acknowledgments
 
