@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.ScrollView;
 
+import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
 import com.ldt.NewDefinitionMusicApp.R;
 
 import java.util.ArrayList;
@@ -46,7 +47,14 @@ public class StickyScrollView extends ScrollView {
     private static final int DEFAULT_SHADOW_HEIGHT = 10; // dp;
 
     private ArrayList<View> stickyViews;
+    public ArrayList<View> getStickyViews() {
+        return stickyViews;
+    };
+    public View getCurrentlyStickingView() {
+        return currentlyStickingView;
+    }
     public View currentlyStickingView;
+
     protected float stickyViewTopOffset;
     protected int stickyViewLeftOffset;
     private boolean redirectTouchesToStickyView;
@@ -322,18 +330,21 @@ public class StickyScrollView extends ScrollView {
     }
 
     private void doTheStickyThing() {
-  //      Log.d("Sticky","doTheStickyThing");
+       Log.d("Sticky","doTheStickyThing");
 
-        View viewThatShouldStick = null;
-        View approachingView = null;
-        for(View v : stickyViews){ // dạo một vòng quanh các view có sticky
+        View viewThatShouldStick = null; // View mà cần Stick ?
+        View approachingView = null; // View đang tiến đến ?
+
+        for(View v : stickyViews){ // dạo một vòng quanh các view có sticky, đã được tìm và lưu trong mảng trước đó.
+
             // xem xét vị trí tương đối của nó đối với khung hình scrollview, sau đây lấy vị trí Top
             int viewTop = getTopForViewRelativeOnlyChild(v) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop());
-            if(viewTop+v.getHeight()<=0){  // nếu view đó 'thấp' hơn 0
+            Log.d("View : ","ViewTop = " + viewTop+",  Height = "+v.getHeight());
+            if(viewTop+v.getHeight()<=0) {  // nếu view đó 'thấp' hơn 0
                 if(viewThatShouldStick==null || viewTop>(getTopForViewRelativeOnlyChild(viewThatShouldStick) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))){
                     viewThatShouldStick = v;
                 }
-            }else{
+            } else {
                 if(approachingView == null || viewTop<(getTopForViewRelativeOnlyChild(approachingView) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))){
                     approachingView = v;
                 }
@@ -361,7 +372,7 @@ public class StickyScrollView extends ScrollView {
         Log.d("Sticky","startStickingView");
 
         currentlyStickingView = viewThatShouldStick;
-        if(getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
+        if(Tool.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
             hideView(currentlyStickingView);
         }
         if(((String)currentlyStickingView.getTag()).contains(FLAG_NONCONSTANT)){
@@ -372,7 +383,7 @@ public class StickyScrollView extends ScrollView {
     private void stopStickingCurrentlyStickingView() {
         Log.d("Sticky","stopStickingCurrentlyStickView");
 
-        if(getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
+        if(Tool.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
             showView(currentlyStickingView);
         }
         currentlyStickingView = null;
@@ -405,7 +416,7 @@ public class StickyScrollView extends ScrollView {
         if(v instanceof ViewGroup){
             ViewGroup vg = (ViewGroup)v;
             for(int i = 0 ; i<vg.getChildCount() ; i++){
-                String tag = getStringTagForView(vg.getChildAt(i));
+                String tag = Tool.getStringTagForView(vg.getChildAt(i));
                 if(tag!=null && tag.contains(STICKY_TAG)){
                     stickyViews.add(vg.getChildAt(i));
                 }else if(vg.getChildAt(i) instanceof ViewGroup){
@@ -420,12 +431,7 @@ public class StickyScrollView extends ScrollView {
         }
     }
 
-    public String getStringTagForView(View v){
-     //   Log.d("Sticky","getStringTagForView");
 
-        Object tagObject = v.getTag();
-        return String.valueOf(tagObject);
-    }
     protected void hideView(View v) {
      v.setVisibility(INVISIBLE);
 

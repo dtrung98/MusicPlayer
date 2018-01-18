@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -82,14 +83,14 @@ public final class Tool {
         /*
             public abstract Resources getResources ()
 
-                Return a Resources instance for your application's package.
+                Return A Resources instance for your application's package.
         */
         Resources r = activity.getResources();
 
         /*
             TypedValue
 
-                Container for a dynamically typed data value. Primarily
+                Container for A dynamically typed data value. Primarily
                 used with Resources for holding resource values.
         */
 
@@ -97,21 +98,21 @@ public final class Tool {
             applyDimension(int unit, float value, DisplayMetrics metrics)
 
                 Converts an unpacked complex data value holding
-                a dimension to its final floating point value.
+                A dimension to its final floating point value.
         */
 
         /*
             Density-independent pixel (dp)
 
                 A virtual pixel unit that you should use when defining UI layout,
-                to express layout dimensions or position in a density-independent way.
+                to express layout dimensions or posTop in A density-independent way.
 
                 The density-independent pixel is equivalent to one physical pixel on
-                a 160 dpi screen, which is the baseline density assumed by the system
-                for a "medium" density screen. At runtime, the system transparently handles
+                A 160 dpi screen, which is the baseline density assumed by the system
+                for A "medium" density screen. At runtime, the system transparently handles
                 any scaling of the dp units, as necessary, based on the actual density
                 of the screen in use. The conversion of dp units to screen pixels
-                is simple: px = dp * (dpi / 160). For example, on a 240 dpi screen,
+                is simple: px = dp * (dpi / 160). For example, on A 240 dpi screen,
                 1 dp equals 1.5 physical pixels. You should always use dp
                 units when defining your application's UI, to ensure proper
                 display of your UI on screens with different densities.
@@ -221,6 +222,12 @@ public final class Tool {
 
     public static void setSplashGone(boolean splashGone) {
         Tool.splashGone = splashGone;
+    }
+    public static String getStringTagForView(View v){
+        //   Log.d("Sticky","getStringTagForView");
+
+        Object tagObject = v.getTag();
+        return String.valueOf(tagObject);
     }
 
 }

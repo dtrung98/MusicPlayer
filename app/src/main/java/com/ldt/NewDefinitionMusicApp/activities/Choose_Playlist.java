@@ -329,7 +329,7 @@ int statusHeight=0;
     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-     //       Toast.makeText(Choose_Playlist.this,"I am ListView "+position+"th",Toast.LENGTH_SHORT).show();
+     //       Toast.makeText(Choose_Playlist.this,"I am ListView "+posTop+"th",Toast.LENGTH_SHORT).show();
 
          //  List<View> lv =getAllViews(view);
   View IsimageView = ((ViewGroup)view).getChildAt(0);
@@ -429,7 +429,7 @@ int statusHeight=0;
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                      //  Toast.makeText(Choose_Playlist.this,"I am ImageView "+position+"th",Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(Choose_Playlist.this,"I am ImageView "+posTop+"th",Toast.LENGTH_LONG).show();
                         ImageView iv = (ImageView) v;
                         int[] location = new int[2];
                         iv.getLocationOnScreen(location);

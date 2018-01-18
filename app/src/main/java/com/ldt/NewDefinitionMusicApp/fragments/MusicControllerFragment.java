@@ -345,7 +345,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
         playBar_overView.setOnTouchListener(touch_play_bar_top1);
     }
     /**
-     * this is handler y of playbar, it means that if user touch the play bar, in any position, will call this before all.
+     * this is handler y of playbar, it means that if user touch the play bar, in any posTop, will call this before all.
      *
      */
    public static void logOnTouchEvent(String mark,MotionEvent event) {
@@ -577,7 +577,7 @@ public class MusicControllerFragment extends Fragment implements EffectViewHolde
 
 
     public void Set_Music_Song_Player(ArrayList<Song_onload> list, int position) {
-        // this will get the list Song from MainScreenFragment and the position of the play Song, it only use for setting UI, it do not set anything else.
+        // this will get the list Song from MainScreenFragment and the posTop of the play Song, it only use for setting UI, it do not set anything else.
         NowPlaying = list.get(position);
 
         nameOfSong.setText(NowPlaying.Title);

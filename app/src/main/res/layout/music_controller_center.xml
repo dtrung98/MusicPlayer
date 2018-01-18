@@ -9,7 +9,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:layout_gravity="center"
-        android:background="#8831AD4A"
+        android:background="@android:color/transparent"
         android:alpha="0"/>
     <View
         android:id="@+id/border_shape4avatar"

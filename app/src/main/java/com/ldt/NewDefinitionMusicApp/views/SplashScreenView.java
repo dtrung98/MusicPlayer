@@ -16,7 +16,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -31,7 +30,7 @@ import com.ldt.NewDefinitionMusicApp.R;
  * Created by trung on 10/2/2017.
  */
 
-public class SplashView extends View {
+public class SplashScreenView extends View {
     private final int alphaPaint = 60;
 
     int eachDp=0;
@@ -54,17 +53,17 @@ public class SplashView extends View {
     int[] ScreenSize;
     final int time_delay1=1500;
     final int time_delay2= 2000;
-    public SplashView(Context context) {
+    public SplashScreenView(Context context) {
         super(context);
         init();
     }
 
-    public SplashView(Context context, @Nullable AttributeSet attrs) {
+    public SplashScreenView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public SplashView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SplashScreenView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -180,7 +179,7 @@ public class SplashView extends View {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float number = (float)animation.getAnimatedValue();
-                SplashView.this.setAlpha(1-number);
+                SplashScreenView.this.setAlpha(1-number);
             }
         });
         value_makeSplashGone.addListener(new Animator.AnimatorListener() {
@@ -192,7 +191,7 @@ public class SplashView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 Tool.setSplashGone(true);
-                ((ViewGroup)getParent()).removeView(SplashView.this);
+                ((ViewGroup)getParent()).removeView(SplashScreenView.this);
                 value1.removeAllUpdateListeners();
                 value1.cancel();
                 value2.removeAllUpdateListeners();

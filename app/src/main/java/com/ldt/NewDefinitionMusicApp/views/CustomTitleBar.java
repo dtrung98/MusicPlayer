@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.ldt.NewDefinitionMusicApp.InternalTools.Tool;
 import com.ldt.NewDefinitionMusicApp.R;
 /**
  * Created by trung on 9/18/2017.
@@ -42,7 +43,7 @@ public class CustomTitleBar extends View{
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (tieuDe== null) {
-            tieuDe = (RelativeLayout) ((View) this.getParent()).findViewById(R.id.tieude);
+            tieuDe = ((View) this.getParent()).findViewById(R.id.tieude);
             if(tieuDe!=null)
                Log.d("Sticky","Catch it!");
         }
@@ -128,11 +129,11 @@ public class CustomTitleBar extends View{
             }
 
             canvas.clipRect(0, (stickyScrollView.clippingToPadding ? -stickyScrollView.stickyViewTopOffset : 0), getWidth(), currentlyStickingView.getHeight());
-            if(stickyScrollView.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
+            if(Tool.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
                 stickyScrollView.showView(currentlyStickingView);
                 currentlyStickingView.draw(canvas);
                 stickyScrollView.hideView(currentlyStickingView);
-            }else{
+            } else {
                 currentlyStickingView.draw(canvas);
             }
             canvas.restore();

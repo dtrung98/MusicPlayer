@@ -39,7 +39,7 @@ public class WavFile {
 
     // Buffering
     private byte[] buffer;                    // Local buffer used for IO
-    private int bufferPointer;                // Points to the current position in local buffer
+    private int bufferPointer;                // Points to the current posTop in local buffer
     private int bytesRead;                    // Bytes read after last read into local buffer
     private long frameCounter;                // Current number of frames read or written
     private long fileSize;

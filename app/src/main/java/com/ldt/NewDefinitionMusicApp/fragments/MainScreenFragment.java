@@ -439,7 +439,7 @@ public class MainScreenFragment extends FragmentPlus {
     /*
       private AdapterView.OnItemClickListener list_view_item_onclick = new AdapterView.OnItemClickListener() {
           @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+          public void onItemClick(AdapterView<?> parent, View view, int posTop, long id) {
 
   Toast.makeText(MainScreenFragment.this,"you clicked listview!",Toast.LENGTH_LONG).show();
           }
@@ -743,15 +743,15 @@ public class MainScreenFragment extends FragmentPlus {
                                                 public boolean normal(View v,MotionEvent e) {
                                                     // do whatever
                                                   if(true)  return true;
-                                                    int position = recyclerView.getChildLayoutPosition(v);
-                                                    if(position==-1) return false;
+                                                    int posTop = recyclerView.getChildLayoutPosition(v);
+                                                    if(posTop==-1) return false;
                                                     ex_service_intent = new Intent(getActivity(), MediaService.class);
                                                     ex_service_intent.putExtra("DanhSachPhat_Data", getData(DanhSachPhat));
-                                                    ex_service_intent.putExtra("NowPlaying", position);
+                                                    ex_service_intent.putExtra("NowPlaying", posTop);
                                                     //   OverScrollDecoratorHelper.setUpOverScroll(Song_list);
 
                                                     //     getActivity().startService(ex_service_intent);
-                                                    NowPlaying_int = position;
+                                                    NowPlaying_int = posTop;
                                                     ChangeBackground(NowPlaying_int);
                                                     ((MainActivity) getActivity()).Control_Music_Song_Player(DanhSachPhat, NowPlaying_int);
                                                     ((MainActivity) getActivity()).Init_UpDown_musicController();
@@ -816,7 +816,7 @@ public class MainScreenFragment extends FragmentPlus {
         playlist_BigList.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                //       Toast.makeText(Choose_Playlist.this,"I am ListView "+position+"th",Toast.LENGTH_SHORT).show();
+                //       Toast.makeText(Choose_Playlist.this,"I am ListView "+posTop+"th",Toast.LENGTH_SHORT).show();
 
                 //  List<View> lv =getAllViews(view);
                 View IsimageView = ((ViewGroup) view).getChildAt(0);

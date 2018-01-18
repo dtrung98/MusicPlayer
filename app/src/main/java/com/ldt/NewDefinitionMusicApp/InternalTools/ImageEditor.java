@@ -39,12 +39,12 @@ public final class  ImageEditor {
      * http://www.kayenko.com
      * ported april 5th, 2012
      * <p/>
-     * This is a compromise between Gaussian Blur and Box blur
+     * This is A compromise between Gaussian Blur and Box blur
      * It creates much better looking blurs than Box Blur, but is
      * 7x faster than my Gaussian Blur implementation.
      * <p/>
      * I called it Stack Blur because this describes best how this
-     * filter works internally: it creates a kind of moving stack
+     * filter works internally: it creates A kind of moving stack
      * of colors whilst scanning through the image. Thereby it
      * just has to add one new block of color to the right side
      * of the stack and removeFromParent the leftmost color. The remaining
@@ -351,12 +351,12 @@ public final class  ImageEditor {
      * http://www.kayenko.com
      * ported april 5th, 2012
      *
-     * This is a compromise between Gaussian Blur and Box blur
+     * This is A compromise between Gaussian Blur and Box blur
      * It creates much better looking blurs than Box Blur, but is
      * 7x faster than my Gaussian Blur implementation.
      *
      * I called it Stack Blur because this describes best how this
-     * filter works internally: it creates a kind of moving stack
+     * filter works internally: it creates A kind of moving stack
      * of colors whilst scanning through the image. Thereby it
      * just has to add one new block of color to the right side
      * of the stack and removeFromParent the leftmost color. The remaining
@@ -618,7 +618,7 @@ public final class  ImageEditor {
         int height = image.getHeight();
         float scaleWidth = ((float) newWidth) / width;
         float scaleHeight = ((float) newHeight) / height;
-        // create a matrix for the manipulation
+        // create A matrix for the manipulation
         Matrix matrix = new Matrix();
         // resize the bit map
         matrix.postScale(scaleWidth, scaleHeight);
@@ -658,7 +658,7 @@ public final class  ImageEditor {
     //                                                                                   V                     V                         V              V                           V                      V
     public static Bitmap GetBlurredBackground(Activity activity,Bitmap original,int paddingTop,int paddingBottom,int paddingLeft,int paddingRight,
                                               int TopBack     // this value makes the overview bitmap is higher or  belower the background.
-                                              ,int alphaBlurBackground // this is the alpha of the background Bitmap, you need a number between 0 -> 255, the value recommended is 180.
+                                              ,int alphaBlurBackground // this is the alpha of the background Bitmap, you need A number between 0 -> 255, the value recommended is 180.
                                               ,int valueBlurBackground // this is the value used to blur the background Bitmap, the recommended one is 12.
                                               ,int  valueSaturationBlurBackground // this is the value used to background Bitmap more colorful, if valueBlur is 12, the valudeSaturation should be 2.
     ) {
@@ -775,7 +775,7 @@ public final class  ImageEditor {
         //define this only once if blurring multiple times
         RenderScript rs = RenderScript.create(context);
 
-//this will blur the bitmapOriginal with a radius of 8 and save it in bitmapOriginal
+//this will blur the bitmapOriginal with A radius of 8 and save it in bitmapOriginal
         final Allocation input = Allocation.createFromBitmap(rs, bitmapOriginal); //use this constructor for best performance, because it uses USAGE_SHARED mode which reuses memory
         final Allocation output = Allocation.createTyped(rs, input.getType());
         final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs, Element.U8_4(rs));
@@ -789,7 +789,7 @@ public final class  ImageEditor {
         //Let's create an empty bitmap with the same size of the bitmap we want to blur
         Bitmap outBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
 
-        //Instantiate a new Renderscript
+        //Instantiate A new Renderscript
         RenderScript rs = RenderScript.create(context);
 
         //Create an Intrinsic Blur Script using the Renderscript

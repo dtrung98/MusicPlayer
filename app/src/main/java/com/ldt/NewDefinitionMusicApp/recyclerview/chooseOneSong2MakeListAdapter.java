@@ -77,7 +77,7 @@ public class chooseOneSong2MakeListAdapter extends RecyclerView.Adapter<chooseOn
     // Involves populating data into the item through holder
     @Override
     public void onBindViewHolder(chooseOneSong2MakeListAdapter.ViewHolder viewHolder, int position) {
-        // Get the data model based on position
+        // Get the data model based on posTop
         Song_onload this_song = mSongs.get(position);
 
         // Set item views based on your views and data model

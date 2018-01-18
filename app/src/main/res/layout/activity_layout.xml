@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/activity_layout_root">
-<com.ldt.NewDefinitionMusicApp.views.SplashView
+<com.ldt.NewDefinitionMusicApp.views.SplashScreenView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"

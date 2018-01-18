@@ -133,7 +133,7 @@ public class MediaService extends Service {
         if (myList != null) {
             playController.setData(myList);
         }
-         //get the position playing
+         //get the posTop playing
         int pos= intent.getIntExtra("NowPlaying", 0);
         playController.setPosPlaying(pos);
         Message msg = mServiceHandler.obtainMessage();

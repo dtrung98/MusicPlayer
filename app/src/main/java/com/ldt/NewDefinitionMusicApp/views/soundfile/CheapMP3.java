@@ -127,7 +127,7 @@ public class CheapMP3 extends CheapSoundFile {
             }
 
             if (bufferOffset > 0) {
-                // We didn't find a sync code (0xFF) at position 0;
+                // We didn't find a sync code (0xFF) at posTop 0;
                 // shift the buffer over and try again
                 for (int i = 0; i < 12 - bufferOffset; i++)
                     buffer[i] = buffer[bufferOffset + i];
