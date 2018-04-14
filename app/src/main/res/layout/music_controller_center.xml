@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.ldt.NewDefinitionMusicApp.views.animated_icon.SlideMarkButton
+    <com.ldt.musicr.views.animated_icon.SlideMarkButton
         android:id="@+id/music_controller_toggle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -58,10 +58,25 @@
                     android:textSize="12sp" />
             </LinearLayout>
         </FrameLayout>
+
+        <!-- Only This -->
+        <FrameLayout
+            android:id="@+id/seek_bar_parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <com.ldt.musicr.views.AudioVisualSeekBar
+                android:id="@+id/visual_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+        </FrameLayout>
+        <!-- Or This -->
         <include
+            android:visibility="gone"
             android:tag="root is frame layout"
             layout="@layout/music_controller_example_frame_layout2"
-            android:visibility="gone"/>
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -83,7 +98,8 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/pref"
                     android:clickable="true"
-                    android:background="@drawable/circle_background" />
+                    android:background="@drawable/circle_background"
+                    android:focusable="true" />
             </FrameLayout>
             <ImageView
                 android:id="@+id/music_controller_InPause"
@@ -93,7 +109,8 @@
                 android:padding="7dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/pauseblack"
-                android:background="@drawable/circle_background"/>
+                android:background="@drawable/circle_background"
+                />
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

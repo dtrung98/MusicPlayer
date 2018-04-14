@@ -1,0 +1,23 @@
+package com.ldt.musicr.Others;
+
+import android.content.Context;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+
+public class SwipeDown implements OnTouchListener {
+    private final GestureDetector gestureDetector;
+public SwipeDown(Context context)
+{
+    this.gestureDetector = new GestureDetector(context,new SimpleOnGestureListener());
+}
+@Override
+   public boolean onTouch(View v,MotionEvent event)
+{
+    return gestureDetector.onTouchEvent(event);
+}
+
+
+}

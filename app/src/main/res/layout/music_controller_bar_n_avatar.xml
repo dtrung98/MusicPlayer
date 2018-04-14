@@ -46,7 +46,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp">
-            <com.ldt.NewDefinitionMusicApp.views.PlayPauseButton
+            <com.ldt.musicr.views.PlayPauseButton
                 android:id="@+id/play_pause_custom"
                 android:layout_width="15dp"
                 android:layout_height="15dp"

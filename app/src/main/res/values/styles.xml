@@ -20,36 +20,43 @@
         <item name="colorPrimaryDark">@color/FlatRed</item>
         <item name="colorAccent">@color/FlatRed</item>
     </style>
+
     <style name="Flat_OrangeTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatOrange</item>
         <item name="colorPrimaryDark">@color/FlatOrange</item>
         <item name="colorAccent">@color/FlatOrange</item>
     </style>
+
     <style name="Flat_YellowTheme" parent="Theme.AppCompat.NoActionBar">
-    <item name="colorPrimary">@color/FlatYellow</item>
-    <item name="colorPrimaryDark">@color/FlatYellow</item>
+        <item name="colorPrimary">@color/FlatYellow</item>
+        <item name="colorPrimaryDark">@color/FlatYellow</item>
         <item name="colorAccent">@color/FlatYellow</item>
-</style>
+    </style>
+
     <style name="Flat_GreenTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatGreen</item>
         <item name="colorPrimaryDark">@color/FlatGreen</item>
         <item name="colorAccent">@color/FlatGreen</item>
     </style>
+
     <style name="Flat_TealBlueTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatTealBlue</item>
         <item name="colorPrimaryDark">@color/FlatTealBlue</item>
         <item name="colorAccent">@color/FlatTealBlue</item>
     </style>
+
     <style name="Flat_BlueTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatBlue</item>
         <item name="colorPrimaryDark">@color/FlatBlue</item>
         <item name="colorAccent">@color/FlatBlue</item>
     </style>
+
     <style name="Flat_PurpleTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatPurple</item>
         <item name="colorPrimaryDark">@color/FlatPurple</item>
         <item name="colorAccent">@color/FlatPurple</item>
     </style>
+
     <style name="Flat_PinkTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatPink</item>
         <item name="colorPrimaryDark">@color/FlatPink</item>
@@ -70,7 +77,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@color/FlatWhite</item>
-        <item name ="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
+        <item name="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
     </style>
 
     <style name="AudioFileInfoOverlayText">
@@ -96,4 +103,8 @@
         <item name="android:layout_height">1px</item>
         <item name="android:background">#000022</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

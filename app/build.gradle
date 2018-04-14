@@ -5,8 +5,8 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.ldt.NewDefinitionMusicApp"
-        minSdkVersion 16
+        applicationId "com.ldt.musicr"
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName '1.2'
@@ -24,7 +24,7 @@ android {
     productFlavors {
     }
     compileOptions {
-    targetCompatibility 1.8
+        targetCompatibility 1.8
         sourceCompatibility 1.8
     }
 }
@@ -36,6 +36,7 @@ repositories {
 
 dependencies {
 
+   // implementation 'com.android.support:design:26.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -54,10 +55,14 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'me.everything:overscroll-decor-android:1.0.4'
     compile 'se.emilsjolander:StickyScrollViewItems:1.1.0'
-       //compile 'com.github.Semantive:waveform-android:v1.2'
+    //compile 'com.github.Semantive:waveform-android:v1.2'
 //    compile 'com.chauthai.overscroll:overscroll-bouncy:0.1.1'
     // compile 'com.alibaba:fastjson:1.1.55.android'
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-
+    compile 'de.Maxr1998:track-selector-lib:1.1'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'net.steamcrafted:materialiconlib:1.0.3'
 }
+
+apply plugin: 'kotlin-android-extensions'

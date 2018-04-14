@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ldt.NewDefinitionMusicApp.activities.SplashActivity"
+    tools:context="com.ldt.musicr.activities.SplashActivity"
     android:clickable="true"
     android:background="@android:color/white">
     <TextView
@@ -30,8 +30,21 @@
 
                 android:textSize="@dimen/title_text_size"
                 android:textStyle="bold"
-                android:text="Music app player"
+                android:text="@string/trade_mark"
                 android:layout_marginBottom="20dp"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/touchToShowNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:padding="10dp"
+        android:text="Touch me to show an notification"
+        android:layout_gravity="bottom|center"
+        android:gravity="center"
+        android:background="#00B061"
+        android:layout_marginBottom="150dp" />
             <TextView
                 android:layout_marginTop="20dp"
                 android:id="@+id/touchMeToContinue"

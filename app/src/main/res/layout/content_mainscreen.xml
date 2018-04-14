@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ldt.NewDefinitionMusicApp.views.StickyScrollView
+<com.ldt.musicr.views.StickyScrollView
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/myScroll"
 android:layout_width="match_parent"
@@ -16,4 +16,4 @@ android:layout_alignParentLeft="true">
     <include layout="@layout/random_big_title"/>
     <include layout = "@layout/layout_playlist_showing"/>
 </LinearLayout>
-</com.ldt.NewDefinitionMusicApp.views.StickyScrollView>
+</com.ldt.musicr.views.StickyScrollView>

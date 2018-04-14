@@ -4,6 +4,9 @@
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="text14sp">14sp</dimen>
     <dimen name="oneDP">1dp</dimen>
-    <dimen name="title_text_size" >26sp</dimen>
+    <dimen name="title_text_size">26sp</dimen>
     <dimen name="title_text_margin_left">20dp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

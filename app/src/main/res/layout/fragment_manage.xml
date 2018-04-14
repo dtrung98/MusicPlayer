@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ldt.NewDefinitionMusicApp.fragments.PlaylistControllerFragment">
+    tools:context="com.ldt.musicr.fragments.PlaybackFragment">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -37,7 +37,7 @@
                     android:layout_marginRight="8dp"
                     android:visibility="invisible"/>
             </FrameLayout>
-            <com.ldt.NewDefinitionMusicApp.views.SeeThroughFrameLayout
+            <com.ldt.musicr.views.SeeThroughFrameLayout
                 android:id="@+id/see_throughFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -53,7 +53,7 @@
                     android:background="@color/FlatGreen"
                     android:text="Button"
                     android:layout_gravity="center"/>
-            </com.ldt.NewDefinitionMusicApp.views.SeeThroughFrameLayout>
+            </com.ldt.musicr.views.SeeThroughFrameLayout>
         </LinearLayout>
         <ImageView
             android:id="@+id/image_sample"

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ldt.NewDefinitionMusicApp.views.CustomAudioWaveView"
-    android:layout_marginTop="50dp">
+    tools:context="com.ldt.musicr.views.CustomAudioWaveView"
+    android:layout_marginTop="0dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,12 +13,14 @@
         android:layout_width="wrap_content"
         android:layout_height="0px"
         android:layout_weight="1">
-        <com.ldt.NewDefinitionMusicApp.views.soundfile.WaveformView android:id="@+id/waveform"
+        <com.ldt.musicr.views.soundfile.WaveformView
+            android:id="@+id/waveform"
             android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.ldt.NewDefinitionMusicApp.views.soundfile.MarkerView android:id="@+id/startmarker"
+        <com.ldt.musicr.views.soundfile.MarkerView
+            android:id="@+id/startmarker"
             android:nextFocusDown="@+id/endmarker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +28,8 @@
             android:contentDescription="@string/start_marker"
             android:visibility="gone"/>
 
-        <com.ldt.NewDefinitionMusicApp.views.soundfile.MarkerView android:id="@+id/endmarker"
+        <com.ldt.musicr.views.soundfile.MarkerView
+            android:id="@+id/endmarker"
             android:nextFocusUp="@+id/startmarker"
             android:nextFocusDown="@+id/info"
             android:layout_width="wrap_content"
@@ -166,7 +169,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginBottom="12dp">
-            <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+            <com.ldt.musicr.views.SeeThroughTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0:32"
@@ -190,7 +193,7 @@
                     android:background="@android:color/black"
                     android:layout_gravity="bottom"/>
             </FrameLayout>
-            <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+            <com.ldt.musicr.views.SeeThroughTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"

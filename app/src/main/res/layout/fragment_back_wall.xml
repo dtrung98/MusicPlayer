@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ldt.NewDefinitionMusicApp.fragments.BackWall">
+    tools:context="com.ldt.musicr.fragments.BackWall">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,20 +37,20 @@
                 android:layout_height="50dp"
                 android:layout_gravity="bottom|center"
                 android:textColor="#20ffffff"
-                android:text="ReDefined Music Player ®"
+                android:text="@string/trade_mark"
                 android:gravity="center"
                 android:textSize="14sp" />
-        <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+        <com.ldt.musicr.views.SeeThroughTextView
             android:id="@+id/trade_mark"
             android:background="@color/BackwardColor"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom|center"
-            android:text="ReDefined Music Player ®"
+            android:text="@string/trade_mark"
             android:gravity="center"
             android:textSize="14sp" />
         </FrameLayout>
-            <com.ldt.NewDefinitionMusicApp.views.SeeThroughLineView
+            <com.ldt.musicr.views.SeeThroughLineView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingTop="25dp"
@@ -79,7 +79,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="30dp"
                    android:weightSum="2">
-                   <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                   <com.ldt.musicr.views.SeeThroughTextView
                        android:layout_width="0dp"
                        android:layout_weight="1"
                        android:layout_height="match_parent"
@@ -87,13 +87,13 @@
                        android:text="Total Songs"
                        android:gravity="center"
                        android:paddingRight="15dp"/>
-                   <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                   <com.ldt.musicr.views.SeeThroughTextView
                        android:layout_height="match_parent"
                        android:layout_width="wrap_content"
                        android:text="•"
                        android:gravity="center"
                        android:background="@color/BackwardColor"/>
-                   <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                   <com.ldt.musicr.views.SeeThroughTextView
                        android:layout_width="0dp"
                        android:layout_weight="1"
                        android:layout_height="match_parent"
@@ -107,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -115,13 +115,13 @@
                         android:text="Total Artists"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
                         android:background="@color/BackwardColor"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -135,7 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -143,13 +143,13 @@
                         android:text="Initialized Playlists"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
                         android:background="@color/BackwardColor"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -163,7 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -171,13 +171,13 @@
                         android:text="Total Playing Time"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
                         android:background="@color/BackwardColor"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -191,7 +191,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
@@ -199,13 +199,13 @@
                         android:text="Now Playing"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
                         android:background="@color/BackwardColor"/>
-                    <com.ldt.NewDefinitionMusicApp.views.SeeThroughTextView
+                    <com.ldt.musicr.views.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"

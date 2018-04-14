@@ -51,7 +51,7 @@
         android:layout_height="1px"
         android:layout_below="@+id/tieude"
         android:background="#ff555555"/>
-    <com.ldt.NewDefinitionMusicApp.views.CustomTitleBar
+    <com.ldt.musicr.views.CustomTitleBar
         android:layout_below="@id/status_bar"
         android:id="@+id/topOfTieuDe"
         android:layout_width="match_parent"
