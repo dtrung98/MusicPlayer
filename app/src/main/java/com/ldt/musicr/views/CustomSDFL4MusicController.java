@@ -70,6 +70,7 @@ public class CustomSDFL4MusicController extends FrameLayout {
     private float eachDP =0;
     private final  float maxRy=14;
     private final  float maxRx = 14;
+    private int notARGB=0xffffff;
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -78,11 +79,14 @@ public class CustomSDFL4MusicController extends FrameLayout {
      //   if(backColor2!=0) canvas.drawColor(backColor2);
         int tempMix1 = ColorUtils.blendARGB(backColor2,backColor1,0.5f);
         int mixColor = ColorUtils.blendARGB(tempMix1, Color.WHITE, 0.5F);
-        int notARGB = ColorUtils.compositeColors(mixColor, Color.WHITE);
+        notARGB = ColorUtils.compositeColors(mixColor, Color.WHITE);
         if(notARGB==0) return;
         //canvas.drawColor(notARGB);
         mPaint.setColor(notARGB);
-    drawContent(canvas,mPaint);
+        drawContent(canvas,mPaint);
+    }
+    public int getBackgroundColor() {
+        return notARGB;
     }
     private float number=0;
     public void setNumber(float number1)

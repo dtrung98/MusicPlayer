@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.ldt.musicr"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName '1.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -36,7 +36,7 @@ repositories {
 
 dependencies {
 
-   // implementation 'com.android.support:design:26.0.2'
+    // implementation 'com.android.support:design:26.0.2'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -50,8 +50,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.google.android.gms:play-services-ads:10.2.6'
-    compile 'com.google.android.gms:play-services-location:10.2.6'
+  //  compile 'com.google.android.gms:play-services-ads:10.2.6'
+   // compile 'com.google.android.gms:play-services-location:10.2.6'
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'me.everything:overscroll-decor-android:1.0.4'
     compile 'se.emilsjolander:StickyScrollViewItems:1.1.0'
@@ -63,6 +63,7 @@ dependencies {
     compile 'de.Maxr1998:track-selector-lib:1.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     compile 'net.steamcrafted:materialiconlib:1.0.3'
+    compile 'com.daasuu:EasingInterpolator:1.0.0'
 }
 
 apply plugin: 'kotlin-android-extensions'

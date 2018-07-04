@@ -594,14 +594,14 @@ public final class  ImageEditor {
         final int color = 0xff424242;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
+    //    final RectF rectF = new RectF(rect);
         final float roundPx = pixels;
 
         paint.setAntiAlias(true);
         canvas.drawARGB(0, 0, 0, 0);
         paint.setColor(color);
-        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
+     //   canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawPath(ImageEditor.RoundedRect(0,0,bitmap.getWidth(),bitmap.getHeight(),roundPx,roundPx,false),paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
 

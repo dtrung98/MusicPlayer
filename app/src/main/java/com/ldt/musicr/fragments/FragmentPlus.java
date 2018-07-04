@@ -12,6 +12,7 @@ import com.ldt.musicr.activities.SupportFragmentActivity;
 
 /**
  * Created by trung on 8/13/2017.
+ *  FragmentPlus is a fragment type which supports visual transitions
  */
 public abstract class FragmentPlus extends Fragment {
     public enum StatusTheme {

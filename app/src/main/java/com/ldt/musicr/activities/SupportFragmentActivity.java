@@ -32,7 +32,7 @@ import com.ldt.musicr.fragments.FragmentHolder.FadeInFadeOutTransition;
 import com.ldt.musicr.fragments.FragmentHolder.RightToLeftTransition;
 import com.ldt.musicr.fragments.FragmentHolder.Prepare4Fragment;
 import com.ldt.musicr.fragments.FragmentPlus;
-import com.ldt.musicr.fragments.NowPlayingFragment;
+import com.ldt.musicr.fragments.PlayControllerFragment;
 import com.ldt.musicr.fragments.PlaybackFragment;
 import com.ldt.musicr.views.roundClippingFrameLayout;
 
@@ -96,7 +96,7 @@ public abstract class SupportFragmentActivity extends AppCompatActivity {
             switchThemeActivity();
         }
     }
-    public final void OrderToChangeStatusTheme(NowPlayingFragment musicControllerFragment)
+    public final void OrderToChangeStatusTheme(PlayControllerFragment musicControllerFragment)
     {
         // Trường hợp đặc biệt, cho phép musicControllerFragment thay đổi theme, trong điều kiện
         orderThemeActivity = musicControllerFragment.statusTheme;

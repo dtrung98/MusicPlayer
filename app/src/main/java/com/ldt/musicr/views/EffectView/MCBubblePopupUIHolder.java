@@ -11,10 +11,12 @@ import com.ldt.musicr.activities.MainActivity;
 
 /**
  * Created by trung on 10/30/2017.
+ *  Tạo một bộ xử lý Menu Choose Bubble Popup UI Holder
+ *  XỬ lý sự kiện nhấn chạm của view  và truyền sự kiện cho MCBP UI View
  */
 
-public class EffectViewHolder {
-    public EffectViewHolder(MainActivity activity) {
+public class MCBubblePopupUIHolder {
+    public MCBubblePopupUIHolder(MainActivity activity) {
         this.activity = activity;
         SCROLL_THRESHOLD = Tool.getOneDps(activity)*10;
         handler = new Handler();
@@ -31,17 +33,17 @@ public class EffectViewHolder {
     }
     private EffectViewListener whichCall;
     private MainActivity activity;
-    private EffectView effectView;
+    private MCBubblePopupUI MCBubblePopupUI;
     private View sourceView;
-    ImageView symbol;
-    String[] string_menu;
-    int[] image_menu;
-    float[] touch;
-    int[] from_local;
-    int[] from_size;
+    private ImageView symbol;
+    private String[] string_menu;
+    private int[] image_menu;
+    private float[] touch;
+    private int[] from_local;
+    private int[] from_size;
     private final Handler handler;
     private Status status;
-    String command;
+    private String command;
     enum Status {
         THE_FIRST_TIME,
         IN_LONG_PRESSED,
@@ -50,18 +52,18 @@ public class EffectViewHolder {
     private void setNull() {
         sourceView = null;
         whichCall = null;
-        effectView = null;
+        MCBubblePopupUI = null;
         status = Status.THE_FIRST_TIME;
     }
 
-    private EffectView create_New_Instance_Of_EffectView() {
-        EffectView effectView = new EffectView(activity);
-        effectView.set(symbol,sourceView,touch,string_menu,image_menu);
-        effectView.emo_behavior.set_source(from_local[0],from_local[1],from_size[0],from_size[1]);
+    private MCBubblePopupUI create_New_Instance_Of_EffectView() {
+        MCBubblePopupUI MCBubblePopupUI = new MCBubblePopupUI(activity);
+        MCBubblePopupUI.set(symbol,sourceView,touch,string_menu,image_menu);
+        MCBubblePopupUI.emo_behavior.set_source(from_local[0],from_local[1],from_size[0],from_size[1]);
         //effectView.emo_behavior.sync();
         //effectView.bg_behavior.sync();
-        activity.rootEveryThing.addView(effectView);
-        return effectView;
+        activity.rootEveryThing.addView(MCBubblePopupUI);
+        return MCBubblePopupUI;
     }
 
 
@@ -132,8 +134,8 @@ public class EffectViewHolder {
            if(isTheFirstTime()) setTheFirstTime(event);
             status = Status.IN_LONG_PRESSED;
            if(symbol!=null) symbol.setVisibility(View.INVISIBLE);
-            if (effectView == null)
-                effectView = create_New_Instance_Of_EffectView();
+            if (MCBubblePopupUI == null)
+                MCBubblePopupUI = create_New_Instance_Of_EffectView();
         }
     };
 
@@ -143,10 +145,10 @@ public class EffectViewHolder {
 
     public boolean run(View v, MotionEvent event) { // gọi khi đã chắc chắn là long press
         if (!isInLongPressed()) return false;
-        if(effectView==null&&(event.getAction()==MotionEvent.ACTION_UP||event.getAction()==MotionEvent.ACTION_CANCEL)) {
+        if(MCBubblePopupUI ==null&&(event.getAction()==MotionEvent.ACTION_UP||event.getAction()==MotionEvent.ACTION_CANCEL)) {
             return false;
         }
-        int result = effectView.handlingEvent(v, event);
+        int result = MCBubblePopupUI.handlingEvent(v, event);
         if (result != -1) {
             // trả về kết quả
           //  if(result!=0)

@@ -4,6 +4,7 @@ package com.ldt.musicr.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -34,22 +35,23 @@ import com.ldt.musicr.activities.SupportFragmentActivity;
 import com.ldt.musicr.views.AudioVisualSeekBar;
 import com.ldt.musicr.views.CustomAudioWaveView;
 import com.ldt.musicr.views.CustomSDFL4MusicController;
-import com.ldt.musicr.views.EffectView.EffectViewHolder;
+import com.ldt.musicr.views.EffectView.MCBubblePopupUIHolder;
 import com.ldt.musicr.views.PlayPauseButton;
 import com.ldt.musicr.activities.MainActivity;
 import com.ldt.musicr.R;
-import com.ldt.musicr.views.animated_icon.SlideMarkButton;
+import com.ldt.musicr.views.animated_icon.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NowPlayingFragment extends Fragment implements EffectViewHolder.EffectViewListener,AudioVisualSeekBar.SeekBarListener{
-    public final static String TAG = "NowPlayingFragment";
-    public FragmentPlus.StatusTheme statusTheme = FragmentPlus.StatusTheme.BlackIcon;
+public class PlayControllerFragment extends Fragment implements MCBubblePopupUIHolder.EffectViewListener,AudioVisualSeekBar.SeekBarListener, MinimizePlaySwitcher.PlayControlListener{
+    public final static String TAG = "PlayControllerFragment";
+    public FragmentPlus.StatusTheme statusTheme = FragmentPlus.StatusTheme.WhiteIcon;
     public int color_in7basic = 0;
     public int colorMostCommon = 0;
     private View navigation ;
     protected View rootView;
+
     public int[] palette = new int[6];
     private boolean generated = false;
 
@@ -90,7 +92,6 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         };
         generated = false;
         Palette.from(originalBitmapSong).generate(paletteListener);
-
     }
 
     boolean HadSetPalette = false;
@@ -174,6 +175,7 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         }
            getPaletteColor();
         playBar_pause_custom.setColor(color_in7basic);
+        toggle.setColor(color_in7basic);
         playBar_pause_custom.setPlayed(!playBar_pause_custom.isPlayed());
         playBar_pause_custom.startAnimation();
         ImageEditor.applyNewColor4Bitmap(getActivity(), R.drawable.listblack, playBar_list, color_in7basic, 1);
@@ -187,8 +189,8 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         ImageEditor.applyNewColor4Bitmap(getActivity(), R.drawable.pauseblack, inPause, color2, alpha2);
         ImageEditor.applyNewColor4Bitmap(getActivity(), R.drawable.next, inNext, color2, alpha2);
         playBar_TrackBar.setBackgroundColor(color1);
-
- thisIsParentOfRoot.setBackColor1(0x80<<24|((MainActivity)getActivity()).getColorr());
+       thisIsParentOfRoot.setBackColor1(0x80<<24|((MainActivity)getActivity()).getColorr());
+    //    thisIsParentOfRoot.setBackColor1(0x80BE5600);
     }
 
     float alpha_7basic = 0;
@@ -254,7 +256,6 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         overDoneZoomInAvatar = false;
         ValueAnimator va;
         if (!zoomIn) {
-
             va = ValueAnimator.ofFloat(1f, 0);
             va.setDuration(400);
         } else {
@@ -305,10 +306,7 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         });
         va.start();
     }
-
-
-
-    public NowPlayingFragment() {
+    public PlayControllerFragment() {
         // Required empty public constructor
     }
 
@@ -320,7 +318,7 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
     public PlayPauseButton playBar_pause_custom;
     public TextView playBar_nameOfSong, playBar_artistOfSong;
     public ImageView inList;
-    public SlideMarkButton toggle;
+    public ToggleButton toggle;
     public ImageView inPrev, inNext, inPause;
     public View playBar_TrackBar;
    public FrameLayout example_frame_layout;
@@ -346,9 +344,12 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         visualSeekBar.setSeekBarListener(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void setOnClickOrOnTouch4AllButton() {
         rootView.setOnTouchListener(touch_play_bar_top1);
         playBar_overView.setOnTouchListener(touch_play_bar_top1);
+        playBar_pause_custom.setOnClickListener(buttonClick);
+        playBar_list.setOnClickListener(buttonClick);
     }
     /**
      * this is handler y of playbar, it means that if user touch the play bar, in any posTop, will call this before all.
@@ -375,25 +376,32 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
    final String[] menu =  new String[]{"More", "Slide Up", "Close"};
     final int[] image_menu = new int[] {R.drawable.exit_controller,R.drawable.repeat,R.drawable.more_black};
 
-    private EffectViewHolder effectViewHolder;
+    private MCBubblePopupUIHolder mMCBubblePopupUIHolder;
     private View.OnTouchListener touch_play_bar_top1 = new View.OnTouchListener()
     {
-
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            if (v.getId() == R.id.music_controller_play_bar_frm||true) {
+            if (v.getId() == R.id.music_controller_play_bar_frm) {
                 v.performClick();
-                if (effectViewHolder == null) effectViewHolder = getMainActivity().effectViewHolder;
-                logOnTouchEvent("MSF",event);
-
-                effectViewHolder.detectLongPress(NowPlayingFragment.this, "",v,event);
-
-                return effectViewHolder.run(v, event) || getMainActivity().onTouchToggle.onTouch(v, event);
+                if (mMCBubblePopupUIHolder == null) mMCBubblePopupUIHolder = getMainActivity().MCBubblePopupUIHolder;
+              //  logOnTouchEvent("MSF",event);
+                mMCBubblePopupUIHolder.detectLongPress(PlayControllerFragment.this, "",v,event);
+                return mMCBubblePopupUIHolder.run(v, event) || getMainActivity().onTouchToggle.onTouch(v, event);
             }
             else return getMainActivity().onTouchToggle.onTouch(v,event);
         }
     };
-
+    private View.OnClickListener buttonClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //if(v.getId()==playBar_pause_custom.getId()) playBar_pause_clicked();
+            //else
+                if(v.getId() == playBar_list.getId()) playBar_pause_clicked();
+        }
+    };
+    private void playBar_pause_clicked() {
+        MinimizePlaySwitcher.switchToMinimizeMode(this);
+    }
     public void setInform4PlayBar(Song_onload nowPlaying) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             TransitionManager.beginDelayedTransition( rootView.findViewById(R.id.music_controller_parent2OfNameNArtist));
@@ -403,7 +411,6 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
     }
 
     public boolean IsInitAvatarIcon = true;
-    public boolean appearBar = true;
     public boolean inAnimator_alpha_pb = false;
   private boolean checkAgain = false;
   private float pc_check = 0;
@@ -413,8 +420,9 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
         ValueAnimator va;
         if(playBar_toOn) va = ValueAnimator.ofFloat(0,1);
         else va = ValueAnimator.ofFloat(1,0);
-        va.setDuration(600);
+        va.setDuration(400);
         va.setStartDelay(200);
+        va.setInterpolator(Animation.getInterpolator(6));
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -422,59 +430,28 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
                 if (d > 1) d = 1;
                 else if (d < 0) d = 0;
                 playBar_overView.setAlpha(d);
+                playBar_overView.setTranslationY(15*(d-1));
                 Log.d(TAG,"play bar alpha = " + d);
                 toggle.setAlpha(1 - d);
+                toggle.setTranslationY(15*d);
             }
         });
-/*
-        va.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation, boolean isReverse) {
-                inAnimator_alpha_pb = true;
-               if(playBar_overView.getVisibility()==View.INVISIBLE) {
-                   playBar_overView.setVisibility(View.VISIBLE);
-
-               }
-                else if(toggle.getVisibility()==View.INVISIBLE) {
-                   toggle.setVisibility(View.VISIBLE);
-
-               }
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                if(playBar_overView.getAlpha()==0) {
-                    playBar_overView.setVisibility(View.INVISIBLE);
-                    appearBar = false;
-                }
-                else if(toggle.getAlpha()==0) {
-                    toggle.setVisibility(View.INVISIBLE);
-                    appearBar = true;
-                }
-               inAnimator_alpha_pb = false;
-                if(checkAgain) {
-                    checkAgain = false;
-
-                    setAlphaOfPB(pc_check);
-                }
-            }
-        });
-        */
         va.start();
     }
+    float savedPC = 0;
     public void setAlphaOfPB(float pc) {
-        // Setting alpha for play bar.
-        if (appearBar&&pc>=0.5f) {
-            if (playBar_overView.getAlpha()>0)
-                //  disappear the playbar and appear the toggle
-                alpha_playBar_toggle_transition(false,pc);
+
+   //  if(1==1)   return;
+
+        if(savedPC<pc) {
+            // this means the controller is on going up to one
+        if(savedPC<0.5f&&pc>=0.5f) alpha_playBar_toggle_transition(false,pc);
+        } else {
+            // otherwise the controller is on going down to zero
+          if(savedPC>0.5f && pc <=0.5f) alpha_playBar_toggle_transition(true,pc);
         }
-        else if (!appearBar&&pc<0.5f) {
-            if (toggle.getAlpha() >0) {
-                // disappear the toggle and appear the playbar
-                alpha_playBar_toggle_transition(true,pc);
-            }
-        }
+        savedPC = pc;
+        Log.d(TAG, "pc = "+ pc+", alpha = "+ playBar_overView.getAlpha());
     }
     public void setAlphaOfPlayBar(float pc) {
         setAlphaOfPB(pc);
@@ -500,14 +477,20 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
     }
 
     public Bitmap originalBitmapSong = null;
+    @Override
+    public Bitmap getBitmapRounded(float rounded, Bitmap original) {
+        Bitmap new2 = ImageEditor.getRoundedCornerBitmap(originalBitmapSong, (int)rounded);
 
+         Bitmap ret =  ImageEditor.GetBlurredBackground(getActivity(), new2, 30, 30, 30, 30, -6, 180, 12, 2);
+         new2.recycle();
+         return ret;
+    }
     public void setBitmap4Avatar(Song_onload NowPlaying) {
         oldBitmap = ((BitmapDrawable) iconAvatar.getDrawable()).getBitmap();
         if (originalBitmapSong != null) originalBitmapSong.recycle();
         originalBitmapSong = getBitmapResourceOrPathFromSong(NowPlaying);
-        Bitmap new2 = ImageEditor.getRoundedCornerBitmap(originalBitmapSong, originalBitmapSong.getWidth());
-        newBitmap = ImageEditor.GetBlurredBackground(getActivity(), new2, 30, 30, 30, 30, -6, 180, 12, 2);
-        new2.recycle();
+       // Bitmap new2 = ImageEditor.getRoundedCornerBitmap(originalBitmapSong, originalBitmapSong.getWidth());
+        newBitmap = getBitmapRounded(originalBitmapSong.getWidth()/16,originalBitmapSong);
     }
 
     Bitmap newBitmap = null;
@@ -609,6 +592,18 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
       params.height=((SupportFragmentActivity)getActivity()).NavigationHeight;
       navigation.setLayoutParams(params);
   }
+  @Override
+  public int getNavigationHeight() {
+        return ((SupportFragmentActivity)getActivity()).NavigationHeight;
+  }
+  @Override
+  public int getBarHeight() {
+        return playBar_overView.getHeight();
+  }
+  @Override
+  public int getBarWidth() {
+        return navigation.getHeight();
+    }
     private MainActivity activity;
     public MainActivity getMainActivity(){
         if(activity==null) activity = (MainActivity)getActivity();
@@ -692,6 +687,49 @@ public class NowPlayingFragment extends Fragment implements EffectViewHolder.Eff
 
     @Override
     public void onSeekBarTouchUp() {
+
+    }
+
+
+
+    @Override
+    public float getCurrentRadius() {
+        return originalBitmapSong.getWidth()/16 ;
+    }
+
+    @Override
+    public int getOutlineColor() {
+        return color_in7basic;
+    }
+
+    @Override
+    public int getBackColor() {
+        return thisIsParentOfRoot.getBackgroundColor();
+    }
+
+    @Override
+    public Bitmap getOriginalBitmap() {
+        return oldBitmap;
+    }
+
+    @Override
+    public ImageView getCurrentView() {
+        return iconAvatar;
+    }
+
+    @Override
+    public View getRootLayout() {
+        return ((MainActivity)getActivity()).control_container;
+    }
+
+    @Override
+    public void beginSwitchMinimize() {
+        ((MainActivity)getActivity()).music_controller_withFrameLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void finishSwitchNormal() {
+        ((MainActivity)getActivity()).music_controller_withFrameLayout.setVisibility(View.VISIBLE);
 
     }
 }

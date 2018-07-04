@@ -45,5 +45,6 @@
     <string name="playlist_last_added">Last Added</string>
     <string name="playlist_recently_played">Recently Played</string>
     <string name="playlist_top_tracks">My Top Tracks</string>
+    <string name="this_is_name_of_the_song">This Is Name Of The Song</string>
 
 </resources>

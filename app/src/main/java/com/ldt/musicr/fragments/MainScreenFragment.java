@@ -68,7 +68,7 @@ import java.util.Comparator;
 import java.util.Random;
 import java.util.Timer;
 import com.ldt.musicr.MediaData.FormatDefinition.Album;
-import com.ldt.musicr.views.EffectView.EffectViewHolder;
+import com.ldt.musicr.views.EffectView.MCBubblePopupUIHolder;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -468,7 +468,6 @@ public class MainScreenFragment extends FragmentPlus {
         ((MainActivity)getActivity()).control_music_controller_up();
     }
 
-
     public static ArrayList<String> getData(ArrayList<Song_onload> arrayList) {
         int len = arrayList.size();
         ArrayList<String> arrayList1 = new ArrayList<>();
@@ -705,7 +704,7 @@ public class MainScreenFragment extends FragmentPlus {
     private void setUpRecyclerView() {
         chooseOneSong2MakeListAdapter adapter = new chooseOneSong2MakeListAdapter(getActivity(), DanhSachPhat);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 4, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 6, LinearLayoutManager.HORIZONTAL, false));
 
         OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
         SnapHelper snapHelper = new LinearSnapHelper();
@@ -714,10 +713,10 @@ public class MainScreenFragment extends FragmentPlus {
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                                                 @Override
                                                 public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                                                    NowPlayingFragment.logOnTouchEvent("recyclerView (onIntercept.... )",e);
+                                                    PlayControllerFragment.logOnTouchEvent("recyclerView (onIntercept.... )",e);
                                                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                                                     if(recyclerView.getChildLayoutPosition(child)!=-1) {
-                                                        getMainActivity().effectViewHolder.detectLongPress(effectViewListener,"",child,e);
+                                                        getMainActivity().MCBubblePopupUIHolder.detectLongPress(effectViewListener,"",child,e);
                                                         return true;
                                                     }
                                                     return false;
@@ -725,10 +724,10 @@ public class MainScreenFragment extends FragmentPlus {
 
                                                 @Override
                                                 public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                                                    NowPlayingFragment.logOnTouchEvent("recyclerView ( onTouchEvent )",e);
+                                                    PlayControllerFragment.logOnTouchEvent("recyclerView ( onTouchEvent )",e);
                                                     View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                                                    getMainActivity().effectViewHolder.detectLongPress(effectViewListener,"",child,e);
-                                                    boolean d = getMainActivity().effectViewHolder.run(child,e)|| normal(child,e);
+                                                    getMainActivity().MCBubblePopupUIHolder.detectLongPress(effectViewListener,"",child,e);
+                                                    boolean d = getMainActivity().MCBubblePopupUIHolder.run(child,e)|| normal(child,e);
 
                                                 }
 
@@ -787,7 +786,7 @@ public class MainScreenFragment extends FragmentPlus {
     }
     String[] long_press_menu_random_string = new String[] {"Play","Add","More"};
     int[] long_press_menu_random_image_id = new int[] {R.drawable.play,R.drawable.back,R.drawable.more_black};
-    public EffectViewHolder.EffectViewListener effectViewListener = new EffectViewHolder.EffectViewListener() {
+    public MCBubblePopupUIHolder.EffectViewListener effectViewListener = new MCBubblePopupUIHolder.EffectViewListener() {
         @Override
         public ImageView getImageView(String command) {
             return null;

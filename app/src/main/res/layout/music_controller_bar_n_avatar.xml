@@ -4,7 +4,8 @@
     <FrameLayout
         android:id="@+id/music_controller_play_bar_frm"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        >
         <View
             android:id="@+id/music_controller_PlayBar_TrackBar"
             android:layout_width="match_parent"

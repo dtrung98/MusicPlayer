@@ -16,19 +16,19 @@ public class BackgroundBehavior {
      * @param canvas canvas which to draw on
      *               draw a rectangle which makes a shadow on the bottom of
      */
-    EffectView effectView;
-    EffectView.Property property;
-    BackgroundBehavior(EffectView effectView) {
-        this.effectView = effectView;
-        property = effectView.property;
+    MCBubblePopupUI MCBubblePopupUI;
+    com.ldt.musicr.views.EffectView.MCBubblePopupUI.MCAttributes mcAttributes;
+    BackgroundBehavior(MCBubblePopupUI MCBubblePopupUI) {
+        this.MCBubblePopupUI = MCBubblePopupUI;
+        mcAttributes = MCBubblePopupUI.mcAttributes;
     }
     private void invalidate() {
-        effectView.invalidate();
+        MCBubblePopupUI.invalidate();
     }
     public void draw_gradient_shadow(Canvas canvas) {
         canvas.save();
-        canvas.translate(0, property.height - property.length_dp_100);
-        //       canvas.drawRect(0,0,property.width,property.length_dp_100,gradient_shadow_Paint);
+        canvas.translate(0, mcAttributes.height - mcAttributes.length_dp_100);
+        //       canvas.drawRect(0,0,mcAttributes.width,mcAttributes.length_dp_100,gradient_shadow_Paint);
         canvas.restore();
     }
     private boolean inAnimation = false;
@@ -89,7 +89,7 @@ public class BackgroundBehavior {
                     animation.removeAllListeners();
                     inAnimation = false;
                     if(prepare2End) {
-                        effectView.destroy();
+                        MCBubblePopupUI.destroy();
                     }
                 }
             });
@@ -105,8 +105,8 @@ public class BackgroundBehavior {
     }
 
     void destroy() {
-        effectView = null;
-        property = null;
+        MCBubblePopupUI = null;
+        mcAttributes = null;
     }
 
     boolean sync() {

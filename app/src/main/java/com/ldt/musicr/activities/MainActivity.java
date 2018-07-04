@@ -3,6 +3,7 @@ package com.ldt.musicr.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.app.WallpaperManager;
 
 import android.content.ComponentName;
@@ -10,6 +11,7 @@ import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -26,13 +28,13 @@ import com.ldt.musicr.InternalTools.Animation;
 import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.MediaData.Song_onload;
 import com.ldt.musicr.fragments.FragmentPlus;
-import com.ldt.musicr.fragments.NowPlayingFragment;
+import com.ldt.musicr.fragments.PlayControllerFragment;
 import com.ldt.musicr.fragments.PlaybackFragment;
 
 import com.ldt.musicr.fragments.MainScreenFragment;
 import com.ldt.musicr.R;
 import com.ldt.musicr.services.IRTimberService;
-import com.ldt.musicr.views.EffectView.EffectViewHolder;
+import com.ldt.musicr.views.EffectView.MCBubblePopupUIHolder;
 import com.ldt.musicr.views.SupportDarkenFrameLayout;
 
 import java.util.ArrayList;
@@ -41,10 +43,9 @@ import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
 import static android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 import static com.ldt.musicr.services.MusicPlayer.mService;
 public class MainActivity extends SupportFragmentActivity implements ServiceConnection {
+    private static final String TAG = "MainActivity";
+
     boolean openedDrawer = false;
-
-
-
 
     public void openAndCloseDrawer()
     {
@@ -55,7 +56,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
         }
         openedDrawer = true;
     }
-    public EffectViewHolder effectViewHolder;
+    public MCBubblePopupUIHolder MCBubblePopupUIHolder;
     public FrameLayout music_controller_withFrameLayout;// this is the frameLayout will contain the music controller fragment, it will be added then.
     public FrameLayout playlist_controller_withFrameLayout;// this is the frameLayout will contain the playlist controller fragment, it will be added to music_controller framelayout.
     public int[] ScreenSize;
@@ -78,7 +79,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        effectViewHolder = new EffectViewHolder(this);
+        MCBubblePopupUIHolder = new MCBubblePopupUIHolder(this);
         setContentView(R.layout.activity_layout);
         View f= findViewById(R.id.activity_layout_root);
         f.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN); // trong suốt status bar và thanh navigation màu đen.
@@ -120,19 +121,18 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     }
     private void runLoading()
     {
-
-        FrameLayout parents = (FrameLayout)findViewById(R.id.activity_layout_root);
+        // load the root layout of activity
+        FrameLayout parents = findViewById(R.id.activity_layout_root);
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.basic_activity_layout,
-                (ViewGroup) findViewById(R.id.rootEveryThing));
+        View view = inflater.inflate(R.layout.basic_activity_layout, findViewById(R.id.rootEveryThing));
         parents.addView(view,0);
         callSuperMergeUI();
         MergeUI();
-        Initialize_MusicController();
+        Initialize_PlayController();
         Initialize_PlaylistController();
 
         onHideLayoutAfterNavigation();
-      openAndCloseDrawer();
+        openAndCloseDrawer();
         setHeightOfNavigation();
     }
     @Override
@@ -149,12 +149,12 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     }
     private void onHideLayoutAfterNavigation()
     {
-
         getWindow().addFlags( SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION| SYSTEM_UI_FLAG_LAYOUT_STABLE);//|WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
    //     getWindow().addFlags( SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
    //             SYSTEM_UI_FLAG_LAYOUT_STABLE );
     //    getWindow().addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS|WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
     }
+
 
     private Bitmap getWallpapers()
     {
@@ -184,7 +184,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
         float InDp = pc*VirtualStatusHeight_DP + pc_pl*VirtualStatusHeight_DP*0.5f;
 
         if(InDp>=VirtualStatusHeight_DP/2&&!black_theme) {
-            musicControllerFragment.statusTheme = FragmentPlus.StatusTheme.BlackIcon;
+            musicControllerFragment.statusTheme = FragmentPlus.StatusTheme.WhiteIcon;
           OrderToChangeStatusTheme(musicControllerFragment);
         }
         else if(InDp<VirtualStatusHeight_DP/2&&!black_theme)
@@ -203,6 +203,11 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
  //   endarker4SwitchContainer.setAlpha(alpha);
 
     }
+    // Các phân lớp giao diện của ứng dụng
+    // Hiện tại có 3 phân lớp
+    // Lớp Container chứa Bộ Fragment , điều chuyển giữa các trang giao diện
+    // Lớp MusicController là bộ điều khiển nhạc
+    // Lớp PlaylistController là bộ điều khiển danh sách phát
     public enum Layer {
         Container,
         MusicController,
@@ -232,13 +237,13 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
    //     Log.d("Dps = "+Dps+", pcc = "+pcc+", ScreenHeightDp = "+ ScreenHeightDp,"RPSFD");
         return pcc;
     }
-    private void Initialize_MusicController()
+    private void Initialize_PlayController()
     {
         if(Init_Music_Controller) return;
         if(musicControllerFragment!=null) return;
     ScreenSize= Tool.getRefreshScreenSize(this);
      ScreenSizeDP = Tool.getScreenSizeInDp(this);
-        musicControllerFragment= new NowPlayingFragment();
+        musicControllerFragment= new PlayControllerFragment();
         // this is the frame contain music controller
         music_controller_withFrameLayout = new SupportDarkenFrameLayout(this);
         float paddingTop = StatusHeight+pixel_unit/5;
@@ -261,7 +266,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     public void Initialize_PlaylistController()
     {
 
-        if(music_controller_withFrameLayout==null) Initialize_MusicController();
+        if(music_controller_withFrameLayout==null) Initialize_PlayController();
     //    if(playlistControllerFragment!=null) return;
         // this is the function which init the playlist controller
         Music_Controller_Width = music_controller_withFrameLayout.getWidth();
@@ -348,7 +353,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     //
     //  the end
     //
-
+   //static int count = 0;
     public void UpDown_musicController_Transform(float from,final float to)
     {
         if(block_UpDown) return;
@@ -359,6 +364,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
         if(from>to) {
             mDuration =200+(int)(500.0f*pec);
             va.setInterpolator(Animation.getInterpolator(4));
+        //    count = (count==28)? 0 : count+1; va.setInterpolator(Animation.getEasingInterpolator(15)); Log.d(TAG,"count = "+count);
             down = true;
         }
         else {
@@ -710,7 +716,7 @@ public class MainActivity extends SupportFragmentActivity implements ServiceConn
     };
 
 
-    public NowPlayingFragment musicControllerFragment;
+    public PlayControllerFragment musicControllerFragment;
     public PlaybackFragment playlistControllerFragment;
 
 }

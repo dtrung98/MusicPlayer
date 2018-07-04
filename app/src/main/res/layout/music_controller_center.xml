@@ -2,14 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.ldt.musicr.views.animated_icon.SlideMarkButton
+    <com.ldt.musicr.views.animated_icon.ToggleButton
         android:id="@+id/music_controller_toggle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:layout_gravity="center"
-        android:background="@android:color/transparent"
         android:alpha="0"/>
     <View
         android:id="@+id/border_shape4avatar"
@@ -44,9 +43,10 @@
                     android:ellipsize="end"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="This Is Name Of The Song"
+                    android:text="@string/this_is_name_of_the_song"
                     android:textColor="#B8183A"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
                 <TextView
                     android:id="@+id/music_controller_nameOfArtist"
                     android:layout_width="wrap_content"
@@ -55,6 +55,7 @@
                     android:text="This Is Artist Of The Song"
                     android:ellipsize="end"
                     android:textColor="#E6010E"
+                    android:textStyle="bold"
                     android:textSize="12sp" />
             </LinearLayout>
         </FrameLayout>
@@ -136,6 +137,7 @@
             android:layout_height="50dp"
             android:src="@drawable/list_nearlyred"
             android:padding="15dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:contentDescription=" icon list mở tab danh sách phát, icon nằm dưới cùng" />
     </FrameLayout>
 </LinearLayout>

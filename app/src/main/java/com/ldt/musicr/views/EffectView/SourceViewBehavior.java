@@ -21,13 +21,13 @@ public class SourceViewBehavior {
     private final float maxRx;
     private Paint mPaintFill;
     private Paint mPaintStroke;
-    private EffectView effectView;
-    SourceViewBehavior(EffectView effectView) {
+    private MCBubblePopupUI MCBubblePopupUI;
+    SourceViewBehavior(MCBubblePopupUI MCBubblePopupUI) {
         local = new int[]{0,0};
         size = new int[] {0,0};
-        this.effectView = effectView;
+        this.MCBubblePopupUI = MCBubblePopupUI;
 
-        maxRx = maxRy = effectView.property.oneDp* MAX_R_XY;
+        maxRx = maxRy = MCBubblePopupUI.mcAttributes.oneDp* MAX_R_XY;
 
         mPaintFill = new Paint();
         mPaintFill.setAntiAlias(true);
@@ -53,7 +53,7 @@ public class SourceViewBehavior {
         if(sourceView==null) return;
         canvas.save();
         canvas.translate(local[0],local[1]);
-        float pc = effectView.getBackgroundAlphaPercent();
+        float pc = MCBubblePopupUI.getBackgroundAlphaPercent();
         //int color = mPaintFill.getColor();
        // mPaintFill.setColor(0xffdddddd);
        // canvas.drawRect(0,0,size[0],size[1],mPaintFill);
@@ -70,7 +70,7 @@ public class SourceViewBehavior {
     void destroy() {
         sourceView.setVisibility(View.VISIBLE);
         sourceView = null;
-        effectView = null;
+        MCBubblePopupUI = null;
         mPaintFill = null;
     }
 }
