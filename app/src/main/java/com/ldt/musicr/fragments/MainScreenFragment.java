@@ -3,12 +3,17 @@ package com.ldt.musicr.fragments;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.animation.*;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -47,56 +52,103 @@ import android.widget.ImageView;
 
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.ldt.musicr.InternalTools.ImageEditor;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.InternalTools.helper;
-import com.ldt.musicr.MediaData.MediaLoader;
-import com.ldt.musicr.MediaData.Song_onload;
+import com.ldt.musicr.MediaData.Song_OnLoad;
 import com.ldt.musicr.Others.OnSwipeTouchListener;
 import com.ldt.musicr.R;
 
-import com.ldt.musicr.activities.MainActivity;
-import com.ldt.musicr.activities.SupportFragmentActivity;
-import com.ldt.musicr.recyclerview.chooseOneSong2MakeListAdapter;
+import com.ldt.musicr.activities.BaseActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
+import com.ldt.musicr.adapters.SmallPlaylistAdapter;
+import com.ldt.musicr.adapters.SmallSongListAdapter;
+import com.ldt.musicr.dataloaders.PlaylistLoader;
+import com.ldt.musicr.dataloaders.SongLoader;
+import com.ldt.musicr.listeners.MusicStateListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Timer;
+
 import com.ldt.musicr.MediaData.FormatDefinition.Album;
-import com.ldt.musicr.views.EffectView.MCBubblePopupUIHolder;
+import com.ldt.musicr.views.BubbleMenu.BubbleMenuCenter;
+import com.ldt.musicr.views.GridRecyclerIndicator;
+import com.ldt.musicr.views.stickyActionBarConstraintLayout;
+import com.ldt.musicr.views.StickyScrollView;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-import static com.ldt.musicr.InternalTools.ImageEditor.updateSat;
+import static com.ldt.musicr.InternalTools.BitmapEditor.updateSat;
 
-public class MainScreenFragment extends FragmentPlus {
-
+public class MainScreenFragment extends FragmentPlus implements MusicStateListener {
+    private static final String TAG = "MainScreenFragment";
     private static final int MY_PERMISSIONS_READ_STORAGE = 1;
     private TextView baiHat;
     private ImageButton menuButton;
-    private ImageView album2;
     private ImageButton searchButton;
     private View statusBar;
-    private RecyclerView recyclerView;
+    private RecyclerView songListRecyclerView,playlistRecyclerView;
     private ListView playlist_BigList;
+    private stickyActionBarConstraintLayout stickyActionBar;
+    private GridRecyclerIndicator songIndicator;
+    private View songs_pieces_relative_header;
+    private View playlist_pieces_relative;
+    private View main_slider;
+    public static RippleDrawable getPressedColorRippleDrawable(int normalColor, int pressedColor)
+    {
+        return new RippleDrawable(getPressedColorSelector(normalColor, pressedColor), getColorDrawableFromColor(normalColor), null);
+    }
+
+    public static ColorStateList getPressedColorSelector(int normalColor, int pressedColor)
+    {
+        return new ColorStateList(
+                new int[][]
+                        {
+                                new int[]{android.R.attr.state_pressed},
+                                new int[]{android.R.attr.state_focused},
+                                new int[]{android.R.attr.state_activated},
+                                new int[]{}
+                        },
+                new int[]
+                        {
+                                pressedColor,
+                                pressedColor,
+                                pressedColor,
+                                normalColor
+                        }
+        );
+    }
+
+    public static ColorDrawable getColorDrawableFromColor(int color)
+    {
+        return new ColorDrawable(color);
+    }
+
     private void MergeUI() {
+        main_slider = rootView.findViewById(R.id.main_slider);
+        blur_background =  rootView.findViewById(R.id.blur_background);
+        songs_pieces_relative_header = rootView.findViewById(R.id.songs_piece_header_relative);
+        playlist_pieces_relative = rootView.findViewById(R.id.playlist_piece_relative);
+  //      songs_pieces_relative_header.setBackground(rippleDrawable);
         statusBar = rootView.findViewById(R.id.status_bar);
-        recyclerView = rootView.findViewById(R.id.recyclerView_N1);
+        songListRecyclerView = rootView.findViewById(R.id.recyclerView_N1);
+        playlistRecyclerView = rootView.findViewById(R.id.playlists_recycler_view);
         menuButton = rootView.findViewById(R.id.menuButton);
         baiHat =  rootView.findViewById(R.id.baihat);
-        titleBar = rootView.findViewById(R.id.title_bar);
+        titleBar = rootView.findViewById(R.id.ActionBarAndStatusBar);
+        stickyActionBar = rootView.findViewById(R.id.stickyActionBar);
         scrollView =rootView.findViewById(R.id.myScroll);
-        tieuDe =  rootView.findViewById(R.id.tieude);
-        line_bottomOftitleBar = rootView.findViewById(R.id.mainActivity_line_titlebar);
-        album2 =  rootView.findViewById(R.id.album2);
-        searchButton = rootView.findViewById(R.id.search);
+        scrollView.setStickyDrawView(stickyActionBar);
+      //  searchButton = rootView.findViewById(R.id.search);
         playlist_BigList =rootView.findViewById(R.id.choosePlaylist_listView);
-        setTimer();
+        songIndicator = rootView.findViewById(R.id.circleIndicator);
+        addToBeRipple(R.drawable.ripple_effect,songs_pieces_relative_header,playlist_pieces_relative);
+        addToBeRipple(R.drawable.ripple_oval,menuButton);
+        //setTimer();
     }
 
     private void SetAllClick() {
@@ -104,12 +156,12 @@ public class MainScreenFragment extends FragmentPlus {
                 {  // put views here
                         menuButton,
                         baiHat,
-                        titleBar,
-                        searchButton
+                        songs_pieces_relative_header
+              //          titleBar,
+                    //    searchButton
                 };
         setOnClick(Onclick, views);
     }
-
     private void setOnClick(View.OnClickListener onclick, View[] v) {
         int len = v.length;
         for (int i = 0; i < len; i++)
@@ -120,14 +172,13 @@ public class MainScreenFragment extends FragmentPlus {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.search: {
-                    Scroll2Top();
-                }
-                break;
                 case R.id.baihat:
                 case R.id.menuButton:
-                case R.id.title_bar:
-                    ((SupportFragmentActivity) getActivity()).pushFragment(ShowMusicSongs.Initialize(getActivity()), true);
+                case R.id.ActionBarAndStatusBar:
+                case R.id.songs_piece_header_relative:
+                    ((SupportFragmentPlusActivity) getActivity()).pushFragment(ShowMusicSongs.Initialize(getActivity()), true);
+                    break;
+
             }
         }
     };
@@ -159,10 +210,10 @@ public class MainScreenFragment extends FragmentPlus {
     public static MainScreenFragment Initialize(Activity activity) {
 
         MainScreenFragment mainScreenFragment = new MainScreenFragment();
-        mainScreenFragment.setFrameLayoutNTransitionType(activity, SupportFragmentActivity.TransitionType.FADE_IN_OUT);
+        mainScreenFragment.setFrameLayoutNTransitionType(activity, SupportFragmentPlusActivity.TransitionType.FADE_IN_OUT);
         return mainScreenFragment;
     }
-
+    private boolean initted = false;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -170,6 +221,8 @@ public class MainScreenFragment extends FragmentPlus {
         MergeUI();
         SetAllClick();
         GetListMusic();
+        ((BaseActivity)getActivity()).setMusicStateListenerListener(this);
+        initted = true;
         return rootView;
     }
 
@@ -204,7 +257,7 @@ public class MainScreenFragment extends FragmentPlus {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult) {
-        Log.d("Permission Order","Reply Permission'");
+     //   Log.d("Permission Order","Reply Permission'");
         switch (requestCode) {
             case MY_PERMISSIONS_READ_STORAGE: {
                 if (grantResult.length > 0 && grantResult[0] == PackageManager.PERMISSION_GRANTED) {
@@ -219,27 +272,15 @@ public class MainScreenFragment extends FragmentPlus {
     }
 
     private int dd = 0;
+    private void onPostSongs() {};
+    private void onPostAlbums() {};
+    private void doInBackground_LoadSongs() {};
+    private void doInBackground_LoadAlbums() {};
 
     private void doStuff() {
-        Log.d("Permission Order","Permission's granted");
-        Tool.showToast(getMainActivity(),"Permission's granted",500);
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                GetListSong();
-                setAlbumArrayList_ListView();
-                scrollView.fullScroll(ScrollView.FOCUS_UP);
-                onTransitionComplete();
-            }
-
-            @Override
-            protected Void doInBackground(Void... voids) {
-                getMusic();
-                getAlbumList_AfterAskedPermission();
-                return null;
-            }
-
-        }.execute();
+        new loadPlaylists().execute();
+        new loadSongs().execute();
+        onTransitionComplete();
     }
     private boolean drawn =false;
     @Override
@@ -264,17 +305,20 @@ public class MainScreenFragment extends FragmentPlus {
         statusBar.setLayoutParams(params);
     }
 
-    class AlbumArt {
-        String Name;
-        String Art;
+    @Override
+    public void restartLoader() {
 
-        public AlbumArt(String name, String art) {
-            Name = name;
-            Art = art;
-        }
     }
 
-    private Timer timer = new Timer();
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+        if(mSongsListAdapter!=null) mSongsListAdapter.notifyDataSetChanged();
+    }
 
     private void setTimer() {
         start();
@@ -307,32 +351,27 @@ public class MainScreenFragment extends FragmentPlus {
         handler.postDelayed(runnable, 2);
     }
 
-    ScrollView scrollView;
+    StickyScrollView scrollView;
     RelativeLayout titleBar;
-    RelativeLayout tieuDe;
-    View line_bottomOftitleBar;
+    int titleColor = 0;
 
     private void AnimatedColorTitle() {
         if (scrollView == null) scrollView =  rootView.findViewById(R.id.myScroll);
         int yy = scrollView.getScrollY();
 
-        int max_y = scrollView.getChildAt(0).getHeight() - scrollView.getHeight();
-
         if (yy < max_alpha) {
             alphaOfTitleBar = yy / 3;
             if (alphaOfTitleBar < 0) alphaOfTitleBar = 0;
-            titleBar.setBackgroundColor(alphaOfTitleBar << 24 | colorr);
-            line_bottomOftitleBar.setAlpha(alphaOfTitleBar/255.0f);
+
         } else if (alphaOfTitleBar < max_alpha) {
             alphaOfTitleBar = max_alpha / 3;
-            titleBar.setBackgroundColor(alphaOfTitleBar << 24 | colorr);
-            line_bottomOftitleBar.setAlpha(alphaOfTitleBar/255.0f);
+
         } else if (just_change_color) {
             just_change_color = false;
-            titleBar.setBackgroundColor(alphaOfTitleBar << 24 | colorr);
-            line_bottomOftitleBar.setAlpha(alphaOfTitleBar/255.0f);
         }
-
+        titleColor = BitmapEditor.mixTwoColors(Color.WHITE,0xff<<24| color24bit,1-alphaOfTitleBar/255.0f);
+        statusBar.setBackgroundColor(titleColor);
+        stickyActionBar.setBackgroundColor(titleColor);
     }
 
     /*
@@ -360,9 +399,12 @@ public class MainScreenFragment extends FragmentPlus {
        timer = null;
    }
         */
+
+    /*
     private ArrayList<AlbumArt> albumArts = new ArrayList<>();
 
     private void getMusic() {
+
         ContentResolver contentR = getActivity().getContentResolver();
         MediaLoader.StartToRefresh(contentR);
         Uri song = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -390,30 +432,32 @@ public class MainScreenFragment extends FragmentPlus {
             //     Toast.makeText(MainScreenFragment.this, albumArts.size() + ":" + albumArts.size(), Toast.LENGTH_SHORT).show();
 
         }
-
+        // con trỏ bài hát
         if (songCursor != null && songCursor.moveToFirst()) {
-            int songTitle = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtst = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            int albumId = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-            int data = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-            int idColumn = songCursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
+            // tên bài
+            int songTitleID = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
+            int songArtistID = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int albumID = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+            int pathID = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+            //
+            int songIDID = songCursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
             do {
-                long thisId = songCursor.getLong(idColumn);
-                String idz = songCursor.getString(albumId);
-                String curTil = songCursor.getString(songTitle);
-                String curArt = songCursor.getString(songArtst);
-                String path = songCursor.getString(data);
+                long songID = songCursor.getLong(songIDID);
+                String idAlbum = songCursor.getString(albumID);
+                String curTit = songCursor.getString(songTitleID);
+                String curArt = songCursor.getString(songArtistID);
+                String path = songCursor.getString(pathID);
 
                 // String thisArt = songCursor.getString(album);
                 // if(thisArt!=null&&thisArt!="")
-                //   listSong.add(new Song_onload(thisArt,curTil,curArt));
+                //   listSong.add(new Song_OnLoad(thisArt,curTil,curArt));
                 //    else
 
-                String nnn = getAlbumArtWithId(idz);
-                if (nnn != null)
-                    DanhSachPhat.add(new Song_onload(thisId, nnn, curTil, curArt, path));
+                String artPath = getAlbumArtWithId(idAlbum);
+                if (artPath != null)
+                    DanhSachPhat.add(new Song_OnLoad(songID, artPath, curTit, curArt, path));
                 else if (DanhSachPhat.size() != 0)
-                    DanhSachPhat.add(new Song_onload(thisId, R.drawable.default_image2, curTil, curArt, path));
+                    DanhSachPhat.add(new Song_OnLoad(songID, R.drawable.default_image2, curTit, curArt, path));
 
             }
             while (songCursor.moveToNext());
@@ -425,14 +469,14 @@ public class MainScreenFragment extends FragmentPlus {
             }
         });
 
-        Collections.sort(DanhSachPhat, new Comparator<Song_onload>() {
-            public int compare(Song_onload a, Song_onload b) {
+        Collections.sort(DanhSachPhat, new Comparator<Song_OnLoad>() {
+            public int compare(Song_OnLoad a, Song_OnLoad b) {
                 return a.Title.compareTo(b.Title);
             }
         });
     }
 
-    /*
+
       private AdapterView.OnItemClickListener list_view_item_onclick = new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> parent, View view, int posTop, long id) {
@@ -441,34 +485,42 @@ public class MainScreenFragment extends FragmentPlus {
           }
       };
       */
-    public static ArrayList<Song_onload> DanhSachPhat = new ArrayList<Song_onload>();
-    private Intent ex_service_intent = null;
+    public static ArrayList<Song_OnLoad> DanhSachPhat = new ArrayList<Song_OnLoad>();
 
-    private void GetListSong() {
-        if (DanhSachPhat.size() == 0) return;
-        dd = rnd.nextInt(albumArts.size());
-        setUpRecyclerView();
-       OverScrollDecoratorHelper.setUpOverScroll(scrollView);
+    private float actionBarHeight = 0;
+    private float transYActionBar = 0;
+    private boolean scrollOnDown = false;
+    private float scrollMove = 0;
+    private void doTheActionBar(View v, MotionEvent e) {
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                scrollOnDown = true;
+                scrollMove = e.getRawY();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float delta = e.getRawY() - scrollMove;
+                scrollMove = e.getRawY();
+                Log.d(TAG,"delta = "+delta+", actionBarHeight = "+actionBarHeight);
 
-
+                if(delta<0&&actionBarHeight!=-transYActionBar) {
+                    transYActionBar = (transYActionBar +delta<-actionBarHeight)? transYActionBar + delta : -actionBarHeight;
+                    stickyActionBar.setTranslationY(transYActionBar);
+                }
+                else if(delta>0&&transYActionBar!=0) {
+                    transYActionBar = (transYActionBar + delta >0) ? 0 : transYActionBar + delta;
+                    stickyActionBar.setTranslationY(transYActionBar);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                    scrollOnDown = false;
+            scrollMove = 0;
+                break;
+        }
     }
 
     public int NowPlaying_int;
 
-    public void controlPrevOrNext(boolean next) {
-        if (next) NowPlaying_int++;
-        else NowPlaying_int--;
-        if (NowPlaying_int > DanhSachPhat.size() - 1) NowPlaying_int = DanhSachPhat.size() - 1;
-        else if (NowPlaying_int < 0) NowPlaying_int = 0;
-        ex_service_intent.putExtra("NowPlaying", NowPlaying_int);
-        getActivity().startService(ex_service_intent);
-        ChangeBackground(NowPlaying_int);
-        ((MainActivity) getActivity()).Control_Music_Song_Player(DanhSachPhat, NowPlaying_int);
-        ((MainActivity) getActivity()).Init_UpDown_musicController();
-        ((MainActivity)getActivity()).control_music_controller_up();
-    }
-
-    public static ArrayList<String> getData(ArrayList<Song_onload> arrayList) {
+    public static ArrayList<String> getData(ArrayList<Song_OnLoad> arrayList) {
         int len = arrayList.size();
         ArrayList<String> arrayList1 = new ArrayList<>();
         for (int i = 0; i < len; i++) {
@@ -482,52 +534,64 @@ public class MainScreenFragment extends FragmentPlus {
 
     Random rnd = new Random();
 
-    private String getAlbumArtWithId(String id) {
-        int len = albumArts.size();
-        for (int i = 0; i < len; i++)
-            if (id.equals(albumArts.get(i).Name)) {
-                return albumArts.get(i).Art;
-            }
-        return null;
+    @Override
+    public void onArtWorkChanged() {
+    if(!initted) return;
+     //   blur_background.setImageBitmap(getMainActivity().getBlurArtWork());
+        int c = Tool.getSurfaceColor();
+        applyRippleColor(c);
+        main_slider.setBackgroundColor(Color.argb(150,Color.red(c),Color.green(c),Color.blue(c)));
+        if(mSongsListAdapter!=null) mSongsListAdapter.notifyDataSetChanged();
+        //((RippleDrawable)songs_pieces_relative_header.getBackground()).setColor(ColorStateList.valueOf(Tool.getSurfaceColor()));
     }
 
     private ImageView blur_background;
     private boolean settedBackground = false;
 
     private void ChangeBackground(int id) {
+        // ảnh gốc
         Bitmap original = null;
+        // ảnh mẫu
         Bitmap sample = null;
+        // ảnh mẫu sau cập nhật
         Bitmap sample_update;
+        // ảnh mẫu được làm mờ
         Bitmap sample_blur ;
+        // đã từng cài background trước đó rồi
         settedBackground = true;
-        blur_background =  rootView.findViewById(R.id.blur_background);
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        String albumArt_path = DanhSachPhat.get(id).AlbumArt_path;
+        // ImageView dùng để hiển thị ảnh blur
 
+        // biến
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        // địa chỉ của ảnh
+        String albumArt_path = DanhSachPhat.get(id).AlbumArt_path;
+        // Nếu địa chỉ khác null, rỗng và tồn tại
         if (albumArt_path != null && albumArt_path != "" && Tool.Path_Is_Exist(albumArt_path) == 2)
-            try {
+            try { // cố gắng lấy bức ảnh
                 original = BitmapFactory.decodeFile(albumArt_path);
                 options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
                 sample = BitmapFactory.decodeFile(albumArt_path, options);
-                album2.setImageBitmap(original);
             } catch (Exception e) {
+            // nếu không lấy được thì lấy ảnh mặc định
                 original = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
                 options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
                 sample = BitmapFactory.decodeResource(getResources(), R.drawable.default_image, options);
             }
+            // phòng
         if (original == null)
             original = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
+
         options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
         if (sample == null)
             sample = BitmapFactory.decodeResource(getResources(), R.drawable.default_image, options);
 
         sample_update = updateSat(sample, 4);
-        sample_blur = ImageEditor.fastblur(sample_update, 1, 4);
-        int[] averageColorRGB = ImageEditor.getAverageColorRGB(sample_blur);
-        black_theme = ImageEditor.PerceivedBrightness(95, averageColorRGB);
+        sample_blur = BitmapEditor.fastblur(sample_update, 1, 4);
+        int[] averageColorRGB = BitmapEditor.getAverageColorRGB(sample_blur);
+        black_theme = BitmapEditor.PerceivedBrightness(95, averageColorRGB);
 
-        colorr = (averageColorRGB[0] << 16 | averageColorRGB[1] << 8 | averageColorRGB[2]);
-        Tool.setGlobalColor(0xff << 24 | colorr);
+        color24bit = (averageColorRGB[0] << 16 | averageColorRGB[1] << 8 | averageColorRGB[2]);
+        Tool.setGlobalColor(0xff << 24 | color24bit);
         just_change_color = true;
         //   changeThemeColor();
         blur_background.setImageBitmap(sample_blur);
@@ -537,7 +601,7 @@ public class MainScreenFragment extends FragmentPlus {
     private void changeThemeColor()
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(0x88000000 | colorr);
+            getWindow().setNavigationBarColor(0x88000000 | color24bit);
             root.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -567,18 +631,13 @@ public class MainScreenFragment extends FragmentPlus {
     private boolean blockChangeStatusBarColor = false;
     private boolean FirstRender = true;
 
-    private void setBackground() {
-        int random = rnd.nextInt(albumArts.size());
-        ChangeBackground(random);
-        //     Log.d((System.nanoTime()-ddd)+"","zzzm");
-    }
 
     private int alphaOfTitleBar = 0;
     static boolean black_theme = false;
     /*
     Black is true, otherwise is white
      */
-    public int colorr = 255 << 16 | 255 << 8 | 255;
+    public int color24bit = 255 << 16 | 255 << 8 | 255;
 
     /**
      * Calculate the average red, green, blue color values of a bitmap
@@ -677,7 +736,7 @@ public class MainScreenFragment extends FragmentPlus {
         /**
          * constructor
          *
-         * @param margin  desirable margin size in px between the views in the recyclerView
+         * @param margin  desirable margin size in px between the views in the songListRecyclerView
          * @param columns number of columns of the RecyclerView
          */
         public RecyclerViewMargin(@IntRange(from = 0) int margin, @IntRange(from = 0) int columns) {
@@ -687,7 +746,7 @@ public class MainScreenFragment extends FragmentPlus {
         }
 
         /**
-         * Set different margins for the items inside the recyclerView: no y margin for the first row
+         * Set different margins for the items inside the songListRecyclerView: no y margin for the first row
          * and no x margin for the first column.
          */
         @Override
@@ -701,92 +760,54 @@ public class MainScreenFragment extends FragmentPlus {
 
         }
     }
-    private void setUpRecyclerView() {
-        chooseOneSong2MakeListAdapter adapter = new chooseOneSong2MakeListAdapter(getActivity(), DanhSachPhat);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 6, LinearLayoutManager.HORIZONTAL, false));
+    private SmallPlaylistAdapter mPlaylistAdapter;
+    private SmallSongListAdapter mSongsListAdapter;
+    private class loadPlaylists extends  AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            if(getActivity()!=null) mPlaylistAdapter = new SmallPlaylistAdapter(getActivity(),PlaylistLoader.getPlaylists(getActivity(),true),true);
+            return "Executed";
+        }
+        @Override
+        protected void onPostExecute(String result){
+            playlistRecyclerView.setAdapter(mPlaylistAdapter);
+            if(getActivity()!=null) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),1,LinearLayoutManager.HORIZONTAL,false);
+                playlistRecyclerView.setLayoutManager(gridLayoutManager);
+                OverScrollDecoratorHelper.setUpOverScroll(playlistRecyclerView,OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
+            //    SnapHelper snapHelper = new LinearSnapHelper();
+              //  snapHelper.attachToRecyclerView(playlistRecyclerView);
+            }
+        }
+    }
+    private boolean showAuto = true;
+    private class loadSongs extends AsyncTask<String, Void, String> {
 
-        OverScrollDecoratorHelper.setUpOverScroll(recyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
-        SnapHelper snapHelper = new LinearSnapHelper();
-        snapHelper.attachToRecyclerView(recyclerView);
-        /*
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-                                                @Override
-                                                public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-                                                    PlayControllerFragment.logOnTouchEvent("recyclerView (onIntercept.... )",e);
-                                                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                                                    if(recyclerView.getChildLayoutPosition(child)!=-1) {
-                                                        getMainActivity().MCBubblePopupUIHolder.detectLongPress(effectViewListener,"",child,e);
-                                                        return true;
-                                                    }
-                                                    return false;
-                                                }
+        @Override
+        protected String doInBackground(String... params) {
+            if (getActivity() != null)
+                mSongsListAdapter = new SmallSongListAdapter((AppCompatActivity) getActivity(), SongLoader.getAllSongs(getActivity()), false, false);
+            return "Executed";
+        }
 
-                                                @Override
-                                                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-                                                    PlayControllerFragment.logOnTouchEvent("recyclerView ( onTouchEvent )",e);
-                                                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                                                    getMainActivity().MCBubblePopupUIHolder.detectLongPress(effectViewListener,"",child,e);
-                                                    boolean d = getMainActivity().MCBubblePopupUIHolder.run(child,e)|| normal(child,e);
+        @Override
+        protected void onPostExecute(String result) {
+            songListRecyclerView.setAdapter(mSongsListAdapter);
+            if (getActivity() != null) {
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 6, LinearLayoutManager.HORIZONTAL, false);
+               songListRecyclerView.setLayoutManager(gridLayoutManager);
+                OverScrollDecoratorHelper.setUpOverScroll(songListRecyclerView,OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
+                SnapHelper snapHelper = new LinearSnapHelper();
+                snapHelper.attachToRecyclerView(songListRecyclerView);
+                songIndicator.setRecyclerView(songListRecyclerView);
 
-                                                }
+            }
+        }
 
-                                                @Override
-                                                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-                                                    Log.d("recyclerView","onRequestDisallowInterceptTouchEvent");
-                                                }
-                                                public boolean normal(View v,MotionEvent e) {
-                                                    // do whatever
-                                                  if(true)  return true;
-                                                    int posTop = recyclerView.getChildLayoutPosition(v);
-                                                    if(posTop==-1) return false;
-                                                    ex_service_intent = new Intent(getActivity(), MediaService.class);
-                                                    ex_service_intent.putExtra("DanhSachPhat_Data", getData(DanhSachPhat));
-                                                    ex_service_intent.putExtra("NowPlaying", posTop);
-                                                    //   OverScrollDecoratorHelper.setUpOverScroll(Song_list);
-
-                                                    //     getActivity().startService(ex_service_intent);
-                                                    NowPlaying_int = posTop;
-                                                    ChangeBackground(NowPlaying_int);
-                                                    ((MainActivity) getActivity()).Control_Music_Song_Player(DanhSachPhat, NowPlaying_int);
-                                                    ((MainActivity) getActivity()).Init_UpDown_musicController();
-                                                    ((MainActivity)getActivity()).control_music_controller_up();
-                                                    return true;
-                                                }
-                                            });
-        */
-///*
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        /*
-                        // do whatever
-                        ex_service_intent = new Intent(getActivity(), MediaService.class);
-
-                        ex_service_intent.putExtra("DanhSachPhat_Data", getData(DanhSachPhat));
-                        ex_service_intent.putExtra("NowPlaying", position);
-                        //   OverScrollDecoratorHelper.setUpOverScroll(Song_list);
-
-                             getActivity().startService(ex_service_intent);
-                             */
-                        NowPlaying_int = position;
-                        ChangeBackground(NowPlaying_int);
-                        ((MainActivity) getActivity()).Control_Music_Song_Player(DanhSachPhat, NowPlaying_int);
-                        ((MainActivity) getActivity()).Init_UpDown_musicController();
-                       ((MainActivity)getActivity()).control_music_controller_up();
-                    }
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                }));
-//*/
     }
     String[] long_press_menu_random_string = new String[] {"Play","Add","More"};
     int[] long_press_menu_random_image_id = new int[] {R.drawable.play,R.drawable.back,R.drawable.more_black};
-    public MCBubblePopupUIHolder.EffectViewListener effectViewListener = new MCBubblePopupUIHolder.EffectViewListener() {
+    public BubbleMenuCenter.BubbleMenuViewListener bubbleMenuViewListener = new BubbleMenuCenter.BubbleMenuViewListener() {
         @Override
         public ImageView getImageView(String command) {
             return null;
@@ -803,7 +824,7 @@ public class MainScreenFragment extends FragmentPlus {
         }
 
         @Override
-        public void onReceivedResult(String command, int result) {
+        public void onReturnResult(String command, int result) {
             Tool.showToast(getActivity(),getStringCommand(command)[result],500);
         }
     };
@@ -863,13 +884,14 @@ public class MainScreenFragment extends FragmentPlus {
 
         @Override
         public View getView(final int position, View view, ViewGroup parent) {
-            view = getActivity().getLayoutInflater().inflate(R.layout.item_list_view, parent, false);
+            view = getActivity().getLayoutInflater().inflate(R.layout.item_songs_list, parent, false);
             final ImageView imageView =  view.findViewById(R.id.item_album_view_image);
             TextView titleView =  view.findViewById(R.id.item_album_view_title);
             TextView artistView = view.findViewById(R.id.item_album_view_aritst);
             final Album album = albumArrayList.get(position);
             imageView.setTag(new myTag(position));
-            imageView.setImageBitmap(ImageEditor.GetBlurredBackground(getActivity(), ImageEditor.getRoundedCornerBitmap(album.getBitmap(), 15), 25, 25, 25, 25, -6, 180, 12, 2));
+
+            imageView.setImageBitmap(BitmapEditor.GetRoundedBitmapWithBlurShadow(getActivity(), BitmapEditor.getRoundedCornerBitmap(album.getBitmap(), 15), 25, 25, 25, 25, -6, 180, 12, 2));
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -882,8 +904,6 @@ public class MainScreenFragment extends FragmentPlus {
                 public boolean onLongClick(View v) {
                     ImageView iv = (ImageView) v;
                     Tool.showToast(getActivity(), "You long click on this ImageView!", 1000);
-
-
                     return true;
                 }
             });
@@ -894,7 +914,7 @@ public class MainScreenFragment extends FragmentPlus {
         }
     }
 
-    static class MyBounceInterpolator implements android.view.animation.Interpolator {
+     class MyBounceInterpolator implements android.view.animation.Interpolator {
         private double mAmplitude = 1;
         private double mFrequency = 10;
 
@@ -928,9 +948,9 @@ public class MainScreenFragment extends FragmentPlus {
                 if (bitmap == null) // khong ton tai art
                 {
                     Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.default_image2);
-                    if (ImageEditor.TrueIfBitmapBigger(bitmap1, 300)) {
+                    if (BitmapEditor.TrueIfBitmapBigger(bitmap1, 300)) {
                         Log.d("Song", "bigger");
-                        bitmap = ImageEditor.getResizedBitmap(bitmap1, 300, 300);
+                        bitmap = BitmapEditor.getResizedBitmap(bitmap1, 300, 300);
                         bitmap1.recycle();
                     } else bitmap = bitmap1;
                 }

@@ -7,4 +7,7 @@
   <component name="Kotlin2JvmCompilerArguments">
     <option name="jvmTarget" value="1.8" />
   </component>
+  <component name="KotlinCommonCompilerArguments">
+    <option name="languageVersion" value="1.2" />
+  </component>
 </project>

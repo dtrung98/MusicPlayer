@@ -30,6 +30,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -42,10 +43,11 @@ import java.util.Arrays;
 import java.util.WeakHashMap;
 
 public class MusicPlayer {
+    private static final String TAG = "MusicPlayer";
 
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap;
     private static final long[] sEmptyList;
-    public static IRTimberService mService = null;
+    public static ITimberService mService = null;
     private static ContentValues[] mContentValuesCache = null;
 
     static {
@@ -55,18 +57,23 @@ public class MusicPlayer {
 
     public static final ServiceToken bindToService(final Context context,
                                                    final ServiceConnection callback) {
-
+        Log.d(TAG,"->0");
         Activity realActivity = ((Activity) context).getParent();
         if (realActivity == null) {
             realActivity = (Activity) context;
         }
+        Log.d(TAG,"-> 1");
         final ContextWrapper contextWrapper = new ContextWrapper(realActivity);
         contextWrapper.startService(new Intent(contextWrapper, MusicService.class));
+        Log.d(TAG,"-> 3");
         final ServiceBinder binder = new ServiceBinder(callback,
                 contextWrapper.getApplicationContext());
+        Log.d(TAG,"->4");
         if (contextWrapper.bindService(
                 new Intent().setClass(contextWrapper, MusicService.class), binder, 0)) {
+            Log.d(TAG,"-> 4 in if");
             mConnectionMap.put(contextWrapper, binder);
+            Log.d(TAG,"-> 5");
             return new ServiceToken(contextWrapper);
         }
         return null;
@@ -414,6 +421,15 @@ public class MusicPlayer {
         if (mService != null) {
             try {
                 return mService.getQueueHistoryList();
+            } catch (final RemoteException ignored) {
+            }
+        }
+        return null;
+    }
+    public static final  String getPath() {
+        if(mService!=null) {
+            try {
+               return mService.getPath();
             } catch (final RemoteException ignored) {
             }
         }
@@ -779,7 +795,7 @@ public class MusicPlayer {
 
         @Override
         public void onServiceConnected(final ComponentName className, final IBinder service) {
-            mService = IRTimberService.Stub.asInterface(service);
+            mService = ITimberService.Stub.asInterface(service);
             if (mCallback != null) {
                 mCallback.onServiceConnected(className, service);
             }

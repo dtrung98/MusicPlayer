@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name= "SurfaceColor">#FFCC00</color>
     <color name="BackwardColorHeavy">#B0000000</color>
     <color name="BackwardColor">#A0000000</color>
     <color name="colorPrimary">#3F51B5</color>

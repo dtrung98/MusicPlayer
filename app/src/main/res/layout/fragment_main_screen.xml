@@ -4,10 +4,9 @@
         android:id="@+id/UILayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
         tools:context="com.ldt.musicr.fragments.MainScreenFragment">
     <include layout="@layout/layout_background_4_mainscreen"/>
     <include layout="@layout/content_mainscreen"/>
     <include layout="@layout/layout_action_bar_mainscreen"/>
+
     </RelativeLayout>

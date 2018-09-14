@@ -11,23 +11,23 @@
         android:layout_gravity="center"
         android:alpha="0"/>
     <View
-        android:id="@+id/border_shape4avatar"
-        android:layout_width="0dp"
+        android:id="@+id/rulerAlign"
+        android:layout_width="5dp"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_weight="19"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
+        android:layout_gravity="center" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="12"
-        android:weightSum="3"
         android:orientation="vertical">
         <FrameLayout
             android:id="@+id/music_controller_parent2OfNameNArtist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="2">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,6 +37,7 @@
                     android:id="@+id/music_controller_nameOfSong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:layout_marginBottom="2dp"
                     android:maxLines="1"
@@ -52,38 +53,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="This Is Artist Of The Song"
+                    android:gravity="center"
+                    android:text="@string/this_is_artist_of_the_song"
                     android:ellipsize="end"
                     android:textColor="#E6010E"
                     android:textStyle="bold"
                     android:textSize="12sp" />
             </LinearLayout>
         </FrameLayout>
-
-        <!-- Only This -->
-        <FrameLayout
-            android:id="@+id/seek_bar_parent"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <com.ldt.musicr.views.AudioVisualSeekBar
-                android:id="@+id/visual_seek_bar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-        </FrameLayout>
-        <!-- Or This -->
-        <include
-            android:visibility="gone"
-            android:tag="root is frame layout"
-            layout="@layout/music_controller_example_frame_layout2"
-            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:orientation="horizontal"
-            android:weightSum="2"
+            android:weightSum="3"
             android:paddingLeft="70dp"
             android:paddingRight="70dp">
             <FrameLayout
@@ -92,52 +75,127 @@
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/music_controller_InPrev"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/button_control_center_size"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"
                     android:padding="8dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/pref"
                     android:clickable="true"
-                    android:background="@drawable/circle_background"
+                    android:background="@drawable/ripple_oval"
                     android:focusable="true" />
             </FrameLayout>
-            <ImageView
-                android:id="@+id/music_controller_InPause"
-                android:layout_width="40dp"
+            <FrameLayout
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/pauseblack"
-                android:background="@drawable/circle_background"
-                />
+                android:layout_weight="1">
+                <com.ldt.musicr.views.PlayPauseButton
+                    android:id="@+id/music_controller_InPause"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/ripple_oval"
+                    />
+                <View
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/in_pause_wrapper"/>
+            </FrameLayout>
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/music_controller_InNext"
-                    android:layout_width="40dp"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/button_control_center_size"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"
                     android:padding="8dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/next"
-                    android:background="@drawable/circle_background"/>
+                    android:background="@drawable/ripple_oval"
+                    android:clickable="true"/>
             </FrameLayout>
         </LinearLayout>
+        <!-- Only This -->
+        <FrameLayout
+            android:id="@+id/seek_bar_parent"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp">
+            <com.ldt.musicr.views.AudioVisualSeekBar
+                android:id="@+id/visual_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            <com.ldt.musicr.views.RoundSeeThroughTextView
+                android:id="@+id/time_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="02:38 | 04:07"
+                android:background="@color/FlatPink"
+                android:textSize="@dimen/text14sp"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+        </FrameLayout>
     </LinearLayout>
-    <FrameLayout
+    <!-- Or This -->
+    <include
+        android:visibility="gone"
+        android:tag="root is frame layout"
+        layout="@layout/pallete_sample"
+        android:layout_height="10dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:weightSum="5"
+        android:paddingLeft="@dimen/padding_button_option_center"
+        android:paddingRight="@dimen/padding_button_option_center">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_button_option_center"
+            android:src="@drawable/love"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_button_option_center"
+            android:src="@drawable/repeat"/>
         <ImageView
             android:id="@+id/InMusicController_list"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="50dp"
             android:src="@drawable/list_nearlyred"
-            android:padding="15dp"
             android:layout_gravity="center"
-            android:contentDescription=" icon list mở tab danh sách phát, icon nằm dưới cùng" />
-    </FrameLayout>
+            android:padding="@dimen/padding_button_option_center"
+            android:contentDescription="Open now playing playlist" />
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_button_option_center"
+            android:src="@drawable/shufflel"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_button_option_center"
+            android:src="@drawable/more"/>
+    </LinearLayout>
 </LinearLayout>

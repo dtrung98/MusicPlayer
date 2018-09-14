@@ -13,7 +13,7 @@
  */
 
 package com.ldt.musicr.dataloaders;
-/*
+
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -24,7 +24,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.Audio.Playlists;
 
-import com.naman14.timber.models.Song;
+import com.ldt.musicr.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -198,4 +198,3 @@ public class PlaylistSongLoader {
                 Playlists.Members.DEFAULT_SORT_ORDER);
     }
 }
-*/

@@ -101,7 +101,7 @@ public class SeeThroughFrameLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(final Canvas canvas) {
-        Log.d("dispatchDraw called","stfl");
+      //  Log.d("dispatchDraw called","stfl");
         super.dispatchDraw(canvas);
 
       //  if (isNothingToDraw()) {

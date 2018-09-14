@@ -5,7 +5,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.ldt.musicr.InternalTools.Tool;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.fragments.FragmentPlus;
 
 /**
@@ -13,7 +13,7 @@ import com.ldt.musicr.fragments.FragmentPlus;
  */
 
 public class NoTransition {
-    public static void AddFragmentAndTransform(final SupportFragmentActivity activity, final FragmentPlus ThisFragment, final ViewGroup behindView) {
+    public static void AddFragmentAndTransform(final SupportFragmentPlusActivity activity, final FragmentPlus ThisFragment, final ViewGroup behindView) {
         final int[] screenSize = Tool.getScreenSize(activity);
         final FrameLayout ViewFragment = ThisFragment.getFrameLayout();
         final RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -24,7 +24,7 @@ public class NoTransition {
         activity.getSupportFragmentManager().beginTransaction().add(ViewFragment.getId(),ThisFragment).commit();
     }
     public static void RemoveFragmentAndTransform( final FragmentPlus ThisFragment, final ViewGroup behindView) {
-        final SupportFragmentActivity activity = (SupportFragmentActivity) ThisFragment.getActivity();
+        final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity) ThisFragment.getActivity();
         final int[] screenSize = Tool.getScreenSize(activity);
         final  FrameLayout ViewFragment = ThisFragment.getFrameLayout();
         final RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams)ViewFragment.getLayoutParams();

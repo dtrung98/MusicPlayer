@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+  <RelativeLayout
+      android:layout_marginTop="10dp"
+      android:layout_marginBottom="10dp"
+      android:layout_width="match_parent"
+      android:layout_height="55dp"
+      android:background="@drawable/ripple_effect"
+      android:clickable="true"
+      android:id="@+id/songs_piece_header_relative">
+      <TextView
+          android:tag="sticky|-hastransparancy"
+          android:layout_width="wrap_content"
+          android:layout_height="match_parent"
+          android:gravity="center_vertical"
+          android:paddingLeft="20dp"
+          android:textStyle="bold"
+          android:id="@+id/songs_piece_header"
+          android:textSize="@dimen/header1_text_size"
+          android:text="@string/songs"
+          android:textColor="@android:color/black"/>
+      <ImageView
+          android:layout_width="50dp"
+          android:layout_height="match_parent"
+          android:layout_toRightOf="@id/songs_piece_header"
+          android:src="@drawable/icons8_right"
+          android:scaleType="centerInside"
+          android:padding="12dp"
+          />
+      <com.ldt.musicr.views.GridRecyclerIndicator
+          android:layout_width="100dp"
+          android:layout_height="match_parent"
+          android:layout_alignParentRight="true"
+          app:avi_animation_enable="true"
+          app:avi_drawable="@color/FlatPink"
+          app:avi_drawable_unselected="@color/FlatOrange"
+          android:id="@+id/circleIndicator" />
+  </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_N1"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_width="match_parent" />
+</LinearLayout>

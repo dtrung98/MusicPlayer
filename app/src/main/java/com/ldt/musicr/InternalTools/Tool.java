@@ -4,15 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
-
-import com.ldt.musicr.R;
 
 import java.io.File;
 
@@ -21,11 +22,17 @@ import java.io.File;
  */
 
 public final class Tool {
+    private static final String TAG = "Tool";
     private static int GlobalColor = 0xffff4081;
     private static int SurfaceColor =0xff00dbde;
     public static void setSurfaceColor(int surfaceColor) {
         SurfaceColor = surfaceColor;
     }
+
+    /**
+     *  A color get in 7 basic color, nearly the global color
+     * @return a color which nearly the global color
+     */
     public static int getSurfaceColor() {
         return SurfaceColor;
     }
@@ -33,9 +40,19 @@ public final class Tool {
     {
         GlobalColor = globalColor;
     }
+
+    /**
+     * The most common color get from the art song.
+     * @return integer value of color
+     */
     public static int getGlobalColor()
     {
         return GlobalColor;
+    }
+
+    public static void setOneDps(float width) {
+        oneDPs =width;
+        Log.d(TAG, "oneDps = " + oneDPs);
     }
 
 
@@ -84,7 +101,7 @@ public final class Tool {
         StatusHeight =height;
         return StatusHeight;
     }
-    public static int getPixelsFromDPs(Context activity, int dps){
+    public static float getPixelsFromDPs(Context activity, int dps){
         /*
             public abstract Resources getResources ()
 
@@ -129,17 +146,17 @@ public final class Tool {
                 TYPE_DIMENSION complex unit: Value is Device Independent Pixels.
                 Constant Value: 1 (0x00000001)
         */
-        int  px = (int) (TypedValue.applyDimension(
+        return (TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, dps, r.getDisplayMetrics()));
-        return px;
     }
-    public static int getOneDps(Context context)
+    public static float getOneDps(Context context)
     {
         if(oneDPs !=-1) return oneDPs;
-        oneDPs = context.getResources().getDimensionPixelOffset(R.dimen.oneDP);
+  //      oneDPs = context.getResources().getDimensionPixelOffset(R.dimen.oneDP);
+        oneDPs = getPixelsFromDPs((Activity)context,1);
         return oneDPs;
     }
-    public static int oneDPs =-1;
+    public static float oneDPs =-1;
     public static int getDpsFromPixel(Activity activity,int px) {
         DisplayMetrics displayMetrics = activity.getResources().getDisplayMetrics();
         return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
@@ -174,13 +191,36 @@ public final class Tool {
         if(!HAD_GOT_SCREEN_SIZE) getScreenSize(context);
         return screenSizeInDp;
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+    public static boolean hasSoftKeys(WindowManager windowManager){
+        Display d = windowManager.getDefaultDisplay();
+
+        DisplayMetrics realDisplayMetrics = new DisplayMetrics();
+        d.getRealMetrics(realDisplayMetrics);
+
+        int realHeight = realDisplayMetrics.heightPixels;
+        int realWidth = realDisplayMetrics.widthPixels;
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        d.getMetrics(displayMetrics);
+
+        int displayHeight = displayMetrics.heightPixels;
+        int displayWidth = displayMetrics.widthPixels;
+
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static int getNavigationHeight(Activity activity)
     {
+
         int navigationBarHeight = 0;
         int resourceId = activity.getResources().getIdentifier("navigation_bar_height", "dimen", "android");
         if (resourceId > 0) {
             navigationBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
         }
+        if(!hasSoftKeys(activity.getWindowManager())) return 0;
         return  navigationBarHeight;
     }
     public static String convertByteArrayToString(byte[] b)

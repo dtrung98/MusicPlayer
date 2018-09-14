@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/FlatWhite"
     tools:context="com.ldt.musicr.activities.Choose_Playlist">
    <RelativeLayout
        android:layout_width="match_parent"
@@ -15,5 +16,5 @@
            android:layout_height="match_parent"
            android:scaleType="fitXY" />
    </RelativeLayout>
-    <include layout="@layout/layout_playlist_showing"/>
+    <include layout="@layout/main_screen_album_piece"/>
 </RelativeLayout>

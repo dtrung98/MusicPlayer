@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -273,6 +274,7 @@ public class Nammu {
      */
     public static boolean checkPermission(String permissionName) {
         if (context == null) {
+            Log.d("MusicPlaybackService"," >> i = 5.301");
             throw new RuntimeException("Before comparing permissions you need to call Nammu.init(context)");
         }
         return PackageManager.PERMISSION_GRANTED == context.checkSelfPermission(permissionName);

@@ -3,7 +3,7 @@ package com.ldt.musicr.MediaData.FormatDefinition;
 import android.util.Log;
 
 import com.ldt.musicr.fragments.MainScreenFragment;
-import com.ldt.musicr.MediaData.Song_onload;
+import com.ldt.musicr.MediaData.Song_OnLoad;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class PlayController {
     {
         list = new ArrayList<>();
     }
-    public void setList(ArrayList<Song_onload> theSongs) {
+    public void setList(ArrayList<Song_OnLoad> theSongs) {
         Log.d("setList Service","Service Log");
         list= MainScreenFragment.getData(theSongs);
     }

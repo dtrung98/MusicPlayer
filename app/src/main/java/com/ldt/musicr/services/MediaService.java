@@ -15,7 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ldt.musicr.MediaData.FormatDefinition.PlayController;
-import com.ldt.musicr.MediaData.Song_onload;
+import com.ldt.musicr.MediaData.Song_OnLoad;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class MediaService extends Service {
     {
      // blank
     }
-    public void setPlayController_Playlists(ArrayList<Song_onload> list)
+    public void setPlayController_Playlists(ArrayList<Song_OnLoad> list)
     {
 
         playController.setList(list);
@@ -79,15 +79,18 @@ public class MediaService extends Service {
                 }
             });
         }
-            else mediaPlayer.reset();
+            else try {
+                mediaPlayer.reset();
+            } catch (NullPointerException ignored){};
+
             try {
                 mediaPlayer.setDataSource(filePath);
-            } catch (IOException e) {
+            } catch (IOException ignored) {
 
             }
             try {
                 mediaPlayer.prepare();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
 
             }
             mediaPlayer.start();
@@ -140,7 +143,6 @@ public class MediaService extends Service {
         msg.arg1 = startId;
 //        move(msg);
         MakeThisMediaPlayerVolumeDownButNotSwitchSong(mediaPlayer);
-        mediaPlayer = null;
         mServiceHandler.sendMessage(msg);
         return START_STICKY;
     }

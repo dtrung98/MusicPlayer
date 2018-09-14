@@ -24,36 +24,34 @@ import com.ldt.musicr.R;
 public class SupportDarkenFrameLayout extends FrameLayout {
     public SupportDarkenFrameLayout(@NonNull Context context) {
         super(context);
-        beforeStart();
+        init();
     }
 
     public SupportDarkenFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         addAttr(context,attrs);
-        beforeStart();
+        init();
     }
 
     public SupportDarkenFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         addAttr(context,attrs);
-        beforeStart();
+        init();
     }
   private float darken=0f;
-    public float maxDarken =0.4f;
-    public void setDarken(float darken, float MaxDarken)
+    public void setDarken(float darken, boolean shouldDraw)
     {
         if(darken>=0&&darken<=1) {
             this.darken = darken;
-            maxDarken = MaxDarken;
-            invalidate();
         }
+        if(shouldDraw) invalidate();
     }
     public float getDarken()
     {
         return darken;
     }
     private Paint drawDarkenPaint;
-    private void beforeStart()
+    private void init()
     {
         drawDarkenPaint = new Paint();
         drawDarkenPaint.setColor(Color.BLACK);
@@ -73,7 +71,7 @@ public class SupportDarkenFrameLayout extends FrameLayout {
         } finally {
             a.recycle();
         }
-        Log.d("How dark ",darken+"");
+    //    Log.d("How dark ",darken+"");
     }
     float color4Black_float=0;
 
@@ -82,10 +80,9 @@ public class SupportDarkenFrameLayout extends FrameLayout {
 
         super.dispatchDraw(canvas);
 
-        int color4White = (int)( darken/maxDarken * 255.0f);
-        if(color4White>255) color4White = 255; else if(color4White<0) color4White =0;
-      //  if ((color4White>=230&&color4Black_float==0)||(color4White<230&&color4Black_float==1)) turnOnOrOffDark();
-      //  int color4Black = (int) (255.0f*maxDarken*color4Black_float);
+    //    int color4White = (int)( darken* 255.0f);
+      //  if(color4White>255) color4White = 255; else if(color4White<0) color4White =0;
+
         int color4Black = (int) (255.0f*darken);
      //  canvas.drawColor(color4White<<24|0x00ffffff);
        if(color4Black>255) color4Black=255;

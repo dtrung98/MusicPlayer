@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-import com.ldt.musicr.MediaData.Song_onload;
+import com.ldt.musicr.MediaData.Song_OnLoad;
 import com.ldt.musicr.R;
 
 /**
@@ -31,19 +31,19 @@ public class chooseOneSong2MakeListAdapter extends RecyclerView.Adapter<chooseOn
             // to access the context from any ViewHolder instance.
             super(view);
             item_relative_root = (RelativeLayout) view;
-            imageView = (ImageView) view.findViewById(R.id.imageSong);
+            imageView = (ImageView) view.findViewById(R.id.album_art);
             titleSong = (TextView) view.findViewById(R.id.title_song_list);
             artistSong = (TextView) view.findViewById(R.id.artist_song_list);
         }
 
     }
 
-    private java.util.List<Song_onload> mSongs;
+    private java.util.List<Song_OnLoad> mSongs;
     // Store the context for easy access
     private Context mContext;
 
     // Pass in the contact array into the constructor
-    public chooseOneSong2MakeListAdapter(Context context, java.util.List<Song_onload> songs) {
+    public chooseOneSong2MakeListAdapter(Context context, java.util.List<Song_OnLoad> songs) {
         mSongs = songs;
         mContext = context;
     }
@@ -70,7 +70,7 @@ public class chooseOneSong2MakeListAdapter extends RecyclerView.Adapter<chooseOn
     @Override
     public void onBindViewHolder(chooseOneSong2MakeListAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on posTop
-        Song_onload this_song = mSongs.get(position);
+        Song_OnLoad this_song = mSongs.get(position);
 
         // Set item views based on your views and data model
 

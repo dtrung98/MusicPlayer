@@ -2,19 +2,22 @@ package com.ldt.musicr.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.activities.MainActivity;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 
 /**
  * Created by trung on 8/13/2017.
  *  FragmentPlus is a fragment type which supports visual transitions
  */
-public abstract class FragmentPlus extends Fragment {
+public abstract class FragmentPlus extends RuntimeThemeFragment {
     public enum StatusTheme {
         BlackIcon,WhiteIcon
     }
@@ -32,12 +35,12 @@ public abstract class FragmentPlus extends Fragment {
     public int FitWindow_Bottom = 0;
     public int init_MarginTop()
     {
-        return SupportFragmentActivity.Standard_FitWindow_Top;
+        return SupportFragmentPlusActivity.Standard_FitWindow_Top;
     }
 
     protected int init_MarginBottom()
     {
-        return SupportFragmentActivity.Standard_FitWindow_Bottom;
+        return SupportFragmentPlusActivity.Standard_FitWindow_Bottom;
     }
     public enum ApplyMargin {
         ONLY_STATUS,ONLY_NAVIGATION,BOTH, NONE
@@ -73,17 +76,17 @@ public abstract class FragmentPlus extends Fragment {
        FitWindow_Top = init_MarginTop();
        FitWindow_Bottom = init_MarginBottom();
     }
-    public SupportFragmentActivity.TransitionType getTransitionType() {
+    public SupportFragmentPlusActivity.TransitionType getTransitionType() {
         return transitionType;
     }
 
     private FrameLayout frameLayout;
-    private SupportFragmentActivity.TransitionType transitionType;
+    private SupportFragmentPlusActivity.TransitionType transitionType;
     public FrameLayout getFrameLayout()
     {
         return frameLayout;
     }
-    public void setFrameLayoutNTransitionType(Activity activity,SupportFragmentActivity.TransitionType transition_type)
+    public void setFrameLayoutNTransitionType(Activity activity,SupportFragmentPlusActivity.TransitionType transition_type)
     {
         frameLayout = new FrameLayout(activity);
         statusTheme = setDefaultStatusTheme();
@@ -92,4 +95,10 @@ public abstract class FragmentPlus extends Fragment {
 
     public View rootView;
 
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 }

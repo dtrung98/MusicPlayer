@@ -9,7 +9,7 @@ import android.graphics.RectF;
 
 public class C_RectF {
     /**
-     * RectF holds four float coordinates for a rectangle. The rectangle is
+     * ScreenSize holds four float coordinates for a rectangle. The rectangle is
      * represented by the coordinates of its 4 edges (x, y, right bottom).
      * These fields can be accessed directly. Use width() and height() to retrieve
      * the rectangle's width and height. Note: most methods do not check to see that
@@ -21,7 +21,7 @@ public class C_RectF {
     public float height;
 
     /**
-     * Create a new empty RectF. All coordinates are initialized to 0.
+     * Create a new empty ScreenSize. All coordinates are initialized to 0.
      */
     public C_RectF() {}
 

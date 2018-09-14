@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -16,10 +17,10 @@ import android.view.ViewGroup;
 import android.widget.ScrollView;
 
 import com.ldt.musicr.InternalTools.Tool;
-import com.ldt.musicr.R;
 
 import java.util.ArrayList;
-public class StickyScrollView extends ScrollView {
+public class StickyScrollView extends NestedScrollView {
+    private static final String TAG = "StickyScrollView";
 
     /**
      * Tag for views that should stick and have constant drawing. e.g. TextViews, ImageViews etc
@@ -58,7 +59,11 @@ public class StickyScrollView extends ScrollView {
 
     protected int mShadowHeight;
     protected Drawable mShadowDrawable;
-    public com.ldt.musicr.views.CustomTitleBar customTitleBar;
+    public com.ldt.musicr.views.stickyActionBarConstraintLayout stickyDrawView;
+    public void setStickyDrawView(stickyActionBarConstraintLayout c) {
+        stickyDrawView = c;
+       c.setStickyScrollView(this);
+    }
 
     private final Runnable invalidateRunnable = new Runnable() {
 
@@ -162,12 +167,8 @@ public class StickyScrollView extends ScrollView {
         return bottom;
     }
     @Override
-    protected void onAttachedToWindow() {
+    public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        if (customTitleBar== null) {
-           customTitleBar = (CustomTitleBar)((View)getParent()).findViewById(R.id.topOfTieuDe);
-        if(customTitleBar!=null)  customTitleBar.stickyScrollView = this;
-     }
     }
 
     @Override
@@ -223,12 +224,16 @@ public class StickyScrollView extends ScrollView {
         super.addView(child, params);
         findStickyViews(child);
     }
-
+    public void stickyDrawViewInvalidate() {
+      Log.d(TAG,"call invalidate");
+        if(stickyDrawView!=null) stickyDrawView.invalidate();
+    }
     @Override
     protected void dispatchDraw(Canvas canvas) {
     //    Log.d("Sticky","dispatchDraw");
         super.dispatchDraw(canvas);
-        customTitleBar.invalidate();
+
+        stickyDrawViewInvalidate();
        if(true) return;
        /*
         if(currentlyStickingView != null){
@@ -292,7 +297,7 @@ public class StickyScrollView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-   //     Log.d("Sticky","onTouchEvent");
+   //     Log.d("Sticky","onTouchEventThatView");
 
         if(redirectTouchesToStickyView){
             ev.offsetLocation(0, ((getScrollY() + stickyViewTopOffset) - getTopForViewRelativeOnlyChild(currentlyStickingView)));
@@ -321,7 +326,7 @@ public class StickyScrollView extends ScrollView {
 
         super.onScrollChanged(l, t, oldl, oldt);
         doTheStickyThing();
-        customTitleBar.connectOnScrollChanged(l,t,oldl,oldt);
+        stickyDrawView.connectOnScrollChanged(l,t,oldl,oldt);
     }
 
     private void doTheStickyThing() {

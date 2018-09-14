@@ -13,20 +13,20 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.activities.MainActivity;
 import com.ldt.musicr.R;
-import com.ldt.musicr.activities.SupportFragmentActivity;
-
-import org.w3c.dom.Text;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 
 import static com.ldt.musicr.services.MusicService.NEXT_ACTION;
 import static com.ldt.musicr.services.MusicService.PREVIOUS_ACTION;
@@ -38,7 +38,7 @@ import static com.ldt.musicr.services.MusicService.TOGGLEPAUSE_ACTION;
  * Use the {@link HelloScreenFragment#Initialize(Activity)} factory method to
  * create an instance of this fragment.
  */
-public class HelloScreenFragment extends FragmentPlus {
+public class HelloScreenFragment extends FragmentPlus implements View.OnTouchListener {
 
 
     public HelloScreenFragment() {
@@ -51,7 +51,7 @@ public class HelloScreenFragment extends FragmentPlus {
 
     public static HelloScreenFragment Initialize(Activity activity) {
         HelloScreenFragment fragment = new HelloScreenFragment();
-        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentActivity.TransitionType.LEFT2RIGHT);
+        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentPlusActivity.TransitionType.RIGHT_LEFT);
         return fragment;
     }
     private ImageView icon;
@@ -59,10 +59,10 @@ public class HelloScreenFragment extends FragmentPlus {
     private TextView touch_me_to_show_notification;
     private void MergerUi()
     {
-        icon= (ImageView) rootView.findViewById(R.id.helloScreen_icon);
-       textView =(TextView) rootView.findViewById(R.id.touchMeToContinue);
+        icon= rootView.findViewById(R.id.helloScreen_icon);
+       textView = rootView.findViewById(R.id.touchMeToContinue);
        touch_me_to_show_notification = rootView.findViewById(R.id.touchToShowNotification);
-       MainScreenFragment mainScreenFragment = new MainScreenFragment();
+      // rootView.setOnTouchListener(this);
     }
     private void SetAllClick()
     {
@@ -95,7 +95,7 @@ public class HelloScreenFragment extends FragmentPlus {
             art = ((BitmapDrawable)getResources().getDrawable(R.drawable.default_image2)).getBitmap();
 
         }
-        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v7.app.NotificationCompat.Builder(getActivity())
+        Notification.Builder builder = new Notification.Builder(getActivity())
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(art)
              //   .setContentIntent(clickIntent)
@@ -155,16 +155,16 @@ public class HelloScreenFragment extends FragmentPlus {
     public ApplyMargin IWantApplyMargin() {
         return ApplyMargin.BOTH;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d("onCreateView()","LogF");
        rootView = inflater.inflate(R.layout.fragment_hello_screen, container, false);
-        MergerUi();
+       MergerUi();
         SetAllClick();
-        return  rootView;
+        return  rootView;//new FrameLayout(getContext());
     }
+
 
 
 
@@ -198,4 +198,10 @@ public class HelloScreenFragment extends FragmentPlus {
         Log.d("onDestroy()","LogF");
     }
 
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+       // Tool.showToast(getContext(),"Container got event",500);
+
+        return false;
+    }
 }

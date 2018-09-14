@@ -4,9 +4,11 @@
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="text14sp">14sp</dimen>
     <dimen name="oneDP">1dp</dimen>
-    <dimen name="title_text_size">26sp</dimen>
-    <dimen name="title_text_margin_left">20dp</dimen>
+    <dimen name="button_control_center_size">45dp</dimen>
+    <dimen name="header1_text_size">24sp</dimen>
+    <dimen name="title_text_margin_left">5dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="padding_button_option_center">15dp</dimen>
 </resources>

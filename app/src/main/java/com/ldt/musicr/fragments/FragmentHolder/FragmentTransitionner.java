@@ -2,7 +2,7 @@ package com.ldt.musicr.fragments.FragmentHolder;
 
 import android.animation.ValueAnimator;
 
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.fragments.FragmentPlus;
 
 /**
@@ -19,7 +19,7 @@ public class FragmentTransitionner {
         public static void onEnd() {
 
     }
-    public static void AddFragmentAndTransform(final SupportFragmentActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment) {
+    public static void AddFragmentAndTransform(final SupportFragmentPlusActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment) {
 
     }
     public static void RemoveFragmentAndTransform( final FragmentPlus ThisFragment, final FragmentPlus BackFragment)

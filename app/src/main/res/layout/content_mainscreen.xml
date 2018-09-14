@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ldt.musicr.views.StickyScrollView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/myScroll"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:layout_below="@+id/title_bar"
 android:layout_alignParentStart="true"
 android:scrollbars="none"
 android:layout_alignParentLeft="true">
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <include layout="@layout/layout_playlist_suggested"/>
-    <include layout="@layout/random_big_title"/>
-    <include layout = "@layout/layout_playlist_showing"/>
+    android:layout_height="wrap_content"
+    android:id="@+id/main_content_linear">
+    <FrameLayout
+        android:layout_marginTop="74dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#FFBAC7"
+        android:id="@+id/main_slider"/>
+    <include layout="@layout/playlists_piece_layout" />
+    <include layout="@layout/song_piece_layout"/>
+    <include layout = "@layout/main_screen_album_piece"/>
+
 </LinearLayout>
 </com.ldt.musicr.views.StickyScrollView>

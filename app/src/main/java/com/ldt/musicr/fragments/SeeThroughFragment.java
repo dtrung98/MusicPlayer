@@ -19,9 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.ldt.musicr.InternalTools.ImageEditor;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.R;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -42,26 +42,25 @@ public class SeeThroughFragment extends FragmentPlus {
 
     public static SeeThroughFragment Initialize(Activity activity) {
         SeeThroughFragment fragment = new SeeThroughFragment();
-        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentActivity.TransitionType.FADE_IN_OUT);
+        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentPlusActivity.TransitionType.FADE_IN_OUT);
         return fragment;
     }
     ImageView iV_wallpaper;
-    SupportFragmentActivity activity;
+    SupportFragmentPlusActivity activity;
     View blank_wall_back;
     LinearLayout draw_on;
     View trade_mark;
     ScrollView scrollView;
     private void MergeUI()
     {
-        activity = (SupportFragmentActivity)getActivity();
+        activity = (SupportFragmentPlusActivity)getActivity();
         iV_wallpaper = new ImageView(activity);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         ((FrameLayout)rootView).addView(iV_wallpaper,0,params);
         blank_wall_back = rootView.findViewById(R.id.back_wall_blank);
         draw_on = rootView.findViewById(R.id.back_wall_drawn_on);
         trade_mark = rootView.findViewById(R.id.trade_mark);
-        scrollView = rootView.findViewById(R.id.see_through_scrollView);
-        OverScrollDecoratorHelper.setUpOverScroll(scrollView);
+           //OverScrollDecoratorHelper.setUpOverScroll(scrollView);
     }
     private void SetAllClick()
     {
@@ -85,7 +84,7 @@ public class SeeThroughFragment extends FragmentPlus {
     };
     private void back_wall_blank_onTouch()
     {
-        ((SupportFragmentActivity)getActivity()).pushFragment(HelloScreenFragment.Initialize(getActivity()),true);
+        ((SupportFragmentPlusActivity)getActivity()).pushFragment(HelloScreenFragment.Initialize(getActivity()),true);
     }
     private Bitmap getWallPaper()
     {
@@ -97,7 +96,7 @@ public class SeeThroughFragment extends FragmentPlus {
     }
     private Bitmap applyBackWallEffect4Wallpaper(Bitmap old)
     {
-        Bitmap blur  = ImageEditor.getBlurredWithGoodPerformance(getActivity(),old,1,12,1.4f);
+        Bitmap blur  = BitmapEditor.getBlurredWithGoodPerformance(getActivity(),old,1,12,1.4f);
         //     Canvas canvas = new Canvas(blur);
         //    Paint paint= new Paint();
         //   int w=blur.getWidth(),h = blur.getHeight();
@@ -110,7 +109,7 @@ public class SeeThroughFragment extends FragmentPlus {
     private void CreateAnWallImage()
     {
         iV_wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        final SupportFragmentActivity activity = (SupportFragmentActivity)getActivity();
+        final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity)getActivity();
         iV_wallpaper.setImageBitmap(activity.getIV_Wallpaper());
     }
 

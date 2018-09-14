@@ -8,7 +8,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.InternalTools.Animation;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.fragments.FragmentPlus;
 import com.ldt.musicr.InternalTools.Tool;
 
@@ -21,7 +21,7 @@ public class RightToLeftTransition {
     private final static Interpolator _INTERPOLATOR = Animation.getInterpolator(2);
     private final static long _DELAY = 5;
 
-    public static void AddFragmentAndTransform(final SupportFragmentActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
+    public static void AddFragmentAndTransform(final SupportFragmentPlusActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
     {
     final int[] screenSize = Tool.getScreenSize(activity);
     //  ValueAnimator va = ValueAnimator.ofFloat(0.25f,1);
@@ -32,8 +32,7 @@ public class RightToLeftTransition {
     final FrameLayout ViewFragment = ThisFragment.getFrameLayout();
     final FrameLayout OldViewFragment = BackFragment.getFrameLayout();
     final FrameLayout.LayoutParams params1 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-    final FrameLayout.LayoutParams params2 = (FrameLayout.LayoutParams) OldViewFragment.getLayoutParams();
-        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+       va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 float number = (float)animation.getAnimatedValue();
@@ -58,7 +57,7 @@ public class RightToLeftTransition {
                 OldViewFragment.setAlpha(1);
                 OldViewFragment.setVisibility(View.GONE);
                 ThisFragment.onTransitionComplete();
-                SupportFragmentActivity.setInTransition(false);
+                SupportFragmentPlusActivity.setInTransition(false);
             }
 
             @Override
@@ -75,7 +74,7 @@ public class RightToLeftTransition {
     }
     public static void RemoveFragmentAndTransform( final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
     {
-        final SupportFragmentActivity activity = (SupportFragmentActivity) ThisFragment.getActivity();
+        final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity) ThisFragment.getActivity();
         final int[] screenSize = Tool.getScreenSize(activity);
         ValueAnimator va = ValueAnimator.ofFloat(0.75f,0f);
         va.setDuration(_DURATION);
@@ -83,8 +82,6 @@ public class RightToLeftTransition {
         va.setStartDelay(_DELAY);
         final  FrameLayout ViewFragment = ThisFragment.getFrameLayout();
         final FrameLayout OldViewFragment = BackFragment.getFrameLayout();
-        final FrameLayout.LayoutParams params1 = ( FrameLayout.LayoutParams)ViewFragment.getLayoutParams();
-        final  FrameLayout.LayoutParams params2 = ( FrameLayout.LayoutParams) OldViewFragment.getLayoutParams();
         OldViewFragment.setVisibility(View.VISIBLE);
         va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -99,7 +96,7 @@ public class RightToLeftTransition {
 
                 if(number==0f) {
                     activity.getSupportFragmentManager().beginTransaction().remove(ThisFragment).commit();
-                    SupportFragmentActivity.setInTransition(false);
+                    SupportFragmentPlusActivity.setInTransition(false);
                 }
             }
         });

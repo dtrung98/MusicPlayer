@@ -3,6 +3,7 @@ package com.ldt.musicr.fragments;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -21,10 +22,11 @@ import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.MediaData.FormatDefinition.SimpleSong;
 import com.ldt.musicr.MediaData.MS_AudioField;
 import com.ldt.musicr.MediaData.MediaLoader;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.activities.MainActivity;
 import com.ldt.musicr.R;
 
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 
 
@@ -43,7 +45,7 @@ public class ShowMusicSongs extends FragmentPlus {
     public static ShowMusicSongs Initialize(Activity activity)
     {
         ShowMusicSongs fragment = new ShowMusicSongs();
-        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentActivity.TransitionType.LEFT2RIGHT);
+        fragment.setFrameLayoutNTransitionType(activity, SupportFragmentPlusActivity.TransitionType.RIGHT_LEFT);
         // The only need for the ShowMusicSongs Fragment is the contentResolver
         //fragment.setCR(activity.getContentResolver());
 
@@ -72,7 +74,7 @@ public class ShowMusicSongs extends FragmentPlus {
                 LinearLayout l_cast = (LinearLayout) view;
 
                 l_cast.setOrientation(LinearLayout.VERTICAL);
-                l_cast.setPadding(Tool.getPixelsFromDPs(getActivity(), 10), 0, Tool.getPixelsFromDPs(getActivity(), 10), 0);
+                l_cast.setPadding((int) Tool.getPixelsFromDPs(getActivity(), 10), 0, (int) Tool.getPixelsFromDPs(getActivity(), 10), 0);
                 ArrayList<String> ar = getValueFromProperty(MediaLoader.simpleSongs.get(position));
 
                 int len = ar.size();
@@ -83,21 +85,23 @@ public class ShowMusicSongs extends FragmentPlus {
                     //   t.setTextSize(label_AlbumList.getTextSize());
                     String text = ar.get(i);
                     if (i == 0)
+                    {
                         t.setText(position + " - " + text);
+                        t.setTypeface(t.getTypeface(),Typeface.BOLD);
+                    }
                     else t.setText(text);
-                    Log.d(text, "SMSFragment");
                     l_cast.addView(t);
                     View line = new View(getActivity());
 
                     line.setBackgroundColor(0xffeeeeee);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Tool.getPixelsFromDPs(getActivity(), 1));
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Tool.oneDPs);
                     l_cast.addView(line, params);
 
                 }
                 View line = new View(getActivity());
 
                 line.setBackgroundColor(0xff444444);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Tool.getPixelsFromDPs(getActivity(), 1));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) Tool.oneDPs);
                 l_cast.addView(line, params);
 
             return view;
@@ -146,7 +150,7 @@ public class ShowMusicSongs extends FragmentPlus {
             switch (id)
             {
                 case R.id.show_music_song_button_click2Show :
-              //      FadeInFadeOutTransition.AddFragmentAndTransform((SupportFragmentActivity) getActivity(),ShowMusicSongs.Initialize(getActivity()),getFrameLayout());return;
+              //      FadeInFadeOutTransition.AddFragmentAndTransform((SupportFragmentPlusActivity) getActivity(),ShowMusicSongs.Initialize(getActivity()),getFrameLayout());return;
                 case R.id.show_music_song_label_albumList : hideThisFragment();return;
             }
         }

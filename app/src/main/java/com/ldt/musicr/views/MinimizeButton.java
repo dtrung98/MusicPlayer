@@ -7,16 +7,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.ldt.musicr.InternalTools.Animation;
-import com.ldt.musicr.InternalTools.ImageEditor;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.fragments.MinimizePlaySwitcher;
 
@@ -197,7 +194,7 @@ private final String TAG = "MinimizeButton";
     public void paint(Canvas canvas) {
         if(pc==0) calculating();
         // vẽ background đã được rounded
-        if(curRoundBack!=0) canvas.drawPath(ImageEditor.RoundedRect(curLeftBack,curTopBack,curLeftBack+curWBack,curHBack+curTopBack,curRoundBack,curRoundBack,false),backPaint);
+        if(curRoundBack!=0) canvas.drawPath(BitmapEditor.RoundedRect(curLeftBack,curTopBack,curLeftBack+curWBack,curHBack+curTopBack,curRoundBack,curRoundBack,false),backPaint);
         else canvas.drawRect(0,beginTopBack,width,height,backPaint);
         shownBitmap = listener.getBitmapRounded(curRoundAvar,bitmap);
         canvas.drawBitmap(shownBitmap,new Rect(0,0,shownBitmap.getWidth(),shownBitmap.getHeight()),new Rect((int)curLeftAva,(int) curTopBack,(int)curLeftAva+barHeight,barHeight+ (int)curTopBack),backPaint);

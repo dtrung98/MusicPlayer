@@ -1,6 +1,3 @@
-package com.ldt.musicr.services;
-
-
 /*
  * Copyright (C) 2012 Andrew Neal
  * Copyright (C) 2014 The CyanogenMod Project
@@ -14,13 +11,17 @@ package com.ldt.musicr.services;
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
-*/
+ */
+
+package com.ldt.musicr.services;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -34,6 +35,7 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -45,6 +47,7 @@ import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -61,21 +64,21 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.activities.MainActivity;
 import com.ldt.musicr.helpers.MediaButtonIntentReceiver;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 import com.ldt.musicr.permission.Nammu;
 import com.ldt.musicr.provider.MusicPlaybackState;
 import com.ldt.musicr.provider.RecentStore;
 import com.ldt.musicr.provider.SongPlayCount;
+import com.ldt.musicr.utils.NavigationUtils;
 import com.ldt.musicr.utils.PreferencesUtility;
 import com.ldt.musicr.utils.TimberUtils;
+import com.ldt.musicr.utils.TimberUtils.IdType;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
@@ -92,11 +95,10 @@ import de.Maxr1998.trackselectorlib.TrackItem;
 
 @SuppressLint("NewApi")
 public class MusicService extends Service {
-
     public static final String PLAYSTATE_CHANGED = "com.naman14.timber.playstatechanged";
     public static final String POSITION_CHANGED = "com.naman14.timber.positionchanged";
     public static final String META_CHANGED = "com.naman14.timber.metachanged";
-    public static final String QUEUE_CHANGED = "com.naman14.-timber.queuechanged";
+    public static final String QUEUE_CHANGED = "com.naman14.timber.queuechanged";
     public static final String PLAYLIST_CHANGED = "com.naman14.timber.playlistchanged";
     public static final String REPEATMODE_CHANGED = "com.naman14.timber.repeatmodechanged";
     public static final String SHUFFLEMODE_CHANGED = "com.naman14.timber.shufflemodechanged";
@@ -124,6 +126,7 @@ public class MusicService extends Service {
     public static final String CMDNEXT = "next";
     public static final String CMDNOTIF = "buttonId";
     public static final String UPDATE_PREFERENCES = "updatepreferences";
+    public static final String CHANNEL_ID = "timber_channel_01";
     public static final int NEXT = 2;
     public static final int LAST = 3;
     public static final int SHUFFLE_NONE = 0;
@@ -277,19 +280,23 @@ public class MusicService extends Service {
         cancelShutdown();
         mServiceInUse = true;
     }
-
+    private void log(float i) {
+        if(D)
+        Log.d(TAG, " >> i = " + i);
+    }
     @Override
     public void onCreate() {
         if (D) Log.d(TAG, "Creating service");
         super.onCreate();
-
+        log(2);
         mNotificationManager = NotificationManagerCompat.from(this);
-
+        createNotificationChannel();
+        log(3);
         // gets a pointer to the playback state store
         mPlaybackStateStore = MusicPlaybackState.getInstance(this);
         mSongPlayCount = SongPlayCount.getInstance(this);
         mRecentStore = RecentStore.getInstance(this);
-
+        log(4);
 
         mHandlerThread = new HandlerThread("MusicPlayerHandler",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
@@ -297,23 +304,24 @@ public class MusicService extends Service {
 
 
         mPlayerHandler = new MusicPlayerHandler(this, mHandlerThread.getLooper());
-
+log(5);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mMediaButtonReceiverComponent = new ComponentName(getPackageName(),
                 MediaButtonIntentReceiver.class.getName());
         mAudioManager.registerMediaButtonEventReceiver(mMediaButtonReceiverComponent);
-
+log(5.1f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             setUpMediaSession();
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             setUpRemoteControlClient();
-
+log(5.2f);
         mPreferences = getSharedPreferences("Service", 0);
-        mCardId = getCardId();
-
+       log(5.3f);
+       mCardId = getCardId();
+log(5.4f);
         registerExternalStorageListener();
-
+log(6);
         mPlayer = new MultiPlayer(this);
         mPlayer.setHandler(mPlayerHandler);
 
@@ -328,6 +336,8 @@ public class MusicService extends Service {
         filter.addAction(PREVIOUS_FORCE_ACTION);
         filter.addAction(REPEAT_ACTION);
         filter.addAction(SHUFFLE_ACTION);
+        filter.addAction(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
         // Attach the broadcast listener
         registerReceiver(mIntentReceiver, filter);
 
@@ -341,7 +351,7 @@ public class MusicService extends Service {
         final PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         mWakeLock.setReferenceCounted(false);
-
+        log(7);
 
         final Intent shutdownIntent = new Intent(this, MusicService.class);
         shutdownIntent.setAction(SHUTDOWN);
@@ -350,17 +360,21 @@ public class MusicService extends Service {
         mShutdownIntent = PendingIntent.getService(this, 0, shutdownIntent, 0);
 
         scheduleDelayedShutdown();
-
+log(8);
         reloadQueueAfterPermissionCheck();
         notifyChange(QUEUE_CHANGED);
         notifyChange(META_CHANGED);
+        /*
         //Try to push LastFMCache
-       // if (LastfmUserSession.getSession(this) != null) {
-         //   LastFmClient.getInstance(this).Scrobble(null);
-        //}
+        if (LastfmUserSession.getSession(this) != null) {
+            LastFmClient.getInstance(this).Scrobble(null);
+        }
+        */
         PreferencesUtility pref = PreferencesUtility.getInstance(this);
         mShowAlbumArtOnLockscreen = pref.getSetAlbumartLockscreen();
         mActivateXTrackSelector = pref.getXPosedTrackselectorEnabled();
+        if(D) Log.d(TAG,"at end onCreate");
+
     }
 
     @SuppressWarnings("deprecation")
@@ -422,17 +436,20 @@ public class MusicService extends Service {
                 releaseServiceUiAndStop();
             }
         });
-        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS
+                | MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS);
     }
 
     @Override
     public void onDestroy() {
         if (D) Log.d(TAG, "Destroying service");
         super.onDestroy();
+        /*
         //Try to push LastFMCache
-     //   if (LastfmUserSession.getSession(this).isLogedin()) {
-        //    LastFmClient.getInstance(this).Scrobble(null);
-        //}
+        if (LastfmUserSession.getSession(this).isLogedin()) {
+            LastFmClient.getInstance(this).Scrobble(null);
+        }
+        */
         // Remove any sound effects
         final Intent audioEffectsIntent = new Intent(
                 AudioEffect.ACTION_CLOSE_AUDIO_EFFECT_CONTROL_SESSION);
@@ -494,16 +511,16 @@ public class MusicService extends Service {
 
         return START_NOT_STICKY; //no sense to use START_STICKY with using startForeground
     }
-
+/*
     void scrobble() {
-   //     if (LastfmUserSession.getSession(this).isLogedin()) {
+        if (LastfmUserSession.getSession(this).isLogedin()) {
             Log.d("Scrobble", "to LastFM");
             String trackname = getTrackName();
-        //    if (trackname != null)
-       //         LastFmClient.getInstance(this).Scrobble(new ScrobbleQuery(getArtistName(), trackname, System.currentTimeMillis() / 1000));
-     //   }
+            if (trackname != null)
+                LastFmClient.getInstance(this).Scrobble(new ScrobbleQuery(getArtistName(), trackname, System.currentTimeMillis() / 1000));
+        }
     }
-
+*/
     private void releaseServiceUiAndStop() {
         if (isPlaying()
                 || mPausedByTransientLossOfFocus
@@ -563,12 +580,17 @@ public class MusicService extends Service {
         } else if (UPDATE_PREFERENCES.equals(action)) {
             onPreferencesUpdate(intent.getExtras());
         }
+        else if (AudioManager.ACTION_AUDIO_BECOMING_NOISY.equals(action)) {
+            if (PreferencesUtility.getInstance(getApplicationContext()).pauseEnabledOnDetach()) {
+                pause();
+            }
+        }
     }
 
     private void onPreferencesUpdate(Bundle extras) {
         mShowAlbumArtOnLockscreen = extras.getBoolean("lockscreen", mShowAlbumArtOnLockscreen);
         mActivateXTrackSelector = extras.getBoolean("xtrack",mActivateXTrackSelector);
-      /*
+        /*
         LastfmUserSession session = LastfmUserSession.getSession(this);
         session.mToken = extras.getString("lf_token", session.mToken);
         session.mUsername = extras.getString("lf_user", session.mUsername);
@@ -576,7 +598,6 @@ public class MusicService extends Service {
             session.mToken = null;
             session.mUsername = null;
         }
-
         */
         notifyChange(META_CHANGED);
 
@@ -632,10 +653,12 @@ public class MusicService extends Service {
     }
 
     private int getmCardId() {
+        log(5.31f);
         final ContentResolver resolver = getContentResolver();
         Cursor cursor = resolver.query(Uri.parse("content://media/external/fs_id"), null, null,
                 null, null);
         int mCardId = -1;
+        log(5.32f);
         if (cursor != null && cursor.moveToFirst()) {
             mCardId = cursor.getInt(0);
             cursor.close();
@@ -700,7 +723,7 @@ public class MusicService extends Service {
         long duration = this.duration();
         long position = this.position();
         if (duration > 30000 && (position >= duration / 2) || position > 240000) {
-            scrobble();
+           // scrobble();
         }
 
         if (mPlayer.isInitialized()) {
@@ -1228,6 +1251,16 @@ public class MusicService extends Service {
         }
     }
 
+    private void createNotificationChannel() {
+        if (TimberUtils.isOreo()) {
+            CharSequence name = "Timber";
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            manager.createNotificationChannel(mChannel);
+        }
+    }
+
     private Notification buildNotification() {
         final String albumName = getAlbumName();
         final String artistName = getArtistName();
@@ -1238,21 +1271,20 @@ public class MusicService extends Service {
         int playButtonResId = isPlaying
                 ? R.drawable.ic_pause_white_36dp : R.drawable.ic_play_white_36dp;
 
-        Intent nowPlayingIntent = new Intent(this, MainActivity.class);
-                // NavigationUtils.getNowPlayingIntent(this);
+        Intent nowPlayingIntent = NavigationUtils.getNowPlayingIntent(this);
         PendingIntent clickIntent = PendingIntent.getActivity(this, 0, nowPlayingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Bitmap artwork;
         artwork = ImageLoader.getInstance().loadImageSync(TimberUtils.getAlbumArtUri(getAlbumId()).toString());
 
         if (artwork == null) {
-            artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.default_image2);
+            artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.ic_empty_music2);
         }
 
         if (mNotificationPostTime == 0) {
             mNotificationPostTime = System.currentTimeMillis();
         }
 
-        android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+        android.support.v4.app.NotificationCompat.Builder builder = new android.support.v4.app.NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setLargeIcon(artwork)
                 .setContentIntent(clickIntent)
@@ -1271,15 +1303,22 @@ public class MusicService extends Service {
         if (TimberUtils.isJellyBeanMR1()) {
             builder.setShowWhen(false);
         }
+
         if (TimberUtils.isLollipop()) {
             builder.setVisibility(Notification.VISIBILITY_PUBLIC);
-            NotificationCompat.MediaStyle style = new NotificationCompat.MediaStyle()
+            android.support.v4.media.app.NotificationCompat.MediaStyle style = new android.support.v4.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mSession.getSessionToken())
                     .setShowActionsInCompactView(0, 1, 2, 3);
             builder.setStyle(style);
         }
-        if (artwork != null && TimberUtils.isLollipop())
+        if (artwork != null && TimberUtils.isLollipop()) {
             builder.setColor(Palette.from(artwork).generate().getVibrantColor(Color.parseColor("#403f4d")));
+        }
+
+        if (TimberUtils.isOreo()) {
+            builder.setColorized(true);
+        }
+
         Notification n = builder.build();
 
         if (mActivateXTrackSelector) {
@@ -1304,8 +1343,7 @@ public class MusicService extends Service {
                 ArrayList<Bundle> list = new ArrayList<>();
                 do {
                     TrackItem t = new TrackItem()
-                            .setArt(ImageLoader.getInstance()
-                                    .loadImageSync(TimberUtils.getAlbumArtUri(c.getLong(c.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))).toString()))
+                            .setArt(BitmapFactory.decodeFile(TimberUtils.getAlbumArtUri(c.getLong(c.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))).getPath()))
                             .setTitle(c.getString(c.getColumnIndexOrThrow(AudioColumns.TITLE)))
                             .setArtist(c.getString(c.getColumnIndexOrThrow(AudioColumns.ARTIST)))
                             .setDuration(TimberUtils.makeShortTimeString(this, c.getInt(c.getColumnIndexOrThrow(AudioColumns.DURATION)) / 1000));
@@ -1321,7 +1359,7 @@ public class MusicService extends Service {
         }
     }
 
-    private final  PendingIntent retrievePlaybackAction(final String action) {
+    private final PendingIntent retrievePlaybackAction(final String action) {
         final ComponentName serviceName = new ComponentName(this, MusicService.class);
         Intent intent = new Intent(action);
         intent.setComponent(serviceName);
@@ -2159,7 +2197,7 @@ public class MusicService extends Service {
         }
     }
 
-    public void enqueue(final long[] list, final int action, long sourceId, TimberUtils.IdType sourceType) {
+    public void enqueue(final long[] list, final int action, long sourceId, IdType sourceType) {
         synchronized (this) {
             if (action == NEXT && mPlayPos + 1 < mPlaylist.size()) {
                 addToPlayList(list, mPlayPos + 1, sourceId, sourceType);
@@ -2264,7 +2302,7 @@ public class MusicService extends Service {
                         }
                         break;
                     case TRACK_WENT_TO_NEXT:
-                        mService.get().scrobble();
+                   //     mService.get().scrobble();
                         service.setAndRecordPlayPos(service.mNextPlayPos);
                         service.setNextTrack();
                         if (service.mCursor != null) {
@@ -2570,12 +2608,12 @@ public class MusicService extends Service {
         }
     }
 
-    private static final class ServiceStub extends IRTimberService.Stub {
+    private static final class ServiceStub extends ITimberService.Stub {
 
         private final WeakReference<MusicService> mService;
 
         private ServiceStub(final MusicService service) {
-            mService = new WeakReference<>(service);
+            mService = new WeakReference<MusicService>(service);
         }
 
 
@@ -2587,7 +2625,7 @@ public class MusicService extends Service {
         @Override
         public void open(final long[] list, final int position, long sourceId, int sourceType)
                 throws RemoteException {
-            mService.get().open(list, position, sourceId, TimberUtils.IdType.getTypeById(sourceType));
+            mService.get().open(list, position, sourceId, IdType.getTypeById(sourceType));
         }
 
         @Override
@@ -2619,7 +2657,7 @@ public class MusicService extends Service {
         @Override
         public void enqueue(final long[] list, final int action, long sourceId, int sourceType)
                 throws RemoteException {
-            mService.get().enqueue(list, action, sourceId, TimberUtils.IdType.getTypeById(sourceType));
+            mService.get().enqueue(list, action, sourceId, IdType.getTypeById(sourceType));
         }
 
         @Override
@@ -2834,6 +2872,4 @@ public class MusicService extends Service {
             refresh();
         }
     }
-
 }
-

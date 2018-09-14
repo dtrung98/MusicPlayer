@@ -16,12 +16,13 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.InternalTools.Animation;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.GradientResourses;
-import com.ldt.musicr.InternalTools.ImageEditor;
 import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.R;
 
@@ -31,9 +32,10 @@ import com.ldt.musicr.R;
  */
 
 public class SplashScreenView extends View {
+    private static final String TAG = "SplashScreenView";
     private final int alphaPaint = 60;
 
-    int eachDp=0;
+    float eachDp=0;
     int upN=0;
     int upN2 =0;
 
@@ -54,18 +56,19 @@ public class SplashScreenView extends View {
     final int time_delay1=1500;
     final int time_delay2= 2000;
     public SplashScreenView(Context context) {
+
         super(context);
-        init();
+
     }
 
     public SplashScreenView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+
     }
 
     public SplashScreenView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+
     }
     private LinearGradient getmLoadingShader()
     {
@@ -84,7 +87,7 @@ public class SplashScreenView extends View {
 
     private void init()
     {
-        eachDp = Tool.getOneDps(getContext());
+        eachDp = Tool.getOneDps(null);
         ScreenSize = Tool.getScreenSize(getContext());
         widthOfIcon = 75*eachDp;
   //     shader = new LinearGradient(0, 0, 0,800*eachDp /*canvas height*/, color1,  color2, Shader.TileMode.MIRROR /*or REPEAT*/);
@@ -104,18 +107,18 @@ public class SplashScreenView extends View {
         loadingPaint.setShader(getmLoadingShader());
         loadingPaint.setStyle(Paint.Style.FILL);
        Bitmap iconTemp = ((BitmapDrawable)getResources().getDrawable(R.drawable.splash_icon_mini)).getBitmap();
-       icon =  ImageEditor.getResizedBitmap(iconTemp,75*eachDp,75*eachDp);
+       icon =  BitmapEditor.getResizedBitmap(iconTemp,(int) (75*eachDp),(int) (75*eachDp));
        iconTemp.recycle();
 
-        icon_loading = Bitmap.createBitmap(75*eachDp,75*eachDp, Bitmap.Config.ARGB_8888);
+        icon_loading = Bitmap.createBitmap((int)(75*eachDp),(int)(75*eachDp), Bitmap.Config.ARGB_8888);
         canvas_icon_loading = new Canvas(icon_loading);
-        dstCrop4IconLoading = new Rect(0,0,75*eachDp,75*eachDp);
+        dstCrop4IconLoading = new Rect(0,0,(int)(75*eachDp),(int)(75*eachDp));
         srcBlur = new Rect(0, 0, 150, 150);
         makeBackgroundSeeThroughPaint = new Paint();
         makeBackgroundSeeThroughPaint.setAntiAlias(true);
         makeBackgroundSeeThroughPaint.setColor(Color.BLACK);
         BitmapShader bitmapShader = new BitmapShader(icon, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-        makeBackgroundSeeThroughPaint.setXfermode(new PorterDuffXfermode(ImageEditor.getPorterMode(11)));
+        makeBackgroundSeeThroughPaint.setXfermode(new PorterDuffXfermode(BitmapEditor.getPorterMode(11)));
         makeBackgroundSeeThroughPaint.setStyle(Paint.Style.FILL);
         makeBackgroundSeeThroughPaint.setShader(bitmapShader);
         bmp = Bitmap.createBitmap(ScreenSize[0], ScreenSize[1], Bitmap.Config.ARGB_8888);
@@ -123,7 +126,7 @@ public class SplashScreenView extends View {
         canvas_bmp = new Canvas(bmp);
         path1 = new Path();
         path2 = new Path();
-        value1 = ValueAnimator.ofInt(-100*eachDp,100*eachDp);
+        value1 = ValueAnimator.ofInt((int)(-100*eachDp),(int)(100*eachDp));
         value1.setInterpolator(Animation.getInterpolator(3));
         value1.setDuration(time_delay1);
         value1.setRepeatMode(ValueAnimator.REVERSE);
@@ -137,7 +140,7 @@ public class SplashScreenView extends View {
         });
        value1.start();
 
-        value2 = ValueAnimator.ofInt(-150*eachDp,150*eachDp);
+        value2 = ValueAnimator.ofInt((int)(-150*eachDp),(int)(150*eachDp));
         value2.setInterpolator(Animation.getInterpolator(4));
         value2.setDuration(time_delay2);
         value2.setRepeatMode(ValueAnimator.REVERSE);
@@ -278,9 +281,14 @@ public class SplashScreenView extends View {
         beforeEnd();
         value_makeIconGone.start();
     }
-
-
+    private boolean firstDraw = true;
+    private void doFirstDraw() {
+        if(!firstDraw) return;
+        firstDraw = false;
+      init();
+    }
     protected void onDraw(Canvas canvas) {
+     doFirstDraw();
         if(Tool.isDrawn()&&!onEnding) {
             onEnd();
         }
@@ -310,7 +318,7 @@ public class SplashScreenView extends View {
          * draw blur background or original background
          */
         if (iWant2BlurBackground) {
-            Bitmap bitmap1 = ImageEditor.getBlurredWithGoodPerformance(getContext(), bmp, 1, 25, 5);
+            Bitmap bitmap1 = BitmapEditor.getBlurredWithGoodPerformance(getContext(), bmp, 1, 25, 5);
             bmp.eraseColor(0);
             canvas_bmp.drawBitmap(bitmap1, srcBlur, dstRect, null);
             bitmap1.recycle();

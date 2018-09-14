@@ -3,6 +3,11 @@
     android:layout_width="match_parent"
     android:id="@id/rootEveryThing"
     android:layout_height="match_parent">
+    <View
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:visibility="invisible"
+        android:id="@+id/ViewOneDp"/>
 <com.ldt.musicr.views.SplashScreenView
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

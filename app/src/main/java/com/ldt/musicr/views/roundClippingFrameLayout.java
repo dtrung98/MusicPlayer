@@ -12,7 +12,7 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import com.ldt.musicr.InternalTools.ImageEditor;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.Tool;
 
 /**
@@ -30,20 +30,20 @@ public class roundClippingFrameLayout extends SupportDarkenFrameLayout {
 
     public roundClippingFrameLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        onInit();
+        init();
     }
 
     public roundClippingFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        onInit();
+        init();
     }
 
     public roundClippingFrameLayout(Context context) {
         super(context);
-        onInit();
+        init();
     }
 
-    protected void onInit() {
+    protected void init() {
         drawPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         drawPaint.setColor(0xffffffff);
         drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
@@ -67,11 +67,11 @@ public class roundClippingFrameLayout extends SupportDarkenFrameLayout {
     Canvas c;
     private float number = 0;
 
-    public void setNumber(float number1) {
-        if (number != number1) {
-            number = number1;
-            invalidate();
+    public void setRoundedClippingNumber(float number, boolean shouldDraw) {
+        if (this.number != number) {
+            this.number = number;
         }
+        if(shouldDraw) invalidate();
     }
     @Override
     protected void onDraw(Canvas canvas)
@@ -86,27 +86,35 @@ public class roundClippingFrameLayout extends SupportDarkenFrameLayout {
     }
     @Override
     protected void dispatchDraw(Canvas canvas) {
-              if(number==0) {
+              if(number<=0) {
                   super.dispatchDraw(canvas);
                   return;
               }
               if(bitmap==null) {
-                  Log.d("You set bitmap !","round");
+                  // one time running
+             //     Log.d("You set bitmap !","round");
                   bitmap = Bitmap.createBitmap((int) bounds.width(), (int) bounds.height(), Bitmap.Config.ARGB_8888);
                   c = new Canvas(bitmap);
                   paint = new Paint();
                   paint.setAntiAlias(true);
                   BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+
                   paint.setShader(shader);
               }
-                  super.dispatchDraw(c);
+            //  bitmap.eraseColor(0);
+
+           // run when rect is clipping
+              super.dispatchDraw(c);
 
               if(eachDP==0) eachDP = Tool.getOneDps(getContext());
               if(number>1) number =1;
               else if(number<0) number =0;
 
-              canvas.drawPath(ImageEditor.RoundedRect(bounds.left,bounds.top,bounds.right,bounds.bottom,mCornerRadius*number*eachDP,mCornerRadius*number*eachDP,false),paint);
+              canvas.drawPath(BitmapEditor.RoundedRect(bounds.left,bounds.top,bounds.right,bounds.bottom,mCornerRadius*number*eachDP,mCornerRadius*number*eachDP,false),paint);
     }
     private float eachDP = 0;
 
+    public float getNumber() {
+        return number;
+    }
 }

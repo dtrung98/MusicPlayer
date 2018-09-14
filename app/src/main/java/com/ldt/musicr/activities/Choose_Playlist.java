@@ -35,7 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ldt.musicr.InternalTools.ImageEditor;
+import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.Motion;
 import com.ldt.musicr.InternalTools.helper;
 import com.ldt.musicr.MediaData.FormatDefinition.Album;
@@ -273,12 +273,12 @@ int statusHeight=0;
             Paint paint = new Paint();
             paint.setStyle(Paint.Style.FILL);
             paint.setAntiAlias(true);
-             Bitmap ex1 = ImageEditor.getRoundedCornerBitmap(bitm, 30-((int) (30 * TiLe)));
+             Bitmap ex1 = BitmapEditor.getRoundedCornerBitmap(bitm, 30-((int) (30 * TiLe)));
 
 
           //  paint.setAlpha(((int)(255*(1-TiLe))));
             if(false) {
-                Bitmap prev_ex1 = ImageEditor.getRoundedCornerBitmap(prev_buffer, ((int) (30 * TiLe)));
+                Bitmap prev_ex1 = BitmapEditor.getRoundedCornerBitmap(prev_buffer, ((int) (30 * TiLe)));
                 canvas_buffer.drawBitmap(prev_ex1, new Rect(0, 0, prev_ex1.getWidth(), prev_ex1.getHeight()), new RectF(ScreenWidth * (TiLe) / 2, ScreenHeight * (TiLe) / 2, ScreenWidth * (1 - TiLe / 2), ScreenHeight * (1 - TiLe / 2)), paint);
                 prev_ex1.recycle();
             }
@@ -293,7 +293,7 @@ int statusHeight=0;
        //     buffer.eraseColor(Color.TRANSPARENT);
             paint.setAlpha(255);
             canvas_buffer.drawBitmap(ex1,new Rect(0,0, ex1.getWidth(),ex1.getHeight()),new RectF(left - left * TiLe, top - top * TiLe, right + (ScreenWidth - right) * TiLe, bottom + (ScreenHeight - bottom) * TiLe), paint);
-            Bitmap ex2 = ImageEditor.getBlurredWithGoodPerformance(Choose_Playlist.this,buffer,1,20,1+6*TiLe); // Làm mờ hình ảnh chính, ảnh chính đã bị thu nhỏ
+            Bitmap ex2 = BitmapEditor.getBlurredWithGoodPerformance(Choose_Playlist.this,buffer,1,20,1+6*TiLe); // Làm mờ hình ảnh chính, ảnh chính đã bị thu nhỏ
 
             canvas_buffer.drawBitmap(ex2,new Rect(0,0,ex2.getWidth(),ex2.getHeight()),new Rect(0,0,ScreenWidth,ScreenHeight),paint); // vẽ lên chính nó
             paint.setARGB(((int) (210 * TiLe)), 255, 255, 255);
@@ -371,9 +371,9 @@ int statusHeight=0;
                 if(bitmap==null) // khong ton tai art
                 {
                     Bitmap bitmap1=  BitmapFactory.decodeResource(getResources(),R.drawable.default_image2);
-                    if(ImageEditor.TrueIfBitmapBigger(bitmap1,300)) {
+                    if(BitmapEditor.TrueIfBitmapBigger(bitmap1,300)) {
                         Log.d("Song","bigger");
-                        bitmap = ImageEditor.getResizedBitmap(bitmap1, 300, 300);
+                        bitmap = BitmapEditor.getResizedBitmap(bitmap1, 300, 300);
                         bitmap1.recycle();
                     }
                     else bitmap = bitmap1;
@@ -419,13 +419,13 @@ int statusHeight=0;
             @Override
             public View getView(final int position, View view, ViewGroup parent) {
                if(view==null)
-                view = getLayoutInflater().inflate(R.layout.item_list_view, parent, false);
+                view = getLayoutInflater().inflate(R.layout.item_songs_list, parent, false);
                 final ImageView imageView = (ImageView) view.findViewById(R.id.item_album_view_image);
                 TextView titleView = (TextView)view.findViewById(R.id.item_album_view_title);
                 TextView artistView = (TextView)view.findViewById(R.id.item_album_view_aritst);
                 final Album album = albumArrayList.get(position);
                 imageView.setTag(new myTag(position));
-                imageView.setImageBitmap(ImageEditor.GetBlurredBackground(Choose_Playlist.this,ImageEditor.getRoundedCornerBitmap(album.getBitmap(),15),25,25,25,25,-6,180,12,2));
+                imageView.setImageBitmap(BitmapEditor.GetRoundedBitmapWithBlurShadow(Choose_Playlist.this,BitmapEditor.getRoundedCornerBitmap(album.getBitmap(),15),25,25,25,25,-6,180,12,2));
                 imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -12,12 +12,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+import android.util.Log;
 
 /**
  * Created by trung on 8/27/2017.
  */
 
 public class SeeThroughTranslucentTextView extends AppCompatTextView{
+    private static final String TAG = "SeeThroughTTextView";
     private Bitmap mMaskBitmap;
     private Canvas mMaskCanvas;
     private Paint mPaint;
@@ -35,6 +37,11 @@ public class SeeThroughTranslucentTextView extends AppCompatTextView{
         init();
     }
 
+    public SeeThroughTranslucentTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
     private void init() {
         mPaint = new Paint();
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
@@ -43,7 +50,6 @@ public class SeeThroughTranslucentTextView extends AppCompatTextView{
     }
 
     @Override
-    @Deprecated
     public void setBackgroundDrawable(final Drawable bg) {
         if (mBackground == bg) {
             return;

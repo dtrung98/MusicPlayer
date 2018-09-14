@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent">
+<android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
+<android.support.design.widget.CollapsingToolbarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:id="@+id/playlist_pager_collapsing_toolbar"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_collapseMode="parallax">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/backIcon"
+            android:src="@drawable/icons8_back_arrow"
+            android:padding="10dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Back"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:layout_toRightOf="@id/backIcon"
+            android:textSize="18dp"/>
+    </RelativeLayout>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/playlist_pager_collapsing_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_collapseMode="pin"
+        android:layout_marginTop="50dp"
+        android:background="@android:color/transparent"
+        app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/default_image_round"
+            android:padding="10dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/playlist_pager_image" />
+
+        <TextView
+            android:id="@+id/playlist_pager_title"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"
+            android:text="Title"
+            android:textColor="@android:color/black"
+
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/playlist_pager_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/playlist_pager_artist"
+            android:layout_width="181dp"
+            android:layout_height="25dp"
+            android:layout_below="@id/playlist_pager_title"
+            android:layout_marginStart="4dp"
+            android:paddingTop="5dp"
+            android:text="Artist"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/text14sp"
+            app:layout_constraintStart_toEndOf="@+id/playlist_pager_image"
+            app:layout_constraintTop_toBottomOf="@+id/playlist_pager_title" />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_below="@id/playlist_pager_artist"
+            android:layout_marginBottom="12dp"
+            android:text="  Play Random  "
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+            app:layout_constraintStart_toEndOf="@+id/playlist_pager_image"
+            fancy:fb_borderColor="@android:color/black"
+            fancy:fb_borderWidth="2dp"
+            fancy:fb_defaultColor="@android:color/transparent"
+            fancy:fb_radius="25dp"
+            fancy:fb_textColor="@android:color/black"
+            fancy:fb_textSize="16dp" />
+
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/playlist_pager_image">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="90dp"
+                android:layout_height="40dp"
+                android:padding="5dp"
+                android:src="@drawable/icons8_sort" />
+        </FrameLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CollapsingToolbarLayout>
+
+</android.support.design.widget.AppBarLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/playlist_big_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

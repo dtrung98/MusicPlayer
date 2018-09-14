@@ -8,7 +8,7 @@ import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.InternalTools.Animation;
-import com.ldt.musicr.activities.SupportFragmentActivity;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.fragments.FragmentPlus;
 import com.ldt.musicr.InternalTools.Tool;
 
@@ -20,7 +20,7 @@ public class Right2LeftTransition {
     private final static long  _DURATION = 300;
     private final static Interpolator _INTERPOLATOR = Animation.getInterpolator(2);
     private final static long _DELAY = 0;
-    public static void AddFragmentAndTransform(final SupportFragmentActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
+    public static void AddFragmentAndTransform(final SupportFragmentPlusActivity activity, final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
     {
         final int[] screenSize = Tool.getScreenSize(activity);
         //  ValueAnimator va = ValueAnimator.ofFloat(0.25f,1);
@@ -74,7 +74,7 @@ public class Right2LeftTransition {
     }
     public static void RemoveFragmentAndTransform( final FragmentPlus ThisFragment, final FragmentPlus BackFragment)
     {
-        final SupportFragmentActivity activity = (SupportFragmentActivity) ThisFragment.getActivity();
+        final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity) ThisFragment.getActivity();
         final int[] screenSize = Tool.getScreenSize(activity);
         ValueAnimator va = ValueAnimator.ofFloat(0.75f,0f);
         va.setDuration(_DURATION);

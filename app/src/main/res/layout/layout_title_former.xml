@@ -5,8 +5,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/playlist_showing_name"
-        android:textSize="@dimen/title_text_size"
+        android:id="@+id/piece_header"
+        android:textSize="@dimen/header1_text_size"
         android:layout_marginTop="10dp"
         android:layout_marginStart="@dimen/title_text_margin_left"
         android:layout_marginLeft="@dimen/title_text_margin_left"

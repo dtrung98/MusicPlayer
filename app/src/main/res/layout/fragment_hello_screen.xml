@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ldt.musicr.activities.SplashActivity"
-    android:clickable="true"
     android:background="@android:color/white">
     <TextView
         android:layout_width="wrap_content"
@@ -11,7 +10,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginLeft="@dimen/title_text_margin_left"
         android:textStyle="bold"
-        android:textSize="@dimen/title_text_size"
+        android:textSize="@dimen/header1_text_size"
         android:textColor="@android:color/black"
         android:text="Bubble Page"/>
             <ImageView
@@ -28,7 +27,7 @@
                 android:layout_gravity="center"
                 android:textColor="#FE7879"
 
-                android:textSize="@dimen/title_text_size"
+                android:textSize="@dimen/header1_text_size"
                 android:textStyle="bold"
                 android:text="@string/trade_mark"
                 android:layout_marginBottom="20dp"/>

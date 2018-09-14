@@ -17,6 +17,8 @@ public class SplashActivity extends AppCompatActivity {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.splash);
        View f= findViewById(R.id.rootEveryThing);
+       View viewOneDp = f.findViewById(R.id.ViewOneDp);
+       Tool.setOneDps(viewOneDp.getWidth());
        f.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN); // trong suốt status bar và thanh navigation màu đen.
 
       //  getWindow().addFlags( SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION| SYSTEM_UI_FLAG_LAYOUT_STABLE);

@@ -60,8 +60,8 @@ public class MinimizePlaySwitcher {
         rootLayout = (FrameLayout) listener.getRootLayout();
        mButton = new MinimizeButton(((Fragment)listener).getActivity());
        mButton.setProperties(listener);
-       int  oneDp = Tool.getOneDps(null);
-       int _height = listener.getBarHeight()+listener.getNavigationHeight()+oneDp*100;
+       float  oneDp = Tool.getOneDps(null);
+       int _height = (int)(listener.getBarHeight()+listener.getNavigationHeight()+oneDp*100);
        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,_height);
        int[] ss = Tool.getScreenSize(true);
        params.topMargin = ss[1]-_height+ listener.getNavigationHeight() ;

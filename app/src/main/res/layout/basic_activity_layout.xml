@@ -19,11 +19,12 @@
         android:layout_height="match_parent"
         android:id="@+id/container_of_container">
         <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
-        <com.ldt.musicr.views.roundClippingFrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:id="@+id/fragment_switch_container" />
+        <com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:id="@+id/fragment_switcher_framelayout" />
+        </FrameLayout>
         <!-- vì lý do android lolipop trở xuống không có icon màu đen cho status bar
         cho nên cần một thanh translucent màu hơi đen ở background-->
         <View
@@ -32,11 +33,6 @@
             android:layout_height="0dp"
             android:background="#25000000"
             android:visibility="gone"/>
-        <!--switch_page_containeriner này chứa 2 control là music, và playlist , và cac layout  chèn khác -->
-        <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/control_container"/>
         <View
         android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
@@ -45,5 +41,4 @@
         android:layout_gravity="bottom"
         android:background="#15000000"
         />
-    </FrameLayout>
 </com.ldt.musicr.views.RootScreen_FrameLayout>

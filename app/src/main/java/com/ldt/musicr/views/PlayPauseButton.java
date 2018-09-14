@@ -164,29 +164,21 @@ public class PlayPauseButton extends View {
      */
     @Override
     protected void onDraw(Canvas canvas) {
-      Log.d("Left = "+( Float)mLeftEdgeAnimator.getAnimatedValue(),"PlayPause");
-        Log.d("Center = "+( Float) mCenterEdgeAnimator.getAnimatedValue(),"PlayPause");
-        mPoint.setHeight(canvas.getHeight());
-        mPoint.setWidth(canvas.getWidth());
-    Log.d("Canvas Width = "+canvas.getWidth()+", Canvas Height = "+ canvas.getHeight(),"CanvasSize");
+        mPoint.setHeight(getHeight()- getPaddingTop()-getPaddingBottom());
+        mPoint.setWidth(getWidth()-getPaddingRight()-getPaddingLeft());
+        canvas.save();
+        canvas.translate(getPaddingLeft(),getPaddingTop());
+
         mLeftPath.reset();
         mRightPath.reset();
-       // drawMyPath(canvas);
-       // if(true) return;
+
         //左半分Pathの設定
-        float getX_pos0_5xSQRT_3 = mPoint.getX(-0.5 * SQRT_3);
-        int c = mPaint.getColor();
-        mPaint.setColor(0xffA5D8F5);
-    //    canvas.drawRect(0,0,mPoint.width,mPoint.height,backgroundCloudEffectPaint);
-        mPaint.setColor(c);
-        LogNumber("getX_pos0_5xSQRT_3",getX_pos0_5xSQRT_3);
-                                      //     minX                     // maxBottom = height
-        mLeftPath.moveTo(getX_pos0_5xSQRT_3, mPoint.height);
-        float lineTo1 = mPoint.getY((Float) mLeftEdgeAnimator.getAnimatedValue());
-        float lineTo2 =  mPoint.getY((Float) mCenterEdgeAnimator.getAnimatedValue());
-        mLeftPath.lineTo(lineTo1 + 0.7f,lineTo2);
-        mLeftPath.lineTo(lineTo1 + 0.7f, mPoint.getY(-1 * (Float) mCenterEdgeAnimator.getAnimatedValue()));
-        mLeftPath.lineTo(getX_pos0_5xSQRT_3,0);
+        mLeftPath.moveTo(mPoint.getX(-0.5 * SQRT_3), mPoint.getY(1.f));
+        mLeftPath.lineTo(mPoint.getY((Float) mLeftEdgeAnimator.getAnimatedValue()) + 0.7f,
+                mPoint.getY((Float) mCenterEdgeAnimator.getAnimatedValue()));
+        mLeftPath.lineTo(mPoint.getY((Float) mLeftEdgeAnimator.getAnimatedValue()) + 0.7f,
+                mPoint.getY(-1 * (Float) mCenterEdgeAnimator.getAnimatedValue()));
+        mLeftPath.lineTo(mPoint.getX(-0.5 * SQRT_3), mPoint.getY(-1.f));
 
         //右半分Pathの設定
         mRightPath.moveTo(mPoint.getY(-1 * (Float) mLeftEdgeAnimator.getAnimatedValue()),
@@ -197,17 +189,11 @@ public class PlayPauseButton extends View {
                 mPoint.getY(-1 * (Float) mRightEdgeAnimator.getAnimatedValue()));
         mRightPath.lineTo(mPoint.getY(-1 * (Float) mLeftEdgeAnimator.getAnimatedValue()),
                 mPoint.getY(-1 * (Float) mCenterEdgeAnimator.getAnimatedValue()));
+
         canvas.drawPath(mLeftPath, mPaint);
-       canvas.drawPath(mRightPath, mPaint);
+        canvas.drawPath(mRightPath, mPaint);
     }
-    private void LogNumber(String Number,float number)
-    {
-        Log.d(Number+" = "+number,"LogNumber");
-    }
-  private void drawMyPath(Canvas canvas)
-  {
-      canvas.drawCircle(mPoint.getX(0),mPoint.getY(0),mPoint.width/2*(float)mCenterEdgeAnimator.getAnimatedValue(),mPaint);
-  }
+
     /**
      * アニメーションを開始する
      */
@@ -226,7 +212,7 @@ public class PlayPauseButton extends View {
 
         if (!mPlayed) {
             mCenterEdgeAnimator.start();
-           mLeftEdgeAnimator.start();
+            mLeftEdgeAnimator.start();
             mRightEdgeAnimator.start();
         } else {
             mCenterEdgeAnimator.reverse();

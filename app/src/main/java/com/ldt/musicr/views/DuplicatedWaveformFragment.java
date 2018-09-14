@@ -439,7 +439,7 @@ public abstract class DuplicatedWaveformFragment extends Fragment implements Mar
         markEndButton.setOnClickListener(this.mMarkEndListener);
         this.enableDisableButtons();
         this.mWaveformView = (WaveformView)view.findViewById(id.waveform);
-        this.mWaveformView.setListener(this);
+        this.mWaveformView.addBaseListener(this);
         this.mWaveformView.setSegments(this.getSegments());
         this.mInfo = (TextView)view.findViewById(id.info);
         this.mInfo.setText(this.mCaption);
@@ -453,13 +453,13 @@ public abstract class DuplicatedWaveformFragment extends Fragment implements Mar
         }
 
         this.mStartMarker = (MarkerView)view.findViewById(id.startmarker);
-        this.mStartMarker.setListener(this);
+        this.mStartMarker.addBaseListener(this);
         this.mStartMarker.setImageAlpha(255);
         this.mStartMarker.setFocusable(true);
         this.mStartMarker.setFocusableInTouchMode(true);
         this.mStartVisible = true;
         this.mEndMarker = (MarkerView)view.findViewById(id.endmarker);
-        this.mEndMarker.setListener(this);
+        this.mEndMarker.addBaseListener(this);
         this.mEndMarker.setImageAlpha(255);
         this.mEndMarker.setFocusable(true);
         this.mEndMarker.setFocusableInTouchMode(true);

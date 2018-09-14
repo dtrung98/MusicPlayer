@@ -9,9 +9,9 @@ import java.util.Random;
 public class GradientResourses {
 
 public final static GradientColor[] gradientColors = new GradientColor[] {
-        new GradientColor( // this might be used for shader.
-                new int[] {0xfffa709a,0xfffee140}
-                ),
+       // new GradientColor( // this might be used for shader.
+            //    new int[] {0xfffa709a,0xfffee140}
+              //  ),
         new GradientColor( // this may be background shader.
                 new int[] {
                         0xffeea2a2,
