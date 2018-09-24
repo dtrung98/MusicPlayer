@@ -46,7 +46,7 @@ src="https://user-images.githubusercontent.com/33343210/32426896-ecd40b42-c2ef-1
 
 ## Authors
 
-* **Le Dinh Trung (ldt)** - *Initial work* - [trungdinhle](https://github.com/trungdinhle)
+* **Le Dinh Trung (ldt)** - *Initial work* - [dtrung98](https://github.com/dtrung98)
 
 
 ### License
