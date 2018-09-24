@@ -12,7 +12,7 @@ This is a  music player which has a pretty UI&UX design
 ### Installing
 The app's now available in Google Play Store, download and install apk file from [here](http://play.google.com/something). It's compatible with API Level 16 (Android 4.1) devices or higher.
 ```
-http://play.google.com/something
+Comming soon
 ```
 ## Screenshots
 </br>
