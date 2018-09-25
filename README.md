@@ -1,5 +1,6 @@
 # RD Music Player - Redefined Music Player
 This is a  music player which has a pretty UI&UX design
+</br>(Powered by [Timber Material Design Music Player](https://github.com/naman14/Timber))
 ## Features
 
 * Live SplashScreen
@@ -47,7 +48,6 @@ src="https://user-images.githubusercontent.com/33343210/32426896-ecd40b42-c2ef-1
 ## Authors
 
 * **Le Dinh Trung (ldt)** - *Initial work* - [dtrung98](https://github.com/dtrung98)
-( Powered by [Timer Music Player](https://github.com/naman14/Timber)
 
 
 ### License
