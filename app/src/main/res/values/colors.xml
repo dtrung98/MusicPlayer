@@ -16,6 +16,16 @@
     <color name="FlatPurple">#5856D6</color>
     <color name="FlatPink">#FF2D55</color>
     <color name="FlatBlue">#007AFF</color>
+
+    <color name="HeavyOrange">#AF8700</color>
+    <color name="HeavyRed">#770000</color>
+    <color name="HeavyTealBlue">#0058AA</color>
+    <color name="HeavyYellow">#802D00</color>
+    <color name="HeavyGreen">#005800</color>
+    <color name="HeavyBlue">#00218B</color>
+    <color name="HeavyPurple">#162EA6</color>
+    <color name="HeavyPink">#B60024</color>
+
     <item name="yellow" type="color">#F7B500</item>
     <item name="yellow_dark" type="color">#AC7E00</item>
    <item name="FlatWhite" type="color">#F5F5F5</item>

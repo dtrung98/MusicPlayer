@@ -23,8 +23,6 @@ import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.R;
 import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -110,7 +108,7 @@ public class SeeThroughFragment extends FragmentPlus {
     {
         iV_wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
         final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity)getActivity();
-        iV_wallpaper.setImageBitmap(activity.getIV_Wallpaper());
+        activity.setBlurWallpaper(iV_wallpaper);
     }
 
     @Override

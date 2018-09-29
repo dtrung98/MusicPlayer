@@ -52,7 +52,7 @@ final public class SeeThroughTextView extends AppCompatTextView
 
         mBackground = bg;
 
-        // Will always draw drawable using view bounds. This might be a
+        // Will always drawVisualWave drawable using view bounds. This might be a
         // problem if the drawable should force the view to be bigger, e.g.
         // the view sets its dimensions to wrap_content and the drawable
         // is larger than the text.
@@ -114,7 +114,7 @@ final public class SeeThroughTextView extends AppCompatTextView
                 || getHeight() == 0;
     }
 
-    // draw() calls onDraw() leading to stack overflow
+    // drawVisualWave() calls onDraw() leading to stack overflow
     @SuppressLint("WrongCall")
     private void drawMask() {
         clear(mMaskCanvas);

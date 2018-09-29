@@ -1,12 +1,61 @@
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/UILayer"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/UILayer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ldt.musicr.fragments.MainScreenFragment">
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/playlist_pager_collapsing_toolbar"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="5dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+        <com.ldt.musicr.views.stickyActionBarConstraintLayout
+            android:id="@+id/stickyActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@android:color/transparent">
+        </com.ldt.musicr.views.stickyActionBarConstraintLayout>
+    </android.support.design.widget.AppBarLayout>
+    <include layout="@layout/layout_background_4_mainscreen"/>
+    <com.ldt.musicr.views.StickyScrollView
+        android:id="@+id/myScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.ldt.musicr.fragments.MainScreenFragment">
-    <include layout="@layout/layout_background_4_mainscreen"/>
-    <include layout="@layout/content_mainscreen"/>
-    <include layout="@layout/layout_action_bar_mainscreen"/>
+        android:layout_alignParentStart="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:scrollbars="none"
+        android:layout_alignParentLeft="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_content_linear">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#FFBAC7"
+                android:visibility="gone"
+                android:id="@+id/main_slider"/>
+            <include layout="@layout/playlists_piece_layout" />
+            <include layout="@layout/song_piece_layout"/>
+            <include layout = "@layout/main_screen_album_piece"/>
 
-    </RelativeLayout>
+        </LinearLayout>
+    </com.ldt.musicr.views.StickyScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>

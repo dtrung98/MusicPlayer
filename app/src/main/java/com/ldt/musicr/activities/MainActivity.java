@@ -200,6 +200,11 @@ public class MainActivity extends BaseActivity  {
         Drawable wallpaperDrawable = wallpaperManager.getDrawable();
         return ((BitmapDrawable)wallpaperDrawable).getBitmap().copy(Bitmap.Config.ARGB_8888,true);
     }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
     boolean Scroll2Top()
     {
      //  return mainScreenFragment.Scroll2Top();

@@ -29,7 +29,7 @@ public class DarkenRoundedBackgroundFrameLayout extends FrameLayout {
         super(context, attrs);
         init();
     }
-    private int backColor1=0,backColor2 =0;
+    private int backColor1=Color.WHITE,backColor2 =Color.WHITE;
     public void setBackColor1(int color)
     {
         backColor1 = color;

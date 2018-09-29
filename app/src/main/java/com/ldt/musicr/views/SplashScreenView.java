@@ -315,7 +315,7 @@ public class SplashScreenView extends View {
         run_cloud_background();
 
         /*
-         * draw blur background or original background
+         * drawVisualWave blur background or original background
          */
         if (iWant2BlurBackground) {
             Bitmap bitmap1 = BitmapEditor.getBlurredWithGoodPerformance(getContext(), bmp, 1, 25, 5);
@@ -327,7 +327,7 @@ public class SplashScreenView extends View {
         make_background_with_through_icon();
        canvas.drawBitmap(bmp,0,0,null);
         /*
-         * draw icon loading
+         * drawVisualWave icon loading
          */
     //    canvas.drawBitmap(icon_loading,dstRect.touch_event_X()-dstCrop4IconLoading.touch_event_X(),dstRect.centerY()- dstCrop4IconLoading.centerY(),null);
 
@@ -341,7 +341,7 @@ public class SplashScreenView extends View {
         canvas_bmp.drawPath(path1, backgroundCloudEffectPaint);
         canvas_bmp.drawPath(path2, backgroundCloudEffectPaint);
 
-        // example draw
+        // example drawVisualWave
      // canvas_bmp.drawRect(0,0,ScreenSize[0],ScreenSize[1],backgroundCloudEffectPaint);
 
     }

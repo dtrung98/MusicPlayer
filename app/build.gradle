@@ -70,6 +70,7 @@ dependencies {
     implementation 'com.github.wangjiegulu:ShadowViewHelper:1.0.2'
     implementation 'com.xgc1986.android:ripplebutton:0.4.0'
     implementation 'com.github.medyo:fancybuttons:1.9.0'
+    implementation 'com.android.support:support-dynamic-animation:27.1.1'
 }
 
 apply plugin: 'kotlin-android-extensions'

@@ -16,6 +16,7 @@
 package com.ldt.musicr.services;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -47,7 +48,6 @@ import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -1849,12 +1849,36 @@ log(8);
                 position = mPlayer.duration();
             }
             long result = mPlayer.seek(position);
+            switch_volume();
             notifyChange(POSITION_CHANGED);
             return result;
         }
         return -1;
     }
-
+    boolean in_switch_volume = false;
+    float current_volume = 1;
+    ValueAnimator va;
+    private void switch_volume() {
+        if(in_switch_volume&&va!=null) if(va.isRunning()) try {
+            va.cancel();
+        } catch (Exception e) {
+            return;
+        }
+        in_switch_volume = true;
+        va = ValueAnimator.ofFloat(0,1);
+        va.setDuration(600);
+        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float value = (float) valueAnimator.getAnimatedValue();
+                if(value<=0.5)
+                    mPlayer.setVolume(1-value);
+                else mPlayer.setVolume(value);
+                if(value==1) in_switch_volume = false;
+            }
+        });
+        va.start();
+    }
     public void seekRelative(long deltaInMs) {
         synchronized (this) {
             if (mPlayer.isInitialized()) {

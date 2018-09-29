@@ -53,7 +53,7 @@ public class SeeThroughFrameLayout extends FrameLayout {
 
         mBackgroundDrawable = bg;
 
-        // Will always draw drawable using view bounds. This might be a
+        // Will always drawVisualWave drawable using view bounds. This might be a
         // problem if the drawable should force the view to be bigger, e.g.
         // the view sets its dimensions to wrap_content and the drawable
         // is larger than the text.
@@ -121,7 +121,7 @@ public class SeeThroughFrameLayout extends FrameLayout {
                 || getHeight() == 0;
     }
 
-    // draw() calls onDraw() leading to stack overflow
+    // drawVisualWave() calls onDraw() leading to stack overflow
     @SuppressLint("WrongCall")
     private void drawMask() {
         clear(mMaskCanvas);
@@ -134,7 +134,7 @@ public class SeeThroughFrameLayout extends FrameLayout {
         clear(mBackgroundCanvas);
         mBackgroundDrawable.draw(mBackgroundCanvas);
        //  Drawable drawable = mBackgroundDrawable.mutate().getConstantState().newDrawable();
-       //  drawable.draw(mBackgroundCanvas);
+       //  drawable.drawVisualWave(mBackgroundCanvas);
       //  mBackgroundCanvas.drawBitmap(mMaskBitmap, 0.f, 0.f, backgroundCloudEffectPaint);
 
         int padding[] = new int[]

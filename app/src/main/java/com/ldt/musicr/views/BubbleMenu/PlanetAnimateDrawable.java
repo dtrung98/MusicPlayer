@@ -106,7 +106,7 @@ float[] kc_lucHut; //  biến khoảng cách từ vật tới vị trí lực h�
          if(i==whichZone) Log.d(TAG,"vx[i] = "+vx[i]+", vy[i] = "+vy[i]);
         }
         // Vẽ lại nếu có sự dịch chuyển của bất cứ vật nào
-        // draw again if there're are anything changed
+        // drawVisualWave again if there're are anything changed
         for (int i = 0; i < number; i++)
             if (vx[i] != 0 || vy[i] != 0)
                 return true;

@@ -3,6 +3,8 @@ package com.ldt.musicr.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -13,8 +15,11 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.graphics.Palette;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.RotateAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,14 +47,19 @@ import com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout;
 import com.ldt.musicr.views.PlayPauseButton;
 import com.ldt.musicr.activities.MainActivity;
 import com.ldt.musicr.R;
-import com.ldt.musicr.views.RoundSeeThroughTextView;
+
 import com.ldt.musicr.views.animated_icon.ToggleButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.File;
+import net.steamcrafted.materialiconlib.MaterialDrawableBuilder;
+
 import java.util.ArrayList;
 
-public class MusicControllerFragment extends BaseTabLayerFragment implements BubbleMenuCenter.BubbleMenuViewListener,AudioVisualSeekBar.SeekBarListener, MinimizePlaySwitcher.PlayControlListener, Palette.PaletteAsyncListener, View.OnTouchListener, View.OnClickListener{
+import static android.view.View.TRANSLATION_X;
+import static android.view.View.TRANSLATION_Y;
+
+
+public class MusicControllerFragment extends BaseTabLayerFragment implements BubbleMenuCenter.BubbleMenuViewListener, MinimizePlaySwitcher.PlayControlListener, Palette.PaletteAsyncListener, View.OnTouchListener, View.OnClickListener{
     public final static String TAG = "MusicControllerFragment";
     public FragmentPlus.StatusTheme statusTheme = FragmentPlus.StatusTheme.WhiteIcon;
     public int color_in7basic = 0;
@@ -94,7 +105,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         if (psMutedDark != null) {
             palette[5] = psMutedDark.getRgb();
         }
-        updatePaletteColorView();
+     //   updatePaletteColorView();
         generateColorThemeFromArtBitmap(p);
     }
 
@@ -119,17 +130,23 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         play_pause_custom.setColor(color_in7basic);
         toggle.setColor(color_in7basic);
 
-        time_textView.setBackgroundColor(color_in7basic);
+       // time_textView.setBackgroundColor(color1);
+        time_textView.setBackgroundColor(Tool.getHeavyColor(color_in7basic));
+       // time_textView.setBorderColor(color2);
+      //  time_textView.setTextColor(color2);
         BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.listblack, playBar_list, color_in7basic, 1);
 
         nameOfSong.setTextColor(color1);
         BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.listblack, inList, color1, alpha1);
+        updateRepeatState();
+        updateShuffleState();
+
         nameOfArtist.setAlpha(alpha2);
         nameOfArtist.setTextColor(color2);
-        BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.pref, inPrev, color2, alpha2);
-      //  BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.pauseblack, inPause, color2, alpha2);
-        inPause.setColor(color2|((int)alpha2*255)<<24);
-        BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.next, inNext, color2, alpha2);
+        BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.pref, inPrev, color2, 1);
+      //  BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.pauseblack, mPlayPause, color2, alpha2);
+        mPlayPause.setColor(color2|((int)alpha2*255)<<24);
+        BitmapEditor.applyNewColor4Bitmap(getActivity(), R.drawable.next, inNext, color2, 1);
         playBar_TrackBar.setBackgroundColor(color1);
         ParentOfRoot.setBackColor1(Color.argb(10,Color.red(color1),Color.green(color1), Color.blue(color1)));
         visualSeekBar.updateProperties();
@@ -149,6 +166,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
             for (int i = 0; i < 6; i++)
                 pl[i].setOnClickListener(paletteOnClick);
         }
+        /*
         for (int i = 0; i < 6; i++) {
             LogColor(palette[i]);
 
@@ -156,6 +174,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                     pl[i].setBackgroundColor(palette[i]);
             else pl[i].setBackgroundColor(Color.TRANSPARENT);
         }
+        */
     }
 
     boolean checkOut = true;
@@ -216,13 +235,13 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         alpha_7basic = hsv[1];
         float toEight = hsv[0] / 45 + 0.5f;
         if (toEight > 8 | toEight <= 1) return 0xffFF3B30;
-        if (toEight <= 2) return 0xffFF9501;
+        if (toEight <= 2) return 0xffFF9500;
         if (toEight <= 3) return 0xffFFCC00;
-        if (toEight <= 4) return 0xff4AD968;
+        if (toEight <= 4) return 0xff4CD964;
         if (toEight <= 5) return 0xff5AC8FA;
         if (toEight <= 6) return 0xff007AFF;
         if (toEight <= 7) return 0xff5855D6;
-        return 0xffFB2C57;
+        return 0xffFF2D55;
     }
 
     private void LogColor(int color) {
@@ -239,6 +258,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     private int widthFrom = 0;
     private int widthTo = 0;
     View shape_back;
+    ImageView shuffle,repeat;
     public void FocusIconAvatarToCenter(boolean zoomIn) {
         int[] location = new int[2];
         shape_back.getLocationOnScreen(location);
@@ -334,13 +354,76 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     public ImageView inList;
     public ToggleButton toggle;
     public ImageView inPrev, inNext;
-   public PlayPauseButton inPause;
+   public PlayPauseButton mPlayPause;
    public View playPauseButtonWrapper, inPauseWrapper;
     public View playBar_TrackBar;
    public FrameLayout example_frame_layout;
    protected AudioVisualSeekBar visualSeekBar;
-   private RoundSeeThroughTextView time_textView;
+   private TextView time_textView;
    private View buttonBar;
+   //private EditText editText;
+    private View below_linear_layout;
+   private int overflowcounter=0;
+   boolean fragmentPaused = false;
+   private void setTextTime(long pos, long duration) {
+       int minute = (int) (pos/1000/60);
+       int second = (int) (pos/1000-  minute*60);
+       int dur_minute = (int) (duration/1000/60);
+       int dur_second = (int) (duration/1000 - dur_minute*60);
+
+       String text ="";
+       if(minute<10) text+="0";
+       text+=minute+":";
+       if(second<10) text+="0";
+       text+= second+" | ";
+       if(dur_minute<10) text+="0";
+       text+= dur_minute+":";
+       if(dur_second<10) text+="0";
+       text+=dur_second;
+       if(time_textView!=null)
+       time_textView.setText(text);
+   }
+   private boolean isTouchedVisualSeekbar = false;
+   // seekbar
+    public Runnable mUpdateProgress = new Runnable() {
+       @Override
+       public void run() {
+           long position = MusicPlayer.position();
+
+           if(!isTouchedVisualSeekbar)
+           setTextTime(position,MusicPlayer.duration());
+
+           if(visualSeekBar!=null) {
+               visualSeekBar.setProgress((int) position);
+               //TODO: Set elapsedTime
+           }
+           overflowcounter--;
+           if(MusicPlayer.isPlaying()) {
+           //TODO: ???
+               int delay = (int) (150 -(position)%100);
+               if(overflowcounter<0 && !fragmentPaused) {
+                   overflowcounter ++;
+                   visualSeekBar.postDelayed(mUpdateProgress,delay);
+               }
+           }
+       }
+   };
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        fragmentPaused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragmentPaused = false;
+        if(visualSeekBar!=null) {
+         visualSeekBar.postDelayed(mUpdateProgress,10);
+        }
+    }
+
     private void MergerUI(View v) {
         // cây thước ẩn xác định kích thước avatar
         shape_back = v.findViewById(R.id.rulerAlign);
@@ -351,7 +434,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         // nút Prev nằm bên trong bảng
         inPrev = v.findViewById(R.id.music_controller_InPrev);
         // nút play - pause nằm bên trong bảng
-        inPause = v.findViewById(R.id.music_controller_InPause);
+        mPlayPause = v.findViewById(R.id.music_controller_InPause);
         inPauseWrapper = v.findViewById(R.id.in_pause_wrapper);
         playPauseButtonWrapper = v.findViewById(R.id.play_pause_wrapper);
         // nút Next nằm bên trong bảng
@@ -371,11 +454,42 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         example_frame_layout = v.findViewById(R.id.example_frame_layout2);
         time_textView = v.findViewById(R.id.time_textView);
         visualSeekBar = v.findViewById(R.id.visual_seek_bar);
-        visualSeekBar.setSeekBarListener(this);
         ParentOfRoot = (DarkenRoundedBackgroundFrameLayout) v;
+        ParentOfRoot.setBackColor2(0xccffffff);
         buttonBar = v.findViewById(R.id.buttonBar);
 
-        addToBeRipple(R.drawable.ripple_oval,inPrev,inNext,playPauseButtonWrapper,inPauseWrapper,inList,playBar_list);
+        shuffle = v.findViewById(R.id.shuffle);
+        repeat = v.findViewById(R.id.repeat);
+
+        below_linear_layout = v.findViewById(R.id.below_linear_layout);
+       /*
+        editText = v.findViewById(R.id.edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String s ='#'+ charSequence.toString();
+                Log.d(TAG, "s = " + s);
+
+                if(s.length()==7) {
+                    try {
+                        int color = Color.parseColor(s);
+                        if (time_textView != null) time_textView.setBackgroundColor(color);
+                    } catch (Exception ignored) {}
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        */
+        addToBeRipple(R.drawable.ripple_oval,inPrev,inNext,playPauseButtonWrapper,inPauseWrapper,inList,playBar_list, repeat,shuffle);
     }
 
 
@@ -496,7 +610,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
             Bitmap resize = BitmapEditor.getResizedBitmap(original, 300, 300);
             original.recycle();
             return resize;
-        }   // imageView.setImageResource(R.drawable.walle);
+        }   // backArtView.setImageResource(R.drawable.walle);
         return BitmapFactory.decodeFile(NowPlaying.AlbumArt_path);
     }
 
@@ -558,9 +672,6 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     }
     private ArrayList<Song_OnLoad> list;
     private int position = -1;
-    private void log(float i) {
-        Log.d(TAG, "-> i = " + i);
-    }
 
     private void setNavigationHeight()
   {
@@ -592,27 +703,131 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         rootView = (DarkenRoundedBackgroundFrameLayout) inflater.inflate(R.layout.music_controller, container, false);
         //  ImageView exit_view = (ImageView) fragment.findViewById(R.id.exit_playlist_controller);
         //   exit_view.setOnClickListener(exit_click);
-
-        MergerUI(rootView);
-        makeBackground();
-        setOnClickOrOnTouch4AllButton();
-        setNavigationHeight();
         //   makeIconAvatarRotateOrStop();
         getMainActivity().setMusicStateListenerListener(this);
-        new loadPlaying().execute();
+        setSongDetails(rootView);
         return rootView;
     }
-    private DarkenRoundedBackgroundFrameLayout ParentOfRoot;
-    private void makeBackground()
-    {
-       // if(ParentOfRoot==null) Tool.showToast(getActivity(),"Parent null",5000);
-      ParentOfRoot.setBackColor2(0xccffffff);
-   //   ParentOfRoot.setBackgroundColor(Color.BLUE);
+    private void setSongDetails(View rootView) {
+        // FindViewByID
+        MergerUI(rootView);
+
+        setNavigationHeight();
+
+        setOnClickOrOnTouch4AllButton();
+
+        // Update now playing song information
+        // Update play pause button
+        // Update time text view
+        // Update visual seek bar
+        setSongDetails();
     }
+    private void setSongDetails() {
+        updateSongDetails();
+
+        setSeekBarListener();
+
+        updateShuffleState();
+        updateRepeatState();
+    }
+    private void setSeekBarListener() {
+        if(visualSeekBar!=null)
+            visualSeekBar.setOnSeekBarChangeListener(new AudioVisualSeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onSeekBarSeekTo(AudioVisualSeekBar seekBar, int i, boolean b) {
+                   if(b) {
+                       MusicPlayer.seek(i);
+                   }
+                }
+
+                @Override
+                public void onSeekBarTouchDown(AudioVisualSeekBar seekBar) {
+
+                    isTouchedVisualSeekbar = true;
+
+                    PropertyValuesHolder valuesHolder_x = PropertyValuesHolder.ofFloat(TRANSLATION_X,0, below_linear_layout.getWidth()/2- time_textView.getWidth()/2 - time_textView.getLeft());
+                    PropertyValuesHolder valuesHolder_y = PropertyValuesHolder.ofFloat(TRANSLATION_Y,0,time_textView.getHeight()/2 - time_textView.getTop()/2);
+                    PropertyValuesHolder valuesHolder_scale_x = PropertyValuesHolder.ofFloat(View.SCALE_X,1,1.25f);
+                    PropertyValuesHolder valuesHolder_scale_y = PropertyValuesHolder.ofFloat(View.SCALE_Y,1,1.25f);
+                    ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(time_textView,valuesHolder_x,valuesHolder_y,valuesHolder_scale_x,valuesHolder_scale_y);
+                    objectAnimator.setDuration(350);
+                    objectAnimator.setInterpolator(Animation.getInterpolator(4));
+                    objectAnimator.start();
+                    /*
+                    TranslateAnimation translateAnimation = new TranslateAnimation(0,below_linear_layout.getWidth()/2-time_textView.getWidth()/2 - time_textView.getLeft(), 0, time_textView.getHeight()/2 - time_textView.getTop()/2);
+                    translateAnimation.setDuration(350);
+                    translateAnimation.setFillAfter(true);
+                    translateAnimation.setInterpolator(Animation.getInterpolator(4));
+                    time_textView.startAnimation(translateAnimation);
+                    */
+                }
+
+                @Override
+                public void onSeekBarTouchUp(AudioVisualSeekBar seekBar) {
+                    isTouchedVisualSeekbar = false;
+                    PropertyValuesHolder valuesHolder_x = PropertyValuesHolder.ofFloat(TRANSLATION_X,below_linear_layout.getWidth()/2- time_textView.getWidth()/2 - time_textView.getLeft(),0);
+                    PropertyValuesHolder valuesHolder_y = PropertyValuesHolder.ofFloat(TRANSLATION_Y,time_textView.getHeight()/2 - time_textView.getTop()/2,0);
+                    PropertyValuesHolder valuesHolder_scale_x = PropertyValuesHolder.ofFloat(View.SCALE_X,1.25f,1);
+                    PropertyValuesHolder valuesHolder_scale_y = PropertyValuesHolder.ofFloat(View.SCALE_Y,1.25f,1);
+                    ObjectAnimator objectAnimator = ObjectAnimator.ofPropertyValuesHolder(time_textView,valuesHolder_x,valuesHolder_y,valuesHolder_scale_x,valuesHolder_scale_y);
+                    objectAnimator.setDuration(350);
+                    objectAnimator.setInterpolator(Animation.getInterpolator(4));
+                    objectAnimator.start();
+                    /*
+                    TranslateAnimation translateAnimation = new TranslateAnimation(below_linear_layout.getWidth()/2-time_textView.getWidth()/2 - time_textView.getLeft(), 0, time_textView.getHeight()/2 - time_textView.getTop()/2,0);
+
+                    translateAnimation.setDuration(350);
+                    translateAnimation.setInterpolator(Animation.getInterpolator(4));
+                    time_textView.startAnimation(translateAnimation);
+                    */
+                }
+
+                @Override
+                public void onSeekBarSeeking(int seekingValue) {
+                    setTextTime(seekingValue,MusicPlayer.duration());
+                }
+            });
+    }
+    public void updateSongDetails() {
+        new loadPlaying().execute();
+    }
+    public void updateShuffleState() {
+        if (shuffle != null && getActivity() != null) {
+            MaterialDrawableBuilder builder = MaterialDrawableBuilder.with(getActivity())
+                    .setIcon(MaterialDrawableBuilder.IconValue.SHUFFLE)
+                    .setSizeDp(30);
+        if(getActivity()!=null) {
+            if (MusicPlayer.getShuffleMode() == 0) {
+                builder.setColor(color1);
+            }
+            else builder.setColor(Color.BLACK);
+        }
+        shuffle.setImageDrawable(builder.build());
+        }
+    }
+    public void updateRepeatState() {
+        if (repeat != null && getActivity() != null) {
+            MaterialDrawableBuilder builder = MaterialDrawableBuilder.with(getActivity())
+                    .setIcon(MaterialDrawableBuilder.IconValue.REPEAT)
+                    .setSizeDp(30);
+
+            if (getActivity() != null) {
+                if (MusicPlayer.getRepeatMode() == 0) {
+                    builder.setColor(color1);
+                } else builder.setColor(Color.BLACK);
+            }
+
+            repeat.setImageDrawable(builder.build());
+        }
+    }
+    private DarkenRoundedBackgroundFrameLayout ParentOfRoot;
 
     private void setAudioWaveFragmentView(String file)
     {
+
+        visualSeekBar.setMax((int) MusicPlayer.duration());
         visualSeekBar.Visualize(file);
+
     }
 
     public void setRoundNumber(float number) {
@@ -645,25 +860,12 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
         }
     }
 
-    @Override
-    public boolean onSeekBarSeekTo(float posTime) {
-        return false;
-    }
-
-    @Override
-    public void onSeekBarTouchDown() {
-
-    }
-
-    @Override
-    public void onSeekBarTouchUp() {
-
-    }
-
 
 
     @Override
     public float getCurrentRadius() {
+        if(originalBitmapSong==null) return 0;
+        if(originalBitmapSong.isRecycled()) return 300/16;
         return originalBitmapSong.getWidth()/16 ;
     }
 
@@ -764,7 +966,9 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 inPrev,
                 inPauseWrapper,
                 inNext,
-                buttonBar
+                buttonBar,
+                shuffle,
+                repeat
         };
 
         for (View anOnTouch : onTouch) anOnTouch.setOnTouchListener(this);
@@ -796,10 +1000,19 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     }
 
     public void ButtonControl(int position) {
+        Handler handler = new Handler();
       switch (position) {
-          case -1 : MusicPlayer.previous(getActivity(),true); break;
-          case 0: MusicPlayer.playOrPause(); break;
-          case 1: MusicPlayer.next(); break;
+          case -1 :
+              handler.postDelayed(() -> {
+                  MusicPlayer.previous(getActivity(),true);
+              },200);
+              break;
+          case 0:
+              handler.postDelayed(MusicPlayer::playOrPause,200);
+              break;
+          case 1:
+              handler.postDelayed(MusicPlayer::next,200);
+              MusicPlayer.next(); break;
       }
     }
 
@@ -810,9 +1023,17 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
             case /* play_pause_custom */  R.id.play_pause_custom : break;
             case /* inPrev */  R.id.music_controller_InPrev:  ButtonControl(-1);break;
             case /* pause_play_bar*/ R.id.play_pause_wrapper:
-            case /* inPause */  R.id.in_pause_wrapper:  ButtonControl(0); break;
+            case /* mPlayPause */  R.id.in_pause_wrapper:  ButtonControl(0); break;
             case /* inPrev */  R.id.music_controller_InNext:  ButtonControl(1);break;
             case /*buttonBar*/ R.id.buttonBar: Tool.showToast(getActivity(),"click",500);
+            case /* shuffle */ R.id.shuffle :
+                MusicPlayer.cycleShuffle();
+                updateShuffleState();
+                break;
+            case /* repeat */ R.id.repeat:
+                MusicPlayer.cycleRepeat();
+                updateRepeatState();
+                break;
         }
     }
 
@@ -845,7 +1066,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     }
 
     private long mID=0;
-    private class loadPlaying extends AsyncTask<Void,Void,String> {
+    private  class loadPlaying extends AsyncTask<Void,Void,String> {
         @Override
         protected String doInBackground(Void... voids) {
 
@@ -863,7 +1084,8 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                if (originalBitmapSong == null) {
                    originalBitmapSong = BitmapFactory.decodeResource(getResources(), R.drawable.default_image2);
                }
-                   return "song_change";
+               newBitmap = getBitmapRounded(originalBitmapSong.getWidth() / 16, originalBitmapSong);
+               return "song_change";
                } else  // play pause state changed
                    return "play_pause";
         }
@@ -880,7 +1102,6 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 }
                 playBar_nameOfSong.setText(mTitle);
                 playBar_artistOfSong.setText(mArtist);
-                newBitmap = getBitmapRounded(originalBitmapSong.getWidth() / 16, originalBitmapSong);
                 if (IsInitAvatarIcon) {
                     iconAvatar.setImageBitmap(newBitmap);
                     IsInitAvatarIcon = false;
@@ -890,6 +1111,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 if(path!=null)
                 setAudioWaveFragmentView(path);
         }
+            visualSeekBar.postDelayed(mUpdateProgress,10);
             generateColorThemeFromArtBitmap();
            updatePlayPauseButton();
 
@@ -901,9 +1123,9 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 play_pause_custom.setPlayed(true);
                 play_pause_custom.startAnimation();
             }
-            if (!inPause.isPlayed()) {
-                inPause.setPlayed(true);
-                inPause.startAnimation();
+            if (!mPlayPause.isPlayed()) {
+                mPlayPause.setPlayed(true);
+                mPlayPause.startAnimation();
             }
 
         } else {
@@ -911,9 +1133,9 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 play_pause_custom.setPlayed(false);
                 play_pause_custom.startAnimation();
             }
-            if (inPause.isPlayed()) {
-                inPause.setPlayed(false);
-                inPause.startAnimation();
+            if (mPlayPause.isPlayed()) {
+                mPlayPause.setPlayed(false);
+                mPlayPause.startAnimation();
             }
         }
     }

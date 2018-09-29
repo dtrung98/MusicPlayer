@@ -13,8 +13,8 @@ import com.ldt.musicr.InternalTools.Animation;
 public class BackgroundBehavior {
     /**
      *
-     * @param canvas canvas which to draw on
-     *               draw a rectangle which makes a shadow on the bottom of
+     * @param canvas canvas which to drawVisualWave on
+     *               drawVisualWave a rectangle which makes a shadow on the bottom of
      */
     BubbleMenuUIView bubbleMenuUIView;
     com.ldt.musicr.views.BubbleMenu.BubbleMenuUIView.MCAttributes mcAttributes;

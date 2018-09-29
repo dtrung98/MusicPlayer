@@ -54,8 +54,32 @@ public final class Tool {
         oneDPs =width;
         Log.d(TAG, "oneDps = " + oneDPs);
     }
-
-
+    public static int getHeavyColor() {
+        switch (SurfaceColor) {
+            case 0xffFF3B30 : return 0xff770000;
+            case 0xffFF9500 : return 0xff923C00;
+            case 0xffFFCC00 : return  0xffAF8700;
+            case 0xff4CD964 :return 0xff005800;
+            case 0xff5AC8FA: return 0xff0058AA;
+            case 0xff007AFF: return 0xff00218B;
+            case 0xff5855D6: return 0xff162EA6;
+            default: //0xffFB2C57
+                return  0xffb60024;
+        }
+    }
+    public static int getHeavyColor(int color_in7_basic) {
+        switch (color_in7_basic) {
+            case 0xffFF3B30 : return 0xff770000;
+            case 0xffFF9500 : return 0xff923C00;
+            case 0xffFFCC00 : return  0xff802D00;
+            case 0xff4CD964 :return 0xff005800;
+            case 0xff5AC8FA: return 0xff0058AA;
+            case 0xff007AFF: return 0xff00218B;
+            case 0xff5855D6: return 0xff162EA6;
+            default: //0xffFB2C57
+                return  0xffb60024;
+        }
+    }
     public static class Avatar {
         public static int getDevideSize(int sizeUWant, Bitmap original) {
             float sizeYouWant= sizeUWant;

@@ -11,7 +11,9 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.AsyncTask;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.animation.*;
 import android.content.pm.PackageManager;
@@ -51,6 +53,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -88,9 +91,7 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
     private static final String TAG = "MainScreenFragment";
     private static final int MY_PERMISSIONS_READ_STORAGE = 1;
     private TextView baiHat;
-    private ImageButton menuButton;
-    private ImageButton searchButton;
-    private View statusBar;
+
     private RecyclerView songListRecyclerView,playlistRecyclerView;
     private ListView playlist_BigList;
     private stickyActionBarConstraintLayout stickyActionBar;
@@ -98,6 +99,7 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
     private View songs_pieces_relative_header;
     private View playlist_pieces_relative;
     private View main_slider;
+    private Toolbar toolbar;
     public static RippleDrawable getPressedColorRippleDrawable(int normalColor, int pressedColor)
     {
         return new RippleDrawable(getPressedColorSelector(normalColor, pressedColor), getColorDrawableFromColor(normalColor), null);
@@ -125,6 +127,8 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
 
     public static ColorDrawable getColorDrawableFromColor(int color)
     {
+        RadioButton radioButton;
+
         return new ColorDrawable(color);
     }
 
@@ -134,27 +138,34 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         songs_pieces_relative_header = rootView.findViewById(R.id.songs_piece_header_relative);
         playlist_pieces_relative = rootView.findViewById(R.id.playlist_piece_relative);
   //      songs_pieces_relative_header.setBackground(rippleDrawable);
-        statusBar = rootView.findViewById(R.id.status_bar);
         songListRecyclerView = rootView.findViewById(R.id.recyclerView_N1);
         playlistRecyclerView = rootView.findViewById(R.id.playlists_recycler_view);
-        menuButton = rootView.findViewById(R.id.menuButton);
+
         baiHat =  rootView.findViewById(R.id.baihat);
-        titleBar = rootView.findViewById(R.id.ActionBarAndStatusBar);
+
         stickyActionBar = rootView.findViewById(R.id.stickyActionBar);
         scrollView =rootView.findViewById(R.id.myScroll);
         scrollView.setStickyDrawView(stickyActionBar);
       //  searchButton = rootView.findViewById(R.id.search);
         playlist_BigList =rootView.findViewById(R.id.choosePlaylist_listView);
         songIndicator = rootView.findViewById(R.id.circleIndicator);
+        toolbar = rootView.findViewById(R.id.toolbar);
+        setupToolbar();
         addToBeRipple(R.drawable.ripple_effect,songs_pieces_relative_header,playlist_pieces_relative);
-        addToBeRipple(R.drawable.ripple_oval,menuButton);
+
         //setTimer();
     }
+    private void setupToolbar() {
 
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+        final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false);
+        ab.setDisplayHomeAsUpEnabled(true);
+    }
     private void SetAllClick() {
         View[] views = new View[]
                 {  // put views here
-                        menuButton,
                         baiHat,
                         songs_pieces_relative_header
               //          titleBar,
@@ -173,8 +184,7 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.baihat:
-                case R.id.menuButton:
-                case R.id.ActionBarAndStatusBar:
+
                 case R.id.songs_piece_header_relative:
                     ((SupportFragmentPlusActivity) getActivity()).pushFragment(ShowMusicSongs.Initialize(getActivity()), true);
                     break;
@@ -300,9 +310,7 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
 
     @Override
     public void applyFitWindow_Top() {
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)statusBar.getLayoutParams();
-        params.height= FitWindow_Top;
-        statusBar.setLayoutParams(params);
+
     }
 
     @Override
@@ -352,7 +360,6 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
     }
 
     StickyScrollView scrollView;
-    RelativeLayout titleBar;
     int titleColor = 0;
 
     private void AnimatedColorTitle() {
@@ -370,153 +377,10 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
             just_change_color = false;
         }
         titleColor = BitmapEditor.mixTwoColors(Color.WHITE,0xff<<24| color24bit,1-alphaOfTitleBar/255.0f);
-        statusBar.setBackgroundColor(titleColor);
+
         stickyActionBar.setBackgroundColor(titleColor);
     }
-
-    /*
-       private Timer timer;
-   private TimerTask timerTask = new TimerTask() {
-
-       @Override
-       public void run() {
-           final Random random = new Random();
-           int i = random.nextInt(2 - 0 + 1) + 0;
-           random_note.setImageResource(image[i]);
-       }
-   };
-
-   public void start() {
-       if(timer != null) {
-           return;
-       }
-       timer = new Timer();
-       timer.scheduleAtFixedRate(timerTask, 0, 2000);
-   }
-
-   public void stop() {
-       timer.cancel();
-       timer = null;
-   }
-        */
-
-    /*
-    private ArrayList<AlbumArt> albumArts = new ArrayList<>();
-
-    private void getMusic() {
-
-        ContentResolver contentR = getActivity().getContentResolver();
-        MediaLoader.StartToRefresh(contentR);
-        Uri song = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Uri album = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
-
-        Cursor songCursor = contentR.query(song, null, null, null, null);
-        Cursor albumCursor = contentR.query(album, null, null, null, null);
-
-        if (albumCursor != null && albumCursor.moveToFirst()) {
-            DanhSachPhat.clear();
-            albumArts.clear();
-            //   Toast.makeText(MainScreenFragment.this,albumArts.size()+":"+albumArts.size(),Toast.LENGTH_SHORT).show();
-            int x = albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART);
-            int idd = albumCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
-
-            {
-                do {
-                    String thisArt = albumCursor.getString(x);
-                    String thisId = albumCursor.getString(idd);
-                    albumArts.add(new AlbumArt(thisId, thisArt));
-                }
-                while (albumCursor.moveToNext());
-            }
-            albumCursor.close();
-            //     Toast.makeText(MainScreenFragment.this, albumArts.size() + ":" + albumArts.size(), Toast.LENGTH_SHORT).show();
-
-        }
-        // con trỏ bài hát
-        if (songCursor != null && songCursor.moveToFirst()) {
-            // tên bài
-            int songTitleID = songCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
-            int songArtistID = songCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
-            int albumID = songCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-            int pathID = songCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-            //
-            int songIDID = songCursor.getColumnIndex(android.provider.MediaStore.Audio.Media._ID);
-            do {
-                long songID = songCursor.getLong(songIDID);
-                String idAlbum = songCursor.getString(albumID);
-                String curTit = songCursor.getString(songTitleID);
-                String curArt = songCursor.getString(songArtistID);
-                String path = songCursor.getString(pathID);
-
-                // String thisArt = songCursor.getString(album);
-                // if(thisArt!=null&&thisArt!="")
-                //   listSong.add(new Song_OnLoad(thisArt,curTil,curArt));
-                //    else
-
-                String artPath = getAlbumArtWithId(idAlbum);
-                if (artPath != null)
-                    DanhSachPhat.add(new Song_OnLoad(songID, artPath, curTit, curArt, path));
-                else if (DanhSachPhat.size() != 0)
-                    DanhSachPhat.add(new Song_OnLoad(songID, R.drawable.default_image2, curTit, curArt, path));
-
-            }
-            while (songCursor.moveToNext());
-            songCursor.close();
-        }
-        Collections.sort(albumArts, new Comparator<AlbumArt>() {
-            public int compare(AlbumArt a, AlbumArt b) {
-                return a.Name.compareTo(b.Name);
-            }
-        });
-
-        Collections.sort(DanhSachPhat, new Comparator<Song_OnLoad>() {
-            public int compare(Song_OnLoad a, Song_OnLoad b) {
-                return a.Title.compareTo(b.Title);
-            }
-        });
-    }
-
-
-      private AdapterView.OnItemClickListener list_view_item_onclick = new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int posTop, long id) {
-
-  Toast.makeText(MainScreenFragment.this,"you clicked listview!",Toast.LENGTH_LONG).show();
-          }
-      };
-      */
     public static ArrayList<Song_OnLoad> DanhSachPhat = new ArrayList<Song_OnLoad>();
-
-    private float actionBarHeight = 0;
-    private float transYActionBar = 0;
-    private boolean scrollOnDown = false;
-    private float scrollMove = 0;
-    private void doTheActionBar(View v, MotionEvent e) {
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                scrollOnDown = true;
-                scrollMove = e.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float delta = e.getRawY() - scrollMove;
-                scrollMove = e.getRawY();
-                Log.d(TAG,"delta = "+delta+", actionBarHeight = "+actionBarHeight);
-
-                if(delta<0&&actionBarHeight!=-transYActionBar) {
-                    transYActionBar = (transYActionBar +delta<-actionBarHeight)? transYActionBar + delta : -actionBarHeight;
-                    stickyActionBar.setTranslationY(transYActionBar);
-                }
-                else if(delta>0&&transYActionBar!=0) {
-                    transYActionBar = (transYActionBar + delta >0) ? 0 : transYActionBar + delta;
-                    stickyActionBar.setTranslationY(transYActionBar);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                    scrollOnDown = false;
-            scrollMove = 0;
-                break;
-        }
-    }
 
     public int NowPlaying_int;
 

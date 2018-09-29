@@ -43,8 +43,7 @@ public class PlaylistControllerFragment extends BaseTabLayerFragment implements 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
          rootView = (DarkenRoundedBackgroundFrameLayout) inflater.inflate(R.layout.playlist_controller_fragment,container,false);
-        rootView.setBackColor1(0x80000000);
-         rootView.setBackColor2(0xccffffff);
+
          //v.setOnTouchListener(this);
         return rootView;
     }

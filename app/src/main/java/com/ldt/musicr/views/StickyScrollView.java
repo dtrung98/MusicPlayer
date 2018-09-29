@@ -250,16 +250,16 @@ public class StickyScrollView extends NestedScrollView {
                         currentlyStickingView.getHeight(),
                         currentlyStickingView.getWidth(),
                         currentlyStickingView.getHeight() + mShadowHeight);
-                mShadowDrawable.draw(canvas);
+                mShadowDrawable.drawVisualWave(canvas);
             }
 
             canvas.clipRect(0, (clippingToPadding ? -stickyViewTopOffset : 0), getWidth(), currentlyStickingView.getHeight());
             if(getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
                 showView(currentlyStickingView);
-                currentlyStickingView.draw(canvas);
+                currentlyStickingView.drawVisualWave(canvas);
                 hideView(currentlyStickingView);
             }else{
-                currentlyStickingView.draw(canvas);
+                currentlyStickingView.drawVisualWave(canvas);
             }
             canvas.restore();
         }

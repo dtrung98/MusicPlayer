@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.ldt.musicr.InternalTools.BitmapEditor;
 import com.ldt.musicr.InternalTools.Tool;
@@ -34,24 +35,26 @@ import com.ldt.musicr.fragments.FragmentHolder.Prepare4Fragment;
 import com.ldt.musicr.fragments.FragmentPlus;
 import com.ldt.musicr.fragments.PlaylistControllerFragment;
 import com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout;
-import com.ldt.musicr.views.roundClippingFrameLayout;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
 public abstract class SupportFragmentPlusActivity extends AppCompatActivity {
+    private static final String TAG = "SFragmentPlusActivity";
     public int StatusHeight=0,NavigationHeight=0;
     public float StatusHeight_DP=0,NavigationHeight_DP =0;
     public static int Standard_FitWindow_Top, Standard_FitWindow_Bottom;
     public FrameLayout rootEveryThing;
     public float ADpInPixel;
     private final int CYCLER_LOAD_WALLPAPER = 5000; // 5 giay test mot lan
-    public Bitmap iV_Wallpaper;
-    public Canvas iv_canvas;
-    public Paint iv_paint;
-    public Boolean set_iV_Wallpaper = false;
+    public Bitmap iV_Wallpaper  = Bitmap.createBitmap(150,150, Bitmap.Config.ARGB_8888);
+
+    public Canvas iv_canvas = new Canvas(iV_Wallpaper);
+    public Paint iv_paint = new Paint();
+    public Boolean WallpaperCreated = false;
     public Bitmap current_wallpaper =null;
     private ValueAnimator valueAnimator;
     public FragmentPlus.StatusTheme nowThemeAcitivity = FragmentPlus.StatusTheme.BlackIcon;
@@ -123,11 +126,27 @@ public abstract class SupportFragmentPlusActivity extends AppCompatActivity {
        switchTheme();
     }
 
+    private void updateWallpaperBitmap() {
+        if(iV_Wallpaper.isRecycled()) {
+            iV_Wallpaper = Bitmap.createBitmap(150,150, Bitmap.Config.ARGB_8888);
+            iv_canvas = new Canvas(iV_Wallpaper);
+            iv_paint = new Paint();
+        }
+
+        new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Bitmap newWallpaper = applyBackWallEffect4Wallpaper(getWallPaper());
+                veLenCanvas(newWallpaper);
+                return null;
+            }
+        }.execute();
+    }
     private void Initialize_Everything4WallpaperCycler()
     {
-        if(set_iV_Wallpaper) return;
-        set_iV_Wallpaper=true;
-
+        if(WallpaperCreated) return;
+        WallpaperCreated =true;
         valueAnimator = ValueAnimator.ofFloat(0,1);
         valueAnimator.setDuration(0); // don't change this, the real duration is CYCLER_LOAD_WALLPAPER =  5000ms
         valueAnimator.setStartDelay(0); // don't change this
@@ -178,14 +197,26 @@ public abstract class SupportFragmentPlusActivity extends AppCompatActivity {
         iv_paint = new Paint();
         valueAnimator.start();
     }
-    public Bitmap getIV_Wallpaper()
+   // private ArrayList<ImageView> WallViews = new ArrayList<>();
+    public void setBlurWallpaper(ImageView imageView)
     {
-        Initialize_Everything4WallpaperCycler();
-        return iV_Wallpaper;
+        imageView.setImageBitmap(iV_Wallpaper);
     }
     private void veLenCanvas(Bitmap bitmap)
     {
         iv_canvas.drawBitmap(bitmap,new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()),new Rect(0,0,iv_canvas.getWidth(),iv_canvas.getHeight()),iv_paint);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    protected void onResume() {
+        updateWallpaperBitmap();
+        super.onResume();
     }
 
     private Bitmap getWallPaper()

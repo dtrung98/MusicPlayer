@@ -179,13 +179,13 @@ Log.d(TAG,"onDestroy");
         //     Log.d(hsv[0] + "|" + hsv[1] + "|" + hsv[2], "ColorMe");
         float toEight = hsv[0] / 45 + 0.5f;
         if (toEight > 8 | toEight <= 1) return 0xffFF3B30;
-        if (toEight <= 2) return 0xffFF9501;
+        if (toEight <= 2) return 0xffFF9500;
         if (toEight <= 3) return 0xffFFCC00;
-        if (toEight <= 4) return 0xff4AD968;
+        if (toEight <= 4) return 0xff4CD964;
         if (toEight <= 5) return 0xff5AC8FA;
         if (toEight <= 6) return 0xff007AFF;
         if (toEight <= 7) return 0xff5855D6;
-        return 0xffFB2C57;
+        return 0xffFF2D55;
     }
 
     @Override
