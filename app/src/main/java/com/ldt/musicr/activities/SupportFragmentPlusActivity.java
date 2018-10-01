@@ -490,15 +490,19 @@ protected void turnOnTranslucent(boolean on)
         updateWhenSwitchFragment();
     }
     abstract boolean Scroll2Top();
-    @Override
-    public void onBackPressed() {
+
+    /**
+     *  Quay trở lại một level trong stack fragment ( UILAYER)
+     *  Nếu không xử lý, trả về false
+     */
+    public boolean onBackUILayer() {
         if (mFragmentMap.get(mCurrentMenuTab).mStackMap.size() <= 1) {
-            //  super.onBackPressed(); // or call finish..
-            if(!Scroll2Top())  SlideDownNShowWallBack();  // lúc về trần rồi mà vẫn nhấn back tiếp, sẽ hiện ra màn Wall Back
-            // Điều này nghĩa là kích thước Stack lúc này là 2 và màn này sẽ được đóng trong lần nhấn back tiếp theo
+            return false;
         } else {
             popFragment();
+            return true;
         }
+
     }
     public abstract void  SlideDownNShowWallBack();
  /*

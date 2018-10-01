@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 
 import com.ldt.musicr.InternalTools.Animation;
 import com.ldt.musicr.InternalTools.Tool;
+import com.ldt.musicr.activities.SupportFragmentPlusActivity;
 import com.ldt.musicr.fragments.FragmentHolder.Prepare4Fragment;
 import com.ldt.musicr.views.SupportDarkenFrameLayout;
 
@@ -81,7 +82,7 @@ public class TabLayerController {
          */
       String tag();
     }
-    private AppCompatActivity activity;
+    private SupportFragmentPlusActivity activity;
     public float margin_inDp = 10f;
     public float margin_inPx;
     public float oneDp;
@@ -90,7 +91,7 @@ public class TabLayerController {
     public float navigation_height =0;
     FrameLayout container;
     public TabLayerController(AppCompatActivity activity, float status_height, float navigationHeight, FrameLayout container) {
-        this.activity = activity;
+        this.activity = (SupportFragmentPlusActivity) activity;
         oneDp = Tool.getOneDps(activity);
         margin_inPx =margin_inDp*oneDp;
         ScreenSize = Tool.getScreenSize(activity);
@@ -453,8 +454,16 @@ public class TabLayerController {
     /**
      * Xử lý sự kiện nhấn nút back
      */
-    public void onBackPressed() {
+    public boolean onBackPressed() {
+        // slide down on current layer
+        //TODO: SLIDE DOWN CURRENT LAYER
 
+        // Try to back the UILayer
+        if(!activity.onBackUILayer())
+            // If UILAYER can't to be back anymore
+            // show something and close app
+            activity.SlideDownNShowWallBack();
+        return true;
     }
 
     /**

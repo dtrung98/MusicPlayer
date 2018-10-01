@@ -213,6 +213,8 @@ public class MainActivity extends BaseActivity  {
     @Override
     public void onBackPressed()
     {
+        if(tabLayerController!=null&&tabLayerController.onBackPressed())
+            return;
        super.onBackPressed();
     }
 
