@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  */
 public class TabLayerController {
     private static final String TAG = "TabLayerController";
-    public interface TabLayerCallBack {
+    public interface BaseTabLayer {
         /**
          * Phương thức được gọi khi layer được Controller thay đổi thông số của layer
          * <br>Dùng phương thức này để cập nhật ui cho layer
@@ -68,7 +68,7 @@ public class TabLayerController {
             VALUE_STT_50DIP
         }
        MarginValue maxPosition();
-
+        boolean onBackPressed();
         /**
          *  Cài đặt khoảng cách giữa đỉnh layer và viền dưới
          *  khi layer đạt vị trí min
@@ -97,8 +97,8 @@ public class TabLayerController {
         ScreenSize = Tool.getScreenSize(activity);
         this.container = container;
         listeners_size =0;
-        listeners = new ArrayList<>();
-        attrs = new ArrayList<>();
+        baseTabLayers = new ArrayList<>();
+        baseAttrs = new ArrayList<>();
         this.status_height = (status_height==0)? 24*oneDp :status_height;
         this.navigation_height = navigationHeight;
         ScreenSize[1]+=navigationHeight;
@@ -106,8 +106,8 @@ public class TabLayerController {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 Log.d(TAG,"onTouchEvent");
-                for(int i=0;i<listeners.size();i++ )
-                    if(attrs.get(i).parent.getId()== view.getId()) return OnTouchEvent(i,view,motionEvent);
+                for(int i = 0; i< baseTabLayers.size(); i++ )
+                    if(baseAttrs.get(i).parent.getId()== view.getId()) return OnTouchEvent(i,view,motionEvent);
                 return false;
             }
         };
@@ -127,6 +127,7 @@ public class TabLayerController {
      *  Cập nhật lại margin lúc pc = 1 của mỗi layer
      *  Được gọi bất cứ khi nào một pc của một layer bất kỳ được thay đổi (sự kiện chạm)
      */
+    int onTopLayer = 0;
     private void updateMarginLayers() {
 
         // Đi từ 0 - n
@@ -139,14 +140,14 @@ public class TabLayerController {
         // on-top-layer là layer đầu tiên được tìm thấy có pc !=0 ( thường là khác 1)
         // các layer còn lại mặc định có pc = 1
         // pc của on-top-layer ảnh hưởng lên các layer khác phía sau nó
-        int onTopLayer =0;
+        onTopLayer =0;
         float pcOnTopLayer =  1;
         int active_number = 0;
         for(int i=0;i<listeners_size;i++)
-            if(attrs.get(i).Pc!=0) {
+            if(baseAttrs.get(i).Pc!=0) {
             if(active_number==0) {
                 onTopLayer = i;
-                pcOnTopLayer = attrs.get(i).Pc;
+                pcOnTopLayer = baseAttrs.get(i).Pc;
             }
             active_number++;
             }
@@ -175,7 +176,7 @@ public class TabLayerController {
         int pos = -1;
         for(int i=0;i<listeners_size;i++) {
             // bỏ qua các layer ẩn
-            if(attrs.get(i).Pc==0) {
+            if(baseAttrs.get(i).Pc==0) {
                 continue;
             }
             pos++;
@@ -190,7 +191,7 @@ public class TabLayerController {
             float scale_marginY = ScreenSize[1]*(1- scaleXY[pos])/2.0f;
 
               float need_marginY;
-            if(attrs.get(i).maxTopMargin==0) { // fullscreen layer
+            if(baseAttrs.get(i).maxTopMargin==0) { // fullscreen layer
                 need_marginY = (pos==1) // just behind onToplayer
                         ?  pcOnTopLayer*(status_height + 2*oneDp)
                         : status_height + 2*oneDp + margin_inPx -   (margin_inPx*(pos-1)/(active_number-2) + pcOnTopLayer*(margin_inPx*(pos)/(active_number-1) - margin_inPx*(pos-1)/(active_number-2)));
@@ -204,7 +205,7 @@ public class TabLayerController {
         Attr attr;
         pos =-1;
         for(int i=0;i<listeners_size;i++) {
-            attr = attrs.get(i);
+            attr = baseAttrs.get(i);
             if(attr.Pc==0) continue;
             pos++;
             attr.ScaleXY = scaleXY[pos];
@@ -221,7 +222,7 @@ public class TabLayerController {
                attr.parent.setScaleX(1);
                attr.parent.setTranslationY(0);
            }
-           listeners.get(i).onUpdateLayer(attrs.get(i), pcOnTopLayer, pos);
+           baseTabLayers.get(i).onUpdateLayer(baseAttrs.get(i), pcOnTopLayer, pos);
         }
     }
     private void setPositionAndSizeLayer(  Attr attr, int pos, float valuePc) {
@@ -299,7 +300,7 @@ public class TabLayerController {
         for(int i=0;i<blockAnimates.size();i++)
             if(pos == blockAnimates.get(i).pos)  blockAnimates.get(i).down = b;
     }
-    private void AnimateLayer(int pos, TabLayerCallBack l, Attr attr, float from, final float to)
+    private void AnimateLayer(int pos, BaseTabLayer l, Attr attr, float from, final float to)
     {
         if(isBlockUpDown(pos)) {
             return;
@@ -343,8 +344,8 @@ public class TabLayerController {
         });
         va.start();
     }
-    private ArrayList<TabLayerCallBack> listeners ;
-    private ArrayList<Attr> attrs;
+    private ArrayList<BaseTabLayer> baseTabLayers;
+    private ArrayList<Attr> baseAttrs;
     private View.OnTouchListener onTouchListener;
 
     /**
@@ -362,9 +363,9 @@ public class TabLayerController {
     private boolean onDown = true;
     private long timeDown = 0;
     private boolean OnTouchEvent(int i, View view, MotionEvent event) {
-        TabLayerCallBack listener = listeners.get(i);
-        FrameLayout parent = attrs.get(i).parent;
-        Attr attr = attrs.get(i);
+        BaseTabLayer listener = baseTabLayers.get(i);
+        FrameLayout parent = baseAttrs.get(i).parent;
+        Attr attr = baseAttrs.get(i);
         if(currentLayerEvent!=i) {
         // reset variables
             onDown = true;
@@ -455,14 +456,19 @@ public class TabLayerController {
      * Xử lý sự kiện nhấn nút back
      */
     public boolean onBackPressed() {
+
+
         // slide down on current layer
         //TODO: SLIDE DOWN CURRENT LAYER
+        Log.d(TAG, "onTopLayer = " + onTopLayer);
 
-        // Try to back the UILayer
-        if(!activity.onBackUILayer())
-            // If UILAYER can't to be back anymore
-            // show something and close app
-            activity.SlideDownNShowWallBack();
+        if(onTopLayer!=-1) // onTopLayer is available
+        {
+            if(baseAttrs.get(onTopLayer).getPc()>0) // The onTopLayer is maximum
+                if(!baseTabLayers.get(onTopLayer).onBackPressed()) // if it cannot be back pressed
+                    AnimateLayer(onTopLayer,baseTabLayers.get(listeners_size-1),baseAttrs.get(onTopLayer),1,0);  // minimize it
+
+        } else activity.SlideDownNShowWallBack();
         return true;
     }
 
@@ -478,7 +484,7 @@ public class TabLayerController {
     private int listeners_size = 0;
     boolean streamOnTouchEvent(String tagLayer, View view, MotionEvent motionEvent) {
         for(int i=0;i<listeners_size;i++) {
-            if(attrs.get(i).Tag.equals(tagLayer)) return OnTouchEvent(i,view,motionEvent);
+            if(baseAttrs.get(i).Tag.equals(tagLayer)) return OnTouchEvent(i,view,motionEvent);
         }
         throw new NoSuchElementException("No Layer has that tag :\""+tagLayer+"\"");
     }
@@ -498,7 +504,7 @@ public class TabLayerController {
         public float ScaleXY;
         public float TranslateY;
         public String Tag;
-        public float Pc = 0;
+        private float Pc = 0;
         public float maxTopMargin;
         public float minBottomMargin;
         public float defaultBottomMargin;
@@ -552,7 +558,7 @@ public class TabLayerController {
             Pc = pc;
             return this;
         }
-        public Attr setDefaultBottomMargin(TabLayerCallBack.MarginValue value)
+        public Attr setDefaultBottomMargin(BaseTabLayer.MarginValue value)
         {
             defaultBottomMargin = getValue(value);
             return this;
@@ -561,7 +567,7 @@ public class TabLayerController {
         public float getMinBottomMargin() {
             return minBottomMargin;
         }
-        public float getValue(TabLayerCallBack.MarginValue value) {
+        public float getValue(BaseTabLayer.MarginValue value) {
             switch (value) {
                 case ZERO: return 0;
                 case STATUS_HEIGHT: return status_height + 2*oneDp;
@@ -580,7 +586,7 @@ public class TabLayerController {
             throw new NoSuchElementException("No Value");
         }
 
-        public Attr setMinBottomMargin(TabLayerCallBack.MarginValue value) {
+        public Attr setMinBottomMargin(BaseTabLayer.MarginValue value) {
             this.minBottomMargin = getValue(value);
             return this;
         }
@@ -630,7 +636,7 @@ public class TabLayerController {
             this.initDuration = initDuration;
             return this;
         }
-        public Attr set(TabLayerCallBack l) {
+        public Attr set(BaseTabLayer l) {
             if(l.parentView()==null)
                 setParent();
             else {
@@ -650,8 +656,8 @@ public class TabLayerController {
                     ScreenSize[0], ScreenSize[1] - maxTopMargin};
             };
 
-        public Attr setMaxTopMargin(TabLayerCallBack.MarginValue m) {
-            if(m==TabLayerCallBack.MarginValue.ZERO) maxTopMargin = 0;
+        public Attr setMaxTopMargin(BaseTabLayer.MarginValue m) {
+            if(m==BaseTabLayer.MarginValue.ZERO) maxTopMargin = 0;
             else maxTopMargin = status_height + 2*oneDp + margin_inPx;
             return this;
         }
@@ -664,8 +670,8 @@ public class TabLayerController {
      * @param i
      */
     private void initLayer( int i,boolean added) {
-        TabLayerCallBack listener = listeners.get(i);
-        Attr attr = attrs.get(i);
+        BaseTabLayer listener = baseTabLayers.get(i);
+        Attr attr = baseAttrs.get(i);
         attr.set(listener);
 
        if(added)
@@ -686,7 +692,7 @@ public class TabLayerController {
        }
 
     }
-    public void openLayer(TabLayerCallBack l) {
+    public void openLayer(BaseTabLayer l) {
 
     }
 
@@ -699,41 +705,41 @@ public class TabLayerController {
     }
     public void addTabLayerFragment(BaseTabLayerFragment tabLayer, int pos) {
         int p = (pos>=listeners_size) ? listeners_size : pos;
-        if(listeners.size()>pos) {
-            listeners.add(pos,tabLayer);
-            attrs.add(pos,new Attr());
+        if(baseTabLayers.size()>pos) {
+            baseTabLayers.add(pos,tabLayer);
+            baseAttrs.add(pos,new Attr());
         }
         else {
-            listeners.add(tabLayer);
-            attrs.add(new Attr());
+            baseTabLayers.add(tabLayer);
+            baseAttrs.add(new Attr());
         }
         listeners_size++;
         tabLayer.setTabLayerController(this);
         initLayer(p,false);
     }
-    public void addBaseListener(TabLayerCallBack l, int pos) {
+    public void addBaseListener(BaseTabLayer l, int pos) {
         int p = (pos>=listeners_size) ? listeners_size : pos;
-        if(listeners.size()>pos) {
-            listeners.add(pos,l);
-            attrs.add(pos,new Attr());
+        if(baseTabLayers.size()>pos) {
+            baseTabLayers.add(pos,l);
+            baseAttrs.add(pos,new Attr());
         }
         else {
-            listeners.add(l);
-            attrs.add(new Attr());
+            baseTabLayers.add(l);
+            baseAttrs.add(new Attr());
         }
         listeners_size++;
         initLayer(p,true);
     }
     public void removeListener(String tag) {
         for(int i=0;i<listeners_size;i++)
-            if(tag.equals(attrs.get(i).Tag)) {
+            if(tag.equals(baseAttrs.get(i).Tag)) {
            removeLayer(i);
             return;
             }
     }
-    public Attr getMyAttr(TabLayerCallBack l) {
-        for(int i=0;i<attrs.size();i++)
-            if(l.tag().equals(attrs.get(i).Tag)) return attrs.get(i);
+    public Attr getMyAttr(BaseTabLayer l) {
+        for(int i = 0; i< baseAttrs.size(); i++)
+            if(l.tag().equals(baseAttrs.get(i).Tag)) return baseAttrs.get(i);
         return null;
     }
 
@@ -742,9 +748,9 @@ public class TabLayerController {
      * @param l which layer order to update
      * @param pc new float-value-pc
      */
-    public void setPc(TabLayerCallBack l, float pc) {
-        for(int i=0;i<attrs.size();i++)
-            if(l.tag().equals(attrs.get(i).Tag)) attrs.get(i).Pc= pc;
+    public void setPc(BaseTabLayer l, float pc) {
+        for(int i = 0; i< baseAttrs.size(); i++)
+            if(l.tag().equals(baseAttrs.get(i).Tag)) baseAttrs.get(i).Pc= pc;
     }
 
 }
