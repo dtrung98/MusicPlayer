@@ -37,7 +37,7 @@ src="https://user-images.githubusercontent.com/33343210/47192828-99d24d00-d379-1
     <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/45993363-d5e6fa80-c0b8-11e8-8376-cf362128c822.png"/></td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/45993365-d67f9100-c0b8-11e8-8b2b-69eb12b5670e.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/47193085-42cd7780-d37b-11e8-85cc-d3c4dbcb2499.png"/></td>
      <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/47192969-ac00bb00-d37a-11e8-9134-c158e7298dbd.png"/></td>
   </tr>
