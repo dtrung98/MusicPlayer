@@ -22,12 +22,12 @@ Comming soon
   <tr>
     <td>
 <img width="360"
-src="https://user-images.githubusercontent.com/33343210/32426887-e96a4994-c2ef-11e7-8421-c28da963cd33.png"/>
+src="https://user-images.githubusercontent.com/33343210/47192822-9212a880-d379-11e8-82cd-30f4839156af.png"/>
        <td><img width="360"
-src="https://user-images.githubusercontent.com/33343210/32426889-ea49786c-c2ef-11e7-9f55-f7d2de63f375.png"/>
+src="https://user-images.githubusercontent.com/33343210/47192827-99d24d00-d379-11e8-80f5-98f0edd59bbe.png"/>
     </td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/32367540-085bf45c-c0b5-11e7-9a2f-d9fc0c1bb196.gif"/></td>
+src="https://user-images.githubusercontent.com/33343210/47192828-99d24d00-d379-11e8-8480-cfce7309c1d3.png"/></td>
   </table>
   </div>
 </br>
@@ -39,7 +39,7 @@ src="https://user-images.githubusercontent.com/33343210/45993363-d5e6fa80-c0b8-1
      <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/45993365-d67f9100-c0b8-11e8-8b2b-69eb12b5670e.png"/></td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/32426896-ecd40b42-c2ef-11e7-8645-f668d22a8925.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/47192969-ac00bb00-d37a-11e8-9134-c158e7298dbd.png"/></td>
   </tr>
 </table>
   </div>
