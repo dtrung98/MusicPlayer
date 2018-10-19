@@ -84,6 +84,7 @@ import com.ldt.musicr.views.stickyActionBarConstraintLayout;
 import com.ldt.musicr.views.StickyScrollView;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import mehdi.sakout.fancybuttons.FancyButton;
 
 import static com.ldt.musicr.InternalTools.BitmapEditor.updateSat;
 
@@ -94,12 +95,14 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
 
     private RecyclerView songListRecyclerView,playlistRecyclerView;
     private ListView playlist_BigList;
-    private stickyActionBarConstraintLayout stickyActionBar;
-    private GridRecyclerIndicator songIndicator;
+
+
     private View songs_pieces_relative_header;
     private View playlist_pieces_relative;
     private View main_slider;
     private Toolbar toolbar;
+    private TextView count_playlist, count_song;
+    private TextView see_all_playlist, see_all_song;
     public static RippleDrawable getPressedColorRippleDrawable(int normalColor, int pressedColor)
     {
         return new RippleDrawable(getPressedColorSelector(normalColor, pressedColor), getColorDrawableFromColor(normalColor), null);
@@ -143,13 +146,20 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
 
         baiHat =  rootView.findViewById(R.id.baihat);
 
-        stickyActionBar = rootView.findViewById(R.id.stickyActionBar);
+       // stickyActionBar = rootView.findViewById(R.id.stickyActionBar);
         scrollView =rootView.findViewById(R.id.myScroll);
-        scrollView.setStickyDrawView(stickyActionBar);
+       // scrollView.setStickyDrawView(stickyActionBar);
       //  searchButton = rootView.findViewById(R.id.search);
         playlist_BigList =rootView.findViewById(R.id.choosePlaylist_listView);
-        songIndicator = rootView.findViewById(R.id.circleIndicator);
+
         toolbar = rootView.findViewById(R.id.toolbar);
+
+        count_song = songs_pieces_relative_header.findViewById(R.id.songs_count);
+        count_playlist = playlist_pieces_relative.findViewById(R.id.playlist_count);
+
+        see_all_song =  songs_pieces_relative_header.findViewById(R.id.song_see_all);
+        see_all_playlist =playlist_pieces_relative.findViewById(R.id.playlist_see_all);
+
         setupToolbar();
         addToBeRipple(R.drawable.ripple_effect,songs_pieces_relative_header,playlist_pieces_relative);
 
@@ -325,7 +335,16 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
 
     @Override
     public void onMetaChanged() {
-        if(mSongsListAdapter!=null) mSongsListAdapter.notifyDataSetChanged();
+
+            if(mSongsListAdapter!=null) {
+
+                mSongsListAdapter.arraylist = SongLoader.getAllSongs(getActivity());
+                mSongsListAdapter.notifyDataSetChanged();
+            }
+        if(mPlaylistAdapter!=null) {
+                mPlaylistAdapter.arraylist = PlaylistLoader.getPlaylists(getActivity(),true);
+                mPlaylistAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setTimer() {
@@ -378,11 +397,9 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         }
         titleColor = BitmapEditor.mixTwoColors(Color.WHITE,0xff<<24| color24bit,1-alphaOfTitleBar/255.0f);
 
-        stickyActionBar.setBackgroundColor(titleColor);
+        //stickyActionBar.setBackgroundColor(titleColor);
     }
-    public static ArrayList<Song_OnLoad> DanhSachPhat = new ArrayList<Song_OnLoad>();
 
-    public int NowPlaying_int;
 
     public static ArrayList<String> getData(ArrayList<Song_OnLoad> arrayList) {
         int len = arrayList.size();
@@ -405,61 +422,20 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         int c = Tool.getSurfaceColor();
         applyRippleColor(c);
         main_slider.setBackgroundColor(Color.argb(150,Color.red(c),Color.green(c),Color.blue(c)));
-        if(mSongsListAdapter!=null) mSongsListAdapter.notifyDataSetChanged();
+       // see_all_song.setTextColor(Tool.getHeavyColor());
+       // see_all_playlist.setTextColor(Tool.getHeavyColor());
+        count_song.setTextColor(c);
+        count_playlist.setTextColor(c);
+        if(mSongsListAdapter!=null) {
+            mSongsListAdapter.notifyDataSetChanged();
+        }
         //((RippleDrawable)songs_pieces_relative_header.getBackground()).setColor(ColorStateList.valueOf(Tool.getSurfaceColor()));
     }
 
     private ImageView blur_background;
     private boolean settedBackground = false;
 
-    private void ChangeBackground(int id) {
-        // ảnh gốc
-        Bitmap original = null;
-        // ảnh mẫu
-        Bitmap sample = null;
-        // ảnh mẫu sau cập nhật
-        Bitmap sample_update;
-        // ảnh mẫu được làm mờ
-        Bitmap sample_blur ;
-        // đã từng cài background trước đó rồi
-        settedBackground = true;
-        // ImageView dùng để hiển thị ảnh blur
 
-        // biến
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        // địa chỉ của ảnh
-        String albumArt_path = DanhSachPhat.get(id).AlbumArt_path;
-        // Nếu địa chỉ khác null, rỗng và tồn tại
-        if (albumArt_path != null && albumArt_path != "" && Tool.Path_Is_Exist(albumArt_path) == 2)
-            try { // cố gắng lấy bức ảnh
-                original = BitmapFactory.decodeFile(albumArt_path);
-                options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
-                sample = BitmapFactory.decodeFile(albumArt_path, options);
-            } catch (Exception e) {
-            // nếu không lấy được thì lấy ảnh mặc định
-                original = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
-                options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
-                sample = BitmapFactory.decodeResource(getResources(), R.drawable.default_image, options);
-            }
-            // phòng
-        if (original == null)
-            original = BitmapFactory.decodeResource(getResources(), R.drawable.default_image);
-
-        options.inSampleSize = Tool.Avatar.getDevideSize(38, original);
-        if (sample == null)
-            sample = BitmapFactory.decodeResource(getResources(), R.drawable.default_image, options);
-
-        sample_update = updateSat(sample, 4);
-        sample_blur = BitmapEditor.fastblur(sample_update, 1, 4);
-        int[] averageColorRGB = BitmapEditor.getAverageColorRGB(sample_blur);
-        black_theme = BitmapEditor.PerceivedBrightness(95, averageColorRGB);
-
-        color24bit = (averageColorRGB[0] << 16 | averageColorRGB[1] << 8 | averageColorRGB[2]);
-        Tool.setGlobalColor(0xff << 24 | color24bit);
-        just_change_color = true;
-        //   changeThemeColor();
-        blur_background.setImageBitmap(sample_blur);
-    }
 
     /*
     private void changeThemeColor()
@@ -492,8 +468,6 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         }
     }
     */
-    private boolean blockChangeStatusBarColor = false;
-    private boolean FirstRender = true;
 
 
     private int alphaOfTitleBar = 0;
@@ -635,6 +609,8 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
         @Override
         protected void onPostExecute(String result){
             playlistRecyclerView.setAdapter(mPlaylistAdapter);
+
+
             if(getActivity()!=null) {
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(),1,LinearLayoutManager.HORIZONTAL,false);
                 playlistRecyclerView.setLayoutManager(gridLayoutManager);
@@ -663,7 +639,7 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
                 OverScrollDecoratorHelper.setUpOverScroll(songListRecyclerView,OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
                 SnapHelper snapHelper = new LinearSnapHelper();
                 snapHelper.attachToRecyclerView(songListRecyclerView);
-                songIndicator.setRecyclerView(songListRecyclerView);
+
 
             }
         }

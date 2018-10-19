@@ -658,7 +658,7 @@ public final class BitmapEditor {
     //                                                                                   V                     V                         V              V                           V                      V
     public static Bitmap GetRoundedBitmapWithBlurShadow(Context context, Bitmap original, int paddingTop, int paddingBottom, int paddingLeft, int paddingRight,
                                                         int TopBack     // this value makes the overview bitmap is higher or  belower the background.
-                                              , int alphaBlurBackground // this is the alpha of the background Bitmap, you need A number between 0 -> 255, the value recommended is 180.
+                                              , int alphaBlurBackground // this is the alpha of the background Bitmap, you need A number between 0 -> 255, the value recommend is 180.
                                               , int valueBlurBackground // this is the value used to blur the background Bitmap, the recommended one is 12.
                                               , int  valueSaturationBlurBackground // this is the value used to background Bitmap more colorful, if valueBlur is 12, the valudeSaturation should be 2.
     ) {
@@ -798,7 +798,6 @@ public final class BitmapEditor {
         //Create the Allocations (in/out) with the Renderscript and the in/out bitmaps
         Allocation allIn = Allocation.createFromBitmap(rs, bitmap);
         Allocation allOut = Allocation.createFromBitmap(rs, outBitmap);
-
         //Set the radius of the blur
         blurScript.setRadius(radius);
 

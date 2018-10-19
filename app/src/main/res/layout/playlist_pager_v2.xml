@@ -5,107 +5,163 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context="com.ldt.musicr.fragments.PlaylistPagerFragment">
 <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="370dp"
-    android:background="@android:color/transparent">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:elevation="0dp">
 <android.support.design.widget.CollapsingToolbarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
    android:id="@+id/playlist_pager_collapsing_toolbar"
     app:layout_scrollFlags="scroll|exitUntilCollapsed"
+
+    android:minHeight="96dp"
     app:titleEnabled="false">
-
-    <ImageView
-        android:id="@+id/back_art"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:scaleType="centerCrop"
-        android:transitionName="transition_album_art"
-        app:layout_collapseMode="parallax" />
-
     <RelativeLayout
-        android:id="@+id/background_relative"
+
+        app:layout_collapseMode="pin"
         android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:background="#55000000" >
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@drawable/gradient"
-            android:layout_alignParentBottom="true"/>
-    <ImageView
-        android:layout_width="170dp"
-        android:layout_height="170dp"
-        android:layout_centerInParent="true"
-        android:id="@+id/backGroundArt"/>
-    <ImageView
-        android:id="@+id/Art"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_centerInParent="true"
-        android:src="@drawable/default_image_round"/>
+        android:layout_height="wrap_content">
+
+    <com.ldt.musicr.views.DeepShadowImgChildConstraintLayout
+        android:id="@+id/background_constraint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F7F6F4"
+        android:paddingLeft="8dp"
+        android:paddingBottom="42dp"
+        android:paddingTop="?attr/actionBarSize">
+
         <ImageView
-            android:id="@+id/PlayButton"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
-            android:src="@drawable/icons8_play_circle"
-            android:padding="40dp"
-            android:background="#22ffffff" />
-        <TextView
-            android:id="@+id/Title"
-            android:layout_below="@id/backGroundArt"
+            android:id="@+id/Art"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginBottom="18dp"
+            android:src="@drawable/default_image_round"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/white_rounded"
+            android:padding="3dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintLeft_toLeftOf="@id/Art"
+            app:layout_constraintStart_toEndOf="@id/Art"
+            app:layout_constraintTop_toTopOf="parent">
 
-            android:textColor="@android:color/black"
-            android:textSize="17sp"
-            android:textStyle="bold"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/Title"
-            android:id="@+id/artistText"
-            android:layout_margin="7dp"
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:minHeight="30dp"
+                android:text="Love your self "
+                android:textColor="@color/FlatYellow"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/Art"
+                app:layout_constraintTop_toTopOf="@+id/Art" />
 
-            android:textColor="@android:color/black"
-            android:layout_centerHorizontal="true"/>
+            <TextView
+                android:id="@+id/artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:minHeight="25dp"
+                android:text="Various Artists"
+                android:textColor="@color/HeavyYellow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/Art"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        </LinearLayout>
+    </com.ldt.musicr.views.DeepShadowImgChildConstraintLayout>
+
         <mehdi.sakout.fancybuttons.FancyButton
+            app:layout_collapseMode="pin"
+            android:id="@+id/play_all_button"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/background_constraint"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/transparent"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            app:fb_useSystemFont= "true"
+            android:paddingRight="10dp"
+            android:paddingBottom="6dp"
+            android:text="Play all songs"
+
+            app:fb_textGravity="left"
+            fancy:fb_defaultColor="@android:color/transparent"
+            fancy:fb_fontIconResource="&#xf04b;"
+            fancy:fb_fontIconSize="10sp"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="15dp"
+            fancy:fb_textColor="@color/FlatYellow"
+            fancy:fb_textSize="14sp" />
+        <mehdi.sakout.fancybuttons.FancyButton
+            app:layout_collapseMode="pin"
             android:id="@+id/random_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="Play Random"
-            fancy:fb_textColor="@color/FlatWhite"
-            android:background="@android:color/transparent"
-            fancy:fb_defaultColor="@android:color/black"
-            fancy:fb_borderColor="@android:color/black"
-            fancy:fb_borderWidth="2dp"
-            fancy:fb_radius="15dp"
-            android:layout_below="@id/artistText"
+            android:layout_height="30dp"
             android:layout_centerHorizontal="true"
-            fancy:fb_fontIconResource="&#xf04b;"
-            fancy:fb_iconPosition="left"
-            fancy:fb_fontIconSize="10sp"
-            />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_below="@id/background_constraint"
+            android:layout_toRightOf="@id/play_all_button"
+            android:background="@android:color/transparent"
+            android:paddingLeft="10dp"
+            android:paddingTop="6dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="6dp"
+            android:text="Random Play"
+            app:fb_useSystemFont= "true"
+            app:fb_textGravity="left"
+            fancy:fb_defaultColor="@android:color/transparent"
 
+            fancy:fb_radius="15dp"
+            fancy:fb_textColor="@color/FlatYellow"
+            fancy:fb_textSize="14sp" />
     </RelativeLayout>
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:elevation="5dp"
+        app:theme="@style/ToolbarColoredBackArrow"
+        android:background="#F7F6F4"
+        android:minHeight="?attr/actionBarSize"
         app:layout_collapseMode="pin"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/AppTheme"
+
+        >
+        <ImageView
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/more_black"
+            android:padding="18dp"
+            android:layout_gravity="right"/>
+    </android.support.v7.widget.Toolbar>
+
 </android.support.design.widget.CollapsingToolbarLayout>
 
 </android.support.design.widget.AppBarLayout>
@@ -113,6 +169,7 @@
         android:id="@+id/playlist_big_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="50dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -28,4 +28,16 @@
         <attr name="downsampleFactor" format="integer"/>
         <attr name="overlayColor" format="color"/>
     </declare-styleable>
+
+    <declare-styleable name="DeepShadowImgChildConstraintLayout">
+        <attr name="image_left" format="integer"/>
+        <attr name="image_top" format="integer"/>
+        <attr name="image_right" format="integer"/>
+        <attr name="image_bottom" format="integer"/>
+        <attr name="shadow_dx_left" format="integer"/>
+        <attr name="shadow_dy_top" format="integer"/>
+        <attr name="shadow_dx_right" format="integer"/>
+        <attr name="shadow_dy_bottom" format="integer"/>
+
+    </declare-styleable>
 </resources>

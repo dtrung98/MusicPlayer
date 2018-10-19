@@ -1,33 +1,33 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">Music</string>
-    <string name="queue">Queue</string>
-    <string name="library">Library</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Âm nhạc</string>
+    <string name="queue">Hàng đợi</string>
+    <string name="library">Thư viện</string>
+    <string name="hello_blank_fragment">Xin chào Fragment trống</string>
     <string name="start_marker">Start marker</string>
     <string name="end_marker">End marker</string>
     <string name="rewind">Rewind</string>
-    <string name="play">Play</string>
-    <string name="stop">Stop</string>
-    <string name="ffwd">Fast forward</string>
+    <string name="play">Chơi</string>
+    <string name="stop">Dừng</string>
+    <string name="ffwd">Tiến nhanh</string>
     <string name="start_label">Start:</string>
     <string name="end_label">End:</string>
-    <string name="progress_dialog_loading">Loading...</string>
+    <string name="progress_dialog_loading">Đang chạy...</string>
     <string name="time_seconds">seconds</string>
-    <string name="hint_choose_song_by_random">Play randomly a song in your library</string>
-    <string name="song_piece_header">Songs</string>
-    <string name="title_playlist_suggest">Recent</string>
-    <string name="hint_playlist_suggested">You might love that songs</string>
+    <string name="hint_choose_song_by_random">Chơi ngẫu nhiên các bài hát</string>
+    <string name="song_piece_header">Bài hát</string>
+    <string name="title_playlist_suggest">Gần đây</string>
+    <string name="hint_playlist_suggested">Bạn chắc sẽ thích những bài này</string>
     <string name="main_screen_album_header">Albums</string>
     <string name="hint_playlist_showing">Play all songs in album</string>
-    <string name="app_title">Music</string>
+    <string name="app_title">Âm nhạc</string>
     <string name="title_activity_slider">Slider</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="trade_mark">Music ®</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="trade_mark">Âm nhạc ®</string>
     <string name="count_song"><xliff:g id="count">%d</xliff:g> song</string>
     <string name="count_songs"><xliff:g id="count">%d</xliff:g> songs</string>
     <string name="count_album"><xliff:g id="count">%d</xliff:g> album</string>
@@ -42,28 +42,28 @@
     <string name="duration_format" translatable="false"><xliff:g id="hours">%1$s</xliff:g> <xliff:g id="minutes">%2$s</xliff:g></string>
     <string name="durationformatshort" translatable="false"><xliff:g id="format">%2$d:%3$02d</xliff:g></string>
     <string name="durationformatlong" translatable="false"><xliff:g id="format">%1$d:%2$02d:%3$02d</xliff:g></string>
-    <string name="playlist_last_added">Last Added</string>
-    <string name="playlist_recently_played">Recently Played</string>
-    <string name="playlist_top_tracks">My Top Tracks</string>
-    <string name="this_is_name_of_the_song">This Is Name Of The Song</string>
-    <string name="the_name_of_the_song">The Name Of The Song</string>
-    <string name="the_artist_of_the_song">The Artist Of The Song</string>
-    <string name="this_is_artist_of_the_song">This Is Artist Of The Song</string>
+    <string name="playlist_last_added"> Mới thêm gần đây</string>
+    <string name="playlist_recently_played">Đã phát gần đây</string>
+    <string name="playlist_top_tracks">Tuyển tập yêu thích</string>
+    <string name="this_is_name_of_the_song">Đây là tên bài hát</string>
+    <string name="the_name_of_the_song">Đây là tên bài hát</string>
+    <string name="the_artist_of_the_song">Đây là tên nghệ sỹ</string>
+    <string name="this_is_artist_of_the_song">Đây là tên nghệ sỹ</string>
     <string name="error_playing_track">Error Playing Track</string>
 
 
 
 
 
-    <string name="accessibility_play">Play</string>
-    <string name="accessibility_pause">Pause</string>
-    <string name="accessibility_next">Next</string>
-    <string name="accessibility_prev">Previous</string>
-    <string name="accessibility_shuffle">Shuffle</string>
-    <string name="accessibility_shuffle_all">Shuffle all</string>
-    <string name="accessibility_repeat">Repeat</string>
-    <string name="accessibility_repeat_all">Repeat all</string>
-    <string name="accessibility_repeat_one">Repeat one</string>
+    <string name="accessibility_play">Chơi</string>
+    <string name="accessibility_pause">Dừng</string>
+    <string name="accessibility_next">Kế</string>
+    <string name="accessibility_prev">"Trước "</string>
+    <string name="accessibility_shuffle">Ngẫu nhiên</string>
+    <string name="accessibility_shuffle_all">Ngẫu nhiên tất cả</string>
+    <string name="accessibility_repeat">Lặp lại</string>
+    <string name="accessibility_repeat_all">Lặp lại tất cả</string>
+    <string name="accessibility_repeat_one">Lặp lại một bài</string>
     <string name="accessibility_queue">Open queue</string>
     <string name="accessibility_browse">Browse music</string>
 
@@ -96,16 +96,16 @@
 
     <string name="last_opened">Last Opened</string>
 
-    <string name="songs">Songs</string>
-    <string name="albums">Albums</string>
-    <string name="artists">Artists</string>
-    <string name="playlists">Playlists</string>
-    <string name="playing_queue">Playing Queue</string>
-    <string name="now_playing">Now Playing</string>
-    <string name="settings">Settings</string>
-    <string name="about">About</string>
+    <string name="songs">Bài hát</string>
+    <string name="albums">Các Album</string>
+    <string name="artists">Nghệ sỹ</string>
+    <string name="playlists">Danh sách phát</string>
+    <string name="playing_queue">Hàng đợi</string>
+    <string name="now_playing">Đang chơi</string>
+    <string name="settings">Cài đặt</string>
+    <string name="about">Về</string>
     <string name="help_and_feedback">Help and Feedback</string>
-    <string name="search">Search</string>
+    <string name="search">Tìm kiếm</string>
     <string name="action_shuffle_all">Shuffle All</string>
     <string name="action_equalizer">Equalizer</string>
     <string name="search_library">Search Library</string>
@@ -163,12 +163,12 @@
     <string name="widget_white">Timber light widget</string>
 
 
-    <string name="add_to_playlist">Add to playlist</string>
-    <string name="go_to_album">Go to album</string>
-    <string name="go_to_artist">Go to artist</string>
-    <string name="add_to_queue">Add to queue</string>
-    <string name="play_next">Play next</string>
-    <string name="new_playlist">New playlist</string>
+    <string name="add_to_playlist">Thêm vào danh sách</string>
+    <string name="go_to_album">Đi tới Album</string>
+    <string name="go_to_artist">Đi tới nghệ sỹ</string>
+    <string name="add_to_queue">Thêm vào hàng đợi</string>
+    <string name="play_next">Chơi kế tiếp</string>
+    <string name="new_playlist">Danh sách phát mới</string>
 
 
     <string name="nothing_found">Nothing found</string>
@@ -180,15 +180,13 @@
     <string name="lastfm_login">Login to LastFM</string>
     <string name="lastfm_loged_in">Logged in as %s</string>
 
-    <string name="cancel">Cancel</string>
-
-    <!-- Bottom Sheet -->
-    <string name="bottom_sheet_option_camera">Use Camera</string>
-    <string name="bottom_sheet_option_gallery">Upload from Gallery</string>
-    <string name="bottom_sheet_option_heading">Add Photo</string>
-    <string name="bottom_sheet_option_remove_photo">Remove Photo</string>
-    <string name="delete_from_playlist">Delete from playlist</string>
-    <string name="delete_from_device">Delete from device</string>
-    <string name="share">Share</string>
-    <string name="see_all">See All</string>
+    <string name="cancel">Hủy</string>
+    <string name="bottom_sheet_option_camera">Chụp ảnh</string>
+    <string name="bottom_sheet_option_gallery">Lấy từ album ảnh</string>
+    <string name="bottom_sheet_option_heading">Thêm ảnh</string>
+    <string name="bottom_sheet_option_remove_photo">Xóa ảnh</string>
+    <string name="delete_from_playlist">Xóa khỏi danh sách phát</string>
+    <string name="delete_from_device">Xóa khỏi thiết bị</string>
+    <string name="share">Chia sẻ</string>
+    <string name="see_all">Xem tất cả</string>
 </resources>

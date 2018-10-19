@@ -4,6 +4,7 @@ package com.ldt.musicr.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -127,7 +128,22 @@ public class TabLayerController {
      *  Cập nhật lại margin lúc pc = 1 của mỗi layer
      *  Được gọi bất cứ khi nào một pc của một layer bất kỳ được thay đổi (sự kiện chạm)
      */
-    int onTopLayer = 0;
+    int onTopLayer = -1;
+    int active_number = 0;
+    float pcOnTopLayer =  1;
+    private void findOnTopLayer() {
+        onTopLayer =-1;
+        pcOnTopLayer = 0;
+        active_number = 0;
+        for(int i=0;i<listeners_size;i++)
+            if(baseAttrs.get(i).Pc!=0) {
+                if(active_number==0) {
+                    onTopLayer = i;
+                    pcOnTopLayer = baseAttrs.get(i).Pc;
+                }
+                active_number++;
+            }
+    }
     private void updateMarginLayers() {
 
         // Đi từ 0 - n
@@ -140,17 +156,7 @@ public class TabLayerController {
         // on-top-layer là layer đầu tiên được tìm thấy có pc !=0 ( thường là khác 1)
         // các layer còn lại mặc định có pc = 1
         // pc của on-top-layer ảnh hưởng lên các layer khác phía sau nó
-        onTopLayer =0;
-        float pcOnTopLayer =  1;
-        int active_number = 0;
-        for(int i=0;i<listeners_size;i++)
-            if(baseAttrs.get(i).Pc!=0) {
-            if(active_number==0) {
-                onTopLayer = i;
-                pcOnTopLayer = baseAttrs.get(i).Pc;
-            }
-            active_number++;
-            }
+        findOnTopLayer();
 
          // Sau đây chỉ thực hiện tính toán với các layer hiện hoạt
 
@@ -219,7 +225,7 @@ public class TabLayerController {
            }
            else {
                attr.parent.setScaleX(1);
-               attr.parent.setScaleX(1);
+               attr.parent.setScaleY(1);
                attr.parent.setTranslationY(0);
            }
            baseTabLayers.get(i).onUpdateLayer(baseAttrs.get(i), pcOnTopLayer, pos);
@@ -332,7 +338,38 @@ public class TabLayerController {
         va.addUpdateListener(animation -> {
 
             float  number= ((float)(animation.getAnimatedValue()));
-            setPositionAndSizeLayer(attr,pos,number);
+
+            //  nếu topMargin ở quá vị trí maxTopmargin
+            // thì chiều cao bị kéo dãn ra và có khoảng chênh lệch
+            // over_height = new_height - old_height
+            float over_height = 0;
+            float new_pc;
+            float maxMove = attr.layerSize[1] - navigation_height - attr.minBottomMargin; // đoạn đường layer có thể di chuyển : từ min -> max
+            float new_topMargin =ScreenSize[1] - navigation_height -  attr.minBottomMargin - maxMove*number;
+
+            // lúc này over_height lớn hơn 0
+            if(new_topMargin<attr.maxTopMargin) {
+                float move = attr.maxTopMargin - new_topMargin;
+                float HeSo = move/(move+100);
+                over_height = attr.maxTopMargin*HeSo;
+                new_pc = 1 + over_height/maxMove;
+                Log.d(TAG, "number = "+number+", new_pc = " + new_pc+", move = "+move+", maxMove = "+maxMove);
+
+            } else {
+                // params.topMargin = (int) (ScreenSize[1] - navigation_height - attr.minBottomMargin - Move);
+                float Move = ScreenSize[1] -navigation_height - attr.minBottomMargin - new_topMargin;
+
+                new_pc = Move/maxMove;
+                Log.d(TAG, "number = "+number+", new_pc = " + new_pc+", move = "+Move+", maxMove = "+maxMove);
+            }
+
+       //     if(attr.Pc !=new_pc) {
+
+                setPositionAndSizeLayer(attr,pos,new_pc);
+                //       Log.d("Param Move : " + layoutParams.topMargin+"|"+layoutParams.bottomMargin+"|"+layoutParams.width+"|"+layoutParams.height,"Params");
+         //   }
+
+        //    setPositionAndSizeLayer(attr,pos,number);
         });
         va.addListener(new AnimatorListenerAdapter()
         {
@@ -363,6 +400,8 @@ public class TabLayerController {
     private boolean onDown = true;
     private long timeDown = 0;
     private boolean OnTouchEvent(int i, View view, MotionEvent event) {
+        // không xử lý layer phía sau layer onTopLayer
+        if (i > onTopLayer) return false;
         BaseTabLayer listener = baseTabLayers.get(i);
         FrameLayout parent = baseAttrs.get(i).parent;
         Attr attr = baseAttrs.get(i);
@@ -451,17 +490,41 @@ public class TabLayerController {
 
         return true;
     }
-
+    CountDownTimer countDownTimer;
+    boolean inCountDownTime = false;
     /**
      * Xử lý sự kiện nhấn nút back
      */
     public boolean onBackPressed() {
-
+/**
+ * Nếu có bất cứ onTopLayer nào ( onTopLayer >=0)
+ * Tiến hành gửi lệnh back tới layer đó, nếu không  thì nghĩa là nó đang trong bộ đếm delta time
+ * Nếu nó không xử lý lệnh back, thì tiến hành "pop down" nó đi
+ * Nếu nó là Layer cuối và bị "pop down", tiến hành bộ đếm thời gian
+ * Nếu nhấn back trong delta time, tiến hành đóng ứng dụng
+ * Nếu không có lệnh back trong delta time, tiến hành "pop up" onTopLayer
+ */
 
         // slide down on current layer
         //TODO: SLIDE DOWN CURRENT LAYER
         Log.d(TAG, "onTopLayer = " + onTopLayer);
 
+        if(onTopLayer!=-1) {
+            if(!baseTabLayers.get(onTopLayer).onBackPressed()) {
+                AnimateLayer(onTopLayer, baseTabLayers.get(onTopLayer), baseAttrs.get(onTopLayer), 1, 0);  // minimize it
+                if(onTopLayer==listeners_size-1) {
+                    // Start Countdown time
+                    checkInCountDownTime();
+                }
+            } else {
+                // Do nothing
+            }
+        } else {
+            checkInCountDownTime();
+        }
+
+
+/*
         if(onTopLayer!=-1) // onTopLayer is available
         {
             if(baseAttrs.get(onTopLayer).getPc()>0) // The onTopLayer is maximum
@@ -469,7 +532,34 @@ public class TabLayerController {
                     AnimateLayer(onTopLayer,baseTabLayers.get(listeners_size-1),baseAttrs.get(onTopLayer),1,0);  // minimize it
 
         } else activity.SlideDownNShowWallBack();
+        */
         return true;
+    }
+    private void checkInCountDownTime() {
+        if(inCountDownTime) {
+            countDownTimer.cancel();
+            countDownTimer=null;
+            activity.finish();
+            return;
+        }
+       inCountDownTime = true;
+        Tool.showToast(activity,"Back again to exit",500);
+
+        if(countDownTimer==null) countDownTimer = new CountDownTimer(2000,2000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                countDownTimer = null;
+                inCountDownTime = false;
+                Tool.showToast(activity,"exit cancel",500);
+                AnimateLayer(listeners_size-1,baseTabLayers.get(listeners_size-1),baseAttrs.get(listeners_size-1),baseAttrs.get(listeners_size-1).getPc(),1);
+            }
+        };
+        countDownTimer.start();
     }
 
     /**
@@ -484,7 +574,9 @@ public class TabLayerController {
     private int listeners_size = 0;
     boolean streamOnTouchEvent(String tagLayer, View view, MotionEvent motionEvent) {
         for(int i=0;i<listeners_size;i++) {
-            if(baseAttrs.get(i).Tag.equals(tagLayer)) return OnTouchEvent(i,view,motionEvent);
+            if(baseAttrs.get(i).Tag.equals(tagLayer)) {
+                return OnTouchEvent(i,view,motionEvent);
+            }
         }
         throw new NoSuchElementException("No Layer has that tag :\""+tagLayer+"\"");
     }
@@ -716,6 +808,8 @@ public class TabLayerController {
         listeners_size++;
         tabLayer.setTabLayerController(this);
         initLayer(p,false);
+        findOnTopLayer();
+
     }
     public void addBaseListener(BaseTabLayer l, int pos) {
         int p = (pos>=listeners_size) ? listeners_size : pos;
@@ -729,6 +823,7 @@ public class TabLayerController {
         }
         listeners_size++;
         initLayer(p,true);
+        findOnTopLayer();
     }
     public void removeListener(String tag) {
         for(int i=0;i<listeners_size;i++)

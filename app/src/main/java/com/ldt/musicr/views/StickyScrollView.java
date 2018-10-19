@@ -10,7 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
-import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -189,7 +189,7 @@ public class StickyScrollView extends NestedScrollView {
 
     @Override
     public void addView(View child) {
-        Log.d("Sticky","addView");
+    //    Log.d("Sticky","addView");
 
         super.addView(child);
         findStickyViews(child);
@@ -197,7 +197,7 @@ public class StickyScrollView extends NestedScrollView {
 
     @Override
     public void addView(View child, int index) {
-        Log.d("Sticky","addView on index "+index);
+      // Log.d("Sticky","addView on index "+index);
 
         super.addView(child, index);
         findStickyViews(child);
@@ -205,14 +205,14 @@ public class StickyScrollView extends NestedScrollView {
 
     @Override
     public void addView(View child, int index, android.view.ViewGroup.LayoutParams params) {
-        Log.d("Sticky","addView on index "+index+", params");
+    //    Log.d("Sticky","addView on index "+index+", params");
         super.addView(child, index, params);
         findStickyViews(child);
     }
 
     @Override
     public void addView(View child, int width, int height) {
-        Log.d("Sticky","addView with width ="+width+", height = "+height);
+   //     Log.d("Sticky","addView with width ="+width+", height = "+height);
 
         super.addView(child, width, height);
         findStickyViews(child);
@@ -220,12 +220,12 @@ public class StickyScrollView extends NestedScrollView {
 
     @Override
     public void addView(View child, android.view.ViewGroup.LayoutParams params) {
-        Log.d("Sticky","addView with params");
+   //     .d("Sticky","addView with params");
         super.addView(child, params);
         findStickyViews(child);
     }
     public void stickyDrawViewInvalidate() {
-      Log.d(TAG,"call invalidate");
+
         if(stickyDrawView!=null) stickyDrawView.invalidate();
     }
     @Override
@@ -326,11 +326,12 @@ public class StickyScrollView extends NestedScrollView {
 
         super.onScrollChanged(l, t, oldl, oldt);
         doTheStickyThing();
+        if(stickyDrawView!=null)
         stickyDrawView.connectOnScrollChanged(l,t,oldl,oldt);
     }
 
     private void doTheStickyThing() {
-       Log.d("Sticky","doTheStickyThing");
+   //    Log.d("Sticky","doTheStickyThing");
 
         View viewThatShouldStick = null; // View mà cần Stick ?
         View approachingView = null; // View đang tiến đến ?
@@ -339,7 +340,7 @@ public class StickyScrollView extends NestedScrollView {
 
             // xem xét vị trí tương đối của nó đối với khung hình scrollview, sau đây lấy vị trí Top
             int viewTop = getTopForViewRelativeOnlyChild(v) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop());
-            Log.d("View : ","ViewTop = " + viewTop+",  Height = "+v.getHeight());
+       //     Log.d("View : ","ViewTop = " + viewTop+",  Height = "+v.getHeight());
             if(viewTop+v.getHeight()<=0) {  // nếu view đó 'thấp' hơn 0
                 if(viewThatShouldStick==null || viewTop>(getTopForViewRelativeOnlyChild(viewThatShouldStick) - getScrollY() + (clippingToPadding ? 0 : getPaddingTop()))){
                     viewThatShouldStick = v;
@@ -369,7 +370,7 @@ public class StickyScrollView extends NestedScrollView {
     }
 
     private void startStickingView(View viewThatShouldStick) {
-        Log.d("Sticky","startStickingView");
+     //   Log.d("Sticky","startStickingView");
 
         currentlyStickingView = viewThatShouldStick;
         if(Tool.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
@@ -381,7 +382,7 @@ public class StickyScrollView extends NestedScrollView {
     }
 
     private void stopStickingCurrentlyStickingView() {
-        Log.d("Sticky","stopStickingCurrentlyStickView");
+     //   Log.d("Sticky","stopStickingCurrentlyStickView");
 
         if(Tool.getStringTagForView(currentlyStickingView).contains(FLAG_HASTRANSPARANCY)){
             showView(currentlyStickingView);
@@ -398,7 +399,7 @@ public class StickyScrollView extends NestedScrollView {
     }
 
     private void notifyHierarchyChanged(){
-        Log.d("Sticky","notifyHierarchyChanged");
+    //    Log.d("Sticky","notifyHierarchyChanged");
 
         if(currentlyStickingView!=null){
             stopStickingCurrentlyStickingView();
@@ -411,7 +412,7 @@ public class StickyScrollView extends NestedScrollView {
     }
 
     private void findStickyViews(View v) {
-        Log.d("Sticky","findStickyViews");
+    //    Log.d("Sticky","findStickyViews");
 
         if(v instanceof ViewGroup){
             ViewGroup vg = (ViewGroup)v;

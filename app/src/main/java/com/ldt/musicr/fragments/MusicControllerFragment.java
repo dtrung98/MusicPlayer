@@ -360,6 +360,8 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
    public FrameLayout example_frame_layout;
    protected AudioVisualSeekBar visualSeekBar;
    private TextView time_textView;
+   private View more_button;
+   private View love_button;
    private View buttonBar;
    //private EditText editText;
     private View below_linear_layout;
@@ -460,6 +462,8 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
 
         shuffle = v.findViewById(R.id.shuffle);
         repeat = v.findViewById(R.id.repeat);
+        more_button = v.findViewById(R.id.more_button_bar);
+        love_button = v.findViewById(R.id.love);
 
         below_linear_layout = v.findViewById(R.id.below_linear_layout);
        /*
@@ -489,7 +493,7 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
             }
         });
         */
-        addToBeRipple(R.drawable.ripple_oval,inPrev,inNext,playPauseButtonWrapper,inPauseWrapper,inList,playBar_list, repeat,shuffle);
+        addToBeRipple(R.drawable.ripple_oval,inPrev,inNext,playPauseButtonWrapper,inPauseWrapper,inList,playBar_list, repeat,shuffle,more_button,love_button);
     }
 
 
@@ -908,8 +912,8 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     @Override
     public void onUpdateLayer(TabLayerController.Attr attr, float pcOnTopLayer, int active_i) {
         if(active_i==0) {
-            rootView.setRoundNumber(attr.Pc,true);
-            doTransform(attr.Pc);
+            rootView.setRoundNumber(attr.getPc(),true);
+            doTransform(attr.getPc());
         }
         else if(active_i>=1) {
             rootView.setDarken(pcOnTopLayer*0.3f,false);
@@ -935,6 +939,11 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     @Override
     public MarginValue maxPosition() {
         return MarginValue.STATUS_HEIGHT;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 
     @Override
@@ -968,7 +977,8 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
                 inNext,
                 buttonBar,
                 shuffle,
-                repeat
+                repeat,
+                more_button
         };
 
         for (View anOnTouch : onTouch) anOnTouch.setOnTouchListener(this);
@@ -1033,6 +1043,10 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
             case /* repeat */ R.id.repeat:
                 MusicPlayer.cycleRepeat();
                 updateRepeatState();
+                break;
+            case /* more button */ R.id.more_button_bar:
+                RoundedBottomSheetDialogFragment.newInstance().show(getMainActivity().getSupportFragmentManager(),
+                    "song_popup_menu");
                 break;
         }
     }

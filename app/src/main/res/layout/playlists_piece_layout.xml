@@ -20,16 +20,35 @@
         android:paddingLeft="20dp"
         android:id="@+id/playlist_piece_header"
         android:textSize="@dimen/header1_text_size"
+
         android:textStyle="bold"
         android:text="@string/playlists"
         android:textColor="@android:color/black"/>
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside"
+        <TextView
+            android:id="@+id/playlist_count"
+            android:layout_width="wrap_content"
+            android:minWidth="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerInParent="true"
             android:layout_toRightOf="@id/playlist_piece_header"
-            android:src="@drawable/icons8_right"
-            android:padding="12dp"
+            android:text="0"
+            android:singleLine="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:gravity="center"
+            android:textColor="@color/FlatYellow"
+            android:background="@drawable/count_round_drawable"/>
+        <TextView
+            android:id="@+id/playlist_see_all"
+            android:layout_width="wrap_content"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_height="match_parent"
+            android:text="@string/see_all"
+            android:textColor="#888"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
             />
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView

@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:id="@+id/container_of_container">
         <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
-        <com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout
+        <com.ldt.musicr.views.roundClippingFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"

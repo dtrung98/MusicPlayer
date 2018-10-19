@@ -4,17 +4,26 @@
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@drawable/splash_background</item>
-
+        <!--item name="android:fontFamily">@font/opensans</item>
+        <item name="fontFamily">@font/opensans</item-->
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimary">@color/FlatWhite</item>
         <item name="colorAccent">#FF5676</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+
         <!--item name="android:fontFamily">@font/hn</item-->
         <!-- Status bar stuff. -->
     </style>
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@android:color/black</item>
+    </style>
 
+    <style name="Widget.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+        <item name="android:contentDescription">@string/accessibility_overflow</item>
+    </style>
     <style name="FlatRedTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatRed</item>
         <item name="colorPrimaryDark">@color/FlatRed</item>
@@ -107,4 +116,17 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- set the rounded drawable as background to your bottom sheet -->
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottom_sheet_drawable</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+
+    <string name="accessibility_overflow">Accessibility Overflow</string>
 </resources>

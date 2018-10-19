@@ -35,6 +35,7 @@ import com.ldt.musicr.fragments.FragmentHolder.Prepare4Fragment;
 import com.ldt.musicr.fragments.FragmentPlus;
 import com.ldt.musicr.fragments.PlaylistControllerFragment;
 import com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout;
+import com.ldt.musicr.views.roundClippingFrameLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public abstract class SupportFragmentPlusActivity extends AppCompatActivity {
     public float pixel_unit  = 0;
     public FrameLayout container;
     public View navigation_bar;
-    public DarkenRoundedBackgroundFrameLayout TabSwitcherFrameLayout;
+    public roundClippingFrameLayout TabSwitcherFrameLayout;
     public View statusColor4Lolipop;
 
     protected void checkNSwitch()

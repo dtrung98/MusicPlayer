@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,8 @@ import android.widget.TextView;
 
 import com.ldt.musicr.InternalTools.Tool;
 import com.ldt.musicr.R;
+import com.ldt.musicr.activities.BaseActivity;
+import com.ldt.musicr.fragments.RoundedBottomSheetDialogFragment;
 import com.ldt.musicr.models.Song;
 import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.utils.NavigationUtils;
@@ -28,10 +31,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import mehdi.sakout.fancybuttons.FancyButton;
+
 public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdapter.ItemHolder> {
     private static final String TAG = "SmallSongListAdapter";
     public int currentlyPlayingPosition;
-    private List<Song> arraylist;
+    public List<Song> arraylist;
     private AppCompatActivity mContext;
     private long[] songIDs;
     private boolean isPlaylist;
@@ -68,12 +73,19 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
             return ml;
        // }
     }
-
     @Override
     public void onBindViewHolder(ItemHolder itemHolder, int i) {
       //  StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams)itemHolder.root.getLayoutParams();
        // p.setFullSpan(true);
+        if(i==0) {
+            //Log.d(TAG, "arraylist.size() = " + arraylist.size());
+            int count = arraylist.size();
+            TextView textView = mContext.findViewById(R.id.songs_count);
+            ((TextView)mContext.findViewById(R.id.songs_count)).setText(""+count);
+
+        }
         Song localItem = arraylist.get(i);
+        itemHolder.count.setText((i+1)+"");
         itemHolder.title.setText(localItem.title);
         itemHolder.artist.setText(localItem.artistName);
         ImageLoader.getInstance().displayImage(TimberUtils.getAlbumArtUri(localItem.albumId).toString(),itemHolder.albumArt,new DisplayImageOptions.Builder().cacheInMemory(true).showImageOnFail(R.drawable.ic_empty_music2).resetViewBeforeLoading(true).build());
@@ -92,10 +104,59 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
         ((RippleDrawable) itemHolder.root.getBackground()).setColor(ColorStateList.valueOf(Tool.getSurfaceColor()));
         setOnPopupMenuListener(itemHolder,i);
     }
+
     private void setOnPopupMenuListener(ItemHolder itemHolder, final int position) {
         itemHolder.popupMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+            RoundedBottomSheetDialogFragment sheet =  RoundedBottomSheetDialogFragment.newInstance();
+            sheet.show(mContext.getSupportFragmentManager(),
+                        "song_popup_menu");
+            sheet.setListener(new RoundedBottomSheetDialogFragment.BottomSheetListener() {
+                @Override
+                public boolean onButtonClick(int id) {
+                    switch (id) {
+                        case R.id.popup_song_remove_playlist:
+                            TimberUtils.removeFromPlaylist(mContext, arraylist.get(position).id, playlistId);
+                            removeSongAt(position);
+                            notifyItemRemoved(position);
+                            break;
+                        case R.id.popup_song_play:
+                            MusicPlayer.playAll(mContext, songIDs, position, -1, TimberUtils.IdType.NA, false);
+                            break;
+                        case R.id.popup_song_play_next:
+                            long[] ids = new long[1];
+                            ids[0] = arraylist.get(position).id;
+                            MusicPlayer.playNext(mContext, ids, -1, TimberUtils.IdType.NA);
+                            break;
+                        case R.id.popup_song_goto_album:
+                            //TODO:   NavigationUtils.goToAlbum(mContext, arraylist.get(position).albumId);
+                            break;
+                        case R.id.popup_song_goto_artist:
+                            //TODO: NavigationUtils.goToArtist(mContext, arraylist.get(position).artistId);
+                            break;
+                        case R.id.popup_song_addto_queue:
+                            long[] _id = new long[1];
+                            _id[0] = arraylist.get(position).id;
+                            MusicPlayer.addToQueue(mContext, _id, -1, TimberUtils.IdType.NA);
+                            break;
+                        case R.id.popup_song_addto_playlist:
+                            //TODO: AddPlaylistDialog.newInstance(arraylist.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
+                            break;
+                        case R.id.popup_song_share:
+                            TimberUtils.shareTrack(mContext, arraylist.get(position).id);
+                            break;
+                        case R.id.popup_song_delete:
+                            long[] deleteIds = {arraylist.get(position).id};
+                            TimberUtils.showDeleteDialog(mContext, arraylist.get(position).title, deleteIds, SmallSongListAdapter.this, position);
+                            break;
+                    }
+                        return true;
+                    }
+                }
+            );
+            ;
+                if(true) return;
                 final PopupMenu menu = new PopupMenu(mContext, v);
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
@@ -140,6 +201,7 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
                     }
                 });
                 menu.inflate(R.menu.popup_song);
+
                 menu.show();
                 if(isPlaylist)
                     menu.getMenu().findItem(R.id.popup_song_remove_playlist).setVisible(true);
@@ -155,6 +217,7 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
         protected View root;
         protected ImageView albumArt, popupMenu;
         protected ImageView quickPlayPause;
+        protected TextView count;
         //TODO: Add an time circular progress view
         //  Thêm một view hiển thị thời gian chạy hình tròn tại view đang phát
         public ItemHolder(View view) {
@@ -165,6 +228,7 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
             this.albumArt = view.findViewById(R.id.album_art);
             this.popupMenu = view.findViewById(R.id.popup_menu);
             this.quickPlayPause = view.findViewById(R.id.quick_play_pause_button);
+            this.count = view.findViewById(R.id.count);
             // TODO : findViewByID visualizer
             view.setOnClickListener(this);
         }

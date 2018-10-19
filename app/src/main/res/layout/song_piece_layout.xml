@@ -23,22 +23,32 @@
           android:textSize="@dimen/header1_text_size"
           android:text="@string/songs"
           android:textColor="@android:color/black"/>
-      <ImageView
-          android:layout_width="50dp"
-          android:layout_height="match_parent"
+
+      <TextView
+          android:id="@+id/songs_count"
+          android:layout_width="wrap_content"
+          android:layout_height="30dp"
+          android:singleLine="true"
+          android:layout_centerVertical="true"
+          android:layout_marginLeft="10dp"
+          android:paddingLeft="12dp"
+          android:paddingRight="12dp"
           android:layout_toRightOf="@id/songs_piece_header"
-          android:src="@drawable/icons8_right"
-          android:scaleType="centerInside"
-          android:padding="12dp"
-          />
-      <com.ldt.musicr.views.GridRecyclerIndicator
-          android:layout_width="100dp"
+          android:text="4"
+       android:background="@drawable/count_round_drawable"
+          android:gravity="center"
+          android:textColor="@color/FlatYellow" />
+      <TextView
+          android:id="@+id/song_see_all"
+          android:layout_width="wrap_content"
           android:layout_height="match_parent"
+          android:text="@string/see_all"
+          android:textColor="#888"
+          android:gravity="center"
+          android:paddingRight="15dp"
+          android:paddingLeft="15dp"
           android:layout_alignParentRight="true"
-          app:avi_animation_enable="true"
-          app:avi_drawable="@color/FlatPink"
-          app:avi_drawable_unselected="@color/FlatOrange"
-          android:id="@+id/circleIndicator" />
+          />
   </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

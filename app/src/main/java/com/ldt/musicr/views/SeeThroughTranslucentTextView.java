@@ -45,7 +45,7 @@ public class SeeThroughTranslucentTextView extends AppCompatTextView{
     private void init() {
         mPaint = new Paint();
         mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-        super.setTextColor(Color.BLACK);
+        super.setTextColor(0xaaffffff);
         super.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 

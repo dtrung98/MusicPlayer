@@ -103,92 +103,13 @@ public class PlaylistControllerFragment extends BaseTabLayerFragment implements 
     {
         return  (FrameLayout)getActivity().findViewById(id);
     }
-    private View.OnClickListener avatarOnclick = new View.OnClickListener()
-    {
-        @Override
-        public void onClick(View v) {
-            if(MainScreenFragment.DanhSachPhat.size()==0) return;
 
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            int number = rnd.nextInt(MainScreenFragment.DanhSachPhat.size());
-            position_song=number;
-            Song_OnLoad song = MainScreenFragment.DanhSachPhat.get(number);
-            Log_A_Song(song);
-            setInformationPlayer(song);
-
-            // get and set avatar image
-            if (avatar_bitmap != null) avatar_bitmap.recycle();
-            Bitmap original=null;
-            Bitmap sample = null;
-            String albumPath= song.AlbumArt_path;
-            line("Song",1);
-            if(albumPath!=null&&albumPath!=""&& Tool.Path_Is_Exist(albumPath)==2)
-                try {
-                    line("Song",2);
-                    original = BitmapFactory.decodeFile(albumPath);
-                    options.inSampleSize=Tool.Avatar.getDevideSize(38,original);
-                    sample = BitmapFactory.decodeFile(albumPath, options);
-                }
-                catch (Exception e) {
-                    line("Song",3);
-                    original = BitmapFactory.decodeResource(getResources(),R.drawable.default_image);
-                    options.inSampleSize=Tool.Avatar.getDevideSize(38,original);
-                    sample = BitmapFactory.decodeResource(getResources(),R.drawable.default_image, options);
-
-                }
-            line("Song",4);
-            if(original==null)  {line("Song",41); original = BitmapFactory.decodeResource(getResources(),R.drawable.default_image); }
-            options.inSampleSize=Tool.Avatar.getDevideSize(38,original);
-            Log.d("Song","Original ScreenSize = ["+original.getWidth()+"x"+original.getHeight()+"], Sameple Devide = "+ options.inSampleSize);
-            if(sample==null)  {line("Song",42);  sample = BitmapFactory.decodeResource(getResources(),R.drawable.default_image,options); }
-            Log.d("Song","Sample ScreenSize = ["+sample.getWidth()+"x"+sample.getHeight()+"]");
-
-            line("Song",5);
-            Bitmap update_sar = BitmapEditor.updateSat(original, 1f);
-            line("Song",6);
-            original.recycle();
-            avatar_bitmap = update_sar;
-            Bitmap sample_update = BitmapEditor.updateSat(sample, 3);
-
-            Bitmap blur_sample = BitmapEditor.fastblur(sample_update, 1, 6);
-            int[] colorr = BitmapEditor.getAverageColorRGB(blur_sample);
-            int colorr_int = Color.rgb(colorr[0], colorr[1], colorr[2]);
-            lnr(R.id.lnr_z1).setBackgroundColor(colorr_int);
-            sample.recycle();
-            sample = null;
-            sample_update.recycle();
-            blur_sample.recycle();
-            imv(R.id.album_art_f).setImageBitmap(avatar_bitmap);
-
-            if(Build.VERSION.SDK_INT>=19)
-            {
-                black_theme = BitmapEditor.PerceivedBrightness(105,colorr);
-                if(black_theme) {
-                    rootView.setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                                    //      | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE
-                    );
-                    ((ImageButton)getActivity().findViewById(R.id.image_down_player_f)).setImageResource(R.drawable.down_white);
-                }
-                else {
-                    rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                            |View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-                            //      | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    ((ImageButton)getActivity().findViewById(R.id.image_down_player_f)).setImageResource(R.drawable.down_player);
-
-                }
-            }
-        }
-
-    };
 
 
     @Override
     public void onUpdateLayer(TabLayerController.Attr attr, float pcOnTopLayer, int active_i) {
         // Todo : update layout
-        if(active_i==0) rootView.setRoundNumber(attr.Pc,true);
+        if(active_i==0) rootView.setRoundNumber(attr.getPc(),true);
         else if(active_i>=1) {
             rootView.setDarken(pcOnTopLayer*0.3f,false);
             rootView.setRoundNumber(1,true);
@@ -213,6 +134,11 @@ public class PlaylistControllerFragment extends BaseTabLayerFragment implements 
     @Override
     public MarginValue maxPosition() {
         return MarginValue.STATUS_HEIGHT;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        return false;
     }
 
     @Override

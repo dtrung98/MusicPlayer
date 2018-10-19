@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.FrameLayout;
+import android.widget.Switch;
 
 import com.ldt.musicr.fragments.MusicControllerFragment;
 import com.ldt.musicr.fragments.TabLayerController;
@@ -37,6 +38,8 @@ public class MainActivity extends BaseActivity  {
 
     public void openAndCloseDrawer()
     {
+
+
         if(!openedDrawer) {
             InitializeBackWall();
             mainScreenFragment =MainScreenFragment.Initialize(this);
@@ -107,13 +110,14 @@ public class MainActivity extends BaseActivity  {
 
         musicControllerFragment = new MusicControllerFragment();
         playlistControllerFragment = new PlaylistControllerFragment();
-        TabLayerController.TabLayerCallBack tabSwitcher = new TabLayerController.TabLayerCallBack() {
+        TabLayerController.BaseTabLayer tabSwitcher = new TabLayerController.BaseTabLayer() {
             @Override
             public void onUpdateLayer(TabLayerController.Attr attr, float pcOnTopLayer, int active_i) {
 
                 if(active_i==0) {  // onTopLayer
                     TabSwitcherFrameLayout.setDarken(0.3f*(1-pcOnTopLayer),false);
-                    TabSwitcherFrameLayout.setRoundNumber(1-pcOnTopLayer,false);
+                    TabSwitcherFrameLayout.setRoundNumber(1-pcOnTopLayer,true);
+
                     TabSwitcherFrameLayout.setScaleX(0.9f+0.1f*pcOnTopLayer);
                     TabSwitcherFrameLayout.setScaleY(0.9f+0.1f*pcOnTopLayer);
                     TabSwitcherFrameLayout.setTranslationY(-tabLayerController.ScreenSize[1]*(1- 0.9f -0.1f*pcOnTopLayer)/2.0f);
@@ -163,6 +167,11 @@ public class MainActivity extends BaseActivity  {
             }
 
             @Override
+            public boolean onBackPressed() {
+               return onBackUILayer();
+            }
+
+            @Override
             public MarginValue minPosition() {
                 return MarginValue.VALUE_STT_50DIP;
             }
@@ -174,6 +183,7 @@ public class MainActivity extends BaseActivity  {
 
         };
         tabLayerController.addBaseListener(tabSwitcher,0);
+        tabLayerController.getMyAttr(tabSwitcher).upInterpolator = 5;
         tabLayerController.addTabLayerFragment(musicControllerFragment,0);
         tabLayerController.addTabLayerFragment(playlistControllerFragment,0);
         //TODO: add mainscreenFragment

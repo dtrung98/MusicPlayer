@@ -2,19 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/playlist_root">
-<ImageView
-    android:layout_width="150dp"
-    android:layout_height="150dp"
+    android:id="@+id/playlist_root"
+    android:layout_marginLeft="10dp"
+    >
+<com.ldt.musicr.views.ShadowBackgroundImageView
+    android:layout_width="135dp"
+    android:layout_height="135dp"
     android:id="@+id/playlist_image"
-    android:padding="5dp"
+    android:padding="6dp"
+
     android:src="@drawable/default_image_round"
+    android:background="@drawable/shadow"
    />
     <TextView
-        android:layout_width="150dp"
+        android:layout_width="135dp"
         android:layout_height="50dp"
         android:paddingTop="4dp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="12dp"
         android:paddingRight="10dp"
         android:ellipsize="end"
         android:id="@+id/playlist_title"
@@ -22,10 +26,10 @@
         android:layout_below="@id/playlist_image"
         android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:textStyle="bold"/>
+       />
     <View
-        android:layout_width="150dp"
-        android:layout_height="200dp"
+        android:layout_width="135dp"
+        android:layout_height="185dp"
         android:id="@+id/playlist_over"
         android:background="@drawable/ripple_effect"/>
 </RelativeLayout>
