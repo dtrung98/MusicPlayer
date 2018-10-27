@@ -1,0 +1,135 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/dp_8"
+    android:layout_marginTop="@dimen/dp_8"
+    android:layout_marginLeft="3dp"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="35dp"
+        android:layout_height="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/slide_up_down_icon_drawable"/>
+    <TextView
+        android:id="@+id/popup_song_play"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="12dp"
+        android:text="@string/play"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/popup_song_play_next"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/play_next"
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/popup_song_addto_queue"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/add_to_queue"
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/popup_song_addto_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/add_to_playlist"
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/popup_song_goto_album"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/go_to_album"
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/popup_song_goto_artist"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/go_to_artist"
+
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:layout_marginTop="@dimen/md_bottom_sheet_separator_top_margin"
+        android:background="#ddd" />
+    <TextView
+        android:id="@+id/popup_song_share"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+        android:gravity="start|center_vertical"
+        android:text="@string/share"
+        android:paddingLeft="12dp"
+        android:textColor="@color/md_bottom_sheet_text_color"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/popup_song_remove_playlist"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:gravity="start|center_vertical"
+        android:paddingLeft="12dp"
+        android:text="@string/delete_from_playlist"
+        android:textColor="@color/HeavyRed"
+        android:textSize="16sp"
+     />
+    <TextView
+        android:id="@+id/popup_song_delete"
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginStart="@dimen/dp_16"
+        android:backgroundTint="@android:color/white"
+
+        android:gravity="start|center_vertical"
+        android:paddingLeft="12dp"
+        android:text="@string/delete_from_device"
+        android:textColor="@color/FlatRed"
+        android:textSize="16sp" />
+
+</LinearLayout>
