@@ -189,4 +189,6 @@
     <string name="delete_from_device">Xóa khỏi thiết bị</string>
     <string name="share">Chia sẻ</string>
     <string name="see_all">Xem tất cả</string>
+    <string name="play_random">Chơi ngẫu nhiên</string>
+    <string name="play_all_songs">Chơi tất cả</string>
 </resources>

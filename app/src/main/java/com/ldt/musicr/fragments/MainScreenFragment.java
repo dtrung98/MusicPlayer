@@ -339,10 +339,12 @@ public class MainScreenFragment extends FragmentPlus implements MusicStateListen
             if(mSongsListAdapter!=null) {
 
                 mSongsListAdapter.arraylist = SongLoader.getAllSongs(getActivity());
+            count_song.setText(String.valueOf(mSongsListAdapter.arraylist.size()));
                 mSongsListAdapter.notifyDataSetChanged();
             }
         if(mPlaylistAdapter!=null) {
                 mPlaylistAdapter.arraylist = PlaylistLoader.getPlaylists(getActivity(),true);
+                count_playlist.setText(String.valueOf( mPlaylistAdapter.arraylist.size()));
                 mPlaylistAdapter.notifyDataSetChanged();
         }
     }

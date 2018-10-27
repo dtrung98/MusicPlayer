@@ -171,9 +171,9 @@ public class PlaylistPagerFragment extends FragmentPlus implements MusicStateLis
         titleView.setTextColor(surface);
         artistView.setTextColor(surface);
 
-        randomButton.setTextColor(heavy_surface);
-      playAllButton.setIconColor(heavy_surface);
-        playAllButton.setTextColor(heavy_surface);
+        randomButton.setTextColor(surface);
+      playAllButton.setIconColor(surface);
+        playAllButton.setTextColor(surface);
         if(bitmap!=null) {
 
             artView.setImageBitmap(bitmap);

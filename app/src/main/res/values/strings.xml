@@ -191,4 +191,6 @@
     <string name="delete_from_device">Delete from device</string>
     <string name="share">Share</string>
     <string name="see_all">See All</string>
+    <string name="play_random">Play random</string>
+    <string name="play_all_songs">Play all songs</string>
 </resources>

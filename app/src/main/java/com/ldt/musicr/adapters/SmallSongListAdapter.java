@@ -77,13 +77,7 @@ public class SmallSongListAdapter extends RecyclerView.Adapter<SmallSongListAdap
     public void onBindViewHolder(ItemHolder itemHolder, int i) {
       //  StaggeredGridLayoutManager.LayoutParams p = (StaggeredGridLayoutManager.LayoutParams)itemHolder.root.getLayoutParams();
        // p.setFullSpan(true);
-        if(i==0) {
-            //Log.d(TAG, "arraylist.size() = " + arraylist.size());
-            int count = arraylist.size();
-            TextView textView = mContext.findViewById(R.id.songs_count);
-            ((TextView)mContext.findViewById(R.id.songs_count)).setText(""+count);
 
-        }
         Song localItem = arraylist.get(i);
         itemHolder.count.setText((i+1)+"");
         itemHolder.title.setText(localItem.title);

@@ -67,7 +67,7 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:minHeight="30dp"
-                android:text="Love your self "
+
                 android:textColor="@color/FlatYellow"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -84,7 +84,7 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:minHeight="25dp"
-                android:text="Various Artists"
+
                 android:textColor="@color/HeavyYellow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/Art"
@@ -105,13 +105,14 @@
             android:background="@android:color/transparent"
             android:paddingLeft="10dp"
             android:paddingTop="6dp"
-            app:fb_useSystemFont= "true"
+            fancy:fb_defaultColor="#F7F6F4"
+            fancy:fb_useSystemFont= "true"
             android:paddingRight="10dp"
             android:paddingBottom="6dp"
-            android:text="Play all songs"
+            android:text="@string/play_all_songs"
 
             app:fb_textGravity="left"
-            fancy:fb_defaultColor="@android:color/transparent"
+
             fancy:fb_fontIconResource="&#xf04b;"
             fancy:fb_fontIconSize="10sp"
             fancy:fb_iconPosition="left"
@@ -134,10 +135,10 @@
             android:paddingTop="6dp"
             android:paddingRight="10dp"
             android:paddingBottom="6dp"
-            android:text="Random Play"
-            app:fb_useSystemFont= "true"
-            app:fb_textGravity="left"
-            fancy:fb_defaultColor="@android:color/transparent"
+            android:text="@string/play_random"
+            fancy:fb_useSystemFont= "true"
+
+            fancy:fb_defaultColor="#F7F6F4"
 
             fancy:fb_radius="15dp"
             fancy:fb_textColor="@color/FlatYellow"
