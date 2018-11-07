@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
    android:id="@+id/playlist_pager_collapsing_toolbar"
-    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+
 
     android:minHeight="96dp"
     app:titleEnabled="false">

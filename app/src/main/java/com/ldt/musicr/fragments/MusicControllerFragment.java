@@ -1083,7 +1083,6 @@ public class MusicControllerFragment extends BaseTabLayerFragment implements Bub
     private  class loadPlaying extends AsyncTask<Void,Void,String> {
         @Override
         protected String doInBackground(Void... voids) {
-
            long newID = MusicPlayer.getCurrentAudioId();
            String result="";
            if(newID!=mID) {
