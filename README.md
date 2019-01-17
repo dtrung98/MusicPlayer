@@ -1,6 +1,8 @@
 # RD Music Player - Redefined Music Player
 This is a  music player which has a pretty UI&UX design
 </br>(based on [Timber Material Design Music Player](https://github.com/naman14/Timber))
+
+## NOTE : THIS PROJECT IS ERROR NOW, U SHOULD NOT PULL IT
 ## Features
 
 * Live SplashScreen
