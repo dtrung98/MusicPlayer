@@ -27,7 +27,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
- * This database tracks the number of play counts for an individual song.  This is used to drive
+ * This database tracks the number of shuffle counts for an individual song.  This is used to drive
  * the top played tracks as well as the playlist images
  */
 
@@ -78,7 +78,7 @@ public class SongPlayCount {
     }
 
     /**
-     * Calculates the score of the song given the play counts
+     * Calculates the score of the song given the shuffle counts
      *
      * @param playCounts an array of the # of times a song has been played for each week
      *                   where playCounts[N] is the # of times it was played N weeks ago
@@ -135,7 +135,7 @@ public class SongPlayCount {
     }
 
     public void onCreate(final SQLiteDatabase db) {
-        // create the play count table
+        // create the shuffle count table
         // WARNING: If you change the order of these columns
         // please update getColumnIndexForWeek
         StringBuilder builder = new StringBuilder();
@@ -170,9 +170,9 @@ public class SongPlayCount {
     }
 
     /**
-     * Increases the play count of a song by 1
+     * Increases the shuffle count of a song by 1
      *
-     * @param songId The song id to increase the play count
+     * @param songId The song id to increase the shuffle count
      */
 
     public void bumpSongCount(final long songId) {
@@ -211,7 +211,7 @@ public class SongPlayCount {
      *
      * @param database  a writeable database
      * @param id        the id of the track to bump
-     * @param bumpCount whether to bump the current's week play count by 1 and adjust the score
+     * @param bumpCount whether to bump the current's week shuffle count by 1 and adjust the score
      */
 
     private void updateExistingRow(final SQLiteDatabase database, final long id, boolean bumpCount) {
@@ -293,7 +293,7 @@ public class SongPlayCount {
                 float score = cursor.getFloat(scoreIndex) + getScoreMultiplierForWeek(0);
                 values.put(SongPlayCountColumns.PLAYCOUNTSCORE, score);
 
-                // increase the play count by 1
+                // increase the shuffle count by 1
                 values.put(getColumnNameForWeek(0), cursor.getInt(getColumnIndexForWeek(0)) + 1);
 
                 // update the entry

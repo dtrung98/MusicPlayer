@@ -3,7 +3,7 @@ package com.ldt.musicr;
 import android.app.Application;
 
 import com.ldt.musicr.permission.Nammu;
-import com.ldt.musicr.utils.PreferencesUtility;
+import com.ldt.musicr.util.PreferencesUtility;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;

@@ -38,7 +38,7 @@
                     android:layout_marginRight="8dp"
                     android:visibility="invisible"/>
             </FrameLayout>
-            <com.ldt.musicr.views.SeeThroughFrameLayout
+            <com.ldt.musicr.ui.widget.SeeThroughFrameLayout
                 android:id="@+id/see_throughFrameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -54,7 +54,7 @@
                     android:background="@color/FlatGreen"
                     android:text="Button"
                     android:layout_gravity="center"/>
-            </com.ldt.musicr.views.SeeThroughFrameLayout>
+            </com.ldt.musicr.ui.widget.SeeThroughFrameLayout>
         </LinearLayout>
         <ImageView
             android:id="@+id/image_sample"

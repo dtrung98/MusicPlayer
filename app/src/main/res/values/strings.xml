@@ -52,9 +52,6 @@
     <string name="error_playing_track">Error Playing Track</string>
 
 
-
-
-
     <string name="accessibility_play">Play</string>
     <string name="accessibility_pause">Pause</string>
     <string name="accessibility_next">Next</string>
@@ -193,4 +190,12 @@
     <string name="see_all">See All</string>
     <string name="play_random">Play random</string>
     <string name="play_all_songs">Play all songs</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="splash">Splash</string>
+    <string name="feature">Feature</string>
+    <string name="more">More</string>
+    <string name="search_string">Search</string>
+    <string name="genres">Genres</string>
+    <string name="random_play">Random play</string>
+    <string name="sort">Sort</string>
 </resources>

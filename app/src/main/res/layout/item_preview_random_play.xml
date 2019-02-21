@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.makeramen.roundedimageview.RoundedImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/image"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:src="@drawable/photo"
+    app:riv_corner_radius="50dp"
+    app:riv_border_color="@color/shuffle_panel_color"
+    app:riv_border_width="2dp"
+    android:padding="3dp"/>
+

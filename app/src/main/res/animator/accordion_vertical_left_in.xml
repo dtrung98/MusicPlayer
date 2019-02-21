@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" >
+    <objectAnimator
+        android:propertyName="accordionVerticalPivotZero"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:valueType="floatType" />
+</set>

@@ -4,10 +4,8 @@ package com.ldt.musicr.fragments;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ldt.musicr.InternalTools.Tool;
-import com.ldt.musicr.MediaData.FormatDefinition.SimpleSong;
-import com.ldt.musicr.MediaData.MS_AudioField;
-import com.ldt.musicr.MediaData.MediaLoader;
-import com.ldt.musicr.activities.SupportFragmentPlusActivity;
-import com.ldt.musicr.activities.MainActivity;
+import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.mediadata.oldmodel.SimpleSong;
+import com.ldt.musicr.mediadata.MS_AudioField;
+import com.ldt.musicr.mediadata.MediaLoader;
+import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;
+import com.ldt.musicr.ui.main.MainActivity;
 import com.ldt.musicr.R;
 
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 
 
@@ -160,8 +157,7 @@ public class ShowMusicSongs extends FragmentPlus {
 
     private void hideThisFragment()
     {
-        MainActivity mA = (MainActivity) getActivity();
-        mA.pushFragment(SeeThroughFragment.Initialize(mA),true);
+
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,7 +171,6 @@ public class ShowMusicSongs extends FragmentPlus {
         Completed = true;
         MergerUi();
         SetAllClick();
-   ClickToShowAlbumLoader();
     }
 
     @Override
@@ -193,28 +188,7 @@ public class ShowMusicSongs extends FragmentPlus {
     }
     private boolean Completed =false;
 
-    private void ClickToShowAlbumLoader()
-    {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(final Void... unused) {
-              //  MediaLoader.StartToRefresh(CR);
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-
-                label_AlbumList.setText("Hide This Fragment ("+MediaLoader.simpleSongs.size()+")");
-         listView.setAdapter(baseAdapter);
-            }
-        }.execute();
-
-        // show Album by a ListView
-        //    helper.getListViewSize(listView);
-        //    Toast.makeText(getActivity(),"Run completely, there are "+albumList.size()+" album !",Toast.LENGTH_SHORT).show();
-
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

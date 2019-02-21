@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="#66333333"
+   >
+    <!--android:background="@color/FlatBlue">-->
+   <ImageView
+       android:id="@+id/image"
+       android:layout_width="75dp"
+       android:layout_height="75dp"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintEnd_toEndOf="parent"
+       app:layout_constraintTop_toTopOf="parent"
+       android:layout_marginTop="175dp"
+       android:src="@drawable/storage"
+       android:elevation="1dp"
+       />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/image"
+        android:background="@color/backward_color"/>
+    <com.ldt.musicr.ui.widget.SeeThroughTranslucentTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        android:background="@color/backward_color"
+        android:text="Access External Storage"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+    <com.ldt.musicr.ui.widget.SeeThroughTranslucentTextView
+        android:id="@+id/detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:background="@color/backward_color"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Music ® needs storage permission to access your music library. Without this permission, application can not be run."/>
+    <TextView
+        android:id="@+id/allow_button"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Allow access"
+        app:layout_constraintTop_toBottomOf="@id/detail"
+        android:textColor="#DD007AFF"
+        android:background="@drawable/green_round_support_touch"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:elevation="1dp"
+        android:clickable="true"
+        android:focusable="true"/>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/detail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/backward_color"/>
+</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -22,12 +22,12 @@ android:layout_height="wrap_content">
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/songs_piece_header"
+        android:layout_below="@id/albums_piece_header"
         android:layout_marginStart="@dimen/title_text_margin_left"
         android:layout_marginLeft="@dimen/title_text_margin_left"
         android:background="#aaaaaaaa"/>
     <FrameLayout
-        android:layout_below="@id/songs_piece_header"
+        android:layout_below="@id/albums_piece_header"
         android:layout_width="match_parent"
         android:id="@+id/titleList"
         android:layout_height="wrap_content">

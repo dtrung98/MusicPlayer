@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ldt.musicr.views.CustomAudioWaveView"
+    tools:context="com.ldt.musicr.ui.widget.CustomAudioWaveView"
     android:layout_marginTop="0dp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,13 +13,13 @@
         android:layout_width="wrap_content"
         android:layout_height="0px"
         android:layout_weight="1">
-        <com.ldt.musicr.views.soundfile.WaveformView
+        <com.ldt.musicr.ui.widget.soundfile.WaveformView
             android:id="@+id/waveform"
             android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.ldt.musicr.views.soundfile.MarkerView
+        <com.ldt.musicr.ui.widget.soundfile.MarkerView
             android:id="@+id/startmarker"
             android:nextFocusDown="@+id/endmarker"
             android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:contentDescription="@string/start_marker"
             android:visibility="gone"/>
 
-        <com.ldt.musicr.views.soundfile.MarkerView
+        <com.ldt.musicr.ui.widget.soundfile.MarkerView
             android:id="@+id/endmarker"
             android:nextFocusUp="@+id/startmarker"
             android:nextFocusDown="@+id/info"
@@ -169,7 +169,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center"
             android:layout_marginBottom="12dp">
-            <com.ldt.musicr.views.SeeThroughTextView
+            <com.ldt.musicr.ui.widget.SeeThroughTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0:32"
@@ -193,7 +193,7 @@
                     android:background="@android:color/black"
                     android:layout_gravity="bottom"/>
             </FrameLayout>
-            <com.ldt.musicr.views.SeeThroughTextView
+            <com.ldt.musicr.ui.widget.SeeThroughTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"

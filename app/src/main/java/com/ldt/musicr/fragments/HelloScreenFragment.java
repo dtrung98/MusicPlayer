@@ -19,14 +19,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ldt.musicr.InternalTools.Tool;
-import com.ldt.musicr.activities.MainActivity;
+import com.ldt.musicr.ui.main.MainActivity;
 import com.ldt.musicr.R;
-import com.ldt.musicr.activities.SupportFragmentPlusActivity;
+import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;
 
 import static com.ldt.musicr.services.MusicService.NEXT_ACTION;
 import static com.ldt.musicr.services.MusicService.PREVIOUS_ACTION;
@@ -80,7 +78,7 @@ public class HelloScreenFragment extends FragmentPlus implements View.OnTouchLis
             int id = v.getId();
             switch (id)
             {
-                case R.id.touchMeToContinue :touchMeToContinue();return;
+                case R.id.touchMeToContinue :return;
                 case R.id.touchToShowNotification:touchToShowNotification();return;
             }
         }
@@ -120,12 +118,7 @@ public class HelloScreenFragment extends FragmentPlus implements View.OnTouchLis
 
         return PendingIntent.getService(getActivity(), 0, intent, 0);
     }
-    private void touchMeToContinue()
-    {
-        MainActivity mainScreenFragment = (MainActivity)getActivity();
-   //     FadeInFadeOutTransition.RemoveFragmentAndTransform(this, mainScreenFragment.uilayer);
-        mainScreenFragment.pushFragment(ShowMusicSongs.Initialize(getActivity()),true);
-    }
+
     private void Nothing()
     {
         Bitmap bitmap = Bitmap.createBitmap(500,500, Bitmap.Config.ARGB_8888);

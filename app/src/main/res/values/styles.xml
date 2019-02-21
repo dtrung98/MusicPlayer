@@ -1,22 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <!--item name="android:fontFamily">@font/opensans</item>
-        <item name="fontFamily">@font/opensans</item-->
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="colorPrimary">@color/FlatWhite</item>
         <item name="colorAccent">#FF5676</item>
-        <item name="windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
 
-        <!--item name="android:fontFamily">@font/hn</item-->
-        <!-- Status bar stuff. -->
     </style>
+
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@android:color/black</item>
     </style>
@@ -24,6 +20,7 @@
     <style name="Widget.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
         <item name="android:contentDescription">@string/accessibility_overflow</item>
     </style>
+
     <style name="FlatRedTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/FlatRed</item>
         <item name="colorPrimaryDark">@color/FlatRed</item>
@@ -129,4 +126,8 @@
     <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
     <string name="accessibility_overflow">Accessibility Overflow</string>
+    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
 </resources>

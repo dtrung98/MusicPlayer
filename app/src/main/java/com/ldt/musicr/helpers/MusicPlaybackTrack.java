@@ -19,7 +19,7 @@ package com.ldt.musicr.helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ldt.musicr.utils.TimberUtils;
+import com.ldt.musicr.util.TimberUtils;
 
 
 /**

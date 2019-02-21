@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
             >
-            <com.ldt.musicr.views.animated_icon.ToggleButton
+            <com.ldt.musicr.ui.widget.ToggleButton
              android:id="@+id/music_controller_toggle"
              android:layout_width="match_parent"
              android:layout_height="30dp"
@@ -135,4 +135,4 @@
             android:paddingBottom="50dp"/>
     </android.support.design.widget.CoordinatorLayout>
 
-</com.ldt.musicr.views.DarkenRoundedBackgroundFrameLayout>
+</com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout>

@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.ldt.musicr.views.animated_icon.ToggleButton
+    <com.ldt.musicr.ui.widget.ToggleButton
         android:id="@+id/music_controller_toggle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -100,7 +100,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 fancy:layout_constraintBottom_toBottomOf="parent" />
 
-            <com.ldt.musicr.views.PlayPauseButton
+            <com.ldt.musicr.ui.widget.PlayPauseButton
                 android:id="@+id/music_controller_InPause"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -153,7 +153,7 @@
             fancy:fb_textColor="@color/FlatRed"
             fancy:fb_textSize="12sp"
             /-->
-             <com.ldt.musicr.views.RoundSeeThroughTextView
+             <com.ldt.musicr.ui.widget.RoundSeeThroughTextView
                  android:id="@+id/time_textView"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
@@ -171,7 +171,7 @@
                  android:alpha="0.85"
                  android:textStyle="bold"
                  />
-            <com.ldt.musicr.views.AudioVisualSeekBar
+            <com.ldt.musicr.ui.widget.AudioVisualSeekBar
                 android:id="@+id/visual_seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

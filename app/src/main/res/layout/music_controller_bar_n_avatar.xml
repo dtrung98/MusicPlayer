@@ -5,7 +5,6 @@
         android:id="@+id/buttonBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:clickable="true"
         android:background="@drawable/ripple_effect"/>
     <FrameLayout
         android:id="@+id/music_controller_play_bar_frm"
@@ -32,8 +31,9 @@
             android:ellipsize="end"
             android:gravity="bottom"
             android:lines="1"
+            android:textStyle="bold"
             android:text="@string/the_name_of_the_song"
-            android:textColor="@android:color/black"
+            android:textColor="#444"
             android:textSize="15sp"
             android:layout_marginStart="55dp"
             android:layout_marginEnd="105dp" />
@@ -46,8 +46,9 @@
             android:layout_marginTop="27dp"
             android:ellipsize="end"
             android:lines="1"
+            android:textStyle="bold"
             android:text="@string/the_artist_of_the_song"
-            android:textColor="#888"
+            android:textColor="#777"
             android:textSize="10sp"
             android:layout_marginStart="55dp"
             android:layout_marginEnd="105dp" />
@@ -57,7 +58,7 @@
             android:layout_gravity="end"
             android:layout_marginEnd="50dp"
             android:layout_marginRight="50dp">
-            <com.ldt.musicr.views.PlayPauseButton
+            <com.ldt.musicr.ui.widget.PlayPauseButton
                 android:id="@+id/play_pause_custom"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
@@ -84,7 +85,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="fitXY"
-        android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
         android:src="@drawable/heart" />
 </FrameLayout>
 

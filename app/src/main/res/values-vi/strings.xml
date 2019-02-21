@@ -191,4 +191,8 @@
     <string name="see_all">Xem tất cả</string>
     <string name="play_random">Chơi ngẫu nhiên</string>
     <string name="play_all_songs">Chơi tất cả</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="splash">Splash</string>
+    <string name="feature">Gợi ý</string>
+    <string name="more">Thêm</string>
 </resources>

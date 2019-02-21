@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
-import com.ldt.musicr.utils.TimberUtils;
+import com.ldt.musicr.util.TimberUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;

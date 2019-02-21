@@ -2,13 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:id="@+id/activity_layout_root">
-    <com.ldt.musicr.views.GetDpView
+    <com.ldt.musicr.ui.widget.GetDpView
         android:layout_width="100dp"
         android:layout_height="5dp"
         android:id="@+id/ViewOneDp"
         android:visibility="visible"
         android:background="@android:color/transparent"/>
-<com.ldt.musicr.views.SplashScreenView
+<com.ldt.musicr.ui.widget.SplashScreenView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"

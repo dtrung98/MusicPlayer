@@ -40,4 +40,20 @@
         <attr name="shadow_dy_bottom" format="integer"/>
 
     </declare-styleable>
+
+    <declare-styleable name="RoundClippingFrameLayout">
+        <attr name="round_clip_back_color" format="color"/>
+        <attr name="round_clip_number" format="float"/>
+    </declare-styleable>
+
+    <declare-styleable name="DarkenAndRoundedBackgroundConstraintLayout">
+
+        <attr name="round_number" format="float"/>
+        <attr name="background_alpha" format="float"/>
+        <attr name="round_back_color" format="color"/>
+        <attr name="round_type" format="enum">
+            <enum name="TOP" value="0"/>
+            <enum name="ALL" value="1"/>
+        </attr>
+    </declare-styleable>
 </resources>

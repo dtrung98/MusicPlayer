@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="activity_horizontal_margin">0dp</dimen>
     <dimen name="activity_vertical_margin">0dp</dimen>
     <dimen name="text14sp">14sp</dimen>
     <dimen name="oneDP">1dp</dimen>
     <dimen name="button_control_center_size">45dp</dimen>
-    <dimen name="header1_text_size">24sp</dimen>
+    <dimen name="header1_text_size">20sp</dimen>
     <dimen name="title_text_margin_left">5dp</dimen>
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
@@ -27,4 +27,21 @@
     <dimen name="dp_160">160dp</dimen>
 
     <dimen name="md_bottom_sheet_separator_top_margin">7dp</dimen>
+    <string-array name="spinner_main_screen_array">
+        <item>@string/app_title</item>
+        <item>@string/playlists</item>
+        <item>@string/songs</item>
+        <item>@string/albums</item>
+    </string-array>
+
+    <dimen name="design_bottom_navigation_text_size" tools:override="true">11sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">11sp</dimen>
+    <dimen name="bottom_navigation_height">57dp</dimen>
+    <dimen name="now_laying_height_in_minimize_mode">50dp</dimen>
+    <dimen name="minimum_bottom_back_stack_margin">107dp</dimen>
+    <dimen name="highest_back_margin">2dp</dimen>
+    <dimen name="layer_margin_top">10dp</dimen>
+    <dimen name="item_sort_song_child_height">50dp</dimen>
+    <dimen name="item_song_child_height">51dp</dimen>
+    <dimen name="item_song_child_loader_width">24dp</dimen>
 </resources>

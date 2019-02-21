@@ -35,9 +35,9 @@ import android.widget.Toast;
 
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.dataloaders.SongLoader;
+import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
-import com.ldt.musicr.utils.TimberUtils;
+import com.ldt.musicr.util.TimberUtils;
 
 import java.util.Arrays;
 import java.util.WeakHashMap;

@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import com.ldt.musicr.InternalTools.Tool;
-import com.ldt.musicr.views.MinimizeButton;
+import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.ui.widget.MinimizeButton;
 
 
 public class MinimizePlaySwitcher {

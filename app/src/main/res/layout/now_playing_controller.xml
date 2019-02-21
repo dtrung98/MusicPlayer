@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ldt.musicr.ui.widget.rounded.DarkenAndRoundedBackgroundContraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:background_alpha="1"
+    app:round_number="0"
+    android:background="@android:color/transparent"
+    app:round_back_color="@color/background_panel_color">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Now Playing Controller"
+        android:textColor="@android:color/white"/>
+</com.ldt.musicr.ui.widget.rounded.DarkenAndRoundedBackgroundContraintLayout>

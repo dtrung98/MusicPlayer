@@ -19,9 +19,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
-import com.ldt.musicr.InternalTools.BitmapEditor;
+import com.ldt.musicr.util.uitool.BitmapEditor;
 import com.ldt.musicr.R;
-import com.ldt.musicr.activities.SupportFragmentPlusActivity;
+import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,7 +108,7 @@ public class SeeThroughFragment extends FragmentPlus {
     {
         iV_wallpaper.setScaleType(ImageView.ScaleType.CENTER_CROP);
         final SupportFragmentPlusActivity activity = (SupportFragmentPlusActivity)getActivity();
-        activity.setBlurWallpaper(iV_wallpaper);
+       // activity.setBlurWallpaper(iV_wallpaper);
     }
 
     @Override

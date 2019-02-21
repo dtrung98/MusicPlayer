@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+
+    android:singleLine="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:ellipsize="marquee"
+    android:padding="8dp"
+    android:textAlignment="inherit"
+    android:textColor="@color/FlatWhite"
+    android:gravity="center_vertical"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    android:text="Music"
+   />

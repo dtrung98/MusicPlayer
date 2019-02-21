@@ -11,7 +11,7 @@
     android:layout_width="60dp"
     android:layout_height="60dp">
     <ImageView
-        android:id="@+id/album_art"
+        android:id="@+id/image"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerVertical="true"
@@ -28,8 +28,8 @@
         <TextView
             android:maxLines="1"
             android:ellipsize="end"
-            android:id="@+id/title_song_list"
-            android:layout_toRightOf="@id/album_art"
+            android:id="@+id/title"
+            android:layout_toRightOf="@id/image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -43,8 +43,8 @@
             android:maxLines="1"
             android:layout_marginRight="7dp"
             android:ellipsize="end"
-            android:layout_toRightOf="@id/album_art"
-            android:id="@+id/artist_song_list"
+            android:layout_toRightOf="@id/image"
+            android:id="@+id/artist"
             android:layout_width="match_parent"
             android:gravity="top"
             android:layout_height="0dp"

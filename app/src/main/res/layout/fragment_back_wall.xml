@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ldt.musicr.fragments.BackWall">
+   >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,7 +17,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/BackwardColor">
+            android:background="@color/backward_color">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -37,9 +37,9 @@
                 android:gravity="center"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
-        <com.ldt.musicr.views.SeeThroughTextView
+        <com.ldt.musicr.ui.widget.SeeThroughTextView
             android:id="@+id/trade_mark"
-            android:background="@color/BackwardColor"
+            android:background="@color/backward_color"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom|center"
@@ -48,7 +48,7 @@
             android:textSize="18sp"
             android:textStyle="bold"/>
         </FrameLayout>
-            <com.ldt.musicr.views.SeeThroughLineView
+            <com.ldt.musicr.ui.widget.SeeThroughLineView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:paddingTop="25dp"
@@ -56,7 +56,7 @@
                 android:paddingRight="100dp"
                 android:paddingBottom="1dp"
                 android:layout_gravity="center"
-                android:background="@color/BackwardColor" />
+                android:background="@color/backward_color" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
             <View
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:background="@color/BackwardColor"/>
+                android:background="@color/backward_color"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -77,25 +77,25 @@
                    android:layout_width="match_parent"
                    android:layout_height="30dp"
                    android:weightSum="2">
-                   <com.ldt.musicr.views.SeeThroughTextView
+                   <com.ldt.musicr.ui.widget.SeeThroughTextView
                        android:layout_width="0dp"
                        android:layout_weight="1"
                        android:layout_height="match_parent"
-                       android:background="@color/BackwardColor"
+                       android:background="@color/backward_color"
                        android:text="Total Songs"
                        android:gravity="center"
                        android:paddingRight="15dp"/>
-                   <com.ldt.musicr.views.SeeThroughTextView
+                   <com.ldt.musicr.ui.widget.SeeThroughTextView
                        android:layout_height="match_parent"
                        android:layout_width="wrap_content"
                        android:text="•"
                        android:gravity="center"
-                       android:background="@color/BackwardColor"/>
-                   <com.ldt.musicr.views.SeeThroughTextView
+                       android:background="@color/backward_color"/>
+                   <com.ldt.musicr.ui.widget.SeeThroughTextView
                        android:layout_width="0dp"
                        android:layout_weight="1"
                        android:layout_height="match_parent"
-                       android:background="@color/BackwardColor"
+                       android:background="@color/backward_color"
                        android:text="50"
                        android:gravity="center"
                        android:paddingLeft="20dp"/>
@@ -105,25 +105,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="Total Artists"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
-                        android:background="@color/BackwardColor"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                        android:background="@color/backward_color"/>
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="23"
                         android:gravity="center"
                         android:paddingLeft="15dp"/>
@@ -133,25 +133,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="Initialized Playlists"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
-                        android:background="@color/BackwardColor"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                        android:background="@color/backward_color"/>
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="47"
                         android:gravity="center"
                         android:paddingLeft="15dp"/>
@@ -161,25 +161,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="Total Playing Time"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
-                        android:background="@color/BackwardColor"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                        android:background="@color/backward_color"/>
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="1459s"
                         android:gravity="center"
                         android:paddingLeft="15dp"/>
@@ -189,25 +189,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:weightSum="2">
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="Now Playing"
                         android:gravity="center"
                         android:paddingRight="15dp"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
                         android:text="•"
                         android:gravity="center"
-                        android:background="@color/BackwardColor"/>
-                    <com.ldt.musicr.views.SeeThroughTextView
+                        android:background="@color/backward_color"/>
+                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:background="@color/BackwardColor"
+                        android:background="@color/backward_color"
                         android:text="1st in playlists"
                         android:gravity="center"
                         android:paddingLeft="15dp"/>
@@ -216,23 +216,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:background="@color/BackwardColor"/>
+                    android:background="@color/backward_color"/>
             </LinearLayout>
             <View
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
-                android:background="@color/BackwardColor"/>
+                android:background="@color/backward_color"/>
         </LinearLayout>
             </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/BackwardColor"/>
+        android:background="@color/backward_color"/>
     </LinearLayout>
     <View
         android:id="@+id/back_wall_blank"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/BackwardColor"
+        android:background="@color/backward_color"
         android:visibility="gone" />
 </FrameLayout>

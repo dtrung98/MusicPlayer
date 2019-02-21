@@ -69,16 +69,15 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.helpers.MediaButtonIntentReceiver;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 import com.ldt.musicr.permission.Nammu;
 import com.ldt.musicr.provider.MusicPlaybackState;
 import com.ldt.musicr.provider.RecentStore;
 import com.ldt.musicr.provider.SongPlayCount;
-import com.ldt.musicr.utils.NavigationUtils;
-import com.ldt.musicr.utils.PreferencesUtility;
-import com.ldt.musicr.utils.TimberUtils;
-import com.ldt.musicr.utils.TimberUtils.IdType;
+import com.ldt.musicr.util.NavigationUtils;
+import com.ldt.musicr.util.PreferencesUtility;
+import com.ldt.musicr.util.TimberUtils;
+import com.ldt.musicr.util.TimberUtils.IdType;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
@@ -121,7 +120,7 @@ public class MusicService extends Service {
     public static final String CMDTOGGLEPAUSE = "togglepause";
     public static final String CMDSTOP = "stop";
     public static final String CMDPAUSE = "pause";
-    public static final String CMDPLAY = "play";
+    public static final String CMDPLAY = "shuffle";
     public static final String CMDPREVIOUS = "previous";
     public static final String CMDNEXT = "next";
     public static final String CMDNOTIF = "buttonId";
@@ -1030,7 +1029,7 @@ log(8);
 
     private void setNextTrack(int position) {
         mNextPlayPos = position;
-        if (D) Log.d(TAG, "setNextTrack: next play position = " + mNextPlayPos);
+        if (D) Log.d(TAG, "setNextTrack: next shuffle position = " + mNextPlayPos);
         if (mNextPlayPos >= 0 && mPlaylist != null && mNextPlayPos < mPlaylist.size()) {
             final long id = mPlaylist.get(mNextPlayPos).mId;
             mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
@@ -1269,7 +1268,7 @@ log(8);
                 ? artistName : artistName + " - " + albumName;
 
         int playButtonResId = isPlaying
-                ? R.drawable.ic_pause_white_36dp : R.drawable.ic_play_white_36dp;
+                ? R.drawable.ic_pause_black_24dp : R.drawable.ic_play_arrow_black_24dp;
 
         Intent nowPlayingIntent = NavigationUtils.getNowPlayingIntent(this);
         PendingIntent clickIntent = PendingIntent.getActivity(this, 0, nowPlayingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -1291,12 +1290,12 @@ log(8);
                 .setContentTitle(getTrackName())
                 .setContentText(text)
                 .setWhen(mNotificationPostTime)
-                .addAction(R.drawable.ic_skip_previous_white_36dp,
+                .addAction(R.drawable.ic_skip_previous_black_24dp,
                         "",
                         retrievePlaybackAction(PREVIOUS_ACTION))
                 .addAction(playButtonResId, "",
                         retrievePlaybackAction(TOGGLEPAUSE_ACTION))
-                .addAction(R.drawable.ic_skip_next_white_36dp,
+                .addAction(R.drawable.ic_skip_next_black_24dp,
                         "",
                         retrievePlaybackAction(NEXT_ACTION));
 
@@ -2075,7 +2074,7 @@ log(8);
         if (D) Log.d(TAG, "Going to next track");
         synchronized (this) {
             if (mPlaylist.size() <= 0) {
-                if (D) Log.d(TAG, "No play queue");
+                if (D) Log.d(TAG, "No shuffle queue");
                 scheduleDelayedShutdown();
                 return;
             }
@@ -2100,7 +2099,7 @@ log(8);
     public void goToPosition(int pos) {
         synchronized (this) {
             if (mPlaylist.size() <= 0) {
-                if (D) Log.d(TAG, "No play queue");
+                if (D) Log.d(TAG, "No shuffle queue");
                 scheduleDelayedShutdown();
                 return;
             }

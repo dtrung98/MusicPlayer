@@ -1,60 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-  <RelativeLayout
-      android:layout_marginTop="10dp"
-      android:layout_marginBottom="10dp"
-      android:layout_width="match_parent"
-      android:layout_height="55dp"
-      android:background="@drawable/ripple_effect"
-      android:clickable="true"
-      android:id="@+id/songs_piece_header_relative">
-      <TextView
-          android:tag="sticky|-hastransparancy"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:gravity="center_vertical"
-          android:paddingLeft="20dp"
-          android:textStyle="bold"
-          android:id="@+id/songs_piece_header"
-          android:textSize="@dimen/header1_text_size"
-          android:text="@string/songs"
-          android:textColor="@android:color/black"/>
+    <View
 
-      <TextView
-          android:id="@+id/songs_count"
-          android:layout_width="wrap_content"
-          android:layout_height="30dp"
-          android:singleLine="true"
-          android:layout_centerVertical="true"
-          android:layout_marginLeft="10dp"
-          android:paddingLeft="12dp"
-          android:paddingRight="12dp"
-          android:layout_toRightOf="@id/songs_piece_header"
-          android:text="4"
-       android:background="@drawable/count_round_drawable"
-          android:gravity="center"
-          android:textColor="@color/FlatYellow" />
-      <TextView
-          android:id="@+id/song_see_all"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:text="@string/see_all"
-          android:textColor="#888"
-          android:gravity="center"
-          android:paddingRight="15dp"
-          android:paddingLeft="15dp"
-          android:layout_alignParentRight="true"
-          />
-  </RelativeLayout>
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/ripple_effect"
+        android:clickable="true"
+        android:id="@+id/header_panel"/>
+    <TextView
+        android:tag="sticky|-hastransparancy"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/header_panel"
+        app:layout_constraintStart_toStartOf="@id/header_panel"
+        app:layout_constraintBottom_toBottomOf="@id/header_panel"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:id="@+id/title"
+        android:textSize="@dimen/header1_text_size"
+
+        android:textStyle="bold"
+        android:text="@string/songs"
+        android:textColor="@color/FlatWhite"/>
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:minWidth="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintTop_toTopOf="@id/header_panel"
+        app:layout_constraintBottom_toBottomOf="@id/header_panel"
+        app:layout_constraintStart_toEndOf="@id/title"
+        android:text="0"
+        android:singleLine="true"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:gravity="center"
+        android:textColor="@color/FlatYellow"
+        android:background="@drawable/count_round_drawable"/>
+    <View
+        android:id="@+id/refresh_front"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="@id/refresh"
+        app:layout_constraintBottom_toBottomOf="@id/refresh"
+        app:layout_constraintStart_toStartOf="@id/refresh"
+        app:layout_constraintEnd_toEndOf="@id/refresh"
+        android:background="@drawable/ripple_effect"/>
+<ImageView
+    android:id="@+id/refresh"
+    android:layout_width="76dp"
+    android:layout_height="55dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/header_panel"
+    android:src="@drawable/refresh"
+    android:padding="16dp"
+    android:rotation="180"
+    android:tint="#AAF5F5F5"
+    android:elevation="1dp"
+    />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView_N1"
-        android:descendantFocusability="blocksDescendants"
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_width="match_parent" />
-</LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_panel"
+        tools:listitem="@layout/item_feature_song"
+        tools:orientation="vertical"
+        tools:layoutManager="LinearLayoutManager"
+
+        />
+</android.support.constraint.ConstraintLayout>

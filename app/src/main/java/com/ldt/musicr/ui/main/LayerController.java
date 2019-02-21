@@ -1,0 +1,1149 @@
+package com.ldt.musicr.ui.main;
+
+
+import android.animation.ObjectAnimator;
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Interpolator;
+import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewConfiguration;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.ldt.musicr.R;
+import com.ldt.musicr.fragments.BaseLayerFragment;
+import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
+import com.ldt.musicr.ui.widget.rounded.DarkenAndRoundedBackgroundContraintLayout;
+import com.ldt.musicr.ui.widget.rounded.RoundColorable;
+import com.ldt.musicr.util.uitool.Animation;
+import com.ldt.musicr.util.Tool;
+
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ *  Lớp điều khiển cách hành xử của một giao diện gồm các layer ui chồng lên nhau
+ *  <br>Khi một layer trên cùng bật lên thì các layer khác bị lùi ra sau và thu nhỏ dần
+ *  <br>+. Layer ở càng sau thì càng nhô lên một khoảng cách so với layer trước
+ *  <br>+. Layer dưới cùng thì toàn màn hình (chiếm cả phần trạng thái) khi pc = 1. Mặt khác, nó thậm chí cho phép kéo xuống giảm pc tới 0
+ *  <br>+. Các layer còn lại khi pc = 1 sẽ bo góc và cách thanh trạng thái một khoảng cách
+ *   <br>+. Hiệu ứng kéo lên và kéo xuống, bo góc do LayerController điều khiển, tuy nhiên mỗi layer có thể custom thông số để hiệu ứng xảy ra khác nhau
+ */
+public class LayerController {
+    private static final String TAG = "LayerController";
+    public static int SINGLE_TAP_COMFIRM = 1;
+    public static int LONG_PRESSED = 2;
+    public interface BaseLayer {
+
+        /**
+         * Phương thức được gọi khi layer được Controller thay đổi thông số của layer
+         * <br>Dùng phương thức này để cập nhật ui cho layer
+         * <br>Note : Không cài đặt sự kiện chạm cho rootView
+         *<br> Thay vào đó sự kiện chạm sẽ được truyền tới hàm onTouchParentView
+         */
+       void onUpdateLayer(ArrayList<Attr> attrs, ArrayList<Integer> actives,int me);
+       void onTranslateChanged(Attr attr);
+       boolean onTouchParentView(boolean handled) ;
+       View getParent(Activity activity, ViewGroup viewGroup, int maxPosition);
+      void  onAddedToContainer(Attr attr);
+
+        /**
+         * Cài đặt khoảng cách giữa đỉnh layer và viền trên
+         * khi layer đạt vị trí max
+         * @return true : full screen, false : below the status bar and below the back_layer_margin_top
+         */
+       boolean maxPosition();
+        boolean onBackPressed();
+        /**
+         *  Cài đặt khoảng cách giữa đỉnh layer và viền dưới
+         *  khi layer đạt vị trí min
+         * @return Giá trị pixel của Margin dưới
+         */
+       int minPosition(Context context, int maxHeight);
+
+        /**
+         *  Tag nhằm phân biệt giữa các layer
+         * @return String tag
+         */
+      String tag();
+      boolean onGestureDetected(int gesture);
+    }
+    private AppCompatActivity activity;
+    public float margin_inDp = 10f;
+    public float mMaxMarginTop;
+    public float oneDp;
+    public int[] ScreenSize = new int[2];
+    public float status_height=0;
+
+    public float bottom_navigation_height;
+
+
+    // Distance to travel before a drag may begin
+    private int mTouchSlop;
+    private float mMaxVelocity;
+    private float mMinVelocity;
+
+    @BindView(R.id.child_layer_container)
+    FrameLayout mChildLayerContainer;
+
+    FrameLayout mLayerContainer;
+
+    @BindView(R.id.bottom_navigation_view)
+    BottomNavigationView mBottomNavigationView;
+
+    @BindView(R.id.bottom_navigation_parent) View mBottomNavigationParent;
+
+    @SuppressLint("ClickableViewAccessibility")
+    public LayerController(AppCompatActivity activity) {
+        this.activity =  activity;
+        oneDp = Tool.getOneDps(activity);
+        mMaxMarginTop =margin_inDp*oneDp;
+        ScreenSize[0] = ((MainActivity)activity).mRootEverything.getWidth();
+        ScreenSize[1] = ((MainActivity)activity).mRootEverything.getHeight();
+
+        listeners_size =0;
+        mBaseLayers = new ArrayList<>();
+        mBaseAttrs = new ArrayList<>();
+        this.status_height = (status_height==0)? 24*oneDp :status_height;
+
+        this.bottom_navigation_height = activity.getResources().getDimension(R.dimen.bottom_navigation_height);
+
+        mTouchListener = (view, motionEvent) -> {
+            //Log.d(TAG,"onTouchEvent");
+            for(int i = 0; i< mBaseLayers.size(); i++ )
+                if(mBaseAttrs.get(i).parent== view)
+                    return onTouchEvent(i,view,motionEvent);
+            return true;
+        };
+
+        final ViewConfiguration vc = ViewConfiguration.get(activity);
+        mTouchSlop = vc.getScaledTouchSlop();
+        mMaxVelocity = vc.getScaledMaximumFlingVelocity();
+        mMinVelocity = vc.getScaledMinimumFlingVelocity();
+        mGestureDetector = new GestureDetector(activity,mGestureListener);
+
+    }
+
+    public void init(FrameLayout layerContainer, BaseLayerFragment... fragments) {
+        mLayerContainer = layerContainer;
+
+        ButterKnife.bind(this,layerContainer);
+
+        mBaseLayers.clear();
+
+        for (int i = 0; i < fragments.length; i++) {
+            BaseLayerFragment b = fragments[i];
+            addTabLayerFragment(b,0);
+        }
+
+        mLayerContainer.setVisibility(View.VISIBLE);
+        float value = activity.getResources().getDimension(R.dimen.bottom_navigation_height);
+        mBottomNavigationParent.setTranslationY(value);
+        mBottomNavigationParent.animate().translationYBy(-value);
+        for (int i = 0; i < mBaseAttrs.size(); i++) {
+            mBaseAttrs.get(i).animateOnInit();
+        }
+        ObjectAnimator.ofArgb(mLayerContainer,"backgroundColor",0,0x11000000).setDuration(350).start();
+
+    }
+
+
+
+    /**
+     * Phương thức trả về giá trị phần trăm scale khi scale view đó để đạt được hiệu quả
+     * tương ứng như khi đặt margin phải-trái là marginInPx
+     * @param marginInPx
+     * @return
+     */
+    private float convertPixelToScaleX(float marginInPx) {
+        return 1 - marginInPx*2/ ScreenSize[0];
+    }
+
+    /**
+     *  Cập nhật lại margin lúc pc = 1 của mỗi layer
+     *  Được gọi bất cứ khi nào một pc của một layer bất kỳ được thay đổi (sự kiện chạm)
+     */
+    int focusLayer = -1;
+    int active_number = 0;
+    private void findFocusLayer() {
+        focusLayer =-1;
+
+        active_number = 0;
+        for(int i=0;i<listeners_size;i++)
+            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition) {
+                if(active_number==0) {
+                    focusLayer = i;
+                }
+                active_number++;
+            }
+    }
+    private void animateLayerChanged() {
+
+
+
+
+        // Các layer sẽ được update
+        // là các layer không bị minimize
+        ArrayList<Integer> actives = new ArrayList<>();
+        for (int i = 0; i < mBaseAttrs.size(); i++) {
+            // Reset
+            mBaseAttrs.get(i).mScaleXY =1;
+            mBaseAttrs.get(i).mScaleDeltaTranslate = 0;
+            // Only Active Layer
+            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition) {
+                //Log.d(TAG, "animateLayerChanged: runtime : "+mBaseAttrs.get(i).getRuntimePercent());
+                actives.add(i);
+            }
+            else {
+                mBaseAttrs.get(i).parent.setScaleX(mBaseAttrs.get(i).mScaleXY);
+                mBaseAttrs.get(i).parent.setScaleY(mBaseAttrs.get(i).mScaleXY);
+                mBaseAttrs.get(i).updateTranslateY();
+            }
+        }
+        // Size
+        int activeSize = actives.size();
+        //Log.d(TAG, "animateLayerChanged: size = "+activeSize);
+//        if(activeSize==1) {
+//            mBaseAttrs.get(actives.get(0)).parent.setScaleX(mBaseAttrs.get(actives.get(0)).mScaleXY);
+//            mBaseAttrs.get(actives.get(0)).parent.setScaleY(mBaseAttrs.get(actives.get(0)).mScaleXY);
+//            mBaseAttrs.get(actives.get(0)).updateTranslateY();
+//        }
+
+        // Sau đây chỉ thực hiện tính toán với các layer hiện hoạt
+
+        // Giá trị scale mới của mỗi layer theo thứ tự
+        // <br>Các layer ẩn không tính
+
+        /*
+         *  mScaleXY là giá trị tương ứng khi scale view để đạt hiệu quả
+         *  tương tự khi cài đặt viền trái để view nằm cách viền trái phải một khoảng cách mong muốn
+         */
+        float[] scaleXY = new float[activeSize];
+
+        /*
+         *  mScaleDeltaTranslate là giá trị cần phải translate view theo trục y (sau khi view đã scale)
+         *  để đỉnh của view cách màn hình một khoảng cách mong muốn
+         */
+        float[] deltaTranslateY = new float[activeSize];
+
+        // Save the percent of the top focus layer (pos 0 )
+        float pcOfFocusLayer_End = 1;
+
+        if(activeSize!=0) {
+            Attr a = mBaseAttrs.get(actives.get(0));
+
+            pcOfFocusLayer_End = a.getPercent();
+        }
+
+
+        for(int item = 1; item < activeSize; item++) {
+
+            // layer trên cùng mặc nhiên scale = 1 nên không cần phải tính
+            // nên bỏ qua item 0
+            // bắt đầu vòng lặp từ item 1
+            int position = actives.get(item);
+
+            scaleXY[item] = convertPixelToScaleX((item-1)* mMaxMarginTop *(1- pcOfFocusLayer_End)
+                    + pcOfFocusLayer_End*item* mMaxMarginTop);
+
+            // khi scale một giá trị là scaleXY[item] thì layer sẽ nhỏ đi
+            // và khi đó đó nó làm tăng viên trên thêm một giá trị trong pixel là:
+            float scale_marginY = ScreenSize[1]*(1- scaleXY[item])/2.0f;
+
+            float need_marginY = 0;
+            //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
+            if(item==1) {
+                // Layer này khác với các layer khác, nó phải đi từ vị trí maxposition -> margin của tương ứng của nó
+                need_marginY = pcOfFocusLayer_End*(mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
+            } else need_marginY = mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
+
+
+            if(activeSize==2) {
+                need_marginY -= mMaxMarginTop*pcOfFocusLayer_End;
+            } else  { // activeSize >=3
+                need_marginY -= mMaxMarginTop *(item - 1f) /(activeSize - 2f) + pcOfFocusLayer_End*(mMaxMarginTop *item/(activeSize - 1) - mMaxMarginTop*(item - 1)/(activeSize -2));
+            }
+            deltaTranslateY[item] = need_marginY - scale_marginY;
+            //Log.d(TAG, "updateLayerChanged: item "+item +", delatTranslateY = "+deltaTranslateY[item]);
+        }
+
+        // Update UI
+        Attr attr;
+        for(int item = 1;item<activeSize;item++) {
+            attr = mBaseAttrs.get(actives.get(item));
+
+            attr.mScaleXY = scaleXY[item];
+            attr.mScaleDeltaTranslate = deltaTranslateY[item];
+            //Log.d(TAG, "updateLayerChanged: deltaLayer["+item+"] = "+deltaTranslateY[item]);
+            // Scale và translate những layer phía sau
+
+            TimeInterpolator interpolator = Animation.getInterpolator(7);
+            int duration = 650;
+
+            attr.parent.animate().scaleX(attr.mScaleXY).setDuration(duration).setInterpolator(interpolator);
+            //Log.d(TAG, "animateLayerChanged: item "+actives.get(item)+" : scaleX from "+attr.parent.getScaleX()+" to "+attr.mScaleXY);
+            attr.parent.animate().scaleY(attr.mScaleXY).setDuration(duration).setInterpolator(interpolator);
+
+          //          translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
+
+            final int item_copy =  item;
+            attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
+               mBaseLayers.get(actives.get(item_copy)).onUpdateLayer(mBaseAttrs,actives,item_copy);
+            });
+        }
+
+    }
+    private void updateLayerChanged() {
+
+
+
+        // Đi từ 0 - n
+        // Chỉ xét những layer có pc !=0, gọi là layer hiện hoạt
+        // Những layer có pc = 0 sẽ bị bỏ qua và không tính vào bộ layer, gọi là layer ẩn
+        // Layer có pc !=1 nghĩa là đang có sự kiện xảy ra
+
+        // Đếm số lượng layer hiện hoạt
+        // và tìm ra on-top-layer
+        // on-top-layer là layer đầu tiên được tìm thấy có pc !=0 ( thường là khác 1)
+        // các layer còn lại mặc định có pc = 1
+        // pc của on-top-layer ảnh hưởng lên các layer khác phía sau nó
+        findFocusLayer();
+        if(focusLayer<0) return;
+
+        int touchLayer = mGestureListener.item;
+        // Các layer sẽ được update
+        // là các layer không bị minimize
+        ArrayList<Integer> actives = new ArrayList<>();
+        for (int i = 0; i < mBaseAttrs.size(); i++) {
+            // Reset
+            mBaseAttrs.get(i).mScaleXY =1;
+            mBaseAttrs.get(i).mScaleDeltaTranslate = 0;
+            // Only Active Layer
+            if(mBaseAttrs.get(i).getState()!= Attr.MINIMIZED||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition)
+                actives.add(i);
+            else {
+                mBaseAttrs.get(i).parent.setScaleX(mBaseAttrs.get(i).mScaleXY);
+                mBaseAttrs.get(i).parent.setScaleY(mBaseAttrs.get(i).mScaleXY);
+                mBaseAttrs.get(i).updateTranslateY();
+            }
+        }
+        // Size
+        int activeSize = actives.size();
+
+        if(activeSize==1) {
+            mBaseAttrs.get(actives.get(0)).parent.setScaleX(mBaseAttrs.get(actives.get(0)).mScaleXY);
+            mBaseAttrs.get(actives.get(0)).parent.setScaleY(mBaseAttrs.get(actives.get(0)).mScaleXY);
+            mBaseAttrs.get(actives.get(0)).updateTranslateY();
+        }
+
+         // Sau đây chỉ thực hiện tính toán với các layer hiện hoạt
+
+        // Giá trị scale mới của mỗi layer theo thứ tự
+        // <br>Các layer ẩn không tính
+
+        /*
+         *  mScaleXY là giá trị tương ứng khi scale view để đạt hiệu quả
+         *  tương tự khi cài đặt viền trái để view nằm cách viền trái phải một khoảng cách mong muốn
+         */
+        float[] scaleXY = new float[activeSize];
+
+        /*
+         *  mScaleDeltaTranslate là giá trị cần phải translate view theo trục y (sau khi view đã scale)
+         *  để đỉnh của view cách màn hình một khoảng cách mong muốn
+         */
+        float[] deltaTranslateY = new float[activeSize];
+
+        // Save the percent of the top focus layer (pos 0 )
+        float pcOfTopFocusLayer = 1;
+        if(activeSize!=0) pcOfTopFocusLayer = mBaseAttrs.get(actives.get(0)).getRuntimePercent();
+
+        for(int item = 1; item < activeSize; item++) {
+
+            // layer trên cùng mặc nhiên scale = 1 nên không cần phải tính
+            // nên bỏ qua item 0
+            // bắt đầu vòng lặp từ item 1
+            int position = actives.get(item);
+
+            scaleXY[item] = convertPixelToScaleX((item-1)* mMaxMarginTop *(1- pcOfTopFocusLayer)
+                    + pcOfTopFocusLayer*item* mMaxMarginTop);
+
+            // khi scale một giá trị là scaleXY[item] thì layer sẽ nhỏ đi
+            // và khi đó đó nó làm tăng viên trên thêm một giá trị trong pixel là:
+            float scale_marginY = ScreenSize[1]*(1- scaleXY[item])/2.0f;
+
+            float need_marginY = 0;
+            //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
+            if(item==1) {
+                // Layer này khác với các layer khác, nó phải đi từ vị trí maxposition -> margin của tương ứng của nó
+                need_marginY = pcOfTopFocusLayer*(mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
+            } else need_marginY = mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
+
+
+            if(activeSize==2) {
+                need_marginY -= mMaxMarginTop*pcOfTopFocusLayer;
+            } else  { // activeSize >=3
+                need_marginY -= mMaxMarginTop *(item - 1f) /(activeSize - 2f) + pcOfTopFocusLayer*(mMaxMarginTop *item/(activeSize - 1) - mMaxMarginTop*(item - 1)/(activeSize -2));
+            }
+            deltaTranslateY[item] = need_marginY - scale_marginY;
+            //Log.d(TAG, "updateLayerChanged: item "+item +", delatTranslateY = "+deltaTranslateY[item]);
+        }
+
+        // Update UI
+        Attr attr;
+        for(int item = 1;item<activeSize;item++) {
+            attr = mBaseAttrs.get(actives.get(item));
+
+            attr.mScaleXY = scaleXY[item];
+            attr.mScaleDeltaTranslate = deltaTranslateY[item];
+            //Log.d(TAG, "updateLayerChanged: deltaLayer["+item+"] = "+deltaTranslateY[item]);
+            // Scale và translate những layer phía sau
+
+                attr.parent.setScaleX(attr.mScaleXY);
+                attr.parent.setScaleY(attr.mScaleXY);
+
+                attr.updateTranslateY();
+                final int item_copy = item;
+                mBaseLayers.get(actives.get(item)).onUpdateLayer(mBaseAttrs,actives,item_copy);
+        }
+
+   }
+    private void setPositionAndSizeLayer(  Attr attr, int pos, float valuePc) {
+        // lưu pc
+     //   attr.pc(valuePc);
+        // gọi hàm cài đặt vị trí của focusLayer
+        setPosAndSizeOnTopLayer(attr, pos);
+        // cập nhật lại các layer phía sau
+        //updateTranslationLayer();
+    }
+    private void setPosAndSizeOnTopLayer( Attr attr, int pos) {
+//
+//        float maxMove = (attr.maxPosition - attr.minPosition); // đoạn đường layer có thể di chuyển : từ min -> max
+//
+//        // 0 < SelfTranslate < maxPosition - minPosition
+//        attr.mSelfTranslateY = maxMove*attr.Pc;
+//
+//        // Nếu layer đi quá vị trí cao nhất, nó phải bị thay đổi độ cao (kéo dãn ra)
+//        if(attr.mSelfTranslateY >attr.maxPosition||isOverDone(pos)) {
+//            attr.mSelfTranslateY = attr.maxPosition;
+//            // chiều cao =
+//            attr.parent.setPadding(attr.parent.getPaddingLeft(),attr.parent.getPaddingTop(),attr.parent.getPaddingRight(), (int) (attr.parent.getPaddingBottom()+
+//                                attr.mSelfTranslateY - attr.maxPosition));
+//            if(!isDown(pos)) setOverDone(pos,true);
+//        }
+        attr.updateTranslateY();
+    }
+
+
+    private ArrayList<BaseLayerFragment> mBaseLayers;
+    private ArrayList<Attr> mBaseAttrs;
+    private View.OnTouchListener mTouchListener;
+    enum MOVE_DIRECTION {
+        NONE,
+        MOVE_UP,
+        MOVE_DOWN
+    }
+    private GestureDetector mGestureDetector;
+    public SwipeGestureListener mGestureListener = new SwipeGestureListener();
+    class SwipeGestureListener extends SwipeDetectorGestureListener {
+        public boolean down = false;
+        private boolean flingMasked = false;
+        public float assignPosY0;
+        public float assignPosX0;
+        public boolean handled = true;
+        private MOVE_DIRECTION direction;
+
+
+    private float prevY;
+    private boolean isMoveUp() {
+        return direction == MOVE_DIRECTION.MOVE_UP;
+    }
+
+    private boolean isMoveDown() {
+        return direction == MOVE_DIRECTION.MOVE_DOWN;
+    }
+
+    @Override
+    public boolean onUp(MotionEvent e) {
+        down = false;
+        if(flingMasked) {
+            flingMasked = false;
+            //Log.d(TAG, "onUp: fling mask, cancelled handle");
+            return false;
+        }
+        //TODO: when user touch up, what should we do ?
+        if(onMoveUp()) {
+            if(attr.isBigger1_4())
+            attr.animateToMax(); else attr.animateToMin();
+        }
+
+        else if(onMoveDown()) {
+          if(attr.isSmaller3_4())
+            attr.animateToMin();
+          else attr.animateToMax();
+        } else {
+            if(attr.isSmaller_1_2()) attr.animateToMin(); else attr.animateToMax();
+        }
+
+
+       return false;
+    }
+        private boolean onMoveUp() {
+            return direction==MOVE_DIRECTION.MOVE_UP;
+        }
+        private boolean onMoveDown() {
+            return direction == MOVE_DIRECTION.MOVE_DOWN;
+        }
+
+    @Override
+    public boolean onMove(MotionEvent e) {
+
+        if(!down) {
+            down = true;
+            handled = true;
+            prevY = assignPosY0 = e.getRawY();
+            assignPosX0 = e.getRawX();
+            direction = MOVE_DIRECTION.NONE;
+            return handled;
+        } else {
+            if(!handled) return false;
+                float y = e.getRawY();
+            if(direction==MOVE_DIRECTION.NONE) {
+                float diffX = Math.abs(e.getRawX() - assignPosX0);
+                float diffY = Math.abs(e.getRawY() - assignPosY0);
+                if(diffX/diffY>=2) { handled = false; return false;}
+            }
+            direction = (y> prevY) ? MOVE_DIRECTION.MOVE_DOWN : (y== prevY) ? MOVE_DIRECTION.NONE : MOVE_DIRECTION.MOVE_UP;
+
+            if(isLayerAvailable()) {
+                attr.moveTo(attr.mCurrentTranslate - y + prevY);
+            }
+            //TODO: When user move and we know the direction, what should we do ?
+
+            prevY = y;
+            return handled;
+        }
+    }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+        if(direction!=MOVE_DIRECTION.NONE) return;
+            Toast.makeText(activity,"long pressed detected",Toast.LENGTH_SHORT).show();
+            if(isLayerAvailable()) layer.onGestureDetected(LONG_PRESSED);
+        }
+
+        @Override
+        public boolean onSwipeTop(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d(TAG, "onSwipeTop layer " + item);
+            if(isLayerAvailable()) {
+                attr.animateToMax();
+
+            }
+            return handled;
+        }
+
+        @Override
+        public boolean onSwipeBottom(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            Log.d(TAG, "onSwipeBottom layer "+item);
+            if(isLayerAvailable()) attr.animateToMin();
+            return handled;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+        down = true;
+        handled =true;
+        prevY = assignPosY0 = e.getRawY();
+        assignPosX0 = e.getRawX();
+        direction = MOVE_DIRECTION.NONE;
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+       //     Toast.makeText(activity,"single tap confirmed",Toast.LENGTH_SHORT).show();
+            if(isLayerAvailable()) return layer.onGestureDetected(SINGLE_TAP_COMFIRM);
+            return super.onSingleTapConfirmed(e);
+        }
+    }
+
+
+    private boolean onLayerTouchEvent(int i, View view, MotionEvent event) {
+
+        //Log.d(TAG, "event = "+logAction(event));
+        view.performClick();
+        mGestureListener.setMotionLayer(i,mBaseLayers.get(i),mBaseAttrs.get(i));
+        mGestureListener.setAdaptiveView(view);
+
+       boolean b = mGestureDetector.onTouchEvent(event);
+        boolean c = false;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE: c = mGestureListener.onMove(event); break;
+            case MotionEvent.ACTION_UP  : c =mGestureListener.onUp(event); break;
+
+        }
+        Log.d(TAG, "onLayerTouchEvent: b = "+b+", c = "+c);
+        return b||c;
+    }
+
+    private String logAction(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:return "Down";
+            case MotionEvent.ACTION_MOVE:return "Move";
+            case MotionEvent.ACTION_UP:return "UP";
+        }
+        return "Unsupported";
+    }
+    /**
+     *  Tất cả sự kiện chạm của tất cả các view được xử lý trong hàm này
+     *  Xử lý sự kiện của một view hiện thời đang xảy ra sự kiện chạm :
+     *  <br>Capture gestures as slide up, slide down, click ..
+     * @param view View đã gửi sự kiện tới
+     * @param event Sự kiện chạm
+     * @return true nếu sự kiện được xử lý, false nếu sự kiện bị bỏ qua
+     */
+    int currentLayerEvent = -1;
+    private int topMargin;
+    private int _xDelta;
+    private int _yDelta;
+    private boolean onDown = true;
+    private long timeDown = 0;
+    private boolean onTouchEvent(int i, View view, MotionEvent event) {
+        if(true) return onLayerTouchEvent(i,view,event);
+//
+//
+//        // không xử lý layer phía sau layer focusLayer
+//        if (i==mBaseLayers.size()-1) return false;
+//        BaseLayer listener = mBaseLayers.get(i);
+//       View parent = mBaseAttrs.get(i).parent;
+//        Attr attr = mBaseAttrs.get(i);
+//
+//
+//
+//        if(currentLayerEvent!=i) {
+//        // reset variables
+//            onDown = true;
+//            _xDelta = 0;
+//            _yDelta = 0;
+//            topMargin = 0;
+//            currentLayerEvent = i;
+//        }
+//
+//        final int X = (int) event.getRawX();
+//        final int Y = (int) event.getRawY();
+//
+//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+//            case MotionEvent.ACTION_DOWN:
+//                timeDown = System.currentTimeMillis();
+//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) parent.getLayoutParams();
+//                topMargin = params.topMargin;
+//             //   _xDelta = X - params.leftMargin; // chênh lệch vị trí giữa event và vật
+//                _yDelta = Y - topMargin;
+//                break;
+//
+//            case MotionEvent.ACTION_UP:
+//                long elapsedMsec = System.currentTimeMillis() - timeDown;
+//                if (elapsedMsec <= 300) {
+//                    // A Quick Touch - A Click, what should we do ?
+//                    if(attr.Pc<=0.2f) AnimateLayer(i,listener,attr,attr.Pc,1);
+//                    else if(attr.Pc>=0.8f) AnimateLayer(i,listener,attr,attr.Pc,0);
+//                }
+//                if( attr.Pc==1)
+//                    AnimateLayer(i,listener,attr,1,0);
+//                else if(attr.Pc ==0)
+//                    AnimateLayer(i,listener,attr,0,1);
+//                else if(onDown) // nếu kéo tay xuống
+//                {
+//                    if(attr.Pc <=0.8f) AnimateLayer(i,listener,attr,attr.Pc,0);
+//                    else     AnimateLayer(i,listener,attr,attr.Pc,1);
+//                }
+//                else // nếu kéo tay lên
+//                {
+//                    if(attr.Pc >=0.2f) AnimateLayer(i,listener,attr,attr.Pc,1);
+//                    else AnimateLayer(i,listener,attr,attr.Pc,0);
+//                }
+//                currentLayerEvent = -1;
+//                break;
+//
+//            case MotionEvent.ACTION_POINTER_DOWN:
+//
+//                break;
+//            case MotionEvent.ACTION_POINTER_UP:
+//
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                //     layoutParams.leftMargin = X - _xDelta;
+//                float new_self_translate = Y - _yDelta;
+//                float new_pc = new_self_translate/(attr.maxPosition - attr.minPosition);
+//
+//                //  nếu topMargin ở quá vị trí maxTopmargin
+//                // thì chiều cao bị kéo dãn ra và có khoảng chênh lệch
+//                // over_height = new_height - old_height
+//                onDown = (attr.Pc> new_pc);
+//
+//                if(attr.Pc !=new_pc) {
+//                    setPositionAndSizeLayer(attr,currentLayerEvent,new_pc);
+//                }
+//                break;
+//        }
+
+        return true;
+    }
+
+    CountDownTimer countDownTimer;
+    boolean inCountDownTime = false;
+    /**
+     * Xử lý sự kiện nhấn nút back
+     */
+    public boolean onBackPressed() {
+/**
+ * Nếu có bất cứ focusLayer nào ( focusLayer >=0)
+ * Tiến hành gửi lệnh back tới layer đó, nếu không  thì nghĩa là nó đang trong bộ đếm delta time
+ * Nếu nó không xử lý lệnh back, thì tiến hành "pop down" nó đi
+ * Nếu nó là Layer cuối và bị "pop down", tiến hành bộ đếm thời gian
+ * Nếu nhấn back trong delta time, tiến hành đóng ứng dụng
+ * Nếu không có lệnh back trong delta time, tiến hành "pop up" focusLayer
+ */
+
+        // slide down on current layer
+        //TODO: SLIDE DOWN CURRENT LAYER
+        //Log.d(TAG, "focusLayer = " + focusLayer);
+        findFocusLayer();
+        if(focusLayer !=-1) {
+            if(!mBaseLayers.get(focusLayer).onBackPressed()) {
+                mBaseAttrs.get(focusLayer).animateToMin();
+                if(focusLayer ==listeners_size-1) {
+                    // Start Countdown time
+                    checkInCountDownTime();
+                }
+            } else {
+                // Do nothing
+            }
+        } else {
+            checkInCountDownTime();
+        }
+
+
+/*
+        if(focusLayer!=-1) // focusLayer is available
+        {
+            if(mBaseAttrs.get(focusLayer).getPc()>0) // The focusLayer is maximum
+                if(!mBaseLayers.get(focusLayer).onBackPressed()) // if it cannot be back pressed
+                    AnimateLayer(focusLayer,mBaseLayers.get(listeners_size-1),mBaseAttrs.get(focusLayer),1,0);  // minimize it
+
+        } else activity.SlideDownNShowWallBack();
+        */
+        return true;
+    }
+    private void checkInCountDownTime() {
+        if(inCountDownTime) {
+            countDownTimer.cancel();
+            countDownTimer=null;
+            activity.finish();
+            return;
+        }
+       inCountDownTime = true;
+        Tool.showToast(activity,"Back again to exit",500);
+
+        if(countDownTimer==null) countDownTimer = new CountDownTimer(2000,2000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                countDownTimer = null;
+                inCountDownTime = false;
+                Tool.showToast(activity,"exit cancelAndUnBind",500);
+            }
+        };
+        countDownTimer.start();
+    }
+
+    /**
+     * Giả lập rằng có sự kiện chạm của rootView của Layer có tag là tagLayer
+     * <br>Truyền trực tiếp sự kiện chạm tới hàm này
+     *
+     * @param tagLayer
+     * @param view
+     * @param motionEvent
+     * @return
+     */
+
+    private int listeners_size = 0;
+    public boolean streamOnTouchEvent(View view, MotionEvent motionEvent) {
+        for(int i=0;i<listeners_size;i++) {
+            if(mBaseAttrs.get(i).parent == view) {
+                return onTouchEvent(i,view,motionEvent);
+            }
+        }
+        throw new NoSuchElementException("No layer has that view");
+    }
+
+    public class Attr {
+
+        public Attr() {
+            mScaleXY = 1;
+            mScaleDeltaTranslate = 0;
+            upInterpolator = downInterpolator = 4;
+            upDuration = 400;
+            downDuration = 500;
+            initDuration = 1000;
+        }
+
+        public float mScaleXY;
+        public float mScaleDeltaTranslate = 0;
+        public float mCurrentTranslate = 0;
+        public static final int MINIMIZED = -1;
+        public static final int MAXIMIZED = 1;
+        public static final int CAPTURED = 0;
+        public int getState() {
+         if(minPosition == mCurrentTranslate) return MINIMIZED;
+         if(maxPosition == mCurrentTranslate) return MAXIMIZED;
+         return CAPTURED;
+        }
+        public float getPercent() {
+            return (mCurrentTranslate - minPosition +0f)/(maxPosition - minPosition+0f);
+        }
+        public float getRuntimePercent() {
+            return ((maxPosition - parent.getTranslationY() + mScaleDeltaTranslate)- minPosition +0f)/(maxPosition - minPosition+0f);
+        }
+        public float getRuntimeSelfTranslate() {
+            return (maxPosition - parent.getTranslationY() + mScaleDeltaTranslate);
+        }
+        public boolean isBigger1_4() {
+            return (mCurrentTranslate-minPosition)*4>(maxPosition-minPosition);
+        }
+        public boolean isSmaller3_4() {
+            return (mCurrentTranslate-minPosition)*4<3*(maxPosition-minPosition);
+        }
+        public boolean isSmaller_1_2() {
+            return (mCurrentTranslate-minPosition)*2<(maxPosition-minPosition);
+        }
+
+        public float getRealTranslateY() {
+            return maxPosition - mCurrentTranslate + mScaleDeltaTranslate;
+        }
+
+        public void animateOnInit() {
+            parent.setTranslationY(maxPosition);
+            parent.animate().translationYBy(-maxPosition+getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);
+          //  parent.animate().translationYBy(-maxPosition+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-maxPosition + getRealTranslateY()),0,(int)maxPosition)).setInterpolator(Animation.sInterpolator);
+            mCurrentTranslate = minPosition;
+        }
+        public Attr setCurrentTranslate(float current) {
+            mCurrentTranslate = current;
+            if(mCurrentTranslate>maxPosition) mCurrentTranslate = maxPosition;
+            return this;
+        }
+
+        public void moveTo(float translateY) {
+            if(translateY==mCurrentTranslate) return;
+            setCurrentTranslate(translateY);
+            updateTranslateY();
+            if(mGestureListener.isLayerAvailable())
+               mBaseLayers.get(mGestureListener.item).onTranslateChanged(this);
+            updateLayerChanged();
+        }
+
+        public void animateTo(float selfTranslateY) {
+            if(selfTranslateY== mCurrentTranslate) return;
+            mCurrentTranslate = selfTranslateY;
+            final int item = mGestureListener.item;
+            if(parent!=null) {
+                animateLayerChanged();
+              parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
+              .setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                  @Override
+                  public void onAnimationUpdate(ValueAnimator animation) {
+                      if(item!=-1) mBaseLayers.get(item).onTranslateChanged(Attr.this);
+                  }
+              })
+            ;
+            }
+        }
+        public void animateTo(float selfTranslateY, float velocityY) {
+            if(selfTranslateY== mCurrentTranslate) return;
+            mCurrentTranslate = selfTranslateY;
+            if(parent!=null) {
+                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);
+            }
+        }
+        private int computeSettleDuration( int dx, int dy, int xvel, int yvel) {
+            xvel = clampMag(xvel, (int) mMinVelocity, (int) mMaxVelocity);
+            yvel = clampMag(yvel, (int) mMinVelocity, (int) mMaxVelocity);
+            final int absDx = Math.abs(dx);
+            final int absDy = Math.abs(dy);
+            final int absXVel = Math.abs(xvel);
+            final int absYVel = Math.abs(yvel);
+            final int addedVel = absXVel + absYVel;
+            final int addedDistance = absDx + absDy;
+
+            final float xweight = xvel != 0 ? (float) absXVel / addedVel :
+                    (float) absDx / addedDistance;
+            final float yweight = yvel != 0 ? (float) absYVel / addedVel :
+                    (float) absDy / addedDistance;
+
+            int xduration = computeAxisDuration(dx, xvel, 0);
+            int yduration = computeAxisDuration(dy, yvel, (int) Math.abs(maxPosition-minPosition));
+
+            return (int) (xduration * xweight + yduration * yweight);
+        }
+        private int computeAxisDuration(int delta, int velocity, int motionRange) {
+            if (delta == 0) {
+                return 0;
+            }
+
+            final int width = ScreenSize[0];
+            final int halfWidth = width / 2;
+            final float distanceRatio = Math.min(1f, (float) Math.abs(delta) / width);
+            final float distance = halfWidth + halfWidth *
+                    distanceInfluenceForSnapDuration(distanceRatio);
+
+            int duration;
+            velocity = Math.abs(velocity);
+            if (velocity > 0) {
+                duration = 4 * Math.round(1000 * Math.abs(distance / velocity));
+            } else {
+                final float range = (float) Math.abs(delta) / motionRange;
+                duration = (int) ((range + 1) * BASE_SETTLE_DURATION);
+            }
+            return Math.min(duration, MAX_SETTLE_DURATION);
+        }
+        private float distanceInfluenceForSnapDuration(float f) {
+            f -= 0.5f; // center the values about 0.
+            f *= 0.3f * Math.PI / 2.0f;
+            return (float) Math.sin(f);
+        }
+        private static final int BASE_SETTLE_DURATION = 256; // ms
+        private static final int MAX_SETTLE_DURATION = 600; // ms
+        /**
+         * Clamp the magnitude of value for absMin and absMax.
+         * If the value is below the minimum, it will be clamped to zero.
+         * If the value is above the maximum, it will be clamped to the maximum.
+         *
+         * @param value Value to clamp
+         * @param absMin Absolute value of the minimum significant value to return
+         * @param absMax Absolute value of the maximum value to return
+         * @return The clamped value with the same sign as <code>value</code>
+         */
+        private int clampMag(int value, int absMin, int absMax) {
+            final int absValue = Math.abs(value);
+            if (absValue < absMin) return 0;
+            if (absValue > absMax) return value > 0 ? absMax : -absMax;
+            return value;
+        }
+        public void animateToMax() {
+            animateTo(maxPosition);
+        }
+        public void animateToMin() {
+            animateTo(minPosition);
+        }
+
+
+        public void updateTranslateY() {
+            if(parent!=null) parent.setTranslationY(getRealTranslateY());
+//            if(parent instanceof DarkenAndRoundedBackgroundContraintLayout) {
+//                RoundColorable roundable = (RoundColorable)parent;
+//                if(minPosition!=maxPosition)
+//                    roundable.setRoundNumber(getPercent(),true);
+//                else {
+//                    float pc = mCurrentTranslate/maxPosition;
+//                    //Log.d(TAG, "updateTranslateY: "+mCurrentTranslate+" of "+maxPosition+" : "+(1-pc));
+//
+//                    roundable.setRoundNumber(1-pc, true);
+//                }
+//            }
+        }
+
+        public String Tag;
+        public float maxPosition;
+        public float minPosition;
+        public int upInterpolator;
+        public int downInterpolator;
+        public int upDuration;
+        public int downDuration;
+        public int initDuration;
+
+        public View getParent() {
+            return parent;
+        }
+
+        public View parent;
+
+
+        public float getScaleXY() {
+            return mScaleXY;
+        }
+
+        public float getScaleDeltaTranslate() {
+            return mScaleDeltaTranslate;
+        }
+
+        public Attr setScaleDeltaTranslate(float scaleDeltaTranslate) {
+            mScaleDeltaTranslate = scaleDeltaTranslate;
+            return this;
+        }
+
+        public String getTag() {
+            return Tag;
+        }
+
+        public Attr setTag(String tag) {
+            Tag = tag;
+            return this;
+        }
+
+        public float getMinPosition() {
+            return minPosition;
+        }
+
+
+        public Attr setMinPosition(float value) {
+            this.minPosition = value;
+            return this;
+        }
+
+        public int getUpInterpolator() {
+            return upInterpolator;
+        }
+
+        public Attr setUpInterpolator(int upInterpolator) {
+            this.upInterpolator = upInterpolator;
+            return this;
+        }
+
+        public int getDownInterpolator() {
+            return downInterpolator;
+        }
+
+        public Attr setDownInterpolator(int downInterpolator) {
+            this.downInterpolator = downInterpolator;
+            return this;
+        }
+
+        public int getUpDuration() {
+            return upDuration;
+        }
+
+        public Attr setUpDuration(int upDuration) {
+            this.upDuration = upDuration;
+            return this;
+        }
+
+        public int getDownDuration() {
+            return downDuration;
+        }
+
+        public Attr setDownDuration(int downDuration) {
+            this.downDuration = downDuration;
+            return this;
+        }
+
+        public int getInitDuration() {
+            return initDuration;
+
+        }
+
+        public Attr setInitDuration(int initDuration) {
+            this.initDuration = initDuration;
+            return this;
+        }
+        public Attr set(BaseLayer l) {
+            this.setTag(l.tag())
+                    .setMinPosition(l.minPosition(activity,ScreenSize[1]))
+                    .setMaxposition(l.maxPosition())
+                     .setCurrentTranslate(this.getMinPosition());
+
+            return this;
+        }
+        public Attr attachView(View view) {
+            if(parent!=null) parent.setOnTouchListener(null);
+            parent = view;
+            parent.setOnTouchListener(mTouchListener);
+            return this;
+        }
+
+        public Attr setMaxposition(boolean m) {
+            if(m) maxPosition = ScreenSize[1];
+            else maxPosition = ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop;
+            return this;
+        }
+    }
+
+    /**
+     * Cài đặt vị trí ban đầu và kích cỡ cho layer
+     * Thực hiện hiệu ứng đưa layer từ dưới cùng lên tới vị trí minPosition ( pc = 0)
+     * hàm initLayer được thực hiện một lần, lúc nó được chèn vào controller
+     * @param i
+     */
+    private void initLayer( int i) {
+        BaseLayerFragment layer = mBaseLayers.get(i);
+        Attr attr = mBaseAttrs.get(i);
+        attr.set(layer);
+        attr.attachView(layer.getParent(activity,mChildLayerContainer, (int) attr.maxPosition));
+
+        activity.getSupportFragmentManager().beginTransaction().add(mChildLayerContainer.getId(),layer).commit();
+        attr.parent.setElevation(0);
+        layer.onAddedToContainer(attr);
+       }
+
+
+    /**
+     * Thực hiện hiệu ứng loại bỏ layer ra khỏi controller
+     * @param i
+     */
+    private void removeLayer( int i) {
+
+    }
+    public void addTabLayerFragment(BaseLayerFragment tabLayer, int pos) {
+        int p = (pos>=listeners_size) ? listeners_size : pos;
+        if(mBaseLayers.size()>pos) {
+            mBaseLayers.add(pos,tabLayer);
+            mBaseAttrs.add(pos,new Attr());
+        }
+        else {
+            mBaseLayers.add(tabLayer);
+            mBaseAttrs.add(new Attr());
+        }
+
+        listeners_size++;
+
+        tabLayer.setLayerController(this);
+        initLayer(p);
+        findFocusLayer();
+
+    }
+
+    public void removeListener(String tag) {
+        for(int i=0;i<listeners_size;i++)
+            if(tag.equals(mBaseAttrs.get(i).Tag)) {
+           removeLayer(i);
+            return;
+            }
+    }
+    public Attr getMyAttr(BaseLayer l) {
+     int pos = mBaseLayers.indexOf(l);
+     if(pos!=-1) return mBaseAttrs.get(pos);
+     return null;
+    }
+
+    public int getMyPosition(@NonNull  BaseLayer l) {
+        return mBaseLayers.indexOf(l);
+    }
+
+}

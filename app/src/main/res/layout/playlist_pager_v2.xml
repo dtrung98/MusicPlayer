@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
    android:id="@+id/playlist_pager_collapsing_toolbar"
-
+    app:layout_scrollFlags="scroll|exitUntilCollapsed"
 
     android:minHeight="96dp"
     app:titleEnabled="false">
@@ -27,7 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.ldt.musicr.views.DeepShadowImgChildConstraintLayout
+    <com.ldt.musicr.ui.widget.DeepShadowImgChildConstraintLayout
         android:id="@+id/background_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:minHeight="30dp"
-
+                android:text="@string/songs"
                 android:textColor="@color/FlatYellow"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -84,14 +84,14 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:minHeight="25dp"
-
+                android:text="@string/artists"
                 android:textColor="@color/HeavyYellow"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/Art"
                 app:layout_constraintTop_toBottomOf="@+id/title" />
 
         </LinearLayout>
-    </com.ldt.musicr.views.DeepShadowImgChildConstraintLayout>
+    </com.ldt.musicr.ui.widget.DeepShadowImgChildConstraintLayout>
 
         <mehdi.sakout.fancybuttons.FancyButton
             app:layout_collapseMode="pin"
@@ -156,6 +156,7 @@
 
         >
         <ImageView
+            android:id="@+id/more_playlist"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@drawable/more_black"

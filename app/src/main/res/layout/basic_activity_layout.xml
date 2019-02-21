@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ldt.musicr.views.RootScreen_FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:visibility="gone"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:visibility="visible"
     android:id="@+id/rootEveryThing"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    tools:context="com.ldt.musicr.activities.MainActivity">
+
+    tools:context="com.ldt.musicr.ui.main.MainActivity">
     <!-- back_wall_containerswitch_page_containeriner chứa layout khung nền-->
     <FrameLayout
+        android:id="@+id/back_wall_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/back_wall_container"/>
+        />
     <!-- container_of_containerswitch_page_containeriner cha của switch_page_containeriner :
            fragment,control,status_bar,navigation_bar -->
     <FrameLayout
+        android:id="@+id/layer_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container_of_container">
+        android:background="@android:color/transparent"
+        >
         <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
-        <com.ldt.musicr.views.roundClippingFrameLayout
+        <FrameLayout
+            android:id="@+id/child_layer_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:id="@+id/fragment_switcher_framelayout" />
+            android:background="@android:color/transparent"/>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/bottom_navigation_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/background_panel_color"
+
+            >
+            <View
+                android:id="@+id/divider_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="#22555555"/>
+        <com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx
+            android:id="@+id/bottom_navigation_view"
+            android:layout_width="280dp"
+            android:layout_height="56dp"
+            app:layout_constraintTop_toBottomOf="@id/divider_bottom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_gravity="bottom"
+            app:itemIconSize="28dp"
+            android:animateLayoutChanges="true"
+            app:itemIconTint="@color/bottom_navigation_icon_color"
+            app:labelVisibilityMode="unlabeled"
+            app:itemTextColor="@color/bottom_navigation_icon_color"
+            app:menu="@menu/bottom_navigation_menu" />
+        </android.support.constraint.ConstraintLayout>
         </FrameLayout>
-        <!-- vì lý do android lolipop trở xuống không có icon màu đen cho status bar
-        cho nên cần một thanh translucent màu hơi đen ở background-->
-        <View
-            android:id="@+id/status_color_4Lollipop"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="#25000000"
-            android:visibility="gone"/>
-        <View
-        android:id="@+id/navigation_bar"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_gravity="bottom"
-        android:background="#15000000"
-        />
-</com.ldt.musicr.views.RootScreen_FrameLayout>
+
+</android.support.constraint.ConstraintLayout>
