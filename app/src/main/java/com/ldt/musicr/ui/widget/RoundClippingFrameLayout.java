@@ -58,7 +58,7 @@ public class RoundClippingFrameLayout extends SupportDarkenFrameLayout implement
 
         roundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         roundPaint.setColor(0xffffffff);
-
+        t.recycle();
         //  setWillNotDraw(true);
     }
 

@@ -136,7 +136,7 @@ public class MusicService extends Service {
     public static final int REPEAT_ALL = 2;
     public static final int MAX_HISTORY_SIZE = 1000;
     private static final String TAG = "MusicPlaybackService";
-    private static final boolean D = false;
+    private static final boolean D = true;
     private static final String SHUTDOWN = "com.naman14.timber.shutdown";
     private static final int IDCOLIDX = 0;
     private static final int TRACK_ENDED = 1;
@@ -1115,6 +1115,8 @@ log(8);
 
     private void notifyChange(final String what) {
         if (D) Log.d(TAG, "notifyChange: what = " + what);
+        if(what.equals(META_CHANGED))
+            Log.d(TAG, "notifyChange");
 
         // Update the lockscreen controls
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)

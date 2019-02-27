@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.main.navigate;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         return inflater.inflate(R.layout.back_stack_controller,container,false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -75,10 +77,6 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
         if(mRoot==null) return;
         if(me ==1) {
-            mRoot.post(
-                    new Runnable() {
-                        @Override
-                        public void run() {
                             float pc = attrs.get(actives.get(0)).getRuntimePercent();
                             if(pc<0.01f) pc=0f;else if(pc>1) pc =1;
                              mRoot.setRadius(oneDP*14*pc);
@@ -86,9 +84,6 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
                          //   mRoot.setDarken(0.3f*(attrs.get(actives.get(0)).getRuntimePercent()),true);
                           //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),false);
                             mRoot.setAlpha(1);
-                        }
-                    });
-
         } else if(me !=0 )
         {
             //  other, active_i >1
@@ -125,22 +120,22 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     @Override
     public void onTranslateChanged(LayerController.Attr attr) {
         if(mRoot!=null) {
-            float pc = (attr.mCurrentTranslate)/attr.maxPosition;
+            float pc = (attr.mCurrentTranslate)/attr.getMaxPosition();
             Log.d(TAG, "onTranslateChanged : pc = "+pc);
             if(pc>1) pc=1;
             else if(pc<0) pc = 0;
             float scale = 0.2f + pc*0.8f;
-            //mRoot.setScaleX(scale);
-           // mRoot.setScaleY(scale);
-          //  mRoot.setRoundNumber(2*(1-pc),true);
-            mRoot.setRadius(oneDP*14*((1-pc)));
+
+            float radius = 1-pc;
+            if(radius<0.1f) radius = 0; else if(radius>1) radius = 1;
+            mRoot.setRadius(oneDP*14*radius);
             mRoot.setAlpha(scale);
 
         }
     }
 
     @Override
-    public boolean maxPosition() {
+    public boolean getMaxPositionType() {
         return true;
     }
 
@@ -176,9 +171,9 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     Vibrator vibrator;
     private void vibrate() {
         if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(35, VibrationEffect.DEFAULT_AMPLITUDE));
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
         } else {
-            vibrator.vibrate(35);
+            vibrator.vibrate(50);
         }
     }
     public void removeBottomNavigationView() {

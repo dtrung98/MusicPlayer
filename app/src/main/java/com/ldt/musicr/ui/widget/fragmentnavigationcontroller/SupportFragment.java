@@ -23,7 +23,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class SupportFragment extends Fragment {
     private static final String TAG ="SupportFragment";
-    public static int PRESENT_STYLE_DEFAULT = PresentStyle.SLIDE_LEFT;
+    public static int PRESENT_STYLE_DEFAULT = PresentStyle.ACCORDION_LEFT;
 
     private WeakReference<FragmentNavigationController> weakFragmentNaviagationController = null;
     protected boolean animatable = true;

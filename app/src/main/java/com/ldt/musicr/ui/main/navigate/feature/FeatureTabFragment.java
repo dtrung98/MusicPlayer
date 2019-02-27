@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.main.navigate.feature;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,14 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.fragments.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.model.Playlist;
+import com.ldt.musicr.ui.main.navigate.OnClickItemListener;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeatureTabFragment extends SupportFragment {
+public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
     private static final String TAG ="FeatureTabFragment";
 
     @Nullable
@@ -35,6 +39,7 @@ public class FeatureTabFragment extends SupportFragment {
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
+        mFeatureLinearHolder.setPlaylistItemClick(this);
 
         refreshData();
     }
@@ -63,5 +68,11 @@ public class FeatureTabFragment extends SupportFragment {
             mStatusView.getLayoutParams().height = value;
             mStatusView.requestLayout();
         }
+    }
+
+    @Override
+    public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
+        SupportFragment sf = PlaylistPagerFragment.newInstance(playlist,bitmap);
+        getNavigationController().presentFragment(sf);
     }
 }

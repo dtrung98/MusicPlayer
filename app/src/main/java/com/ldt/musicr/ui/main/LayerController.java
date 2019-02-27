@@ -7,7 +7,7 @@ import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Interpolator;
+import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -24,8 +24,6 @@ import android.widget.Toast;
 import com.ldt.musicr.R;
 import com.ldt.musicr.fragments.BaseLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
-import com.ldt.musicr.ui.widget.rounded.DarkenAndRoundedBackgroundContraintLayout;
-import com.ldt.musicr.ui.widget.rounded.RoundColorable;
 import com.ldt.musicr.util.uitool.Animation;
 import com.ldt.musicr.util.Tool;
 
@@ -47,6 +45,19 @@ public class LayerController {
     private static final String TAG = "LayerController";
     public static int SINGLE_TAP_COMFIRM = 1;
     public static int LONG_PRESSED = 2;
+
+    public void onConfigurationChanged(Configuration newConfig) {
+        if(activity!=null) {
+//            Log.d(TAG, "onConfigurationChanged " + newConfig.screenHeightDp * activity.getResources().getDimension(R.dimen.oneDP));
+//            oneDp = activity.getResources().getDimension(R.dimen.oneDP);
+//            ScreenSize[0] = (int) (oneDp*newConfig.screenWidthDp);
+//            ScreenSize[1] = (int) (oneDp*newConfig.screenHeightDp);
+//            status_height = Tool.getStatusHeight(activity.getResources());
+            Log.d(TAG, "onConfigurationChanged: "+ ScreenSize[0]+", "+ScreenSize[1]);
+          //  animateLayerChanged();
+        }
+    }
+
     public interface BaseLayer {
 
         /**
@@ -66,7 +77,7 @@ public class LayerController {
          * khi layer đạt vị trí max
          * @return true : full screen, false : below the status bar and below the back_layer_margin_top
          */
-       boolean maxPosition();
+       boolean getMaxPositionType();
         boolean onBackPressed();
         /**
          *  Cài đặt khoảng cách giữa đỉnh layer và viền dưới
@@ -184,7 +195,7 @@ public class LayerController {
 
         active_number = 0;
         for(int i=0;i<listeners_size;i++)
-            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition) {
+            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).getMaxPosition()) {
                 if(active_number==0) {
                     focusLayer = i;
                 }
@@ -192,9 +203,6 @@ public class LayerController {
             }
     }
     private void animateLayerChanged() {
-
-
-
 
         // Các layer sẽ được update
         // là các layer không bị minimize
@@ -204,7 +212,7 @@ public class LayerController {
             mBaseAttrs.get(i).mScaleXY =1;
             mBaseAttrs.get(i).mScaleDeltaTranslate = 0;
             // Only Active Layer
-            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition) {
+            if(mBaseAttrs.get(i).getRuntimePercent()!=0||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).getMaxPosition()) {
                 //Log.d(TAG, "animateLayerChanged: runtime : "+mBaseAttrs.get(i).getRuntimePercent());
                 actives.add(i);
             }
@@ -267,9 +275,9 @@ public class LayerController {
             float need_marginY = 0;
             //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
             if(item==1) {
-                // Layer này khác với các layer khác, nó phải đi từ vị trí maxposition -> margin của tương ứng của nó
-                need_marginY = pcOfFocusLayer_End*(mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
-            } else need_marginY = mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
+                // Layer này khác với các layer khác, nó phải đi từ vị trí getMaxPositionType() -> margin của tương ứng của nó
+                need_marginY = pcOfFocusLayer_End*(mBaseAttrs.get(position).getMaxPosition()-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
+            } else need_marginY = mBaseAttrs.get(position).getMaxPosition()-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
 
 
             if(activeSize==2) {
@@ -333,7 +341,7 @@ public class LayerController {
             mBaseAttrs.get(i).mScaleXY =1;
             mBaseAttrs.get(i).mScaleDeltaTranslate = 0;
             // Only Active Layer
-            if(mBaseAttrs.get(i).getState()!= Attr.MINIMIZED||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).maxPosition)
+            if(mBaseAttrs.get(i).getState()!= Attr.MINIMIZED||mBaseAttrs.get(i).mCurrentTranslate==mBaseAttrs.get(i).getMaxPosition())
                 actives.add(i);
             else {
                 mBaseAttrs.get(i).parent.setScaleX(mBaseAttrs.get(i).mScaleXY);
@@ -388,9 +396,9 @@ public class LayerController {
             float need_marginY = 0;
             //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
             if(item==1) {
-                // Layer này khác với các layer khác, nó phải đi từ vị trí maxposition -> margin của tương ứng của nó
-                need_marginY = pcOfTopFocusLayer*(mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
-            } else need_marginY = mBaseAttrs.get(position).maxPosition-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
+                // Layer này khác với các layer khác, nó phải đi từ vị trí getMaxPositionType() -> margin của tương ứng của nó
+                need_marginY = pcOfTopFocusLayer*(mBaseAttrs.get(position).getMaxPosition()-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop));
+            } else need_marginY = mBaseAttrs.get(position).getMaxPosition()-(ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
 
 
             if(activeSize==2) {
@@ -421,32 +429,6 @@ public class LayerController {
         }
 
    }
-    private void setPositionAndSizeLayer(  Attr attr, int pos, float valuePc) {
-        // lưu pc
-     //   attr.pc(valuePc);
-        // gọi hàm cài đặt vị trí của focusLayer
-        setPosAndSizeOnTopLayer(attr, pos);
-        // cập nhật lại các layer phía sau
-        //updateTranslationLayer();
-    }
-    private void setPosAndSizeOnTopLayer( Attr attr, int pos) {
-//
-//        float maxMove = (attr.maxPosition - attr.minPosition); // đoạn đường layer có thể di chuyển : từ min -> max
-//
-//        // 0 < SelfTranslate < maxPosition - minPosition
-//        attr.mSelfTranslateY = maxMove*attr.Pc;
-//
-//        // Nếu layer đi quá vị trí cao nhất, nó phải bị thay đổi độ cao (kéo dãn ra)
-//        if(attr.mSelfTranslateY >attr.maxPosition||isOverDone(pos)) {
-//            attr.mSelfTranslateY = attr.maxPosition;
-//            // chiều cao =
-//            attr.parent.setPadding(attr.parent.getPaddingLeft(),attr.parent.getPaddingTop(),attr.parent.getPaddingRight(), (int) (attr.parent.getPaddingBottom()+
-//                                attr.mSelfTranslateY - attr.maxPosition));
-//            if(!isDown(pos)) setOverDone(pos,true);
-//        }
-        attr.updateTranslateY();
-    }
-
 
     private ArrayList<BaseLayerFragment> mBaseLayers;
     private ArrayList<Attr> mBaseAttrs;
@@ -687,7 +669,7 @@ public class LayerController {
 //            case MotionEvent.ACTION_MOVE:
 //                //     layoutParams.leftMargin = X - _xDelta;
 //                float new_self_translate = Y - _yDelta;
-//                float new_pc = new_self_translate/(attr.maxPosition - attr.minPosition);
+//                float new_pc = new_self_translate/(attr.getgetMaxPosition()() - attr.minPosition);
 //
 //                //  nếu topMargin ở quá vị trí maxTopmargin
 //                // thì chiều cao bị kéo dãn ra và có khoảng chênh lệch
@@ -813,41 +795,41 @@ public class LayerController {
         public static final int CAPTURED = 0;
         public int getState() {
          if(minPosition == mCurrentTranslate) return MINIMIZED;
-         if(maxPosition == mCurrentTranslate) return MAXIMIZED;
+         if(getMaxPosition() == mCurrentTranslate) return MAXIMIZED;
          return CAPTURED;
         }
         public float getPercent() {
-            return (mCurrentTranslate - minPosition +0f)/(maxPosition - minPosition+0f);
+            return (mCurrentTranslate - minPosition +0f)/(getMaxPosition() - minPosition+0f);
         }
         public float getRuntimePercent() {
-            return ((maxPosition - parent.getTranslationY() + mScaleDeltaTranslate)- minPosition +0f)/(maxPosition - minPosition+0f);
+            return ((getMaxPosition() - parent.getTranslationY() + mScaleDeltaTranslate)- minPosition +0f)/(getMaxPosition() - minPosition+0f);
         }
         public float getRuntimeSelfTranslate() {
-            return (maxPosition - parent.getTranslationY() + mScaleDeltaTranslate);
+            return (getMaxPosition() - parent.getTranslationY() + mScaleDeltaTranslate);
         }
         public boolean isBigger1_4() {
-            return (mCurrentTranslate-minPosition)*4>(maxPosition-minPosition);
+            return (mCurrentTranslate-minPosition)*4>(getMaxPosition()-minPosition);
         }
         public boolean isSmaller3_4() {
-            return (mCurrentTranslate-minPosition)*4<3*(maxPosition-minPosition);
+            return (mCurrentTranslate-minPosition)*4<3*(getMaxPosition()-minPosition);
         }
         public boolean isSmaller_1_2() {
-            return (mCurrentTranslate-minPosition)*2<(maxPosition-minPosition);
+            return (mCurrentTranslate-minPosition)*2<(getMaxPosition()-minPosition);
         }
 
         public float getRealTranslateY() {
-            return maxPosition - mCurrentTranslate + mScaleDeltaTranslate;
+            return getMaxPosition() - mCurrentTranslate + mScaleDeltaTranslate;
         }
 
         public void animateOnInit() {
-            parent.setTranslationY(maxPosition);
-            parent.animate().translationYBy(-maxPosition+getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);
-          //  parent.animate().translationYBy(-maxPosition+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-maxPosition + getRealTranslateY()),0,(int)maxPosition)).setInterpolator(Animation.sInterpolator);
+            parent.setTranslationY(getMaxPosition());
+            parent.animate().translationYBy(-getMaxPosition()+getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);
+          //  parent.animate().translationYBy(-getMaxPositionType()+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-getMaxPositionType() + getRealTranslateY()),0,(int)getMaxPositionType())).setInterpolator(Animation.sInterpolator);
             mCurrentTranslate = minPosition;
         }
         public Attr setCurrentTranslate(float current) {
             mCurrentTranslate = current;
-            if(mCurrentTranslate>maxPosition) mCurrentTranslate = maxPosition;
+            if(mCurrentTranslate>getMaxPosition()) mCurrentTranslate = getMaxPosition();
             return this;
         }
 
@@ -899,7 +881,7 @@ public class LayerController {
                     (float) absDy / addedDistance;
 
             int xduration = computeAxisDuration(dx, xvel, 0);
-            int yduration = computeAxisDuration(dy, yvel, (int) Math.abs(maxPosition-minPosition));
+            int yduration = computeAxisDuration(dy, yvel, (int) Math.abs(getMaxPosition()-minPosition));
 
             return (int) (xduration * xweight + yduration * yweight);
         }
@@ -948,7 +930,7 @@ public class LayerController {
             return value;
         }
         public void animateToMax() {
-            animateTo(maxPosition);
+            animateTo(getMaxPosition());
         }
         public void animateToMin() {
             animateTo(minPosition);
@@ -959,11 +941,11 @@ public class LayerController {
             if(parent!=null) parent.setTranslationY(getRealTranslateY());
 //            if(parent instanceof DarkenAndRoundedBackgroundContraintLayout) {
 //                RoundColorable roundable = (RoundColorable)parent;
-//                if(minPosition!=maxPosition)
+//                if(minPosition!=getMaxPositionType())
 //                    roundable.setRoundNumber(getPercent(),true);
 //                else {
-//                    float pc = mCurrentTranslate/maxPosition;
-//                    //Log.d(TAG, "updateTranslateY: "+mCurrentTranslate+" of "+maxPosition+" : "+(1-pc));
+//                    float pc = mCurrentTranslate/getMaxPositionType();
+//                    //Log.d(TAG, "updateTranslateY: "+mCurrentTranslate+" of "+getMaxPositionType()+" : "+(1-pc));
 //
 //                    roundable.setRoundNumber(1-pc, true);
 //                }
@@ -971,7 +953,6 @@ public class LayerController {
         }
 
         public String Tag;
-        public float maxPosition;
         public float minPosition;
         public int upInterpolator;
         public int downInterpolator;
@@ -1066,7 +1047,7 @@ public class LayerController {
         public Attr set(BaseLayer l) {
             this.setTag(l.tag())
                     .setMinPosition(l.minPosition(activity,ScreenSize[1]))
-                    .setMaxposition(l.maxPosition())
+                    .setMaxPosition(l.getMaxPositionType())
                      .setCurrentTranslate(this.getMinPosition());
 
             return this;
@@ -1077,10 +1058,14 @@ public class LayerController {
             parent.setOnTouchListener(mTouchListener);
             return this;
         }
+        private boolean mM = true;
+        public int getMaxPosition() {
+            if(mM) return ScreenSize[1];
+            else return (int) (ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop);
+        }
 
-        public Attr setMaxposition(boolean m) {
-            if(m) maxPosition = ScreenSize[1];
-            else maxPosition = ScreenSize[1] - status_height - 2*oneDp - mMaxMarginTop;
+        public Attr setMaxPosition(boolean m) {
+            mM = m;
             return this;
         }
     }
@@ -1095,7 +1080,7 @@ public class LayerController {
         BaseLayerFragment layer = mBaseLayers.get(i);
         Attr attr = mBaseAttrs.get(i);
         attr.set(layer);
-        attr.attachView(layer.getParent(activity,mChildLayerContainer, (int) attr.maxPosition));
+        attr.attachView(layer.getParent(activity,mChildLayerContainer, (int) attr.getMaxPosition()));
 
         activity.getSupportFragmentManager().beginTransaction().add(mChildLayerContainer.getId(),layer).commit();
         attr.parent.setElevation(0);

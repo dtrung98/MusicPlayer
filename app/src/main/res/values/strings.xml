@@ -188,14 +188,15 @@
     <string name="delete_from_device">Delete from device</string>
     <string name="share">Share</string>
     <string name="see_all">See All</string>
-    <string name="play_random">Play random</string>
-    <string name="play_all_songs">Play all songs</string>
+    <string name="play_random">Shuffle play</string>
+    <string name="play_all_songs">Play all</string>
     <string name="title_activity_main3">Main3Activity</string>
     <string name="splash">Splash</string>
     <string name="feature">Feature</string>
     <string name="more">More</string>
     <string name="search_string">Search</string>
     <string name="genres">Genres</string>
-    <string name="random_play">Random play</string>
+    <string name="random_play">Shuffle play</string>
     <string name="sort">Sort</string>
+    <string name="playlist">Playlist</string>
 </resources>

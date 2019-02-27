@@ -1,11 +1,13 @@
 package com.ldt.musicr.ui.main.navigate.library;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +18,11 @@ import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.ui.main.BaseActivity;
 import com.ldt.musicr.util.TimberUtils;
 import com.ldt.musicr.util.uitool.Animation;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -26,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.FirstItemCallBack {
+public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.FirstItemCallBack, MusicStateListener {
     private static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)
@@ -109,11 +113,43 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
         mTitle.setText(song.title);
         mArtist.setText(song.artistName);
 
-        Picasso.get()
+        Glide.with(this)
                 .load(TimberUtils.getAlbumArtUri(song.albumId))
                 .placeholder(R.drawable.music_empty)
                 .error(R.drawable.music_empty)
                 .into(mImage);
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       Activity a = getActivity();
+       if(a instanceof BaseActivity)
+           ((BaseActivity)a).addMusicStateListener(this);
+    }
+
+    @Override
+    public void onPause() {
+        Activity a = getActivity();
+        if(a instanceof BaseActivity)
+            ((BaseActivity)a).removeMusicStateListener(this);
+        super.onPause();
+    }
+
+    @Override
+    public void restartLoader() {
+
+    }
+
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+        Log.d(TAG, "onMetaChanged: is_playing = "+ MusicPlayer.isPlaying()+", song_name = "+MusicPlayer.getTrackName());
+    }
+
 }

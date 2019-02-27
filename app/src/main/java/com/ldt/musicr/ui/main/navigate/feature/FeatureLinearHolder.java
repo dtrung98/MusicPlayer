@@ -11,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.fragments.RecyclerItemClickListener;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.ui.main.navigate.OnClickItemListener;
 import com.ldt.musicr.util.uitool.Animation;
 
 import java.util.List;
@@ -32,8 +34,16 @@ public class FeatureLinearHolder {
     @BindView(R.id.song_frame)
     ViewGroup mSongFrame;
 
+    public PlaylistMiniAdapter getPlaylistMiniAdapter() {
+        return mPlaylistMiniAdapter;
+    }
+
     PlaylistMiniAdapter mPlaylistMiniAdapter;
     SongMiniAdapter mSongMiniAdapter;
+
+    public void setPlaylistItemClick(FeaturePlaylistAdapter.PlaylistClickListener listener) {
+        if(mPlaylistMiniAdapter!=null) mPlaylistMiniAdapter.setItemClickListener(listener);
+    }
 
     public FeatureLinearHolder(Context context, ViewGroup linearLayout) {
         this.mContext = context;
@@ -69,6 +79,10 @@ public class FeatureLinearHolder {
         @BindView(R.id.number) TextView mCount;
 
         FeaturePlaylistAdapter mPlaylistAdapter;
+
+        private void setItemClickListener(FeaturePlaylistAdapter.PlaylistClickListener listener) {
+            if(mPlaylistAdapter!=null) mPlaylistAdapter.setListener(listener);
+        }
 
         PlaylistMiniAdapter(View v) {
             this.mItemView = v;

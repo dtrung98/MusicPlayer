@@ -61,7 +61,7 @@ public abstract class BaseLayerFragment extends RuntimeThemeFragment implements 
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(mMaxPosition==0) {
-            if (maxPosition()) mMaxPosition = mLayerController.ScreenSize[1];
+            if (getMaxPositionType()) mMaxPosition = mLayerController.ScreenSize[1];
             else mMaxPosition = (int) (mLayerController.ScreenSize[1] -mLayerController.status_height - 2 * mLayerController.oneDp - mLayerController.mMaxMarginTop);
         }
         return getParent(getActivity(),container,mMaxPosition);
@@ -81,7 +81,7 @@ public abstract class BaseLayerFragment extends RuntimeThemeFragment implements 
     }
 
     @Override
-    public boolean maxPosition() {
+    public boolean getMaxPositionType() {
         return false;
     }
 

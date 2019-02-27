@@ -51,6 +51,7 @@ public class DarkenAndRoundedBackgroundContraintLayout extends ConstraintLayout 
         mSolidPaint.setStyle(Paint.Style.FILL);
         mSolidPaint.setAntiAlias(true);
         t.recycle();
+        setWillNotDraw(false);
     }
     private float darken=0f;
     public void setDarken(float darken, boolean shouldDraw)

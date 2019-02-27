@@ -6,7 +6,6 @@
     android:id="@+id/rootEveryThing"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.ldt.musicr.ui.main.MainActivity">
     <!-- back_wall_containerswitch_page_containeriner chứa layout khung nền-->
     <FrameLayout
@@ -55,7 +54,8 @@
             app:itemIconTint="@color/bottom_navigation_icon_color"
             app:labelVisibilityMode="unlabeled"
             app:itemTextColor="@color/bottom_navigation_icon_color"
-            app:menu="@menu/bottom_navigation_menu" />
+            app:menu="@menu/bottom_navigation_menu"
+            />
         </android.support.constraint.ConstraintLayout>
         </FrameLayout>
 

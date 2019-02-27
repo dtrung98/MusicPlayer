@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/backward_color"
     tools:context="com.ldt.musicr.fragments.PlaylistPagerFragment">
 <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
@@ -18,30 +18,48 @@
     android:layout_height="wrap_content"
    android:id="@+id/playlist_pager_collapsing_toolbar"
     app:layout_scrollFlags="scroll|exitUntilCollapsed"
-
-    android:minHeight="96dp"
     app:titleEnabled="false">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:theme="@style/ToolbarColoredBackArrow"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        app:popupTheme="@style/AppTheme"
+        app:title="@string/playlist"
+        app:titleTextColor="@color/FlatWhite">
+        <ImageView
+            android:id="@+id/more_playlist"
+            android:layout_width="?attr/actionBarSize"
+            android:layout_height="?attr/actionBarSize"
+            android:src="@drawable/ic_more_horiz_black_24dp"
+            android:tint="@color/FlatWhite"
+            android:padding="18dp"
+            android:layout_gravity="end"/>
+    </android.support.v7.widget.Toolbar>
     <RelativeLayout
-
         app:layout_collapseMode="pin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#44000000">
 
-    <com.ldt.musicr.ui.widget.DeepShadowImgChildConstraintLayout
+    <com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout
         android:id="@+id/background_constraint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F7F6F4"
-        android:paddingLeft="8dp"
-        android:paddingBottom="42dp"
-        android:paddingTop="?attr/actionBarSize">
-
+        android:background="@android:color/transparent"
+        app:imageViewId="@id/art"
+        app:shadowDeltaLeft="6dp"
+        app:shadowDeltaTop="4dp"
+        app:shadowDeltaRight="-6dp"
+        app:shadowDeltaBottom="4dp"
+        >
         <ImageView
-            android:id="@+id/Art"
+            android:id="@+id/art"
             android:layout_width="140dp"
             android:layout_height="140dp"
-            android:layout_marginTop="14dp"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="45dp"
             android:layout_marginBottom="18dp"
             android:src="@drawable/default_image_round"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,120 +67,104 @@
             android:padding="3dp"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="@id/Art"
-            app:layout_constraintStart_toEndOf="@id/Art"
-            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="?attr/actionBarSize"
                 android:minHeight="30dp"
                 android:text="@string/songs"
                 android:textColor="@color/FlatYellow"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/Art"
-                app:layout_constraintTop_toTopOf="@+id/Art" />
+                app:layout_constraintStart_toEndOf="@+id/art"
+                app:layout_constraintTop_toTopOf="@+id/art"
+                app:layout_constraintBottom_toTopOf="@id/artist"
+                app:layout_constraintVertical_chainStyle="packed"
+                />
 
             <TextView
                 android:id="@+id/artist"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="center"
                 android:minHeight="25dp"
                 android:text="@string/artists"
-                android:textColor="@color/HeavyYellow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/Art"
-                app:layout_constraintTop_toBottomOf="@+id/title" />
-
-        </LinearLayout>
-    </com.ldt.musicr.ui.widget.DeepShadowImgChildConstraintLayout>
-
-        <mehdi.sakout.fancybuttons.FancyButton
-            app:layout_collapseMode="pin"
-            android:id="@+id/play_all_button"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_below="@id/background_constraint"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@android:color/transparent"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            fancy:fb_defaultColor="#F7F6F4"
-            fancy:fb_useSystemFont= "true"
-            android:paddingRight="10dp"
-            android:paddingBottom="6dp"
-            android:text="@string/play_all_songs"
-
-            app:fb_textGravity="left"
-
-            fancy:fb_fontIconResource="&#xf04b;"
-            fancy:fb_fontIconSize="10sp"
-            fancy:fb_iconPosition="left"
-            fancy:fb_radius="15dp"
-            fancy:fb_textColor="@color/FlatYellow"
-            fancy:fb_textSize="14sp" />
-        <mehdi.sakout.fancybuttons.FancyButton
-            app:layout_collapseMode="pin"
-            android:id="@+id/random_button"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_below="@id/background_constraint"
-            android:layout_toRightOf="@id/play_all_button"
-            android:background="@android:color/transparent"
-            android:paddingLeft="10dp"
-            android:paddingTop="6dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="6dp"
-            android:text="@string/play_random"
-            fancy:fb_useSystemFont= "true"
-
-            fancy:fb_defaultColor="#F7F6F4"
-
-            fancy:fb_radius="15dp"
-            fancy:fb_textColor="@color/FlatYellow"
-            fancy:fb_textSize="14sp" />
-    </RelativeLayout>
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:theme="@style/ToolbarColoredBackArrow"
-        android:background="#F7F6F4"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_collapseMode="pin"
-        app:popupTheme="@style/AppTheme"
-
-        >
+                android:textColor="@color/FlatWhite"
+                android:maxLines="2"
+                android:ellipsize="end"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
+                app:layout_constraintTop_toBottomOf="@+id/title"
+                app:layout_constraintBottom_toBottomOf="@id/art"/>
+        <View
+            android:id="@+id/play_option_panel"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintTop_toBottomOf="@id/art"/>
+        <View
+            android:id="@+id/play_all_panel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/play_all_icon"
+            app:layout_constraintEnd_toEndOf="@id/play_all_button"
+            app:layout_constraintTop_toTopOf="@id/play_all_icon"
+            app:layout_constraintBottom_toBottomOf="@id/play_all_icon"
+            android:background="@drawable/ripple_effect_15dp_radius"
+            />
         <ImageView
-            android:id="@+id/more_playlist"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/more_black"
-            android:padding="18dp"
-            android:layout_gravity="right"/>
-    </android.support.v7.widget.Toolbar>
+            android:id="@+id/play_all_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_play_arrow_black_24dp"
+            android:tint="#BBFFCC00"
+            android:layout_marginStart="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/play_all_button"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="0dp"
+            />
+            <TextView
+                android:id="@+id/play_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="@id/play_option_panel"
+                app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
+                app:layout_constraintStart_toEndOf="@id/play_all_icon"
+                android:gravity="center"
+                android:text="@string/play_all_songs"
+                android:textStyle="bold"
+                android:paddingEnd="14dp"
+                android:paddingStart="0dp"
+                android:textColor="#BBFFCC00"
+               />
+            <TextView
+                android:id="@+id/shuffle_play_button"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:layout_constraintTop_toTopOf="@id/play_option_panel"
+                app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
+                app:layout_constraintStart_toEndOf="@id/play_all_button"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/play_all_button"
+                android:background="@drawable/ripple_effect_15dp_radius"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:gravity="center"
+                android:text="@string/play_random"
+                android:textStyle="bold"
+                android:textColor="#BBFFCC00"
+                 />
+    </com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout>
+
+    </RelativeLayout>
 
 </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -172,6 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingBottom="50dp"/>
+        android:paddingBottom="50dp"
+        tools:listitem="@layout/item_song_child" />
 
 </android.support.design.widget.CoordinatorLayout>

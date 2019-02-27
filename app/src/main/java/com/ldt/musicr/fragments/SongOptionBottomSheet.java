@@ -64,7 +64,7 @@ public void setListener(BottomSheetListener listener) {
 
         View view = inflater.inflate(R.layout.ex_bottom_sheet_layout, container,
                 false);
-        ((BaseActivity)getActivity()).setMusicStateListenerListener(this);
+        ((BaseActivity)getActivity()).addMusicStateListener(this);
 
         // get the views and attach the listener
         int[] textViewID = {
@@ -139,13 +139,7 @@ public void setListener(BottomSheetListener listener) {
 
     }
     private boolean initted = false;
-    @Override
-    public void onArtWorkChanged() {
-        if(initted) {
-            int c = Tool.getSurfaceColor();
-            applyRippleColor(c);
-        }
-    }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +20,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.ldt.musicr.ui.main.AudioPreviewer;
+import com.ldt.musicr.ui.main.AudioPreviewPlayer;
 import com.ldt.musicr.ui.main.MainActivity;
+import com.ldt.musicr.ui.widget.view.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 import com.ldt.musicr.fragments.SongOptionBottomSheet;
@@ -41,7 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter,
-        FastScrollRecyclerView.MeasurableAdapter, AudioPreviewer.AudioPreviewerListener {
+        FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener {
     private static final String TAG = "SongAdapter";
     public ArrayList<Song> mData = new ArrayList<>();
     public int currentlyPlayingPosition = 0;
@@ -260,16 +262,54 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return mData.get(position-1).title.substring(0,1);
     }
 
+    private int mPreviewItem = -1;
+
     private void playPreviewThisItem(ItemHolder itemHolder) {
 
+        if(mPreviewItem!=-1) notifyItemChanged(mPreviewItem,false);
         String path = mData.get(getRealAdapterPosition(itemHolder)).path;
-        ((MainActivity)mContext).getAudioPreviewer().previewThisFile(SongAdapter.this,path);
+        mPreviewItem = itemHolder.getAdapterPosition();
+        ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(SongAdapter.this,path);
 
     }
 
     @Override
-    public void notifyTimePlayed(int timePlayed) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+       if(holder instanceof ItemHolder && !payloads.isEmpty() && payloads.get(0) instanceof Boolean) {
+          ((ItemHolder)holder).resetProgress();
+      }
+          super.onBindViewHolder(holder,position,payloads);
+    }
+    private long mNotifyDuration =0;
+    private long mNotifyTime = System.currentTimeMillis();
 
+    @Override
+    public void notifyAudioPreviewDuration(int time) {
+        if(mPreviewItem!=-1) {
+            mNotifyDuration = time;
+            mNotifyTime = System.currentTimeMillis();
+            notifyItemChanged(mPreviewItem,time);
+        }
+    }
+
+    public void forceStopPreview() {
+        mPreviewItem = -1;
+        ((MainActivity)mContext).getAudioPreviewPlayer().forceStop();
+    }
+
+    public void playAll() {
+        if(!mData.isEmpty()) {
+            final Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                MusicPlayer.playAll(mContext, songIDs, 0, -1, TimberUtils.IdType.NA, false);
+                Handler handler1 = new Handler();
+                handler1.postDelayed(() -> {
+                    notifyItemChanged(currentlyPlayingPosition);
+                    notifyItemChanged(0);
+                    currentlyPlayingPosition = 0;
+                }, 50);
+            }, 100);
+        }
     }
 
     public class SortHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -302,6 +342,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         @BindView(R.id.number) TextView mNumber;
 
         @BindView(R.id.loader) View mLoader;
+        @BindView(R.id.present) View mPresentButton;
 
         public ItemHolder(View view) {
             super(view);
@@ -322,6 +363,12 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                     currentlyPlayingPosition = getRealAdapterPosition(this);
                 },50);
             },100);
+        }
+
+        public void resetProgress() {
+            if(mPresentButton instanceof CircularPlayPauseProgressBar)
+                ((CircularPlayPauseProgressBar)mPresentButton).resetProgress();
+
         }
 
         public void bind(Song song) {
@@ -348,7 +395,16 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         }
 
         public void bindPresent(Song song) {
-
+            //Log.d(TAG, "bindPresent");
+            if(mPresentButton instanceof CircularPlayPauseProgressBar) {
+                if(getAdapterPosition()!=mPreviewItem&&((CircularPlayPauseProgressBar) mPresentButton).getMode()==CircularPlayPauseProgressBar.PLAYING)
+                ((CircularPlayPauseProgressBar) mPresentButton).resetProgress();
+                else if(getAdapterPosition()==mPreviewItem) {
+                    long timePlayed = System.currentTimeMillis() - mNotifyTime;
+                    if(timePlayed<=mNotifyDuration)
+                    ((CircularPlayPauseProgressBar) mPresentButton).syncProgress((int)mNotifyDuration,(int)timePlayed);
+                }
+            }
         }
 
         public void checkQuickPlayPause() {
@@ -367,10 +423,14 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 mTitle.setTextColor(mContext.getResources().getColor(R.color.FlatWhite));
             }
         }
+
         @OnClick(R.id.present)
         void clickPresent() {
-            if(mContext instanceof MainActivity) {
+            if(mPreviewItem!=getAdapterPosition())
                 playPreviewThisItem(this);
+            else {
+                resetProgress();
+                forceStopPreview();
             }
         }
 
@@ -384,6 +444,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mLoader.clearAnimation();
         }
     }
+
+
 
     public Song getSongAt(int i) {
         return mData.get(i);

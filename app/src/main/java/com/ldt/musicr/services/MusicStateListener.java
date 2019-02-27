@@ -35,9 +35,4 @@ public interface MusicStateListener {
      * Called when {@link com.ldt.musicr.services.MusicService #META_CHANGED} is invoked
      */
     void onMetaChanged();
-
-    /**
-     *  Called when art work is loaded
-     */
-    void onArtWorkChanged();
 }

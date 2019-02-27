@@ -2,7 +2,6 @@ package com.ldt.musicr.ui.main;
 
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
 
@@ -15,8 +14,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
-    private static final String TAG ="AudioPreviewer";
+public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
+    private static final String TAG ="AudioPreviewPlayer";
 
     String mPath;
     File mFile;
@@ -24,11 +23,11 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
     private AudioPreviewerListener mListener;
     private loadSoundFile mLoadSoundFile;
 
-    public AudioPreviewer() {
+    public AudioPreviewPlayer() {
         mPath ="";
     }
 
-    public AudioPreviewer setListener(AudioPreviewerListener listener) {
+    public AudioPreviewPlayer setListener(AudioPreviewerListener listener) {
         mListener = listener;
         return this;
     }
@@ -37,10 +36,11 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
     }
 
     public interface AudioPreviewerListener {
-        void notifyTimePlayed(int timePlayed);
+        void notifyAudioPreviewDuration(int timePlayed);
     }
 
     public void previewThisFile(AudioPreviewerListener listener , String path) {
+
         dismiss();
 
         setListener(listener);
@@ -54,8 +54,8 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
         mLoadSoundFile = new loadSoundFile(this);
         mLoadSoundFile.execute(mFile);
     }
-    private MediaPlayer mMediaPlayer;
 
+    private MediaPlayer mMediaPlayer;
 
     void dismiss() {
        if(mLoadSoundFile!=null)  {
@@ -68,13 +68,13 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
     private double mPlayFrom=0;
     private double mPlayTo = 0;
 
-    protected double mSampleRate;
-    protected double mSamplesPerFrame;
-    protected int mNumFrames;
-    protected double mDuration;
-    protected int mIntDuration;
-    protected int mMaxGain, mMinGain;
-    protected int[] mFrameGain;
+    private double mSampleRate;
+    private double mSamplesPerFrame;
+    private int mNumFrames;
+    private double mDuration;
+    private int mIntDuration;
+    private int mMaxGain, mMinGain;
+    private int[] mFrameGain;
 
     private synchronized void calculateSound() {
         // run in the background
@@ -93,15 +93,18 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
 
         double durationZone;
         double timeFromZone = 0;
-        if(mDuration<=60) {
-            durationZone = mDuration;
-            timeFromZone =0;
-        } else //if(mDuration*2/3<60*1000)
-        {
-            durationZone = 60;
-            timeFromZone =0;// mRandom.nextInt((int) (mDuration - durationZone));
+
+        if(mDuration<40) {
+            durationZone = 40;
+            timeFromZone = 0;
+        } else if(mDuration<60) {
+            timeFromZone = 5;
+            durationZone = mIntDuration - 5 - 5;
+        } else {
+            timeFromZone = 13;
+            durationZone = mIntDuration - timeFromZone - 8;
         }
-        durationZone = mDuration;
+
         int frameFromZone = (int) (mNumFrames*timeFromZone/mDuration);
         int frameToZone = (int) (frameFromZone + durationZone*2);
         if(frameToZone>mNumFrames-1) frameToZone = (int) (mNumFrames-1);
@@ -110,13 +113,9 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
 
         int numberFrameGainPlayingZone = frameGainInPlayingZone.length;
 
-        double duration ; // 15s -> 25s
-        double minDuration = 15;
-        double maxDuration = 25;
-
 
         // reduce the FrameGain to PenGain
-        // 1 pengain = 0.5s
+        // 1 pen gain = 0.5s
         int numberPenGain = (int) (durationZone*2); // each 500ms
         int numberFrameEachPenGain = numberFrameGainPlayingZone/numberPenGain;
 
@@ -136,7 +135,7 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
                 iPen++;
             }
         }
-        Log.d(TAG, "calculateSound: ");
+        Log.d(TAG, "calculateSound: duration = "+ mDuration);
 
         // make pen gains smoothly
        // computeDoublesForAllZoomLevels(numberPenGain, originalPenGain);
@@ -151,7 +150,7 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
          */
 
         final int staticPenSize = 24;
-        final int staticEdge = 18;
+        final int staticEdge = 22;
 
          int startPen = findMaxAverage(SmoothedPenGain, SmoothedPenGain.length, staticPenSize);
          int endPen = startPen + staticPenSize;
@@ -298,14 +297,24 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
             }
         }
     }
-
-    private void play() {
+    public void forceStop() {
         // release old media player
-        if(mMediaPlayer!=null)
+        if(mMediaPlayer!=null) {
             try {
                 if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
                 else mMediaPlayer.release();
             } catch (Exception ignore) {}
+        }
+    }
+
+    private void play() {
+        // release old media player
+        if(mMediaPlayer!=null) {
+            try {
+                if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
+                else mMediaPlayer.release();
+            } catch (Exception ignore) {}
+        }
 
         if(mPlayTo<=mPlayFrom) {return;}
 
@@ -321,7 +330,7 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
 
             int timePlayed = (int) ((mPlayTo - mPlayFrom)*1000);
             mMediaPlayer.start();
-            if(mListener!=null) mListener.notifyTimePlayed(timePlayed);
+            if(mListener!=null) mListener.notifyAudioPreviewDuration(timePlayed);
 
             Handler handler = new Handler();
            final MediaPlayer mediaPlayer = mMediaPlayer;
@@ -341,25 +350,26 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
         dismiss();
     }
     private static class loadSoundFile extends AsyncTask< File, Void, Void > implements CheapSoundFile.ProgressListener {
-        AudioPreviewer mAudioPreviewer;
+        AudioPreviewPlayer mAudioPreviewPlayer;
         boolean mKeeping = true;
         boolean isFinished = false;
-        public loadSoundFile(AudioPreviewer bs) {
-            mAudioPreviewer = bs;
+        public loadSoundFile(AudioPreviewPlayer bs) {
+            mAudioPreviewPlayer = bs;
         }
 
-        public void cancelAndUnBind() {
+        public boolean cancelAndUnBind() {
             mKeeping = false;
             if(!isFinished)
             cancel(true);
-            mAudioPreviewer = null;
+            mAudioPreviewPlayer = null;
+            return isFinished;
         }
 
         @Override
         protected Void doInBackground(File...file) {
             try {
-                mAudioPreviewer.mSoundFile = CheapSoundFile.create(file[0].getAbsolutePath(), this);
-                     mAudioPreviewer.calculateSound();
+                mAudioPreviewPlayer.mSoundFile = CheapSoundFile.create(file[0].getAbsolutePath(), this);
+                     mAudioPreviewPlayer.calculateSound();
             } catch (final Exception e) {
                 Log.e(TAG, "Error while loading sound file", e);
             }
@@ -370,8 +380,8 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             isFinished = true;
-            if(mAudioPreviewer !=null)
-            mAudioPreviewer.play();
+            if(mAudioPreviewPlayer !=null)
+            mAudioPreviewPlayer.play();
 
         }
 
@@ -381,7 +391,6 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
             return mKeeping;
         }
     }
-
 
     float out_volume = 1;
     float in_volume = 0;
@@ -441,7 +450,7 @@ public class AudioPreviewer implements  MediaPlayer.OnCompletionListener {
                     return;
                 }
                 //Cancel and Purge the Timer if the desired out_volume has been reached
-                if(out_volume <=0.25f){
+                if(out_volume <=0.1f){
                     timer.cancel();
                     timer.purge();
                     removeListener();

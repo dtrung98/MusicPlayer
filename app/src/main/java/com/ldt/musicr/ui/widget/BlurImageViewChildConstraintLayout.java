@@ -1,6 +1,7 @@
 package com.ldt.musicr.ui.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -14,34 +15,44 @@ import android.widget.ImageView;
 import com.ldt.musicr.util.uitool.BitmapEditor;
 import com.ldt.musicr.R;
 
-public class DeepShadowImgChildConstraintLayout extends ConstraintLayout {
+public class BlurImageViewChildConstraintLayout extends ConstraintLayout {
     private static final String TAG = "DeepShadowConstraint";
-    public DeepShadowImgChildConstraintLayout(Context context) {
+    public BlurImageViewChildConstraintLayout(Context context) {
         super(context);
         this.init((AttributeSet)null);
     }
+    private int mImageViewId = R.id.art;
 
-    public DeepShadowImgChildConstraintLayout(Context context, AttributeSet attrs) {
+    public BlurImageViewChildConstraintLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.init(attrs);
     }
 
-    public DeepShadowImgChildConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public BlurImageViewChildConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.init(attrs);
     }
 
     private void init(AttributeSet attrs) {
         solidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        TypedArray t = getContext().obtainStyledAttributes(attrs, R.styleable.BlurImageViewChildConstraintLayout);
+
+
+        mImageViewId = t.getResourceId(R.styleable.BlurImageViewChildConstraintLayout_imageViewId,R.id.art);
+
+        mBlurDelta[0] = (int) (t.getDimension(R.styleable.BlurImageViewChildConstraintLayout_shadowDeltaLeft,0));
+        mBlurDelta[1] = (int) (t.getDimension(R.styleable.BlurImageViewChildConstraintLayout_shadowDeltaTop,0));
+        mBlurDelta[2] = (int) (t.getDimension(R.styleable.BlurImageViewChildConstraintLayout_shadowDeltaRight,0));
+        mBlurDelta[3] = (int) (t.getDimension(R.styleable.BlurImageViewChildConstraintLayout_shadowDeltaBottom,0));
+        t.recycle();
     }
-    private boolean setted = false;
     private int[] imageRect = new int[4];
-    private int[] delta = new int[4];
+    private int[] mBlurDelta = new int[4];
 
     public void setShadowDeltaRect(int... value) {
-       setted = true;
+
         for(int i=0;i<4;i++)
-            delta[i] = value[i];
+            mBlurDelta[i] = value[i];
        invalidate();
     }
     private Bitmap bitmap = null;
@@ -61,20 +72,24 @@ public class DeepShadowImgChildConstraintLayout extends ConstraintLayout {
     public void setBitmapImage(Bitmap bitmap) {
 
         shadow_drawn = false;
+        mBitmap = bitmap;
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if(setted) onDrawShadow(canvas);
+        onDrawShadow(canvas);
     }
     private ImageView imageView;
+    private Bitmap mBitmap;
 
     private void onDrawShadow(Canvas canvas) {
 
         if(bitmap==null) {
-            imageView = this.findViewById(R.id.Art);
+            imageView = this.findViewById(mImageViewId);
+            if(imageView==null) return;
+
             imageRect[0] = imageView.getLeft();
             imageRect[1] = imageView.getTop();
             imageRect[2] = imageView.getRight();
@@ -83,6 +98,7 @@ public class DeepShadowImgChildConstraintLayout extends ConstraintLayout {
         }
 
         if(!shadow_drawn) {
+            if(mBitmap==null)
             bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
 
             Log.d(TAG, "imageRect = [" + imageRect[0]+", "+imageRect[1]+", "+imageRect[2]+", "+imageRect[3]+"]");
@@ -90,11 +106,11 @@ public class DeepShadowImgChildConstraintLayout extends ConstraintLayout {
             Bitmap tempBitmap = Bitmap.createBitmap(getWidth(),getHeight(),Bitmap.Config.ARGB_8888);
             Canvas tempCanvas = new Canvas(tempBitmap);
             solidPaint.setAlpha(150);
-           tempCanvas.drawBitmap(bitmap,new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()), new Rect(imageRect[0]+delta[0],imageRect[1]+delta[1],imageRect[2]+delta[2],imageRect[3]+delta[3]),solidPaint);
+           tempCanvas.drawBitmap(bitmap,new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()), new Rect(imageRect[0]+ mBlurDelta[0],imageRect[1]+ mBlurDelta[1],imageRect[2]+ mBlurDelta[2],imageRect[3]+ mBlurDelta[3]),solidPaint);
         //    solidPaint.setColor(Tool.getSurfaceColor());
        //     solidPaint.setAlpha(80);
-       //   tempCanvas.drawRect(imageRect[0]+delta[0],imageRect[1]+delta[1],imageRect[2]+delta[2],imageRect[3]+delta[3],solidPaint);
-            shadowBitmap =BitmapEditor.getBlurredWithGoodPerformance(getContext(),tempBitmap,1,14,2);
+       //   tempCanvas.drawRect(imageRect[0]+mBlurDelta[0],imageRect[1]+mBlurDelta[1],imageRect[2]+mBlurDelta[2],imageRect[3]+mBlurDelta[3],solidPaint);
+            shadowBitmap =BitmapEditor.getBlurredWithGoodPerformance(getContext(),tempBitmap,1,16,3.5f);
             tempCanvas = null;
            tempBitmap.recycle();
         }

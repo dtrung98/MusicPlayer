@@ -14,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -40,7 +39,7 @@ import static com.ldt.musicr.services.MusicPlayer.mService;
 
 public abstract class BaseActivity extends AppCompatActivity implements ServiceConnection, MusicStateListener {
     private static final String TAG = "BaseActivity";
-    private final ArrayList<MusicStateListener> mMusicStateListener = new ArrayList<>();
+    private final ArrayList<MusicStateListener> mMusicStateListeners = new ArrayList<>();
     private MusicPlayer.ServiceToken mToken;
     private PlaybackStatus mPlaybackStatus;
 
@@ -108,7 +107,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
 
     @Override
     protected void onDestroy() {
-Log.d(TAG,"onDestroy");
+        Log.d(TAG,"onDestroy");
         super.onDestroy();
         // Unbind from the service
         if (mToken != null) {
@@ -120,63 +119,9 @@ Log.d(TAG,"onDestroy");
             unregisterReceiver(mPlaybackStatus);
         } catch (final Throwable e) {
         }
-        mMusicStateListener.clear();
-    }
-    private boolean black_theme = false;
-    private long mAlbumId = -1;
-    private int mColor24Bit = 0;
-    public int getColor24Bit() {
-        return mColor24Bit;
+        mMusicStateListeners.clear();
     }
 
-    public void unblockWhiteTheme() {
-
-    }
-
-    public void blockToWhiteTheme() {
-
-    }
-
-    private class loadArtWork extends AsyncTask<Void,Void,Void> {
-        @Override
-        protected Void doInBackground(Void... v) {
-
-                final BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 38;
-                Bitmap origin, sample;
-
-            //    origin = BitmapFactory.decodeFile(TimberUtils.getAlbumArtUri(albumID).getEncodedPath());
-              origin =  ImageLoader.getInstance().loadImageSync(TimberUtils.getAlbumArtUri(mAlbumId).toString());
-                // if bitmap can't be loaded, load default image
-                if(origin==null) {
-                    origin = BitmapFactory.decodeResource(getResources(), R.drawable.default_image2);
-                    sample = BitmapFactory.decodeResource(getResources(),R.drawable.default_image2,options);
-                } else {
-                 //   sample = BitmapFactory.decodeFile(TimberUtils.getAlbumArtUri(albumID).getEncodedPath());
-                    sample = BitmapEditor.getResizedBitmap(origin,origin.getHeight()/38,origin.getWidth()/38);
-                 //   sample = origin.copy(origin.getConfig(),false);
-                }
-                mArtWork = origin.copy(origin.getConfig(),false);
-
-                sample = updateSat(sample, 4);
-                sample = BitmapEditor.fastblur(sample, 1, 4);
-                int[] averageColorRGB = BitmapEditor.getAverageColorRGB(sample);
-                black_theme = BitmapEditor.PerceivedBrightness(95, averageColorRGB);
-
-                mColor24Bit = (averageColorRGB[0] << 16 | averageColorRGB[1] << 8 | averageColorRGB[2]);
-
-                mBlurArtWork = sample.copy(sample.getConfig(),false);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Tool.setGlobalColor(0xff << 24 | mColor24Bit);
-            Tool.setSurfaceColor(ColorReferTo(Tool.getGlobalColor()));
-            onArtWorkChanged();
-        }
-
-    }
     private int ColorReferTo(int cmc) {
         float[] hsv = new float[3];
         Color.colorToHSV(cmc, hsv);
@@ -194,11 +139,8 @@ Log.d(TAG,"onDestroy");
 
     @Override
     public void onMetaChanged() {
-        Log.d(TAG,"onMetaChanged");
-            mAlbumId = MusicPlayer.getCurrentAlbumId();
-            new loadArtWork().execute();
         // Let the listener know to the meta changed
-        for (final MusicStateListener listener : mMusicStateListener) {
+        for (final MusicStateListener listener : mMusicStateListeners) {
             if (listener != null) {
                 listener.onMetaChanged();
             }
@@ -209,7 +151,7 @@ Log.d(TAG,"onDestroy");
     public void restartLoader() {
         Log.d(TAG,"restartLoader");
         // Let the listener know to update a list
-        for (final MusicStateListener listener : mMusicStateListener) {
+        for (final MusicStateListener listener : mMusicStateListeners) {
             if (listener != null) {
                 listener.restartLoader();
             }
@@ -220,31 +162,11 @@ Log.d(TAG,"onDestroy");
     public void onPlaylistChanged() {
         Log.d(TAG,"onPlaylistChanged");
         // Let the listener know to update a list
-        for (final MusicStateListener listener : mMusicStateListener) {
+        for (final MusicStateListener listener : mMusicStateListeners) {
             if (listener != null) {
                 listener.onPlaylistChanged();
             }
         }
-    }
-
-    @Override
-    public void onArtWorkChanged() {
-        Log.d(TAG,"onArtWorkChanged");
-        for(final MusicStateListener listener : mMusicStateListener) {
-            if(listener!=null)
-                listener.onArtWorkChanged();
-        }
-    }
-    private Bitmap mArtWork, mBlurArtWork;
-
-    @Nullable
-    public Bitmap getArtWork() {
-        return mArtWork;
-    }
-
-    @Nullable
-    public Bitmap getBlurArtWork() {
-        return mBlurArtWork;
     }
 
     @NonNull
@@ -252,19 +174,19 @@ Log.d(TAG,"onDestroy");
         return Tool.getGlobalColor();
     }
 
-    public void setMusicStateListenerListener(final MusicStateListener status) {
-        if (status == this) {
+    public void addMusicStateListener(final MusicStateListener listener) {
+        if (listener == this) {
             throw new UnsupportedOperationException("Override the method, don't add a listener");
         }
 
-        if (status != null) {
-            mMusicStateListener.add(status);
+        if (listener != null) {
+            mMusicStateListeners.add(listener);
         }
     }
 
-    public void removeMusicStateListenerListener(final MusicStateListener status) {
+    public void removeMusicStateListener(final MusicStateListener status) {
         if (status != null) {
-            mMusicStateListener.remove(status);
+            mMusicStateListeners.remove(status);
         }
     }
 /*
