@@ -1,11 +1,8 @@
 # RD Music Player - Redefined Music Player
-This is a  music player which has a pretty UI&UX design
-</br>(based on [Timber Material Design Music Player](https://github.com/naman14/Timber))
+A pretty UI&UX Music Player
 
 ## Features
-
-* Live SplashScreen
-* One activity, all fragments with amazing animation
+* One activity, all fragments with fancy animation
 * Play Controller is able to be opened anywhere
 * Long tap to show shortcut
 * Learn your hobby, automatically create new playlist
@@ -36,11 +33,11 @@ src="https://user-images.githubusercontent.com/33343210/47192828-99d24d00-d379-1
   <table align="center" border="0" >
   <tr>
     <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/45993363-d5e6fa80-c0b8-11e8-8376-cf362128c822.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/54081100-60eb4280-4331-11e9-98b4-57a9eb22bcdc.png"/></td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/47193085-42cd7780-d37b-11e8-85cc-d3c4dbcb2499.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/54081099-5fba1580-4331-11e9-9238-2a1ed77dec41.png"/></td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/47192969-ac00bb00-d37a-11e8-9134-c158e7298dbd.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/54081062-97748d80-4330-11e9-9dcb-7b1eb13149d6.png"/></td>
   </tr>
 </table>
   </div>
