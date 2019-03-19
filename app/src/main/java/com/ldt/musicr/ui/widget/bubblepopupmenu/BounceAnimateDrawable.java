@@ -15,7 +15,7 @@ import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
-import com.ldt.musicr.util.uitool.Animation;
+import com.ldt.musicr.util.Animation;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.mediadata.oldmodel.CPointF;
 

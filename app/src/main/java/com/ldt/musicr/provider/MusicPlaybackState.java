@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
-import com.ldt.musicr.util.TimberUtils;
+import com.ldt.musicr.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -163,7 +163,7 @@ public class MusicPlaybackState {
 
                 do {
                     results.add(new MusicPlaybackTrack(cursor.getLong(0), cursor.getLong(1),
-                            TimberUtils.IdType.getTypeById(cursor.getInt(2)), cursor.getInt(3)));
+                            Utils.IdType.getTypeById(cursor.getInt(2)), cursor.getInt(3)));
                 } while (cursor.moveToNext());
             }
 

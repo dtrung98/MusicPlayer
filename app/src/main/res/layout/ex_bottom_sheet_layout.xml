@@ -5,13 +5,14 @@
     android:layout_marginBottom="@dimen/dp_8"
     android:layout_marginTop="@dimen/dp_8"
     android:layout_marginLeft="3dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    style="@style/BottomSheet">
     <ImageView
         android:layout_width="35dp"
         android:layout_height="5dp"
         android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/slide_up_down_icon_drawable"/>
+        android:src="@drawable/slide_up_down_icon_drawable" />
     <TextView
         android:id="@+id/popup_song_play"
         android:layout_width="match_parent"
@@ -22,6 +23,7 @@
         android:gravity="start|center_vertical"
         android:paddingLeft="12dp"
         android:text="@string/play"
+        android:textStyle="bold"
         android:textColor="@color/md_bottom_sheet_text_color"
         android:textSize="16sp" />
 
@@ -34,6 +36,7 @@
         android:backgroundTint="@android:color/white"
         android:gravity="start|center_vertical"
         android:text="@string/play_next"
+        android:textStyle="bold"
         android:paddingLeft="12dp"
         android:textColor="@color/md_bottom_sheet_text_color"
         android:textSize="16sp" />
@@ -47,6 +50,7 @@
         android:gravity="start|center_vertical"
         android:text="@string/add_to_queue"
         android:paddingLeft="12dp"
+        android:textStyle="bold"
         android:textColor="@color/md_bottom_sheet_text_color"
         android:textSize="16sp" />
     <TextView
@@ -59,6 +63,7 @@
         android:gravity="start|center_vertical"
         android:text="@string/add_to_playlist"
         android:paddingLeft="12dp"
+        android:textStyle="bold"
         android:textColor="@color/md_bottom_sheet_text_color"
         android:textSize="16sp" />
     <TextView
@@ -67,6 +72,7 @@
         android:layout_height="48dp"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
+        android:textStyle="bold"
         android:backgroundTint="@android:color/white"
         android:gravity="start|center_vertical"
         android:text="@string/go_to_album"
@@ -77,12 +83,12 @@
         android:id="@+id/popup_song_goto_artist"
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:textStyle="bold"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:backgroundTint="@android:color/white"
         android:gravity="start|center_vertical"
         android:text="@string/go_to_artist"
-
         android:paddingLeft="12dp"
         android:textColor="@color/md_bottom_sheet_text_color"
         android:textSize="16sp" />
@@ -92,13 +98,14 @@
         android:layout_height="1dp"
         android:layout_marginBottom="@dimen/dp_8"
         android:layout_marginTop="@dimen/md_bottom_sheet_separator_top_margin"
-        android:background="#ddd" />
+        android:background="#333" />
     <TextView
         android:id="@+id/popup_song_share"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
+        android:textStyle="bold"
         android:backgroundTint="@android:color/white"
         android:gravity="start|center_vertical"
         android:text="@string/share"
@@ -113,19 +120,19 @@
         android:layout_marginStart="@dimen/dp_16"
         android:gravity="start|center_vertical"
         android:paddingLeft="12dp"
+        android:textStyle="bold"
         android:text="@string/delete_from_playlist"
-        android:textColor="@color/HeavyRed"
+        android:textColor="@color/FlatOrange"
         android:textSize="16sp"
      />
     <TextView
         android:id="@+id/popup_song_delete"
-
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginStart="@dimen/dp_16"
         android:backgroundTint="@android:color/white"
-
+        android:textStyle="bold"
         android:gravity="start|center_vertical"
         android:paddingLeft="12dp"
         android:text="@string/delete_from_device"

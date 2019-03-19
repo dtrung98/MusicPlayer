@@ -76,8 +76,8 @@ import com.ldt.musicr.provider.RecentStore;
 import com.ldt.musicr.provider.SongPlayCount;
 import com.ldt.musicr.util.NavigationUtils;
 import com.ldt.musicr.util.PreferencesUtility;
-import com.ldt.musicr.util.TimberUtils;
-import com.ldt.musicr.util.TimberUtils.IdType;
+import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Utils.IdType;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.IOException;
@@ -461,7 +461,7 @@ log(8);
 
         mPlayerHandler.removeCallbacksAndMessages(null);
 
-        if (TimberUtils.isJellyBeanMR2())
+        if (Utils.isJellyBeanMR2())
             mHandlerThread.quitSafely();
         else mHandlerThread.quit();
 
@@ -615,7 +615,7 @@ log(8);
         int notificationId = hashCode();
         if (mNotifyMode != newNotifyMode) {
             if (mNotifyMode == NOTIFY_MODE_FOREGROUND) {
-                if (TimberUtils.isLollipop())
+                if (Utils.isLollipop())
                     stopForeground(newNotifyMode == NOTIFY_MODE_NONE);
                 else
                     stopForeground(newNotifyMode == NOTIFY_MODE_NONE || newNotifyMode == NOTIFY_MODE_BACKGROUND);
@@ -642,7 +642,7 @@ log(8);
     }
 
     private int getCardId() {
-        if (TimberUtils.isMarshmallow()) {
+        if (Utils.isMarshmallow()) {
             if (Nammu.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 return getmCardId();
             } else return 0;
@@ -733,7 +733,7 @@ log(8);
         if (goToIdle) {
             setIsSupposedToBePlaying(false, false);
         } else {
-            if (TimberUtils.isLollipop())
+            if (Utils.isLollipop())
                 stopForeground(false);
             else stopForeground(true);
         }
@@ -802,7 +802,7 @@ log(8);
         }
     }
 
-    private void addToPlayList(final long[] list, int position, long sourceId, TimberUtils.IdType sourceType) {
+    private void addToPlayList(final long[] list, int position, long sourceId, Utils.IdType sourceType) {
         final int addlen = list.length;
         if (position < 0) {
             mPlaylist.clear();
@@ -1087,7 +1087,7 @@ log(8);
             if (mHistory.size() > MAX_HISTORY_SIZE) {
                 mHistory.remove(0);
             }
-            mPlaylist.add(new MusicPlaybackTrack(mAutoShuffleList[idx], -1, TimberUtils.IdType.NA, -1));
+            mPlaylist.add(new MusicPlaybackTrack(mAutoShuffleList[idx], -1, Utils.IdType.NA, -1));
             notify = true;
         }
         if (notify) {
@@ -1179,7 +1179,7 @@ log(8);
             if (what.equals(META_CHANGED) || what.equals(QUEUE_CHANGED)) {
                 Bitmap albumArt = null;
                 if (mShowAlbumArtOnLockscreen) {
-                    albumArt = ImageLoader.getInstance().loadImageSync(TimberUtils.getAlbumArtUri(getAlbumId()).toString());
+                    albumArt = ImageLoader.getInstance().loadImageSync(Utils.getAlbumArtUri(getAlbumId()).toString());
                     if (albumArt != null) {
 
                         Bitmap.Config config = albumArt.getConfig();
@@ -1220,7 +1220,7 @@ log(8);
         } else if (what.equals(META_CHANGED) || what.equals(QUEUE_CHANGED)) {
             Bitmap albumArt = null;
             if (mShowAlbumArtOnLockscreen) {
-                albumArt = ImageLoader.getInstance().loadImageSync(TimberUtils.getAlbumArtUri(getAlbumId()).toString());
+                albumArt = ImageLoader.getInstance().loadImageSync(Utils.getAlbumArtUri(getAlbumId()).toString());
                 if (albumArt != null) {
 
                     Bitmap.Config config = albumArt.getConfig();
@@ -1253,7 +1253,7 @@ log(8);
     }
 
     private void createNotificationChannel() {
-        if (TimberUtils.isOreo()) {
+        if (Utils.isOreo()) {
             CharSequence name = "Timber";
             int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -1275,7 +1275,7 @@ log(8);
         Intent nowPlayingIntent = NavigationUtils.getNowPlayingIntent(this);
         PendingIntent clickIntent = PendingIntent.getActivity(this, 0, nowPlayingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         Bitmap artwork;
-        artwork = ImageLoader.getInstance().loadImageSync(TimberUtils.getAlbumArtUri(getAlbumId()).toString());
+        artwork = ImageLoader.getInstance().loadImageSync(Utils.getAlbumArtUri(getAlbumId()).toString());
 
         if (artwork == null) {
             artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.ic_empty_music2);
@@ -1301,22 +1301,22 @@ log(8);
                         "",
                         retrievePlaybackAction(NEXT_ACTION));
 
-        if (TimberUtils.isJellyBeanMR1()) {
+        if (Utils.isJellyBeanMR1()) {
             builder.setShowWhen(false);
         }
 
-        if (TimberUtils.isLollipop()) {
+        if (Utils.isLollipop()) {
             builder.setVisibility(Notification.VISIBILITY_PUBLIC);
             android.support.v4.media.app.NotificationCompat.MediaStyle style = new android.support.v4.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mSession.getSessionToken())
                     .setShowActionsInCompactView(0, 1, 2, 3);
             builder.setStyle(style);
         }
-        if (artwork != null && TimberUtils.isLollipop()) {
+        if (artwork != null && Utils.isLollipop()) {
             builder.setColor(Palette.from(artwork).generate().getVibrantColor(Color.parseColor("#403f4d")));
         }
 
-        if (TimberUtils.isOreo()) {
+        if (Utils.isOreo()) {
             builder.setColorized(true);
         }
 
@@ -1344,10 +1344,10 @@ log(8);
                 ArrayList<Bundle> list = new ArrayList<>();
                 do {
                     TrackItem t = new TrackItem()
-                            .setArt(BitmapFactory.decodeFile(TimberUtils.getAlbumArtUri(c.getLong(c.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))).getPath()))
+                            .setArt(BitmapFactory.decodeFile(Utils.getAlbumArtUri(c.getLong(c.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))).getPath()))
                             .setTitle(c.getString(c.getColumnIndexOrThrow(AudioColumns.TITLE)))
                             .setArtist(c.getString(c.getColumnIndexOrThrow(AudioColumns.ARTIST)))
-                            .setDuration(TimberUtils.makeShortTimeString(this, c.getInt(c.getColumnIndexOrThrow(AudioColumns.DURATION)) / 1000));
+                            .setDuration(Utils.makeShortTimeString(this, c.getInt(c.getColumnIndexOrThrow(AudioColumns.DURATION)) / 1000));
                     list.add(t.get());
                 } while (c.moveToNext());
                 try {
@@ -1389,7 +1389,7 @@ log(8);
     }
 
     private void reloadQueueAfterPermissionCheck() {
-        if (TimberUtils.isMarshmallow()) {
+        if (Utils.isMarshmallow()) {
             if (Nammu.checkPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                 reloadQueue();
             }
@@ -1509,7 +1509,7 @@ log(8);
                     if (mCursor != null && shouldAddToPlaylist) {
                         mPlaylist.clear();
                         mPlaylist.add(new MusicPlaybackTrack(
-                                mCursor.getLong(IDCOLIDX), -1, TimberUtils.IdType.NA, -1));
+                                mCursor.getLong(IDCOLIDX), -1, Utils.IdType.NA, -1));
                         notifyChange(QUEUE_CHANGED);
                         mPlayPos = 0;
                         mHistory.clear();
@@ -1965,7 +1965,7 @@ log(8);
         return isPlaying() || System.currentTimeMillis() - mLastPlayedTime < IDLE_DELAY;
     }
 
-    public void open(final long[] list, final int position, long sourceId, TimberUtils.IdType sourceType) {
+    public void open(final long[] list, final int position, long sourceId, Utils.IdType sourceType) {
         synchronized (this) {
             if (mShuffleMode == SHUFFLE_AUTO) {
                 mShuffleMode = SHUFFLE_NORMAL;

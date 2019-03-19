@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.ldt.musicr.ui.main.MainActivity;
+import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.util.Tool;
 
 import java.lang.ref.WeakReference;

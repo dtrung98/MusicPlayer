@@ -1,0 +1,66 @@
+package com.ldt.musicr.fragments;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.ldt.musicr.R;
+import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout;
+
+/**
+ * Created by trung on 7/17/2017.
+ */
+
+public class PlaylistControllerFragment extends BaseLayerFragment implements  View.OnTouchListener{
+    static final String TAG = "PlaylistControllerFragment";
+    public FragmentPlus.StatusTheme statusTheme = FragmentPlus.StatusTheme.BlackIcon;
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        return mLayerController.streamOnTouchEvent(TAG,view,event);
+    }
+    DarkenRoundedBackgroundFrameLayout rootView;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+         rootView = (DarkenRoundedBackgroundFrameLayout) inflater.inflate(R.layout.playlist_controller_fragment,container,false);
+
+         //v.setOnTouchListener(this);
+        return rootView;
+    }
+
+    @Override
+    public void onUpdateLayer(LayerController.Attr attr, float pcOnTopLayer, int active_i) {
+        // Todo : update layout
+        if(active_i==0) rootView.setRoundNumber(attr.getPc(),true);
+        else if(active_i>=1) {
+            rootView.setDarken(pcOnTopLayer*0.3f,false);
+            rootView.setRoundNumber(1,true);
+        }
+    }
+
+    @Override
+    public boolean onTouchParentView(boolean handled) {
+        return false;
+    }
+
+    @Override
+    public void onAddedToContainer(LayerController.Attr attr) {
+
+    }
+
+
+    @Override
+    public int minPosition(Context context) {
+        return 0;
+    }
+
+    @Override
+    public String tag() {
+        return TAG;
+    }
+
+}

@@ -84,7 +84,7 @@
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintStart_toStartOf="@id/title"
             app:layout_constraintEnd_toEndOf="@id/title"/>
-    <com.ldt.musicr.ui.widget.view.CircularPlayPauseProgressBar
+    <com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar
         android:id="@+id/present"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -93,7 +93,7 @@
         app:layout_constraintEnd_toStartOf="@id/more"
         android:padding="8dp"
         app:iconTint="@color/FlatWhite"
-        android:background="@drawable/ripple_effect"
+        android:background="@drawable/ripple_oval"
         android:alpha="0.9"/>
 
         <ImageView
@@ -107,5 +107,5 @@
             android:src="@drawable/ic_more_horiz_black_24dp"
             android:tint="#DDF5F5F5"
             android:scaleType="centerInside"
-            android:background="@drawable/ripple_effect"/>
+            android:background="@drawable/ripple_oval"/>
 </android.support.constraint.ConstraintLayout>

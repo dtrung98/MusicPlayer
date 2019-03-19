@@ -14,6 +14,8 @@
 
 package com.ldt.musicr.model;
 
+import org.jetbrains.annotations.Nullable;
+
 public class Song {
 
     public final long albumId;
@@ -48,5 +50,13 @@ public class Song {
         this.duration = _duration;
         this.trackNumber = _trackNumber;
         this.path = path;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if(obj instanceof Song) {
+           return ((Song)obj).id == this.id;
+        }
+        return false;
     }
 }

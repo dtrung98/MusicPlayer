@@ -11,7 +11,7 @@ import android.support.v4.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
 
 /**

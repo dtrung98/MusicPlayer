@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.ldt.musicr.model.Rectangle;
-import com.ldt.musicr.util.uitool.BitmapEditor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,8 +49,6 @@ public class Tool {
     public static Tool getInstance() {
         return tool;
     }
-
-
 
     private ArrayList<WallpaperChangedNotifier> notifiers = new ArrayList<>();
     private ArrayList<Boolean> CallFirstTime = new ArrayList<>();
@@ -227,7 +224,7 @@ public class Tool {
 
 
     private static int GlobalColor = 0xffff4081;
-    private static int SurfaceColor =0xff00dbde;
+    private static int SurfaceColor =0xff007AFF;
     public static void setSurfaceColor(int globalColor) {
         SurfaceColor = ColorReferTo(globalColor);
 
@@ -238,10 +235,10 @@ public class Tool {
      * @return a color which nearly the global color
      */
     public static boolean WHITE_TEXT_THEME = true;
-    public static int getSurfaceColor() {
+    public static int getBaseColor() {
         return SurfaceColor;
     }
-    public static void setGlobalColor(int globalColor)
+    public static void setMostCommonColor(int globalColor)
     {
         GlobalColor = globalColor;
     }
@@ -250,7 +247,7 @@ public class Tool {
      * The most common color get from the art song.
      * @return integer value of color
      */
-    public static int getGlobalColor()
+    public static int getMostCommonColor()
     {
         return GlobalColor;
     }
@@ -306,7 +303,7 @@ public class Tool {
             return i;
         }
     }
-    private static int ColorReferTo(int cmc) {
+    public static int ColorReferTo(int cmc) {
         float[] hsv = new float[3];
         Color.colorToHSV(cmc, hsv);
         //     Log.d(hsv[0] + "|" + hsv[1] + "|" + hsv[2], "ColorMe");

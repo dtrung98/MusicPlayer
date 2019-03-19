@@ -3,19 +3,16 @@ package com.ldt.musicr.ui.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.util.AttributeSet;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.widget.rounded.DarkenAndRoundedBackgroundContraintLayout;
 import com.ldt.musicr.ui.widget.rounded.RoundColorable;
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
 
 /**

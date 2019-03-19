@@ -42,8 +42,12 @@
     <color name="grid_line">#6D6D6D</color>
     <color name="timecode">#000000</color>
     <color name="timecode_shadow">#aa000000</color>
-    <color name="md_bottom_sheet_text_color">@android:color/black</color>
+    <color name="md_bottom_sheet_text_color">@color/FlatWhite</color>
     <color name="background_panel_color">#080808</color>
-    <color name="library_back_color">#393545</color>
+    <color name="library_back_color">#181818</color>
+    <color name="library_back_color_dd">#DD181818</color>
+    <color name="library_back_color_88">#88181818</color>
     <color name="shuffle_panel_color">#22FFFFFF</color>
+    <color name="color_aaa">#aaa</color>
+    
 </resources>

@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.ui.main.MainActivity;
+import com.ldt.musicr.ui.MainActivity;
 
 /**
  * Created by trung on 10/30/2017.

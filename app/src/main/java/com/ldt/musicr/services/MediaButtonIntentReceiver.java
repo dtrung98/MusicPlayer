@@ -10,8 +10,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.ldt.musicr.ui.main.MainActivity;
-import com.ldt.musicr.services.MusicService;
+import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.util.PreferencesUtility;
 /**
  * Used to control headset playback.

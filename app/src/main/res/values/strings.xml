@@ -199,4 +199,6 @@
     <string name="random_play">Shuffle play</string>
     <string name="sort">Sort</string>
     <string name="playlist">Playlist</string>
+    <string name="middle_dot" translatable="false">•</string>
+    <string name="see_all_songs">See all songs</string>
 </resources>

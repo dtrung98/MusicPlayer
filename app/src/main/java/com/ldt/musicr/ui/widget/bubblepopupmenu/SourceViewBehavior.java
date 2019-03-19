@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 
 /**
  * Created by trung on 11/3/2017.

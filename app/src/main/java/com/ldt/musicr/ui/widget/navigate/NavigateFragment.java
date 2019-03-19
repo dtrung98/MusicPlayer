@@ -27,6 +27,10 @@ public class NavigateFragment extends Fragment implements BackPressable {
         return inflater.inflate(R.layout.back_pressable_fragment,container,false);
     }
 
+    public Fragment getRootFragment() {
+        return mRootFragment;
+    }
+
     @CallSuper
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -94,5 +98,9 @@ public class NavigateFragment extends Fragment implements BackPressable {
         if(isNavigationControllerInit()) {
             mNavigationController.dismissFragment(animated);
         }
+    }
+    public void popToRootFragment() {
+        if(isNavigationControllerInit())
+            mNavigationController.popToRootFragment();
     }
 }

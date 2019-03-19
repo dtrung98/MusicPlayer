@@ -5,5 +5,5 @@
         android:topLeftRadius="10dp"
         android:topRightRadius="10dp" />
     <padding android:top="10dp" />
-    <solid android:color="@android:color/white" />
+    <solid android:color="@color/background_panel_color" />
 </shape>

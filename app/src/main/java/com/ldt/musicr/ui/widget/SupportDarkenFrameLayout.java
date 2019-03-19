@@ -13,7 +13,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.ldt.musicr.util.uitool.Animation;
+import com.ldt.musicr.util.Animation;
 import com.ldt.musicr.R;
 
 /**

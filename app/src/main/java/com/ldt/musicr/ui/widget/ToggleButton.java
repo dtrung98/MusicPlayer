@@ -1,6 +1,7 @@
 package com.ldt.musicr.ui.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -9,7 +10,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.R;
+import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.model.coordinate.MCoordinate.MPoint;
 
 import com.ldt.musicr.util.Tool;
@@ -23,17 +25,22 @@ public class ToggleButton extends View {
 
     public ToggleButton(Context context) {
         super(context);
-        init();
+        init(null);
     }
 
     public ToggleButton(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(attrs);
+    }
+
+    public ToggleButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(attrs);
     }
 
     public ToggleButton(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(attrs);
     }
 
     private Paint solidPaint;
@@ -49,6 +56,7 @@ public class ToggleButton extends View {
     private double gocLech,phuGocLech;
     private double doRongNet;
     private RectF rectF;
+
     public void setColor(int color) {
         this.color = color;
         if(solidPaint!=null) {
@@ -56,7 +64,12 @@ public class ToggleButton extends View {
             invalidate();
         }
     }
-    public void init() {
+    public void init(AttributeSet attr) {
+        if(attr!=null) {
+            TypedArray t = getContext().obtainStyledAttributes(attr, R.styleable.ToggleButton);
+            color = t.getColor(R.styleable.ToggleButton_maskColor, getResources().getColor(R.color.FlatWhite));
+            t.recycle();
+        }
         oneDp = Tool.getOneDps(getContext());
         canhA = oneDp*20;
         gocLech = -30*Math.PI/180; // -45 -> 45
@@ -65,8 +78,7 @@ public class ToggleButton extends View {
 
         solidPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         solidPaint.setStyle(Paint.Style.FILL);
-
-        color = 0xFFD4D4D2;
+        
         solidPaint.setColor(color);
         measuredSize = new int[2];
         realSize = new int[2];

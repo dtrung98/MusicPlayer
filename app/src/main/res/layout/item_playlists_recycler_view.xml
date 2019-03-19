@@ -11,9 +11,10 @@
     app:layout_constraintStart_toStartOf="parent"
     android:id="@+id/playlist_image"
     android:padding="6dp"
-    app:riv_corner_radius="4dp"
+    app:riv_corner_radius="3dp"
     app:riv_border_width="0dp"
     android:src="@drawable/default_image_round"
+    android:elevation="8dp"
    />
     <TextView
         android:layout_width="0dp"

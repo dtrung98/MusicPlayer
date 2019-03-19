@@ -11,7 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.R;
 
 public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
     private static final String TAG = "RoundSeeThroughTextView";
@@ -29,8 +29,10 @@ public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
         super(context, attrs, defStyleAttr);
         init();
     }
-
+    float oneDp =1;
     private void init() {
+        oneDp = getResources().getDimension(R.dimen.oneDP);
+        setWillNotDraw(false);
     }
     RoundDrawable drawable;
     class RoundDrawable extends Drawable {
@@ -45,14 +47,17 @@ public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
         }
         @Override
         public void draw(@NonNull Canvas canvas) {
-            if(path ==null) {
-                path = BitmapEditor.RoundedRect(0,0,getBounds().width(),getBounds().height(),15,15,false);
-                paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-                paint.setStyle(Paint.Style.FILL);
-            }
+//            if(path ==null) {
+//                path = BitmapEditor.RoundedRect(0,0,getBounds().width(),getBounds().height(),15,15,false);
+//                paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//
+//                paint.setStyle(Paint.Style.FILL);
+//            }
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setStyle(Paint.Style.FILL);
             paint.setColor(color);
-            canvas.drawPath(path,paint);
+//            canvas.drawPath(path,paint);
+            canvas.drawRoundRect(0,0,getBounds().width(),getBounds().height(),4*oneDp,4*oneDp,paint);
         }
 
         @Override
@@ -72,7 +77,9 @@ public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
     }
     @Override
     public void setBackgroundColor(int color) {
-        if(drawable==null) drawable = new RoundDrawable(color);
+        if(drawable==null) {
+            drawable = new RoundDrawable(color);
+        }
         else drawable.setColor(color);
        setBackgroundDrawable(drawable);
     }

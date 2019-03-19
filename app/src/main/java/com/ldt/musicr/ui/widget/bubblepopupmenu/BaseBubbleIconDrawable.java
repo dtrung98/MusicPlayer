@@ -10,7 +10,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.widget.ImageView;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
 
 import com.ldt.musicr.mediadata.oldmodel.C_RectF;
@@ -127,7 +127,7 @@ public void set() {
     int number;
     private void createIcon() {
         // tạo 2 background cho icon
-        focusColor = Tool.getSurfaceColor();
+        focusColor = Tool.getBaseColor();
         number = attr.menu_number;
         backIcon = getIconBackground(true);
         focusBackIcon = getIconBackground(false);

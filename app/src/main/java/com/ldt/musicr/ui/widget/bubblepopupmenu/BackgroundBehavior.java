@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.graphics.Canvas;
 
-import com.ldt.musicr.util.uitool.Animation;
+import com.ldt.musicr.util.Animation;
 
 /**
  * Created by trung on 11/2/2017.

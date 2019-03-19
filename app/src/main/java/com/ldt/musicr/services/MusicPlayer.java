@@ -37,7 +37,7 @@ import android.widget.Toast;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
-import com.ldt.musicr.util.TimberUtils;
+import com.ldt.musicr.util.Utils;
 
 import java.util.Arrays;
 import java.util.WeakHashMap;
@@ -469,19 +469,19 @@ public class MusicPlayer {
     public static void playArtist(final Context context, final long artistId, int position, boolean shuffle) {
         final long[] artistList = getSongListForArtist(context, artistId);
         if (artistList != null) {
-            playAll(context, artistList, position, artistId, TimberUtils.IdType.Artist, shuffle);
+            playAll(context, artistList, position, artistId, Utils.IdType.Artist, shuffle);
         }
     }
 
     public static void playAlbum(final Context context, final long albumId, int position, boolean shuffle) {
         final long[] albumList = getSongListForAlbum(context, albumId);
         if (albumList != null) {
-            playAll(context, albumList, position, albumId, TimberUtils.IdType.Album, shuffle);
+            playAll(context, albumList, position, albumId, Utils.IdType.Album, shuffle);
         }
     }
 
     public static void playAll(final Context context, final long[] list, int position,
-                               final long sourceId, final TimberUtils.IdType sourceType,
+                               final long sourceId, final Utils.IdType sourceType,
                                final boolean forceShuffle) {
         if (list == null || list.length == 0 || mService == null) {
             return;
@@ -510,7 +510,7 @@ public class MusicPlayer {
         }
     }
 
-    public static void playNext(Context context, final long[] list, final long sourceId, final TimberUtils.IdType sourceType) {
+    public static void playNext(Context context, final long[] list, final long sourceId, final Utils.IdType sourceType) {
         if (mService == null) {
             return;
         }
@@ -541,7 +541,7 @@ public class MusicPlayer {
                     return;
                 }
             }
-            mService.open(mTrackList, -1, -1, TimberUtils.IdType.NA.mId);
+            mService.open(mTrackList, -1, -1, Utils.IdType.NA.mId);
             mService.play();
             cursor.close();
             cursor = null;
@@ -682,7 +682,7 @@ public class MusicPlayer {
     }
 
     public static void addToQueue(final Context context, final long[] list, long sourceId,
-                                  TimberUtils.IdType sourceType) {
+                                  Utils.IdType sourceType) {
         if (mService == null) {
             return;
         }

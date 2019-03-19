@@ -96,14 +96,24 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/status_bar_parent"
-        app:layout_constraintStart_toStartOf="@id/search_view"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabIndicatorColor="@color/FlatWhite"
         app:tabSelectedTextColor="@color/FlatWhite"
         app:tabMode="scrollable"
-        app:tabTextColor="#88F5F5F5"/>
+        app:tabTextColor="#88F5F5F5"
+        android:overScrollMode="never"/>
+    <View
+        android:id="@+id/gradient_line"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        android:background="@drawable/gradient_shadow"
+        android:alpha="1"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"

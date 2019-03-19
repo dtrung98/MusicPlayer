@@ -19,9 +19,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ldt.musicr.util.uitool.Animation;
-import com.ldt.musicr.util.uitool.BitmapEditor;
-import com.ldt.musicr.util.uitool.GradientResourses;
+import com.ldt.musicr.util.Animation;
+import com.ldt.musicr.util.BitmapEditor;
+import com.ldt.musicr.util.GradientResourses;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 

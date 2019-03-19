@@ -154,7 +154,7 @@
             fancy:fb_textSize="12sp"
             /-->
              <com.ldt.musicr.ui.widget.RoundSeeThroughTextView
-                 android:id="@+id/time_textView"
+                 android:id="@+id/time_text_view"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:layout_gravity="center_horizontal"

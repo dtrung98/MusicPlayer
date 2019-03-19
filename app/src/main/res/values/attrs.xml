@@ -56,4 +56,7 @@
     <declare-styleable name="CircularPlayPauseProgressBar">
         <attr name="iconTint" format="color"/>
     </declare-styleable>
+    <declare-styleable name="ToggleButton">
+        <attr name="maskColor" format="color"/>
+    </declare-styleable>
 </resources>

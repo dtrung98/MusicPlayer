@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
-
+    tools:context="com.ldt.musicr.ui.flow.library.LibraryTabFragment"
    >
     <ImageView
         android:id="@+id/back_image"
@@ -96,11 +96,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabIndicatorColor="#44000000"
+        app:tabIndicatorColor="#33000000"
         app:tabSelectedTextColor="@color/FlatWhite"
         android:layout_marginTop="5dp"
         app:tabMode="scrollable"
-        app:tabTextColor="#88F5F5F5"/>
+        app:tabTextColor="#88F5F5F5"
+        android:overScrollMode="never"/>
+    <View
+        android:id="@+id/gradient_line"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        android:background="@drawable/gradient_shadow"
+        android:alpha="0"/>
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"

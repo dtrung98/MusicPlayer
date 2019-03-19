@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ldt.musicr.fragments.PlaylistControllerFragment"
+    tools:context="com.ldt.musicr.txt.PlaylistControllerFragment"
     android:background="@color/FlatWhite">
     <RelativeLayout
         android:layout_width="match_parent"

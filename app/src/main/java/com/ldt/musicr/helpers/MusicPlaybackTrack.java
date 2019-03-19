@@ -19,7 +19,7 @@ package com.ldt.musicr.helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ldt.musicr.util.TimberUtils;
+import com.ldt.musicr.util.Utils;
 
 
 /**
@@ -43,10 +43,10 @@ public class MusicPlaybackTrack implements Parcelable {
     };
     public long mId;
     public long mSourceId;
-    public TimberUtils.IdType mSourceType;
+    public Utils.IdType mSourceType;
     public int mSourcePosition;
 
-    public MusicPlaybackTrack(long id, long sourceId, TimberUtils.IdType type, int sourcePosition) {
+    public MusicPlaybackTrack(long id, long sourceId, Utils.IdType type, int sourcePosition) {
         mId = id;
         mSourceId = sourceId;
         mSourceType = type;
@@ -56,7 +56,7 @@ public class MusicPlaybackTrack implements Parcelable {
     public MusicPlaybackTrack(Parcel in) {
         mId = in.readLong();
         mSourceId = in.readLong();
-        mSourceType = TimberUtils.IdType.getTypeById(in.readInt());
+        mSourceType = Utils.IdType.getTypeById(in.readInt());
         mSourcePosition = in.readInt();
     }
 

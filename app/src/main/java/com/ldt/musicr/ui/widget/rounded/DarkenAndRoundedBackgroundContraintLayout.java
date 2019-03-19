@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 
 public class DarkenAndRoundedBackgroundContraintLayout extends ConstraintLayout implements RoundColorable{
 

@@ -81,6 +81,27 @@
         tools:listitem="@layout/item_feature_song"
         tools:orientation="vertical"
         tools:layoutManager="LinearLayoutManager"
-
         />
+    <TextView
+        android:id="@+id/see_all"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recycler_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/see_all_songs"
+        android:textColor="@color/FlatWhite"
+        android:background="@drawable/ripple_effect_15dp_radius"
+
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:padding="10dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:focusable="true"
+        android:clickable="true"/>
 </android.support.constraint.ConstraintLayout>

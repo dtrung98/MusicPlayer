@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.ldt.musicr.util.uitool.BitmapEditor;
+import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.R;
 
 public class BlurImageViewChildConstraintLayout extends ConstraintLayout {
@@ -107,7 +107,7 @@ public class BlurImageViewChildConstraintLayout extends ConstraintLayout {
             Canvas tempCanvas = new Canvas(tempBitmap);
             solidPaint.setAlpha(150);
            tempCanvas.drawBitmap(bitmap,new Rect(0,0,bitmap.getWidth(),bitmap.getHeight()), new Rect(imageRect[0]+ mBlurDelta[0],imageRect[1]+ mBlurDelta[1],imageRect[2]+ mBlurDelta[2],imageRect[3]+ mBlurDelta[3]),solidPaint);
-        //    solidPaint.setColor(Tool.getSurfaceColor());
+        //    solidPaint.setColor(Tool.getBaseColor());
        //     solidPaint.setAlpha(80);
        //   tempCanvas.drawRect(imageRect[0]+mBlurDelta[0],imageRect[1]+mBlurDelta[1],imageRect[2]+mBlurDelta[2],imageRect[3]+mBlurDelta[3],solidPaint);
             shadowBitmap =BitmapEditor.getBlurredWithGoodPerformance(getContext(),tempBitmap,1,16,3.5f);
