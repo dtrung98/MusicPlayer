@@ -109,8 +109,8 @@
             android:tint="#AAA"
             android:padding="12dp"/>
     </android.support.constraint.ConstraintLayout>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +136,7 @@
         android:layout_height="220dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/recycler_view"
+        app:layout_constraintBottom_toBottomOf="@id/view_pager"
         android:background="@drawable/now_playing_bottom_gradient"
         android:alpha="1"
 

@@ -14,9 +14,13 @@
 
 package com.ldt.musicr.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.jetbrains.annotations.Nullable;
 
-public class Song {
+
+public class Song implements Parcelable {
 
     public final long albumId;
     public final String albumName;
@@ -27,6 +31,7 @@ public class Song {
     public final String title;
     public final int trackNumber;
     public final String path;
+
 
     public Song() {
         this.id = -1;
@@ -59,4 +64,44 @@ public class Song {
         }
         return false;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.id);
+        dest.writeString(this.title);
+        dest.writeInt(this.trackNumber);
+        dest.writeInt(this.duration);
+        dest.writeString(this.path);
+        dest.writeLong(this.albumId);
+        dest.writeString(this.albumName);
+        dest.writeLong(this.artistId);
+        dest.writeString(this.artistName);
+    }
+
+    public Song(Parcel in) {
+        this.id = in.readLong();
+        this.title = in.readString();
+        this.trackNumber = in.readInt();
+        this.duration = in.readInt();
+        this.path = in.readString();
+        this.albumId = in.readLong();
+        this.albumName = in.readString();
+        this.artistId = in.readLong();
+        this.artistName = in.readString();
+    }
+
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        public Song createFromParcel(Parcel source) {
+            return new Song(source);
+        }
+
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
 }

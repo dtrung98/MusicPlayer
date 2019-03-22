@@ -22,11 +22,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.ItemHolder> implements Callback {
-    private static final String TAG ="NowPlayingAdapter";
+public class CoverRVAdapter extends RecyclerView.Adapter<CoverRVAdapter.ItemHolder> implements Callback {
+    private static final String TAG ="CoverRVAdapter";
     private ArrayList<Song> mData = new ArrayList<>();
     private Context mContext;
-    public NowPlayingAdapter(Context context) {
+    public CoverRVAdapter(Context context) {
         mContext = context;
     }
 
@@ -87,7 +87,7 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
             ButterKnife.bind(this,itemView);
         }
         private void bind(Song song) {
-            Picasso.get().load(Utils.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).into(mImage,NowPlayingAdapter.this);
+            Picasso.get().load(Utils.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).into(mImage, CoverRVAdapter.this);
 
         }
     }

@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.motion.MotionLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +40,6 @@ import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.flow.SongOptionBottomSheet;
-import com.ldt.musicr.ui.flow.library.SongAdapter;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
@@ -56,7 +55,7 @@ import butterknife.OnClick;
 
 import static com.ldt.musicr.util.BitmapEditor.updateSat;
 
-public class NowPlayingController extends BaseLayerFragment implements MusicStateListener, AudioVisualSeekBar.OnSeekBarChangeListener, ColorPickerAdapter.OnColorChangedListener {
+public class NowPlayingController extends BaseLayerFragment implements MusicStateListener, AudioVisualSeekBar.OnSeekBarChangeListener, ColorPickerAdapter.OnColorChangedListener, ViewPager.OnPageChangeListener {
     private static final String TAG ="NowPlayingController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
@@ -64,15 +63,15 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @BindView(R.id.minimize_bar) View mMinimizeBar;
 
-    @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    @BindView(R.id.view_pager)
+    ViewPager mViewPager;
 
     @BindView(R.id.visual_seek_bar)
     AudioVisualSeekBar mVisualSeekBar;
     @BindView(R.id.time_text_view) TextView mTimeTextView;
     @BindView(R.id.big_title) TextView mBigTitle;
     @BindView(R.id.big_artist) TextView mBigArtist;
-    private NowPlayingAdapter mAdapter;
+    private CoverPagerAdapter mAdapter;
     @BindView(R.id.color_picker_recycler_view) RecyclerView mColorPickerRecyclerView;
     private ColorPickerAdapter mColorPickerAdapter;
 
@@ -97,19 +96,16 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mTitle.setSelected(true);
 
-        mAdapter = new NowPlayingAdapter(getActivity());
-      //  mRecyclerView.setPageTransformer(false, new SliderTransformer());
-        mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-
-        snapHelper.attachToRecyclerView(mRecyclerView);
+        mViewPager.addOnPageChangeListener(this);
+        mViewPager.setAdapter(mAdapter);
+       // mViewPager.setPageTransformer(false, new SliderTransformer());
 
         mColorPickerAdapter = new ColorPickerAdapter(this);
         mColorPickerRecyclerView.setAdapter(mColorPickerAdapter);
         mColorPickerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
 
-        mRecyclerView.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
+        mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
         mVisualSeekBar.setOnTouchListener((v, event) -> {
             return mLayerController.streamOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN;
         });
@@ -161,7 +157,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @Override
     public void onTranslateChanged(LayerController.Attr attr) {
-        Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
+        Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+ mViewPager.getWidth());
         if(getMaxPositionType())
         setRadius(0);
         else setRadius(attr.getRuntimePercent());
@@ -169,10 +165,13 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         mConstraintRoot.setProgress(attr.getRuntimePercent());
         // sync time text view
         if(mConstraintRoot.getProgress()!=0&&!mTimeTextIsSync) mTimeTextView.setText(timeTextViewTemp);
-        if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1)
-            try {
-                mRecyclerView.scrollToPosition(MusicPlayer.getQueuePosition());
-            } catch (Exception ignore) {}
+
+
+        if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1) {
+            //TODO: Back to playing position
+     //       mViewPager.setCurrentItem(MusicPlayer.getQueuePosition());
+
+        }
     }
 
     @Override
@@ -250,11 +249,13 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         long start = System.currentTimeMillis();
 
         long time3 = System.currentTimeMillis() - start;
-        mAdapter.setData(songs2);
+
+        //   mAdapter.setData(songs2);
         long time4 = System.currentTimeMillis() - start;
         if(!songs2.isEmpty()) {
-            mAdapter.notifyItemChanged(MusicPlayer.getQueuePosition());
-            mRecyclerView.scrollToPosition(MusicPlayer.getQueuePosition());}
+            mViewPager.setAdapter(new CoverPagerAdapter(getContext(),songs2));
+            mViewPager.setCurrentItem(MusicPlayer.getQueuePosition());
+        }
         long time5 = System.currentTimeMillis() - start;
         String path = MusicPlayer.getPath();
         long duration = MusicPlayer.duration();
@@ -329,18 +330,28 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
     public void onColorChanged(int position, int newColor) {
         mBigTitle.setTextColor(newColor);
     }
+    private int mCurrentPosition= 0;
 
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.d(TAG, "onPageScrolled: "+position+", "+positionOffset+", "+positionOffsetPixels);
+    }
 
-    private class CustomDecoration extends RecyclerView.ItemDecoration {
-        public CustomDecoration() {
-            super();
-        }
+    @Override
+    public void onPageSelected(int position) {
+        mCurrentPosition = position;
+        //TODO : Replace BigTitle & Artist Color by temp position song.
+        //TODO : Change Title & Artist by temp position song.
+        if (position != MusicPlayer.getQueuePosition()) {
 
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
         }
     }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
+
+    }
+
     @Override
     public void onPause() {
         super.onPause();
