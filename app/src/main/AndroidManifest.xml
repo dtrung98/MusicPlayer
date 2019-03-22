@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:name=".MusicApp"
         android:allowBackup="false"
@@ -27,6 +31,56 @@
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+                <action android:name="android.intent.action.MUSIC_PLAYER" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data android:scheme="content" />
+            <data android:mimeType="audio/*" />
+            <data android:mimeType="application/ogg" />
+            <data android:mimeType="application/x-ogg" />
+            <data android:mimeType="application/itunes" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+
+            <data android:scheme="file" />
+            <data android:mimeType="audio/*" />
+            <data android:mimeType="application/ogg" />
+            <data android:mimeType="application/x-ogg" />
+            <data android:mimeType="application/itunes" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="http" />
+            <data android:mimeType="audio/*" />
+            <data android:mimeType="application/ogg" />
+            <data android:mimeType="application/x-ogg" />
+            <data android:mimeType="application/itunes" />
+        </intent-filter>
+            <intent-filter>
+                <action android:name="com.cyanogenmod.eleven.AUDIO_PLAYER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="vnd.android.cursor.dir/audio" />
             </intent-filter>
         </activity>
         <service

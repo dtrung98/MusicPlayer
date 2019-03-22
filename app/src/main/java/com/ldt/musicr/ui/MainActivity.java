@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.bottom_navigation_view)
     BottomNavigationView mBottomNavigationView;
     AudioPreviewPlayer mAudioPreviewPlayer = new AudioPreviewPlayer();
+
     public AudioPreviewPlayer getAudioPreviewPlayer() {
         return mAudioPreviewPlayer;
     }
@@ -64,6 +65,13 @@ public class MainActivity extends BaseActivity {
     public void goToSongTab() {
         mBackStackController.goToSongTab();
     }
+
+    @Override
+    protected void onDestroy() {
+        if(mAudioPreviewPlayer!=null) removeMusicStateListener(mAudioPreviewPlayer);
+        super.onDestroy();
+    }
+
 
     public interface PermissionListener {
         void onPermissionGranted();
@@ -96,11 +104,12 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.basic_activity_layout);
         ButterKnife.bind(this);
         mLayerContainer.setVisibility(View.GONE);
+        if(mAudioPreviewPlayer!=null) addMusicStateListener(mAudioPreviewPlayer);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
         bubbleMenuCenter = new BubbleMenuCenter(this);
 
-        mRootEverything.postDelayed(new Runnable() {
+        mRootEverything.post(new Runnable() {
             @Override
             public void run() {
 
@@ -109,7 +118,7 @@ public class MainActivity extends BaseActivity {
                     mIntroController.Init(MainActivity.this,savedInstanceState);
                 } else startGUI();
             }
-        },100);
+        });
 
     }
     /**

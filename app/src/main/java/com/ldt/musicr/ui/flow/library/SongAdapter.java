@@ -217,6 +217,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public void randommize() {
+        if(mData.isEmpty()) return;
         mSelected = mRandom.nextInt(mData.size());
         if(mCallBack!=null) mCallBack.onFirstItemCreated(mData.get(mSelected));
     }
@@ -242,15 +243,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         },100);
     }
 
-    @Override
-    public int getViewTypeHeight(RecyclerView recyclerView, @Nullable RecyclerView.ViewHolder viewHolder, int viewType) {
-        if (viewType == R.layout.item_sort_song_child) {
-            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_sort_song_child_height);
-        } else if (viewType == R.layout.item_song_child) {
-            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_song_child_height);
-        }
-        return 0;
-    }
 
     @NonNull
     @Override
@@ -265,7 +257,8 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     private void playPreviewThisItem(ItemHolder itemHolder) {
 
-        if(mPreviewItem!=-1) notifyItemChanged(mPreviewItem,false);
+        if(mPreviewItem!=-1)
+            notifyItemChanged(mPreviewItem,false);
         String path = mData.get(getRealAdapterPosition(itemHolder)).path;
         mPreviewItem = itemHolder.getAdapterPosition();
         ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(SongAdapter.this,path);
@@ -283,11 +276,20 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private long mNotifyTime = System.currentTimeMillis();
 
     @Override
-    public void notifyAudioPreviewDuration(int time) {
+    public void onPreviewStart(int totalTime) {
         if(mPreviewItem!=-1) {
-            mNotifyDuration = time;
+            mNotifyDuration = totalTime;
             mNotifyTime = System.currentTimeMillis();
-            notifyItemChanged(mPreviewItem,time);
+            notifyItemChanged(mPreviewItem, totalTime);
+        }
+    }
+
+    @Override
+    public void onPreviewDestroy() {
+        if(mPreviewItem!=-1) {
+            int temp = mPreviewItem;
+            mPreviewItem = -1;
+            notifyItemChanged(temp, false);
         }
     }
 
@@ -309,6 +311,20 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 }, 50);
             }, 100);
         }
+    }
+
+    public int getViewTypeHeight(RecyclerView recyclerView, @Nullable RecyclerView.ViewHolder viewHolder, int viewType) {
+        if (viewType == R.layout.item_sort_song_child) {
+            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_sort_song_child_height);
+        } else if (viewType == R.layout.item_song_child) {
+            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_song_child_height);
+        }
+        return 0;
+    }
+
+    @Override
+    public int getViewTypeHeight(RecyclerView recyclerView, int i) {
+        return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_song_child_height);
     }
 
     public class SortHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -425,6 +441,15 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         @OnClick(R.id.present)
         void clickPresent() {
+
+            // set previewItem = -1 if the preview is end
+            if(mPresentButton instanceof  CircularPlayPauseProgressBar) {
+                CircularPlayPauseProgressBar mProgressBar = (CircularPlayPauseProgressBar)mPresentButton;
+                if(mPreviewItem==getAdapterPosition()&&mProgressBar.getMode()==CircularPlayPauseProgressBar.RESET)
+                    mPreviewItem = -1;
+            }
+
+
             if(mPreviewItem!=getAdapterPosition())
                 playPreviewThisItem(this);
             else {

@@ -46,4 +46,5 @@
     <dimen name="item_song_child_loader_width">24dp</dimen>
     <dimen name="min_padding_image_playlist">42dp</dimen>
     <dimen name="max_radius_layer">18dp</dimen>
+    <dimen name="bottom_line_height_card_view">50dp</dimen>
 </resources>

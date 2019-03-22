@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName '1.2'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi 18
+        renderscriptTargetApi 28
         renderscriptSupportModeEnabled true
 
     }
@@ -59,14 +59,9 @@ dependencies {
     // implementation 'com.google.android.gms:shuffle-services-location:10.2.6'
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'me.everything:overscroll-decor-android:1.0.4'
-    implementation 'se.emilsjolander:StickyScrollViewItems:1.1.0'
-    //implementation 'com.github.Semantive:waveform-android:v1.2'
-//    implementation 'com.chauthai.overscroll:overscroll-bouncy:0.1.1'
-    // implementation 'com.alibaba:fastjson:1.1.55.android'
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'de.Maxr1998:track-selector-lib:1.1'
-    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
     implementation 'net.steamcrafted:materialiconlib:1.0.3'
     implementation 'com.daasuu:EasingInterpolator:1.0.0'
     implementation 'com.facebook.rebound:rebound:0.3.8'
@@ -100,10 +95,19 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
     // RecyclerView FastScroller
-    implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20'
+
+    //  Original
+    // implementation 'com.simplecityapps:recyclerview-fastscroll:2.0.0' (Use Android X which is incompatitive)
+    // implementation 'com.simplecityapps:recyclerview-fastscroll:1.0.20' (Use Android Support)
+
+    // Mod
+    implementation 'com.github.kabouzeid:RecyclerView-FastScroll:1.0.16-kmod'
 
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
+
+    // Universal Image Loader
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 }
 

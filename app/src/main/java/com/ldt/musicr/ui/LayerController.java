@@ -783,6 +783,10 @@ public class LayerController {
         throw new NoSuchElementException("No layer has that view");
     }
 
+    public int getMyPosition(Attr attr) {
+       return mBaseAttrs.indexOf(attr);
+    }
+
     public class Attr {
 
         public Attr() {
@@ -937,12 +941,13 @@ public class LayerController {
             return value;
         }
         public void animateToMax() {
+            mGestureListener.item = getMyPosition(this);
             animateTo(getMaxPosition());
         }
         public void animateToMin() {
+            mGestureListener.item = getMyPosition(this);
             animateTo(minPosition);
         }
-
 
         public void updateTranslateY() {
             if(parent!=null) parent.setTranslationY(getRealTranslateY());

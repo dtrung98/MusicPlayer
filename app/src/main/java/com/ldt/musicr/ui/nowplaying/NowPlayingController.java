@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.nowplaying;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.motion.MotionLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +39,8 @@ import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.flow.SongOptionBottomSheet;
+import com.ldt.musicr.ui.flow.library.SongAdapter;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
@@ -72,18 +76,19 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
     @BindView(R.id.color_picker_recycler_view) RecyclerView mColorPickerRecyclerView;
     private ColorPickerAdapter mColorPickerAdapter;
 
-//    @OnClick(R.id.playlist_title)
-//    void popUpPlaylist() {
-//        if(getActivity() instanceof MainActivity) {
-//            ((MainActivity)getActivity()).popUpPlaylistTab();
-//        }
-//    }
+    @OnClick(R.id.more)
+    void more() {
+        SongOptionBottomSheet sheet =  SongOptionBottomSheet.newInstance();
+        sheet.show((getActivity()).getSupportFragmentManager(),
+                "song_popup_menu");
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return inflater.inflate(R.layout.now_playing_controller,container,false);
     }
+
     SnapHelper snapHelper = new PagerSnapHelper();
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -224,6 +229,13 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
     ImageView mPlayPauseButton;
     LoadQueueTask mLoadQueueTask;
 
+    @OnClick(R.id.playlist_title)
+    void popUpPlayingList() {
+        Activity activity = getActivity();
+        if(activity instanceof MainActivity) {
+            ((MainActivity)getActivity()).popUpPlaylistTab();
+        }
+    }
     @Override
     public void onMetaChanged() {
         mTitle.setText(String.format("%s %s %s", MusicPlayer.getTrackName(), getString(R.string.middle_dot), MusicPlayer.getArtistName()));
@@ -247,7 +259,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         String path = MusicPlayer.getPath();
         long duration = MusicPlayer.duration();
         if(duration>0&&path!=null&&!path.isEmpty()&&!mVisualSeekBar.getCurrentFileName().equals(path))
-            mVisualSeekBar.Visualize(path,duration);
+            mVisualSeekBar.visualize(path,duration, (int) MusicPlayer.position());
         mVisualSeekBar.postDelayed(mUpdateProgress,10);
         // Log.d(TAG, "onMetaChanged: time1 = "+time1+", time2 = "+time2+", time3 = "+time3+", time4 = "+time4+", time5 = "+time5);
         Log.d(TAG, "onMetaChanged: time3 = "+time3+", time4 = "+time4+", time5 = "+time5);
@@ -262,7 +274,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
       //  mTimeTextView.setTextColor(color1);
      //   (mTimeTextView.getBackground()).setColorFilter(color1, PorterDuff.Mode.SRC_IN);
 
-        mBigTitle.setTextColor(Tool.getHeavyColor());
+        mBigTitle.setTextColor(Tool.lighter(color1,0.5f));
        // mBigArtist.setAlpha(alpha2);
         mBigArtist.setTextColor(color2);
         mVisualSeekBar.updateProperties();

@@ -167,7 +167,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicState
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.playlist_pager_v2,container,false);
+        return inflater.inflate(R.layout.playlist_page,container,false);
     }
 
     @Override

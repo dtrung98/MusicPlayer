@@ -51,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
     protected void onStart() {
         Log.d(TAG,"onStart");
         super.onStart();
-
+        if(mService==null) mToken = MusicPlayer.bindToService(this, this);
         final IntentFilter filter = new IntentFilter();
         // Play and pause changes
         filter.addAction(MusicService.PLAYSTATE_CHANGED);

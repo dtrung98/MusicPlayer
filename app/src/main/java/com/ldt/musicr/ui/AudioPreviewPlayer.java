@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
+import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.widget.soundfile.CheapSoundFile;
 
 import java.io.File;
@@ -14,17 +16,20 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
+public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, MusicStateListener {
     private static final String TAG ="AudioPreviewPlayer";
 
     String mPath;
     File mFile;
     CheapSoundFile mSoundFile;
     private AudioPreviewerListener mListener;
-    private loadSoundFile mLoadSoundFile;
+    private SoundFileLoader mLoadSoundFile;
+    private boolean mSavedPlayState = false;
+    private boolean mIsStateLocked = false;
 
     public AudioPreviewPlayer() {
         mPath ="";
+        onMetaChanged();
     }
 
     public AudioPreviewPlayer setListener(AudioPreviewerListener listener) {
@@ -35,12 +40,32 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
         mListener = null;
     }
 
+    @Override
+    public void restartLoader() {
+
+    }
+
+    @Override
+    public void onPlaylistChanged() {
+
+    }
+
+    @Override
+    public void onMetaChanged() {
+        checkingMusicState();
+    }
+    private void checkingMusicState() {
+        if(MusicPlayer.isPlaying())
+            forceStop();
+    }
+
     public interface AudioPreviewerListener {
-        void notifyAudioPreviewDuration(int timePlayed);
+        void onPreviewStart(int totalTime);
+        void onPreviewDestroy();
     }
 
     public void previewThisFile(AudioPreviewerListener listener , String path) {
-
+        Log.d(TAG, "previewThisFile");
         dismiss();
 
         setListener(listener);
@@ -51,7 +76,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
         mFile = new File(mPath);
         if(!mFile.exists()) return;
 
-        mLoadSoundFile = new loadSoundFile(this);
+        mLoadSoundFile = new SoundFileLoader(this);
         mLoadSoundFile.execute(mFile);
     }
 
@@ -304,6 +329,17 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
         }
     }
     public void forceStop() {
+        if(mListener!=null) mListener.onPreviewDestroy();;
+        // release old media player
+        if(mMediaPlayer!=null) {
+            try {
+                if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
+                else mMediaPlayer.release();
+            } catch (Exception ignore) {}
+        }
+    }
+    private void releaseOldMediaPlayer() {
+
         // release old media player
         if(mMediaPlayer!=null) {
             try {
@@ -313,14 +349,10 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
         }
     }
 
-    private void play() {
-        // release old media player
-        if(mMediaPlayer!=null) {
-            try {
-                if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
-                else mMediaPlayer.release();
-            } catch (Exception ignore) {}
-        }
+    private void onSoundFileReady() {
+        if(!mIsStateLocked) mSavedPlayState = MusicPlayer.isPlaying();
+
+        releaseOldMediaPlayer();
 
         if(mPlayTo<=mPlayFrom) {return;}
 
@@ -336,7 +368,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
 
             int timePlayed = (int) ((mPlayTo - mPlayFrom)*1000);
             mMediaPlayer.start();
-            if(mListener!=null) mListener.notifyAudioPreviewDuration(timePlayed);
+            if(mListener!=null) mListener.onPreviewStart(timePlayed);
 
             Handler handler = new Handler();
            final MediaPlayer mediaPlayer = mMediaPlayer;
@@ -347,7 +379,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
             }
 
         } catch (IOException e) {
-            Log.d(TAG, "play error : "+ e.getMessage());
+            Log.d(TAG, "onSoundFileReady error : "+ e.getMessage());
         }
     }
 
@@ -355,11 +387,11 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
     public void onCompletion(MediaPlayer mp) {
         dismiss();
     }
-    private static class loadSoundFile extends AsyncTask< File, Void, Void > implements CheapSoundFile.ProgressListener {
+    private static class SoundFileLoader extends AsyncTask< File, Void, Void > implements CheapSoundFile.ProgressListener {
         AudioPreviewPlayer mAudioPreviewPlayer;
         boolean mKeeping = true;
         boolean isFinished = false;
-        public loadSoundFile(AudioPreviewPlayer bs) {
+        public SoundFileLoader(AudioPreviewPlayer bs) {
             mAudioPreviewPlayer = bs;
         }
 
@@ -387,7 +419,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
             super.onPostExecute(aVoid);
             isFinished = true;
             if(mAudioPreviewPlayer !=null)
-            mAudioPreviewPlayer.play();
+            mAudioPreviewPlayer.onSoundFileReady();
 
         }
 
@@ -470,27 +502,13 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener {
 
         timer.schedule(timerTask,FADE_INTERVAL,FADE_INTERVAL);
     }
-    private class MediaPlayerV2 extends MediaPlayer {
-        boolean isRelease = false;
-
-        public boolean isReleased() {
-            return isRelease;
-        }
-        @Override
-        public void release() {
-            super.release();
-            isRelease = true;
-        }
-    }
 
     private void fadeOutStep(MediaPlayer mediaPlayer,float deltaVolume){
         mediaPlayer.setVolume(out_volume, out_volume);
         out_volume -= deltaVolume;
-
     }
     private void fadeInStep(MediaPlayer mediaPlayer,float deltaVolume){
         mediaPlayer.setVolume(in_volume, in_volume);
         in_volume += deltaVolume;
-
     }
 }

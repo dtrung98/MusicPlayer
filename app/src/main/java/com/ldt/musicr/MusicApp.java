@@ -18,25 +18,25 @@ public class MusicApp extends Application {
     public static synchronized MusicApp getInstance() {
         return mInstance;
     }
-@Override
+    @Override
     public void onCreate() {
-    super.onCreate();
-    mInstance = this;
-    ImageLoaderConfiguration localImageLoaderConfiguration = new ImageLoaderConfiguration.Builder(this).imageDownloader(new BaseImageDownloader(this) {
-        PreferencesUtility prefs = PreferencesUtility.getInstance(MusicApp.this);
+        super.onCreate();
+        mInstance = this;
+        ImageLoaderConfiguration localImageLoaderConfiguration = new ImageLoaderConfiguration.Builder(this).imageDownloader(new BaseImageDownloader(this) {
+            PreferencesUtility prefs = PreferencesUtility.getInstance(MusicApp.this);
 
-        @Override
-        protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
-            if (prefs.loadArtistImages()) return super.getStreamFromNetwork(imageUri, extra);
-            throw new IOException();
-        }
-    }).build();
+            @Override
+            protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+                if (prefs.loadArtistImages()) return super.getStreamFromNetwork(imageUri, extra);
+                throw new IOException();
+            }
+        }).build();
 
-    ImageLoader.getInstance().init(localImageLoaderConfiguration);
-    L.writeLogs(false);
-    L.disableLogging();
-    L.writeDebugLogs(false);
-    Nammu.init(this);
+        ImageLoader.getInstance().init(localImageLoaderConfiguration);
+        L.writeLogs(true);
+     //   L.disableLogging();
+        L.writeDebugLogs(true);
+        Nammu.init(this);
 
-}
+    }
 }

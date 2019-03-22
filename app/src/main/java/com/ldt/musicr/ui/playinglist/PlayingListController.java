@@ -33,8 +33,11 @@ import butterknife.OnTouch;
 
 public class PlayingListController extends BaseLayerFragment implements MusicStateListener {
     private static final String TAG ="PlayingListController";
+    @BindView(R.id.rootCardView)
+    CardView mRootCardView;
+
     @BindView(R.id.root)
-    CardView mRoot;
+    View mRoot;
 
     @BindView(R.id.dim_view) View mDimView;
     private float mMaxRadius = 18;
@@ -67,8 +70,8 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
     }
 
     public void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
-        mPlaylistTitle.setTextColor(color1);
-        mDownIcon.setColorFilter(color1);
+        mPlaylistTitle.setTextColor(Tool.lighter(color1,0.5f));
+        mDownIcon.setColorFilter(Tool.lighter(color1,0.5f));
         updateShuffleState();
         updateRepeatState();
     }
@@ -105,7 +108,7 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
         if(mRoot!=null) {
             if(value>1) value=1;
             else if(value<=0.1f) value = 0;
-            mRoot.setRadius(mMaxRadius * value);
+            mRootCardView.setRadius(mMaxRadius * value);
         }
     }
 
@@ -126,6 +129,7 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
 
     @Override
     public void onTranslateChanged(LayerController.Attr attr) {
+        Log.d(TAG, "onTranslateChanged");
         if(mRoot!=null) {
             float pc = attr.getRuntimePercent();
             if(pc>1) pc=1;

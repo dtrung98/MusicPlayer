@@ -78,7 +78,7 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.song_child_tab_v2,container,false);
+        return inflater.inflate(R.layout.song_child_tab,container,false);
     }
 
     @Override

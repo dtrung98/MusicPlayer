@@ -68,6 +68,7 @@ import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 import com.ldt.musicr.permission.Nammu;
@@ -281,7 +282,7 @@ public class MusicService extends Service {
     }
     private void log(float i) {
         if(D)
-        Log.d(TAG, " >> i = " + i);
+            Log.d(TAG, " >> i = " + i);
     }
     @Override
     public void onCreate() {
@@ -303,24 +304,24 @@ public class MusicService extends Service {
 
 
         mPlayerHandler = new MusicPlayerHandler(this, mHandlerThread.getLooper());
-log(5);
+        log(5);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mMediaButtonReceiverComponent = new ComponentName(getPackageName(),
                 MediaButtonIntentReceiver.class.getName());
         mAudioManager.registerMediaButtonEventReceiver(mMediaButtonReceiverComponent);
-log(5.1f);
+        log(5.1f);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             setUpMediaSession();
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
             setUpRemoteControlClient();
-log(5.2f);
+        log(5.2f);
         mPreferences = getSharedPreferences("Service", 0);
-       log(5.3f);
-       mCardId = getCardId();
-log(5.4f);
+        log(5.3f);
+        mCardId = getCardId();
+        log(5.4f);
         registerExternalStorageListener();
-log(6);
+        log(6);
         mPlayer = new MultiPlayer(this);
         mPlayer.setHandler(mPlayerHandler);
 
@@ -359,7 +360,7 @@ log(6);
         mShutdownIntent = PendingIntent.getService(this, 0, shutdownIntent, 0);
 
         scheduleDelayedShutdown();
-log(8);
+        log(8);
         reloadQueueAfterPermissionCheck();
         notifyChange(QUEUE_CHANGED);
         notifyChange(META_CHANGED);
@@ -510,16 +511,16 @@ log(8);
 
         return START_NOT_STICKY; //no sense to use START_STICKY with using startForeground
     }
-/*
-    void scrobble() {
-        if (LastfmUserSession.getSession(this).isLogedin()) {
-            Log.d("Scrobble", "to LastFM");
-            String trackname = getTrackName();
-            if (trackname != null)
-                LastFmClient.getInstance(this).Scrobble(new ScrobbleQuery(getArtistName(), trackname, System.currentTimeMillis() / 1000));
+    /*
+        void scrobble() {
+            if (LastfmUserSession.getSession(this).isLogedin()) {
+                Log.d("Scrobble", "to LastFM");
+                String trackname = getTrackName();
+                if (trackname != null)
+                    LastFmClient.getInstance(this).Scrobble(new ScrobbleQuery(getArtistName(), trackname, System.currentTimeMillis() / 1000));
+            }
         }
-    }
-*/
+    */
     private void releaseServiceUiAndStop() {
         if (isPlaying()
                 || mPausedByTransientLossOfFocus
@@ -722,7 +723,7 @@ log(8);
         long duration = this.duration();
         long position = this.position();
         if (duration > 30000 && (position >= duration / 2) || position > 240000) {
-           // scrobble();
+            // scrobble();
         }
 
         if (mPlayer.isInitialized()) {
@@ -1278,7 +1279,7 @@ log(8);
         artwork = ImageLoader.getInstance().loadImageSync(Utils.getAlbumArtUri(getAlbumId()).toString());
 
         if (artwork == null) {
-            artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.ic_empty_music2);
+            artwork = ImageLoader.getInstance().loadImageSync("drawable://" + R.drawable.music_empty);
         }
 
         if (mNotificationPostTime == 0) {
@@ -2327,7 +2328,7 @@ log(8);
                         }
                         break;
                     case TRACK_WENT_TO_NEXT:
-                   //     mService.get().scrobble();
+                        //     mService.get().scrobble();
                         service.setAndRecordPlayPos(service.mNextPlayPos);
                         service.setNextTrack();
                         if (service.mCursor != null) {
