@@ -28,7 +28,7 @@ public class Song {
     }
     public boolean HasBitmap()
     {
-        return !(Path_Bitmap=="");
+        return !Path_Bitmap.isEmpty();
     }
     public Bitmap getNewBitmap(Context context)
     {

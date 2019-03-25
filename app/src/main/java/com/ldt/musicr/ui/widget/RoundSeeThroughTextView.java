@@ -47,8 +47,8 @@ public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
         }
         @Override
         public void draw(@NonNull Canvas canvas) {
-//            if(path ==null) {
-//                path = BitmapEditor.RoundedRect(0,0,getBounds().width(),getBounds().height(),15,15,false);
+//            if(data ==null) {
+//                data = BitmapEditor.RoundedRect(0,0,getBounds().width(),getBounds().height(),15,15,false);
 //                paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 //
 //                paint.setStyle(Paint.Style.FILL);
@@ -56,7 +56,7 @@ public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setStyle(Paint.Style.FILL);
             paint.setColor(color);
-//            canvas.drawPath(path,paint);
+//            canvas.drawPath(data,paint);
             canvas.drawRoundRect(0,0,getBounds().width(),getBounds().height(),4*oneDp,4*oneDp,paint);
         }
 

@@ -32,10 +32,10 @@ public class LastAddedLoader {
 
     public static List<Song> getLastAddedSongs(Context context) {
 
-        ArrayList<Song> mSongList = new ArrayList<>();
         mCursor = makeLastAddedCursor(context);
+        ArrayList<Song> mSongList = SongLoader.getSongsForCursor(mCursor);
 
-        if (mCursor != null && mCursor.moveToFirst()) {
+        /*if (mCursor != null && mCursor.moveToFirst()) {
             do {
                 long id = mCursor.getLong(0);
                 String title = mCursor.getString(1);
@@ -50,7 +50,7 @@ public class LastAddedLoader {
 
                 mSongList.add(song);
             } while (mCursor.moveToNext());
-        }
+        }*/
         if (mCursor != null) {
             mCursor.close();
             mCursor = null;
@@ -74,6 +74,6 @@ public class LastAddedLoader {
         selection.append(cutoff);
 
         return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                new String[]{"_id", "title", "artist", "album", "duration", "track", "artist_id", "album_id","_data"}, selection.toString(), null, MediaStore.Audio.Media.DATE_ADDED + " DESC");
+                SongLoader.BASE_PROJECTION, selection.toString(), null, MediaStore.Audio.Media.DATE_ADDED + " DESC");
     }
 }

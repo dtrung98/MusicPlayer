@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/playlist_root">
+<com.makeramen.roundedimageview.RoundedImageView
+    android:layout_width="@dimen/item_feature_playlist_size"
+    android:layout_height="@dimen/item_feature_playlist_size"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:id="@+id/playlist_image"
+    android:padding="6dp"
+    app:riv_corner_radius="3dp"
+    app:riv_border_width="0dp"
+    android:src="@drawable/default_image_round"
+    android:elevation="8dp"
+   />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playlist_image"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:ellipsize="end"
+        android:id="@+id/playlist_title"
+        android:text="Playlist A"
+        android:gravity="center"
+        android:layout_below="@id/playlist_image"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/FlatWhite"
+       />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/playlist_over"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/playlist_image"
+        app:layout_constraintBottom_toBottomOf="@id/playlist_title"
+        android:background="@drawable/ripple_effect"/>
+</android.support.constraint.ConstraintLayout>

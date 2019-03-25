@@ -21,6 +21,7 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 
@@ -31,48 +32,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongLoader {
-
     private static final long[] sEmptyList = new long[0];
 
-    public static ArrayList<Song> getSongsForCursor(Cursor cursor) {
-        ArrayList arrayList = new ArrayList();
-        if ((cursor != null) && (cursor.moveToFirst()))
-            do {
-                long id = cursor.getLong(0);
-                String title = cursor.getString(1);
-                String artist = cursor.getString(2);
-                String album = cursor.getString(3);
-                int duration = cursor.getInt(4);
-                int trackNumber = cursor.getInt(5);
-                long artistId = cursor.getInt(6);
-                long albumId = cursor.getLong(7);
-                String path = cursor.getString(8);
+    protected static final String BASE_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + "=1" + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''";
+    public static final String[] BASE_PROJECTION = new String[]{
+            BaseColumns._ID,// 0
+            MediaStore.Audio.AudioColumns.TITLE,// 1
+            MediaStore.Audio.AudioColumns.TRACK,// 2
+            MediaStore.Audio.AudioColumns.YEAR,// 3
+            MediaStore.Audio.AudioColumns.DURATION,// 4
+            MediaStore.Audio.AudioColumns.DATA,// 5
+            MediaStore.Audio.AudioColumns.DATE_MODIFIED,// 6
+            MediaStore.Audio.AudioColumns.ALBUM_ID,// 7
+            MediaStore.Audio.AudioColumns.ALBUM,// 8
+            MediaStore.Audio.AudioColumns.ARTIST_ID,// 9
+            MediaStore.Audio.AudioColumns.ARTIST,// 10
+    };
 
-                arrayList.add(new Song(id, albumId, artistId, title, artist, album, duration, trackNumber,path));
-            }
-            while (cursor.moveToNext());
-        if (cursor != null)
-            cursor.close();
-        return arrayList;
+    public static ArrayList<Song> getAllSongs(Context context) {
+        Cursor  cursor = makeSongCursor(context, null, null);
+        return getSongsForCursor(cursor);
     }
 
-    public static Song getSongForCursor(Cursor cursor) {
-        Song song = new Song();
-        if ((cursor != null) && (cursor.moveToFirst())) {
-            long id = cursor.getLong(0);
-            String title = cursor.getString(1);
-            String artist = cursor.getString(2);
-            String album = cursor.getString(3);
-            int duration = cursor.getInt(4);
-            int trackNumber = cursor.getInt(5);
-            long artistId = cursor.getInt(6);
-            long albumId = cursor.getLong(7);
-            String path = cursor.getString(8);
-            song = new Song(id, albumId, artistId, title, artist, album, duration, trackNumber,path);
+    public static ArrayList<Song> getAllSongs(Context context, String sortOrder) {
+        Cursor  cursor = makeSongCursor(context, null, null,sortOrder);
+        return getSongsForCursor(cursor);
+    }
+
+    @NonNull
+    private static Song getSongAtThisColumnIndex(@NonNull Cursor cursor) {
+        final int id = cursor.getInt(0);
+        final String title = cursor.getString(1);
+        final int trackNumber = cursor.getInt(2);
+        final int year = cursor.getInt(3);
+        final int duration = cursor.getInt(4);
+        final String data = cursor.getString(5);
+        final long dateModified = cursor.getLong(6);
+        final int albumId = cursor.getInt(7);
+        final String albumName = cursor.getString(8);
+        final int artistId = cursor.getInt(9);
+        final String artistName = cursor.getString(10);
+
+        return new Song(id, title, trackNumber, year, duration, data, dateModified, albumId, albumName, artistId, artistName);
+    }
+
+    public static ArrayList<Song> getSongsForCursor(Cursor cursor) {
+        ArrayList<Song> songs = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                songs.add(getSongAtThisColumnIndex(cursor));
+            } while (cursor.moveToNext());
         }
 
         if (cursor != null)
             cursor.close();
+        return songs;
+    }
+
+    /**
+     *  Get song with a query
+     * @param context
+     * @param query
+     * @return
+     */
+    @NonNull
+    public static ArrayList<Song> getSongsForCursor(@NonNull final Context context, final String query) {
+        Cursor cursor = makeSongCursor(context, MediaStore.Audio.AudioColumns.TITLE + " LIKE ?", new String[]{"%" + query + "%"});
+        return getSongsForCursor(cursor);
+    }
+
+    public static Song getSongForCursor(Cursor cursor) {
+        Song song;
+        if (cursor != null && cursor.moveToFirst()) {
+            song = getSongAtThisColumnIndex(cursor);
+        } else {
+            song = new Song();
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
         return song;
     }
 
@@ -98,13 +136,13 @@ public class SongLoader {
         return list;
     }
 
-    public static Song getSongFromPath(String songPath, Context context) {
+    public static Song getSongFromPath(String path, Context context) {
         ContentResolver cr = context.getContentResolver();
 
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String selection = MediaStore.Audio.Media.DATA;
-        String[] selectionArgs = {songPath};
-        String[] projection = new String[]{"_id", "title", "artist", "album", "duration", "track", "artist_id", "album_id"};
+        String[] selectionArgs = {path};
+        String[] projection = BASE_PROJECTION;
         String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
 
         Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
@@ -117,21 +155,13 @@ public class SongLoader {
         else return new Song();
     }
 
-    public static ArrayList<Song> getAllSongs(Context context) {
-        return getSongsForCursor(makeSongCursor(context, null, null));
-    }
-
     public static long[] getSongListInFolder(Context context, String path) {
         String[] whereArgs = new String[]{path + "%"};
         return getSongListForCursor(makeSongCursor(context, MediaStore.Audio.Media.DATA + " LIKE ?", whereArgs, null));
     }
 
-    public static Song getSongForID(Context context, long id) {
+    public static Song getSongWithId(Context context, long id) {
         return getSongForCursor(makeSongCursor(context, "_id=" + String.valueOf(id), null));
-    }
-    public static String getPathWithSong(Context context, Song song) {
-        Cursor cursor = makeSongCursor(context, "_id="+String.valueOf(song.id),null);
-       return cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DATA));
     }
 
     public static List<Song> searchSongs(Context context, String searchString, int limit) {
@@ -141,7 +171,6 @@ public class SongLoader {
         }
         return result.size() < limit ? result : result.subList(0, limit);
     }
-
 
     public static Cursor makeSongCursor(Context context, String selection, String[] paramArrayOfString) {
         final String songSortOrder = PreferencesUtility.getInstance(context).getSongSortOrder();
@@ -154,23 +183,8 @@ public class SongLoader {
         if (!TextUtils.isEmpty(selection)) {
             selectionStatement = selectionStatement + " AND " + selection;
         }
-        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new String[]{"_id", "title", "artist", "album", "duration", "track", "artist_id", "album_id","_data"}, selectionStatement, paramArrayOfString, sortOrder);
+        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, BASE_PROJECTION, selectionStatement, paramArrayOfString, sortOrder);
 
-    }
-
-    public static Song songFromFile(String filePath) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(filePath);
-        return new Song(
-                -1,
-                -1,
-                -1,
-                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
-                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
-                mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
-                Integer.parseInt(mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)),
-                0,filePath
-        );
     }
 
 }

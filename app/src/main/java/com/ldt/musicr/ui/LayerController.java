@@ -1,6 +1,7 @@
 package com.ldt.musicr.ui;
 
 
+import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
@@ -8,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -19,10 +21,9 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.flow.BaseLayerFragment;
+import com.ldt.musicr.ui.navigation.BaseLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.Animation;
 import com.ldt.musicr.util.Tool;
@@ -169,8 +170,11 @@ public class LayerController {
         for (int i = 0; i < mBaseAttrs.size(); i++) {
             mBaseAttrs.get(i).animateOnInit();
         }
-        ObjectAnimator.ofArgb(mLayerContainer,"backgroundColor",0,0x11000000).setDuration(350).start();
-        ObjectAnimator.ofArgb(mLayerContainer,"backgroundColor",0,0x11000000).setDuration(350).start();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ObjectAnimator.ofArgb(mLayerContainer,"backgroundColor",0,0x11000000).setDuration(350).start();
+        } else {
+            ObjectAnimator.ofObject(mLayerContainer, "backgroundColor", new ArgbEvaluator(), 0,0x11000000).setDuration(350).start();
+        }
 
     }
 
@@ -311,9 +315,11 @@ public class LayerController {
           //          translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
 
             final int item_copy =  item;
-            attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
-               mBaseLayers.get(actives.get(item_copy)).onUpdateLayer(mBaseAttrs,actives,item_copy);
-            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
+                   mBaseLayers.get(actives.get(item_copy)).onUpdateLayer(mBaseAttrs,actives,item_copy);
+                });
+            }
         }
 
     }
@@ -859,14 +865,20 @@ public class LayerController {
             final int item = mGestureListener.item;
             if(parent!=null) {
                 animateLayerChanged();
-              parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
-              .setUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                  @Override
-                  public void onAnimationUpdate(ValueAnimator animation) {
-                      if(item!=-1) mBaseLayers.get(item).onTranslateChanged(Attr.this);
-                  }
-              })
-            ;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
+                    .setUpdateListener(animation -> {
+                        if(item!=-1) mBaseLayers.get(item).onTranslateChanged(Attr.this);
+                    });
+                } else {
+                     ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition));
+                     oa.addUpdateListener(animation -> {
+                         if(item!=-1) mBaseLayers.get(item).onTranslateChanged(Attr.this);
+                     });
+                     oa.setInterpolator(Animation.sInterpolator);
+                     oa.start();
+                }
             }
         }
         public void animateTo(float selfTranslateY, float velocityY) {

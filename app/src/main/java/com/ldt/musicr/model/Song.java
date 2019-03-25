@@ -14,19 +14,23 @@
 
 package com.ldt.musicr.model;
 
+import android.support.v4.content.Loader;
+
 import org.jetbrains.annotations.Nullable;
 
 public class Song {
 
+    public final long id;
+    public final String title;
+    public final int trackNumber;
+    public final int year;
+    public final int duration;
+    public final String data;
+    public final long dateModified;
     public final long albumId;
     public final String albumName;
     public final long artistId;
     public final String artistName;
-    public final int duration;
-    public final long id;
-    public final String title;
-    public final int trackNumber;
-    public final String path;
 
     public Song() {
         this.id = -1;
@@ -36,26 +40,34 @@ public class Song {
         this.artistName = "";
         this.albumName = "";
         this.duration = -1;
+        this.year = -1;
+        this.dateModified = -1;
         this.trackNumber = -1;
-        this.path ="";
+        this.data ="";
     }
 
-    public Song(long _id, long _albumId, long _artistId, String _title, String _artistName, String _albumName, int _duration, int _trackNumber, String path) {
-        this.id = _id;
-        this.albumId = _albumId;
-        this.artistId = _artistId;
-        this.title = _title;
-        this.artistName = _artistName;
-        this.albumName = _albumName;
-        this.duration = _duration;
-        this.trackNumber = _trackNumber;
-        this.path = path;
+    public Song(long id, String title, int trackNumber, int year, int duration, String data, long dateModified, long albumId, String albumName, long artistId, String artistName) {
+        this.id = id;
+        this.title = title;
+        this.trackNumber = trackNumber;
+        this.year = year;
+        this.duration = duration;
+        this.data = data;
+        this.dateModified = dateModified;
+        this.albumId = albumId;
+        this.albumName = albumName;
+        this.artistId = artistId;
+        this.artistName = artistName;
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
         if(obj instanceof Song) {
            return ((Song)obj).id == this.id;
+        } else if(obj instanceof Integer) {
+            return ((Integer)obj) == this.id;
+        } else if(obj instanceof Long) {
+            return ((Long)obj) == this.id;
         }
         return false;
     }

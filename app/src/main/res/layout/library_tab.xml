@@ -7,20 +7,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
-    tools:context="com.ldt.musicr.ui.flow.library.LibraryTabFragment"
+    tools:context="com.ldt.musicr.ui.navigation.library.LibraryTabFragment"
    >
-    <ImageView
-        android:id="@+id/back_image"
-        android:layout_width="0dp"
-        android:layout_height="220dp"
-        app:layout_constraintTop_toTopOf="@id/status_bar_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="centerCrop"
-        android:visibility="visible"
-        android:scaleX="1.1"
-        android:scaleY="1.1"
-       />
+
     <View
         android:id="@+id/gradient_back"
         android:layout_width="0dp"
@@ -54,7 +43,8 @@
     android:textSize="26sp"
     android:paddingStart="25dp"
     android:textStyle="bold"
-    android:gravity="center_vertical"/>
+    android:gravity="center_vertical"
+    android:paddingLeft="25dp" />
     <android.support.constraint.Guideline
         android:id="@+id/guide_line"
         android:layout_width="0dp"
@@ -67,6 +57,7 @@
         android:layout_height="45dp"
         android:iconifiedByDefault="false"
         app:queryHint="@string/search_string"
+        app:defaultQueryHint="@string/search"
         android:focusable="true"
         android:background="@drawable/search_view_background"
         android:clickable="true"
@@ -77,7 +68,17 @@
         app:layout_constraintTop_toBottomOf="@id/header"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        />
+        >
+
+        <ImageView
+            android:id="@+id/back_image"
+            android:layout_width="0dp"
+            android:layout_height="220dp"
+            android:scaleType="centerCrop"
+            android:scaleX="1.1"
+            android:scaleY="1.1"
+            android:visibility="visible" />
+    </android.support.v7.widget.SearchView>
     <View
         android:id="@+id/back_color_view"
         android:layout_width="0dp"

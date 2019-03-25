@@ -14,9 +14,21 @@
 
 package com.ldt.musicr.model;
 
+import com.ldt.musicr.util.MusicUtil;
+
+import static com.ldt.musicr.model.Artist.UNKNOWN_ARTIST_DISPLAY_NAME;
+
 public class Album {
     public final long artistId;
-    public final String artistName;
+
+    public String getArtistName() {
+        if (MusicUtil.isArtistNameUnknown(artistName)) {
+            return UNKNOWN_ARTIST_DISPLAY_NAME;
+        }
+        return artistName;
+    }
+
+    private final String artistName;
     public final long id;
     public final int songCount;
     public final String title;
@@ -39,6 +51,5 @@ public class Album {
         this.songCount = _songCount;
         this.year = _year;
     }
-
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 public class CustomAudioWaveView extends WaveformFragment {
 
     /**
-     * Provide path to your audio file.
+     * Provide data to your audio file.
      *
      * @return
      */

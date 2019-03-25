@@ -201,4 +201,7 @@
     <string name="playlist">Playlist</string>
     <string name="middle_dot" translatable="false">•</string>
     <string name="see_all_songs">See all songs</string>
+    <string name="x_has_been_set_as_ringtone">Set %1$s as your ringtone.</string>
+    <string name="deleted_x_songs">Deleted %1$d songs.</string>
+    <string name="favorites">Favorites</string>
 </resources>

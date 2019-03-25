@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintSet;
 import android.support.constraint.motion.MotionLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.flow.BaseLayerFragment;
+import com.ldt.musicr.ui.navigation.BaseLayerFragment;
 import com.ldt.musicr.loader.QueueLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.services.MusicPlayer;
@@ -39,8 +38,7 @@ import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.flow.SongOptionBottomSheet;
-import com.ldt.musicr.ui.flow.library.SongAdapter;
+import com.ldt.musicr.ui.navigation.SongOptionBottomSheet;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
@@ -115,7 +113,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         });
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
-       if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).addMusicStateListener(this);
+       if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).addMusicStateListener(this,true);
        onMetaChanged();
     }
 
@@ -129,9 +127,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     private void setRadius(float value) {
         if(mRoot!=null) {
-            if(value>1) value=1;
-            else if(value<=0.1f) value = 0;
-            mRoot.setRadius(mMaxRadius * value);
+            float valueTemp;
+            if(value>1) valueTemp=1;
+            else if(value<=0.1f) valueTemp = 0;
+            else valueTemp = value;
+            mRoot.setRadius(mMaxRadius * valueTemp);
         }
     }
 
@@ -157,6 +157,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
             mDimView.setAlpha(darken);
             setRadius(1);
         }
+        checkStatusStyle();
     }
 
     @Override
@@ -173,6 +174,17 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
             try {
                 mRecyclerView.scrollToPosition(MusicPlayer.getQueuePosition());
             } catch (Exception ignore) {}
+        //checkStatusStyle();
+    }
+    public void checkStatusStyle(){
+        if(mConstraintRoot.getProgress()>=0.9&&mDimView.getAlpha()<=0.1
+        ) {
+            if(getActivity() instanceof MainActivity)
+            ((MainActivity)getActivity()).setTheme(true);
+        } else {
+            if(getActivity() instanceof MainActivity)
+            ((MainActivity)getActivity()).setTheme(false);
+        }
     }
 
     @Override
@@ -250,11 +262,12 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         long start = System.currentTimeMillis();
 
         long time3 = System.currentTimeMillis() - start;
-        mAdapter.setData(songs2);
         long time4 = System.currentTimeMillis() - start;
+
         if(!songs2.isEmpty()) {
-            mAdapter.notifyItemChanged(MusicPlayer.getQueuePosition());
-            mRecyclerView.scrollToPosition(MusicPlayer.getQueuePosition());}
+            mAdapter.setData(songs2);
+            mRecyclerView.smoothScrollToPosition(MusicPlayer.getQueuePosition());
+        }
         long time5 = System.currentTimeMillis() - start;
         String path = MusicPlayer.getPath();
         long duration = MusicPlayer.duration();
@@ -285,7 +298,8 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @BindView(R.id.constraint_root)
     MotionLayout mConstraintRoot;
-    private void addAnimationOperations() {
+/*
+   private void addAnimationOperations() {
         final boolean[] set = {false};
         ConstraintSet constraint1 = new ConstraintSet();
         constraint1.clone(mConstraintRoot);
@@ -304,6 +318,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         });
 
     }
+    */
 
     @Override
     public boolean onGestureDetected(int gesture) {

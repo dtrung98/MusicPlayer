@@ -33,25 +33,17 @@ import static com.ldt.musicr.services.MusicPlayer.mService;
 public class NowPlayingCursor extends AbstractCursor {
 
     private static final String[] PROJECTION = new String[]{
-
-            BaseColumns._ID,
-
-            AudioColumns.TITLE,
-
-            AudioColumns.ARTIST,
-
-            AudioColumns.ALBUM_ID,
-
-            AudioColumns.ALBUM,
-
-            AudioColumns.DURATION,
-
-            AudioColumns.TRACK,
-
-            AudioColumns.ARTIST_ID,
-
-            AudioColumns.TRACK,
-            AudioColumns.DATA
+            BaseColumns._ID,// 0
+            AudioColumns.TITLE,// 1
+            AudioColumns.TRACK,// 2
+            AudioColumns.YEAR,// 3
+            AudioColumns.DURATION,// 4
+            AudioColumns.DATA,// 5
+            AudioColumns.DATE_MODIFIED,// 6
+            AudioColumns.ALBUM_ID,// 7
+            AudioColumns.ALBUM,// 8
+            AudioColumns.ARTIST_ID,// 9
+            AudioColumns.ARTIST,// 10
     };
 
     private final Context mContext;

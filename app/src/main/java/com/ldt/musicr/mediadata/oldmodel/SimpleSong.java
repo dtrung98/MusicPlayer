@@ -45,7 +45,7 @@ public class SimpleSong {
         }
         public boolean HasBitmap()
         {
-            return !(Path_Bitmap=="");
+            return !Path_Bitmap.isEmpty();
         }
         public Bitmap getNewBitmap(Activity activity)
         {

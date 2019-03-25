@@ -60,6 +60,7 @@
                     android:textColor="@color/FlatWhite"
                     android:textSize="26sp"
                     android:layout_marginStart="25dp"
+                    android:layout_marginLeft="25dp"
                     android:textStyle="bold"
                     android:gravity="center_vertical"/>
                 <android.support.v7.widget.SearchView

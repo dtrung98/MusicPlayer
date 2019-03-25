@@ -2,6 +2,28 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+<!--android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"-->
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_artist_child"
+        tools:layoutManager="LinearLayoutManager"
+        tools:orientation="vertical"
+        app:fastScrollAutoHide="true"
+        app:fastScrollAutoHideDelay="1500"
+        app:fastScrollPopupBackgroundSize="88dp"
+        app:fastScrollPopupBgColor="@color/FlatBlue"
+        app:fastScrollPopupPosition="adjacent"
+        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+        app:fastScrollPopupTextSize="46sp"
+        app:fastScrollThumbColor="@color/FlatBlue"
 
+        />
+<!--/android.support.v4.widget.SwipeRefreshLayout-->
 </android.support.constraint.ConstraintLayout>

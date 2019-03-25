@@ -21,7 +21,7 @@ import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.intro.IntroController;
-import com.ldt.musicr.ui.flow.BackStackController;
+import com.ldt.musicr.ui.navigation.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 import com.ldt.musicr.ui.playinglist.PlayingListController;
 import com.ldt.musicr.ui.widget.bubblepopupmenu.BubbleMenuCenter;

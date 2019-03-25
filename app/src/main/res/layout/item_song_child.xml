@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_song_child_height"
-    android:background="@drawable/ripple_effect">
+    android:background="@drawable/ripple_effect"
+    tools:background="@color/library_back_color">
     <View
         android:id="@+id/loader"
         android:layout_width="match_parent"
@@ -27,7 +30,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp" />
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/image"
             app:layout_constraintStart_toEndOf="@id/number"
@@ -39,7 +43,7 @@
             android:scaleType="centerInside"
             android:padding="6dp"
             app:riv_corner_radius="2dp"
-          />
+            android:layout_marginRight="10dp" />
         <ImageView
             android:id="@+id/quick_play_pause"
             android:layout_width="0dp"
@@ -62,14 +66,14 @@
             android:textColor="@color/FlatWhite"
             android:textStyle="bold"
             android:textSize="15sp"
-            android:text="Knock"
+            tools:text="Galaxy Supernova"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/image"
             app:layout_constraintEnd_toStartOf="@id/present"
             app:layout_constraintBottom_toTopOf="@id/artist"
             app:layout_constraintVertical_chainStyle="packed"
             android:layout_marginStart="10dp"
-            />
+            android:layout_marginLeft="10dp" />
         <TextView
             android:id="@id/artist"
             android:maxLines="1"
@@ -77,9 +81,10 @@
             android:layout_width="0dp"
             android:singleLine="true"
             android:layout_height="wrap_content"
+            tools:text="Girls 'Generation"
             android:textSize="12sp"
-            android:textColor="#DDF5F5F5"
-            android:text="TWICE - Nhac Cua Tui.Com"
+            android:textStyle="bold"
+            android:textColor="#AAF5F5F5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
             app:layout_constraintStart_toStartOf="@id/title"
@@ -107,5 +112,6 @@
             android:src="@drawable/ic_more_horiz_black_24dp"
             android:tint="#DDF5F5F5"
             android:scaleType="centerInside"
-            android:background="@drawable/ripple_oval"/>
+            android:background="@drawable/ripple_oval"
+            android:layout_marginRight="6dp" />
 </android.support.constraint.ConstraintLayout>

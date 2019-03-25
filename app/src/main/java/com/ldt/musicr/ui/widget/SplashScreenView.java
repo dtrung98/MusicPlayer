@@ -366,9 +366,9 @@ public class SplashScreenView extends View {
        path1.reset();
         path1.moveTo(100+upN/2,0-upN2);
         path1.quadTo(120,120,500+upN2,100-upN);
-      //  path.moveTo(500,100);
+      //  data.moveTo(500,100);
         path1.quadTo(150-upN,150,0,500);
-       // path.moveTo(0,500);
+       // data.moveTo(0,500);
         path1.quadTo(100,150,100+upN,0);
 
     }
@@ -378,9 +378,9 @@ public class SplashScreenView extends View {
         int w= ScreenSize[0],h = ScreenSize[1];
         path2.moveTo(w-100-upN2 ,h-0+upN);
         path2.quadTo(w-120,h-120 ,w-500+0.5f*upN2,upN+h-100);
-        //  path.moveTo(500,100);
+        //  data.moveTo(500,100);
         path2.quadTo(w-150+upN,h-150,w-0-upN,h-500+upN2);
-        // path.moveTo(0,500);
+        // data.moveTo(0,500);
         path2.quadTo(w-100,h-150,w-100-upN,h-0);
     }
 

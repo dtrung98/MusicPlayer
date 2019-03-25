@@ -4,19 +4,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.navigation.library.SongChildTab">
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:listitem="@layout/item_song_child"
+        tools:layoutManager="LinearLayoutManager"
+        tools:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@id/preview_random_panel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="4dp"
+        app:fastScrollAutoHide="true"
+        app:fastScrollAutoHideDelay="1500"
+        app:fastScrollPopupBackgroundSize="88dp"
+        app:fastScrollPopupBgColor="@color/FlatYellow"
+        app:fastScrollPopupPosition="adjacent"
+        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+        app:fastScrollPopupTextSize="46sp"
+        app:fastScrollThumbColor="@color/FlatYellow"
+        />
     <View
         android:id="@+id/preview_random_panel"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recycler_view"
-        android:background="@drawable/ripple_effect"
-        android:layout_marginStart="5dp"
+        android:background="@drawable/ripple_16dp_transparent"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
+        android:layout_marginEnd="10dp"
         />
     <ImageView
         android:id="@+id/refresh"
@@ -33,7 +55,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_marginEnd="6dp"
-       />
+        android:layout_marginRight="6dp" />
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image"
         android:layout_width="50dp"
@@ -45,7 +67,7 @@
         app:riv_border_width="0dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="6dp"
-        />
+        android:layout_marginLeft="6dp" />
     <ImageView
         android:id="@+id/shuffle_button"
         android:layout_width="30dp"
@@ -58,7 +80,7 @@
         android:paddingBottom="13dp"
         android:tint="@color/FlatWhite"
         android:layout_marginStart="17dp"
-        />
+        android:layout_marginLeft="17dp" />
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
@@ -76,7 +98,8 @@
         android:layout_marginEnd="4dp"
         app:layout_constraintBottom_toTopOf="@id/artist"
         app:layout_constraintVertical_chainStyle="packed"
-        />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="4dp" />
     <TextView
         android:id="@+id/artist"
         android:layout_width="0dp"
@@ -90,26 +113,5 @@
         android:ellipsize="end"
         android:textColor="#AAF5F5F5"
         android:textSize="13sp" />
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:listitem="@layout/item_song_child"
-        tools:layoutManager="LinearLayoutManager"
-        tools:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="4dp"
-        app:fastScrollAutoHide="true"
-        app:fastScrollAutoHideDelay="1500"
-        app:fastScrollPopupBackgroundSize="88dp"
-        app:fastScrollPopupBgColor="@color/FlatBlue"
-        app:fastScrollPopupPosition="adjacent"
-        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
-        app:fastScrollPopupTextSize="46sp"
-        app:fastScrollThumbColor="@color/FlatBlue"
-        />
+
 </android.support.constraint.ConstraintLayout>

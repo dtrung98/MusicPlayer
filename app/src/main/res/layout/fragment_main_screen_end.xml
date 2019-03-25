@@ -4,8 +4,7 @@
     android:id="@+id/UILayer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    tools:context="com.ldt.musicr.txt.MainScreenFragment">
+    android:background="@android:color/white">
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="0dp"

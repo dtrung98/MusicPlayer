@@ -33,7 +33,7 @@ public class AlbumSongLoader {
     public static ArrayList<Song> getSongsForAlbum(Context context, long albumID) {
 
         Cursor cursor = makeAlbumSongCursor(context, albumID);
-        ArrayList arrayList = new ArrayList();
+        ArrayList<Song> arrayList = new ArrayList<>();
         if ((cursor != null) && (cursor.moveToFirst()))
             do {
                 long id = cursor.getLong(0);
@@ -47,9 +47,12 @@ public class AlbumSongLoader {
                     trackNumber -= 1000; //When error occurs the track numbers have an extra 1000 or 2000 added, so decrease till normal.
                 }
                 long artistId = cursor.getInt(6);
-                long albumId = albumID;
+                String data = cursor.getString(7);
+                int year = cursor.getInt(8);
+                long dateModified = cursor.getLong(9);
 
-                arrayList.add(new Song(id, albumId, artistId, title, artist, album, duration, trackNumber,cursor.getString(7)));
+                Song song = new Song(id,title,trackNumber,year,duration,data,dateModified,albumID,album,artistId,artist);
+                arrayList.add(song);
             }
             while (cursor.moveToNext());
         if (cursor != null)
@@ -62,7 +65,7 @@ public class AlbumSongLoader {
         final String albumSongSortOrder = PreferencesUtility.getInstance(context).getAlbumSongSortOrder();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         String string = "is_music=1 AND title != '' AND album_id=" + albumID;
-        Cursor cursor = contentResolver.query(uri, new String[]{"_id", "title", "artist", "album", "duration", "track", "artist_id","_data"}, string, null, albumSongSortOrder);
+        Cursor cursor = contentResolver.query(uri, new String[]{"_id", "title", "artist", "album", "duration", "track", "artist_id","_data", "year","date_modified"}, string, null, albumSongSortOrder);
         return cursor;
     }
 }

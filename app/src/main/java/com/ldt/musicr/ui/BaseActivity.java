@@ -176,6 +176,15 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceC
             mMusicStateListeners.add(listener);
         }
     }
+    public void addMusicStateListener(final MusicStateListener listener, boolean firstIndex) {
+        if (listener == this) {
+            throw new UnsupportedOperationException("Override the method, don't add a listener");
+        }
+
+        if (listener != null) {
+            mMusicStateListeners.add(0,listener);
+        }
+    }
 
     public void removeMusicStateListener(final MusicStateListener status) {
         if (status != null) {

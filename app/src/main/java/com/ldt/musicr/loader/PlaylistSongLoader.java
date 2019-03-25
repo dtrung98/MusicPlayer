@@ -99,7 +99,7 @@ public class PlaylistSongLoader {
                 final String album = mCursor.getString(mCursor
                         .getColumnIndexOrThrow(AudioColumns.ALBUM));
 
-                final long duration = mCursor.getLong(mCursor
+                final int duration = mCursor.getInt(mCursor
                         .getColumnIndexOrThrow(AudioColumns.DURATION));
 
                 final int durationInSecs = (int) duration / 1000;
@@ -108,8 +108,12 @@ public class PlaylistSongLoader {
                         .getColumnIndexOrThrow(AudioColumns.TRACK));
                 final String path = mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.DATA));
 
-                final Song song = new Song(id, albumId, artistId, songName, artist, album, durationInSecs, tracknumber,path);
+                final int year = mCursor.getInt(mCursor.getColumnIndexOrThrow(AudioColumns.YEAR));
+                final long dateModified = mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.DATE_MODIFIED));
 
+
+             //   final Song song = new Song(id, albumId, artistId, songName, artist, album, durationInSecs, tracknumber,path);
+                final Song song = new Song(id,songName,tracknumber,year,duration,path,dateModified,albumId,album,artistId,artist);
                 mSongList.add(song);
             } while (mCursor.moveToNext());
         }
@@ -195,7 +199,10 @@ public class PlaylistSongLoader {
                         AudioColumns.DURATION,
                         AudioColumns.TRACK,
                         Playlists.Members.PLAY_ORDER,
-                        AudioColumns.DATA
+                        AudioColumns.DATA,
+                        AudioColumns.YEAR,
+                        AudioColumns.DATE_MODIFIED,
+
                 }, mSelection.toString(), null,
                 Playlists.Members.DEFAULT_SORT_ORDER);
     }

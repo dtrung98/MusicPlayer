@@ -11,14 +11,14 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-/*
-package com.ldt.musicr.dataloaders;
+package com.ldt.musicr.loader;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
-import com.naman14.timber.models.Album;
+
+import com.ldt.musicr.model.Album;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class ArtistAlbumLoader {
 
     public static ArrayList<Album> getAlbumsForArtist(Context context, long artistID) {
 
-        ArrayList albumList = new ArrayList();
+        ArrayList<Album> albumList = new ArrayList<>();
         Cursor cursor = makeAlbumForArtistCursor(context, artistID);
 
         if (cursor != null) {
@@ -56,4 +56,3 @@ public class ArtistAlbumLoader {
     }
 
 }
-*/

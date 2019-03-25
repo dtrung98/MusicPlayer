@@ -68,9 +68,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header_panel"
-        tools:listitem="@layout/item_playlists_recycler_view"
+        tools:listitem="@layout/item_feature_playlist"
         tools:orientation="horizontal"
         tools:layoutManager="LinearLayoutManager"
         android:paddingStart="8dp"
-        />
+        android:paddingLeft="8dp" />
 </android.support.constraint.ConstraintLayout>

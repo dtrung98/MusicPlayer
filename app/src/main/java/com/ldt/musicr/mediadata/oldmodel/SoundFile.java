@@ -723,7 +723,7 @@ public class SoundFile {
         // Create the parent directory
         File parentDirFile = new File(parentDir);
         parentDirFile.mkdirs();
-        // If we can't write to that special path, try just writing directly to the SDCard.
+        // If we can't write to that special data, try just writing directly to the SDCard.
         if (!parentDirFile.isDirectory()) {
             parentDir = externalRootDir;
         }

@@ -160,7 +160,7 @@ public class SongPlayCount {
     }
 
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-        // No upgrade path needed yet
+        // No upgrade data needed yet
     }
 
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {

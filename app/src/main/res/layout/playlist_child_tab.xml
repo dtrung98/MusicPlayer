@@ -13,5 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_playlist_child"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/bottom_navigation_height"
         />
 </android.support.constraint.ConstraintLayout>

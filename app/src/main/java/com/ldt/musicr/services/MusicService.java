@@ -89,10 +89,6 @@ import java.util.ListIterator;
 import java.util.Random;
 import java.util.TreeSet;
 
-import de.Maxr1998.trackselectorlib.ModNotInstalledException;
-import de.Maxr1998.trackselectorlib.NotificationHelper;
-import de.Maxr1998.trackselectorlib.TrackItem;
-
 @SuppressLint("NewApi")
 public class MusicService extends Service {
     public static final String PLAYSTATE_CHANGED = "com.naman14.timber.playstatechanged";
@@ -546,10 +542,6 @@ public class MusicService extends Service {
 
         if (D) Log.d(TAG, "handleCommandIntent: action = " + action + ", command = " + command);
 
-        if (NotificationHelper.checkIntent(intent)) {
-            goToPosition(mPlayPos + NotificationHelper.getPosition(intent));
-            return;
-        }
 
         if (CMDNEXT.equals(command) || NEXT_ACTION.equals(action)) {
             gotoNext(true);
@@ -1323,42 +1315,7 @@ public class MusicService extends Service {
 
         Notification n = builder.build();
 
-        if (mActivateXTrackSelector) {
-            addXTrackSelector(n);
-        }
-
         return n;
-    }
-
-    private void addXTrackSelector(Notification n) {
-        if (NotificationHelper.isSupported(n)) {
-            StringBuilder selection = new StringBuilder();
-            StringBuilder order = new StringBuilder().append("CASE _id \n");
-            for (int i = 0; i < mPlaylist.size(); i++) {
-                selection.append("_id=").append(mPlaylist.get(i).mId).append(" OR ");
-                order.append("WHEN ").append(mPlaylist.get(i).mId).append(" THEN ").append(i).append("\n");
-            }
-            order.append("END");
-            Cursor c = getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, NOTIFICATION_PROJECTION, selection.substring(0, selection.length() - 3), null, order.toString());
-            if (c != null && c.getCount() != 0) {
-                c.moveToFirst();
-                ArrayList<Bundle> list = new ArrayList<>();
-                do {
-                    TrackItem t = new TrackItem()
-                            .setArt(BitmapFactory.decodeFile(Utils.getAlbumArtUri(c.getLong(c.getColumnIndexOrThrow(AudioColumns.ALBUM_ID))).getPath()))
-                            .setTitle(c.getString(c.getColumnIndexOrThrow(AudioColumns.TITLE)))
-                            .setArtist(c.getString(c.getColumnIndexOrThrow(AudioColumns.ARTIST)))
-                            .setDuration(Utils.makeShortTimeString(this, c.getInt(c.getColumnIndexOrThrow(AudioColumns.DURATION)) / 1000));
-                    list.add(t.get());
-                } while (c.moveToNext());
-                try {
-                    NotificationHelper.insertToNotification(n, list, this, getQueuePosition());
-                } catch (ModNotInstalledException e) {
-                    e.printStackTrace();
-                }
-                c.close();
-            }
-        }
     }
 
     private final PendingIntent retrievePlaybackAction(final String action) {
@@ -1461,7 +1418,7 @@ public class MusicService extends Service {
     }
 
     public boolean openFile(final String path) {
-        if (D) Log.d(TAG, "openFile: path = " + path);
+        if (D) Log.d(TAG, "openFile: data = " + path);
         synchronized (this) {
             if (path == null) {
                 return false;
