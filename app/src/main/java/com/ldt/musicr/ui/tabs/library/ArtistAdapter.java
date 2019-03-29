@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.library;
+package com.ldt.musicr.ui.tabs.library;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -154,8 +154,9 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
                 mGenreTwo.setVisibility(View.VISIBLE);
             }
             long start2 = System.currentTimeMillis() - start;
-
-            loadArtistImage(artist);
+            try {
+                loadArtistImage(artist);
+            } catch (Exception ignored) {}
             long start3 = System.currentTimeMillis() - start - start2;
             Log.d(TAG, "bind: start2 = "+ start2+", start3 = "+ start3);
         }
@@ -165,6 +166,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
            if(artists.length>1)
                artistTemp = new Artist(artist.id,artists[0],artist.albumCount,artist.songCount);
            else artistTemp = artist;
+
 
             ArtistGlideRequest.Builder.from(Glide.with(mContext), artistTemp)//.build().into(mImage);
                     .generatePalette(mContext).build()

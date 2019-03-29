@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.feature;
+package com.ldt.musicr.ui.tabs.feature;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

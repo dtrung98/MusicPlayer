@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.library;
+package com.ldt.musicr.ui.tabs.library;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.util.SortOrder;

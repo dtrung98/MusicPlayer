@@ -19,7 +19,7 @@ import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.services.MusicService;
 import com.ldt.musicr.services.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.navigation.BaseLayerFragment;
+import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.util.Tool;
 

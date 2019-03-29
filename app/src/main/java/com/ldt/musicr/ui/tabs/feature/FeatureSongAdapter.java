@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.feature;
+package com.ldt.musicr.ui.tabs.feature;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -15,7 +15,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.navigation.SongOptionBottomSheet;
+import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.util.Utils;

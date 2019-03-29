@@ -4,7 +4,6 @@ package com.ldt.musicr.ui;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -23,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.navigation.BaseLayerFragment;
+import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.Animation;
 import com.ldt.musicr.util.Tool;

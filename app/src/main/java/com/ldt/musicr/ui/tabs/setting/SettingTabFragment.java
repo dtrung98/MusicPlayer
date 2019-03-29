@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.setting;
+package com.ldt.musicr.ui.tabs.setting;
 
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;

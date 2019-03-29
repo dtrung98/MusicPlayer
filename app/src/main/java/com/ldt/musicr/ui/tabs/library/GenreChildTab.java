@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.library;
+package com.ldt.musicr.ui.tabs.library;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

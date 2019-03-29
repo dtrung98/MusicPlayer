@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation;
+package com.ldt.musicr.ui.tabs;
 
 import android.app.Activity;
 import android.os.Bundle;

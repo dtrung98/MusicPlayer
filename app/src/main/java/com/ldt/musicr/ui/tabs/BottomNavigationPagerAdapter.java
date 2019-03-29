@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation;
+package com.ldt.musicr.ui.tabs;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -6,9 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.navigation.feature.FeatureTabFragment;
-import com.ldt.musicr.ui.navigation.library.LibraryTabFragment;
-import com.ldt.musicr.ui.navigation.setting.SettingTabFragment;
+import com.ldt.musicr.ui.tabs.feature.FeatureTabFragment;
+import com.ldt.musicr.ui.tabs.library.LibraryTabFragment;
+import com.ldt.musicr.ui.tabs.setting.SettingTabFragment;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
 
 import java.util.ArrayList;

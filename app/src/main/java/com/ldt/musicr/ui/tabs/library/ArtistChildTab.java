@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.library;
+package com.ldt.musicr.ui.tabs.library;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +19,6 @@ import com.ldt.musicr.loader.ArtistLoader;
 import com.ldt.musicr.loader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
-import com.ldt.musicr.services.MusicPlayer;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;

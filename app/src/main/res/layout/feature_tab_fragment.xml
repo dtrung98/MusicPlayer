@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#DD1C1A21"
-    tools:context="com.ldt.musicr.ui.navigation.feature.FeatureTabFragment">
+    tools:context="com.ldt.musicr.ui.tabs.feature.FeatureTabFragment">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="0dp"

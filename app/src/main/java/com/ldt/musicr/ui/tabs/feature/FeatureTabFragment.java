@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.feature;
+package com.ldt.musicr.ui.tabs.feature;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.navigation.PlaylistPagerFragment;
+import com.ldt.musicr.ui.tabs.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Playlist;

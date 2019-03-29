@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation;
+package com.ldt.musicr.ui.tabs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.navigation.library.LibraryTabFragment;
+import com.ldt.musicr.ui.tabs.library.LibraryTabFragment;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
 
 import java.util.ArrayList;

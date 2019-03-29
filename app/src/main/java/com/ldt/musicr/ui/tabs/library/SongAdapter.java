@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.navigation.library;
+package com.ldt.musicr.ui.tabs.library;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -24,7 +24,7 @@ import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.navigation.SongOptionBottomSheet;
+import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.util.Utils;
