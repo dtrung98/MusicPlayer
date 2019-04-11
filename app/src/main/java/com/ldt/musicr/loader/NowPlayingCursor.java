@@ -23,11 +23,11 @@ import android.provider.MediaStore.Audio.AudioColumns;
 import android.util.Log;
 
 
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 
 import java.util.Arrays;
 
-import static com.ldt.musicr.services.MusicPlayer.mService;
+import static com.ldt.musicr.service.MusicPlayer.mService;
 
 
 public class NowPlayingCursor extends AbstractCursor {

@@ -37,7 +37,7 @@ import android.widget.Toast;
 import com.ldt.musicr.R;
 import com.ldt.musicr.provider.RecentStore;
 import com.ldt.musicr.provider.SongPlayCount;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 
 
 

@@ -17,15 +17,15 @@ import android.widget.Toast;
 
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
-import com.ldt.musicr.services.MusicStateListener;
-import com.ldt.musicr.services.ITimberService;
-import com.ldt.musicr.services.MusicPlayer;
-import com.ldt.musicr.services.MusicService;
+import com.ldt.musicr.service.MusicStateListener;
+import com.ldt.musicr.service.ITimberService;
+import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicService;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import static com.ldt.musicr.services.MusicPlayer.mService;
+import static com.ldt.musicr.service.MusicPlayer.mService;
 /**
  *  Create relationship between Activity and Music Player Service
  */

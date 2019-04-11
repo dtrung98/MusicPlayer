@@ -16,6 +16,8 @@ package com.ldt.musicr.model;
 
 import com.ldt.musicr.util.MusicUtil;
 
+import org.jetbrains.annotations.Nullable;
+
 public class Artist {
     public static final String UNKNOWN_ARTIST_DISPLAY_NAME = "Unknown Artist";
 
@@ -46,5 +48,8 @@ public class Artist {
         this.albumCount = _albumCount;
     }
 
-
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj instanceof Artist && ((Artist) obj).getName().equals(this.getName());
+    }
 }

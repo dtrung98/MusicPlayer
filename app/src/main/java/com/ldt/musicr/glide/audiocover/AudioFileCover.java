@@ -1,4 +1,4 @@
-package com.ldt.musicr.glide;
+package com.ldt.musicr.glide.audiocover;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

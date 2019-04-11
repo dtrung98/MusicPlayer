@@ -18,6 +18,11 @@ public class App extends Application {
     public static synchronized App getInstance() {
         return mInstance;
     }
+
+    public PreferencesUtility getPreferencesUtility() {
+        return PreferencesUtility.getInstance(App.this);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

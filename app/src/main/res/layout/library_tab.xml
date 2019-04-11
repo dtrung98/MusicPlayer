@@ -8,6 +8,9 @@
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
     tools:context="com.ldt.musicr.ui.tabs.library.LibraryTabFragment"
+    app:progress="0"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
    >
 
     <View
@@ -61,6 +64,7 @@
         android:focusable="true"
         android:background="@drawable/search_view_background"
         android:clickable="true"
+        app:theme="@style/AppSearchView"
         android:queryBackground="@android:color/transparent"
         app:queryBackground="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,21 +101,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:tabGravity="fill"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabIndicatorColor="#33000000"
+        app:tabIndicatorColor="#44444444"
         app:tabSelectedTextColor="@color/FlatWhite"
         android:layout_marginTop="5dp"
         app:tabMode="scrollable"
         app:tabTextColor="#88F5F5F5"
         android:overScrollMode="never"/>
-    <View
-        android:id="@+id/gradient_line"
-        android:layout_width="0dp"
-        android:layout_height="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
-        android:background="@drawable/gradient_shadow"
-        android:alpha="0"/>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"
@@ -121,4 +117,13 @@
         app:layout_constraintTop_toBottomOf="@id/tab_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+    <View
+        android:id="@+id/gradient_line"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout"
+        android:background="@drawable/gradient_shadow"
+        android:alpha="0"/>
 </android.support.constraint.motion.MotionLayout>

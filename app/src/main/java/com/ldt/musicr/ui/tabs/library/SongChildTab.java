@@ -13,12 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.service.MusicStateListener;
 import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.util.SortOrder;
+import com.ldt.musicr.ui.popup.SortOrderBottomSheet;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Utils;
 import com.ldt.musicr.util.Animation;
@@ -31,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.FirstItemCallBack, MusicStateListener {
+public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack, MusicStateListener {
     private static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)
@@ -51,7 +52,10 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
     @BindView(R.id.artist)
     TextView mArtist;
 
-
+    private int mCurrentSortOrder = 0;
+    private void initSortOrder() {
+         mCurrentSortOrder = App.getInstance().getPreferencesUtility().getSongChildSortOrder();
+    }
 
 //    @BindView(R.id.top_background) View mTopBackground;
 //    @BindView(R.id.bottom_background) View mBottomBackground;
@@ -64,14 +68,12 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
         mAdapter.shuffle();
     }
 
-
     SongAdapter mAdapter;
 //    PreviewRandomPlayAdapter mPreviewAdapter;
 
     @OnClick(R.id.refresh)
     void refresh() {
         mRefresh.animate().rotationBy(360).setInterpolator(Animation.getInterpolator(6)).setDuration(650);
-
         mRefresh.postDelayed(mAdapter::randommize,300);
     }
 
@@ -86,9 +88,11 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        initSortOrder();
 
         mAdapter = new SongAdapter(getActivity());
         mAdapter.setCallBack(this);
+        mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -102,11 +106,13 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
     public void onDestroyView() {
         if(getActivity() instanceof BaseActivity)
             ((BaseActivity)getActivity()).removeMusicStateListener(this);
+        mAdapter.removeCallBack();
+        mAdapter.removeOrderListener();
         super.onDestroyView();
     }
 
     private void refreshData() {
-        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(), SortOrder.SongSortOrder.SONG_A_Z);
+        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(),SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
         mAdapter.setData(songs);
         showOrHidePreview(!songs.isEmpty());
 
@@ -170,4 +176,17 @@ public class SongChildTab extends Fragment implements PreviewRandomPlayAdapter.F
         if(mAdapter!=null)mAdapter.notifyMetaChanged();
     }
 
+    @Override
+    public int getSavedOrder() {
+        return mCurrentSortOrder;
+    }
+
+    @Override
+    public void onOrderChanged(int newType, String name) {
+        if(mCurrentSortOrder!=newType) {
+            mCurrentSortOrder = newType;
+            App.getInstance().getPreferencesUtility().setSongChildSortOrder(mCurrentSortOrder);
+            refreshData();
+        }
+    }
 }

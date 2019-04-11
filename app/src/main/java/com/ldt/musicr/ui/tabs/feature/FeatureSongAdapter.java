@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 import com.ldt.musicr.util.Utils;
 import com.ldt.musicr.util.Tool;
 import com.squareup.picasso.Picasso;

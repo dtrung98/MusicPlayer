@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 import com.ldt.musicr.util.Utils;
 import com.makeramen.roundedimageview.RoundedImageView;
 

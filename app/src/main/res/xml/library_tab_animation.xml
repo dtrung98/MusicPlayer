@@ -11,6 +11,7 @@
         <OnSwipe
             app:dragDirection="dragUp"
             app:touchAnchorId="@id/view_pager"
+            app:touchAnchorSide="top"
              />
     </Transition>
 </MotionScene>

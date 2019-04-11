@@ -204,4 +204,14 @@
     <string name="x_has_been_set_as_ringtone">Set %1$s as your ringtone.</string>
     <string name="deleted_x_songs">Deleted %1$d songs.</string>
     <string name="favorites">Favorites</string>
+    <string name="sort_by_name_asc">Sort by title</string>
+    <string name="sort_by_name_desc">Sort by title (Desc)</string>
+    <string name="sort_by_time_asc">Sort by time added</string>
+    <string name="sort_by_time_desc">Sort by time added (Desc)</string>
+    <string name="sort_by_favor_asc">Sort by favorite (Asc)</string>
+    <string name="sort_by_favor_desc">Sort by favorite (Desc)</string>
+    <string name="favorite">Favorite</string>
+    <string name="time_added">Time added</string>
+    <string name="title">Title</string>
+
 </resources>

@@ -20,12 +20,15 @@ import android.widget.FrameLayout;
 
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.intro.IntroController;
+import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.tabs.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import com.ldt.musicr.ui.playinglist.PlayingListController;
 import com.ldt.musicr.ui.widget.bubblepopupmenu.BubbleMenuCenter;
 import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +73,10 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         if(mAudioPreviewPlayer!=null) removeMusicStateListener(mAudioPreviewPlayer);
         super.onDestroy();
+    }
+
+    public void setDataForPlayingQueue(List<Song> songs2) {
+        if(mPlaylistController!=null) mPlaylistController.setData(songs2);
     }
 
 
@@ -149,7 +156,7 @@ public class MainActivity extends BaseActivity {
         mLayerController = new LayerController(this);
         mBackStackController = new BackStackController();
         mNowPlayingController = new NowPlayingController();
-        mPlaylistController = new PlayingListController();
+        mPlaylistController = new PlayingQueueController();
         mBackStackController.attachBottomNavigationView(this);
         mLayerController.init(mLayerContainer,mBackStackController,mNowPlayingController, mPlaylistController);
     }
@@ -226,6 +233,6 @@ public class MainActivity extends BaseActivity {
 
     public BackStackController mBackStackController;
     public NowPlayingController mNowPlayingController;
-    public PlayingListController mPlaylistController;
+    public PlayingQueueController mPlaylistController;
 
 }

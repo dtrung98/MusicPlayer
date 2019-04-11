@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.ldt.musicr.services;
+package com.ldt.musicr.service;
 
 /**
  * Listens for playback changes to send the the fragments bound to this activity
@@ -22,17 +22,17 @@ package com.ldt.musicr.services;
 public interface MusicStateListener {
 
     /**
-     * Called when {@link com.ldt.musicr.services.MusicService #REFRESH} is invoked
+     * Called when {@link com.ldt.musicr.service.MusicService #REFRESH} is invoked
      */
     void restartLoader();
 
     /**
-     * Called when {@link com.ldt.musicr.services.MusicService #PLAYLIST_CHANGED} is invoked
+     * Called when {@link com.ldt.musicr.service.MusicService #PLAYLIST_CHANGED} is invoked
      */
     void onPlaylistChanged();
 
     /**
-     * Called when {@link com.ldt.musicr.services.MusicService #META_CHANGED} is invoked
+     * Called when {@link com.ldt.musicr.service.MusicService #META_CHANGED} is invoked
      */
     void onMetaChanged();
 }

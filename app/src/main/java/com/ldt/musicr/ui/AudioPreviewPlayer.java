@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
-import com.ldt.musicr.services.MusicPlayer;
-import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicStateListener;
 import com.ldt.musicr.ui.widget.soundfile.CheapSoundFile;
 
 import java.io.File;

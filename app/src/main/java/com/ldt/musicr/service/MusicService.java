@@ -13,7 +13,7 @@
  * governing permissions and limitations under the License.
  */
 
-package com.ldt.musicr.services;
+package com.ldt.musicr.service;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
@@ -36,7 +36,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
@@ -68,7 +67,6 @@ import android.support.v7.graphics.Palette;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 import com.ldt.musicr.permission.Nammu;

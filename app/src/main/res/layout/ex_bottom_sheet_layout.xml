@@ -1,12 +1,12 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/dp_8"
-    android:layout_marginTop="@dimen/dp_8"
-    android:layout_marginLeft="3dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingBottom="@dimen/dp_8"
+    android:paddingTop="@dimen/dp_8"
+    android:paddingStart="3dp"
     android:orientation="vertical"
-    style="@style/BottomSheet">
+    tools:background="@color/background_panel_color">
     <ImageView
         android:layout_width="35dp"
         android:layout_height="5dp"
@@ -98,7 +98,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="@dimen/dp_8"
         android:layout_marginTop="@dimen/md_bottom_sheet_separator_top_margin"
-        android:background="#333" />
+        android:background="#66333333" />
     <TextView
         android:id="@+id/popup_song_share"
         android:layout_width="match_parent"

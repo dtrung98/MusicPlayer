@@ -3,6 +3,7 @@ package com.ldt.musicr.ui.tabs.library;
 import android.content.Context;
 import android.content.res.ColorStateList;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
@@ -19,18 +20,25 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.popup.SortOrderBottomSheet;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 import com.ldt.musicr.util.Utils;
 
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter,
-        FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener {
+        FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener, SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG = "SongAdapter";
     public ArrayList<Song> mData = new ArrayList<>();
     public int mCurrentHightLightPos = 0;
@@ -97,6 +105,36 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return ret;
     }
 
+    @Override
+    public int getSavedOrder() {
+        if(mSortOrderListener!=null)
+            return mSortOrderListener.getSavedOrder();
+        return 0;
+    }
+
+    @Override
+    public void onOrderChanged(int newType, String name) {
+        if(mSortOrderListener!=null) {
+            mSortOrderListener.onOrderChanged(newType, name);
+            notifyItemChanged(0);
+        }
+    }
+    private SortOrderBottomSheet.SortOrderChangedListener mSortOrderListener;
+    public void setSortOrderChangedListener(SortOrderBottomSheet.SortOrderChangedListener listener) {
+        mSortOrderListener = listener;
+    }
+    public void removeOrderListener() {
+        mSortOrderListener = null;
+    }
+
+    private void sortHolderClicked() {
+        if(mContext instanceof AppCompatActivity) {
+            SortOrderBottomSheet bs = SortOrderBottomSheet.newInstance(this);
+            bs.show(((AppCompatActivity)mContext).getSupportFragmentManager(),TAG);
+        }
+    }
+
+
     @NotNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int viewType) {
@@ -117,7 +155,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private int getPositionInData(ItemHolder holder) {
         return holder.getAdapterPosition() - 1;
     }
-
 
     private void setOnPopupMenuListener(SongAdapter.ItemHolder itemHolder, final int position) {
         itemHolder.mMoreButton.setOnClickListener(v -> {
@@ -226,6 +263,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public SongAdapter setCallBack(PreviewRandomPlayAdapter.FirstItemCallBack callBack) {
         mCallBack = callBack;
         return this;
+    }
+    public void removeCallBack() {
+        mCallBack = null;
     }
 
     private PreviewRandomPlayAdapter.FirstItemCallBack mCallBack;
@@ -348,24 +388,25 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
 
-    public class SortHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.sort_image) ImageView mImageView;
+    public class SortHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.sort_text) TextView mSortText;
+        @OnClick(R.id.sort_parent)
+        void sortClicked() {
+            sortHolderClicked();
+        }
 
         public SortHolder(View view) {
             super(view);
             ButterKnife.bind(this,view);
-            view.setOnClickListener(this);
         }
 
         public void bind() {
-
-        }
-
-        @Override
-        public void onClick(View v) {
-
-        }
+            if(mSortOrderListener!=null) {
+              String str =  mContext.getResources().getString(
+                        SortOrderBottomSheet.mSortStringRes[mSortOrderListener.getSavedOrder()]);
+              mSortText.setText(str);
+            }
+            }
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnAttachStateChangeListener {
@@ -413,16 +454,37 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             mArtist.setText(song.artistName);
             //   ImageLoader.getInstance().displayImage(Utils.getAlbumArtUri(song.albumId).toString(),mImage,new DisplayImageOptions.Builder().cacheInMemory(true).showImageOnFail(R.drawable.music_empty).resetViewBeforeLoading(true).build());
 
-            Picasso.get()
-                    .load(Utils.getAlbumArtUri(song.albumId))
-                    .placeholder(R.drawable.music_empty)
-                    .error(R.drawable.music_empty)
-                    .into(mImage);
-        /*    Glide.with((Activity) mContext)
+        /*    Picasso.get()
                     .load(Utils.getAlbumArtUri(song.albumId))
                     .placeholder(R.drawable.music_empty)
                     .error(R.drawable.music_empty)
                     .into(mImage);*/
+
+        /*    Uri uri = Utils.getAlbumArtUri(song.albumId);
+            Log.d(TAG, "bind: song ["+ song.title+"], AlbumArtPath = "+ uri.toString());
+            Glide.with(mContext)
+                    .load(uri)
+                    .placeholder(R.drawable.music_empty)
+                    .error(R.drawable.music_empty)
+                    .into(mImage);*/
+
+            SongGlideRequest.Builder.from(GlideApp.with(mContext), song)
+                    .ignoreMediaStore(false)
+                    .generatePalette(mContext).build()
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            if(mImage instanceof RoundedImageView) ((RoundedImageView)mImage).setBorderWidth(R.dimen.oneDP);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            if(mImage instanceof RoundedImageView) ((RoundedImageView)mImage).setBorderWidth(0f);
+                            return false;
+                        }
+                    })
+                   .into(mImage);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ((RippleDrawable) itemView.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));

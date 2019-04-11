@@ -108,14 +108,14 @@ public class ArtistChildTab extends Fragment {
             result.mArtist = ArtistLoader.getAllArtists(App.getInstance());
             else  return null;
 
-            if(result.mArtist!=null) {
+        /*    if(result.mArtist!=null) {
                 result.mGenres = new ArrayList[result.mArtist.size()];
                 List<Artist> mArtist = result.mArtist;
                 for (int i = 0, mArtistSize = mArtist.size(); i < mArtistSize; i++) {
                     Artist artist = mArtist.get(i);
                     result.mGenres[i] = GenreLoader.getGenreForArtist(context, artist.id);
                 }
-            }
+            }*/
             return result;
         }
 
@@ -126,7 +126,8 @@ public class ArtistChildTab extends Fragment {
                 if (fragment.mSwipeRefreshLayout != null)
                     fragment.mSwipeRefreshLayout.setRefreshing(false);
                 if(!asyncResult.mArtist.isEmpty())
-                fragment.mAdapter.setData(asyncResult.mArtist, asyncResult.mGenres);
+             //       fragment.mAdapter.setData(asyncResult.mArtist, asyncResult.mGenres);
+                fragment.mAdapter.setData(asyncResult.mArtist);
                 fragment.mLoadArtist = null;
             }
         }

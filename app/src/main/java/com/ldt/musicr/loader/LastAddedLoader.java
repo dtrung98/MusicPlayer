@@ -22,6 +22,7 @@ import android.provider.MediaStore.Audio.AudioColumns;
 
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.PreferencesUtility;
+import com.ldt.musicr.util.SortOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,28 +30,15 @@ import java.util.List;
 public class LastAddedLoader {
 
     private static Cursor mCursor;
-
     public static List<Song> getLastAddedSongs(Context context) {
+        return getLastAddedSongs(context, SortOrder.SongSortOrder.SONG_DATE);
+    }
 
-        mCursor = makeLastAddedCursor(context);
+    public static List<Song> getLastAddedSongs(Context context, String sortOrder) {
+
+        mCursor = makeLastAddedCursor(context, sortOrder);
         ArrayList<Song> mSongList = SongLoader.getSongsForCursor(mCursor);
 
-        /*if (mCursor != null && mCursor.moveToFirst()) {
-            do {
-                long id = mCursor.getLong(0);
-                String title = mCursor.getString(1);
-                String artist = mCursor.getString(2);
-                String album = mCursor.getString(3);
-                int duration = mCursor.getInt(4);
-                int trackNumber = mCursor.getInt(5);
-                long artistId = mCursor.getInt(6);
-                long albumId = mCursor.getLong(7);
-
-                final Song song = new Song(id, albumId, artistId, title, artist, album, duration, trackNumber,mCursor.getString(8));
-
-                mSongList.add(song);
-            } while (mCursor.moveToNext());
-        }*/
         if (mCursor != null) {
             mCursor.close();
             mCursor = null;
@@ -58,7 +46,7 @@ public class LastAddedLoader {
         return mSongList;
     }
 
-    public static final Cursor makeLastAddedCursor(final Context context) {
+    public static final Cursor makeLastAddedCursor(final Context context, String sortOrder) {
         //four weeks ago
         long fourWeeksAgo = (System.currentTimeMillis() / 1000) - (4 * 3600 * 24 * 7);
         long cutoff = PreferencesUtility.getInstance(context).getLastAddedCutoff();
@@ -74,6 +62,6 @@ public class LastAddedLoader {
         selection.append(cutoff);
 
         return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                SongLoader.BASE_PROJECTION, selection.toString(), null, MediaStore.Audio.Media.DATE_ADDED + " DESC");
+                SongLoader.BASE_PROJECTION, selection.toString(), null, sortOrder);
     }
 }

@@ -24,8 +24,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
-import com.ldt.musicr.services.MusicPlayer;
-import com.ldt.musicr.services.MusicService;
+import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicService;
 
 public final class PreferencesUtility {
 
@@ -58,10 +58,22 @@ public final class PreferencesUtility {
     private static final String SHOW_LOCKSCREEN_ALBUMART = "show_albumart_lockscreen";
     private static final String ARTIST_IMAGE = "artist_image";
     private static final String ARTIST_IMAGE_MOBILE = "artist_image_mobile";
+    private static final String SONG_CHILD_SORT_ORDER = "song_child_sort_order";
 
     private static PreferencesUtility sInstance;
+    public static final PreferencesUtility getInstance(final Context context) {
+        if (sInstance == null) {
+            sInstance = new PreferencesUtility(context.getApplicationContext());
+        }
+        return sInstance;
+    }
 
-    private static SharedPreferences mPreferences;
+    private SharedPreferences mPreferences;
+
+    public SharedPreferences getSharePreferences() {
+        return mPreferences;
+    }
+
     private static Context context;
     private ConnectivityManager connManager = null;
 
@@ -70,12 +82,7 @@ public final class PreferencesUtility {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public static final PreferencesUtility getInstance(final Context context) {
-        if (sInstance == null) {
-            sInstance = new PreferencesUtility(context.getApplicationContext());
-        }
-        return sInstance;
-    }
+
 
 
     public void setOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
@@ -189,6 +196,16 @@ public final class PreferencesUtility {
 
     public final String getSongSortOrder() {
         return mPreferences.getString(SONG_SORT_ORDER, SortOrder.SongSortOrder.SONG_A_Z);
+    }
+
+    public final int getSongChildSortOrder() {
+        return mPreferences.getInt(SONG_CHILD_SORT_ORDER,0);
+    }
+
+    public final void setSongChildSortOrder(int value) {
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(SONG_CHILD_SORT_ORDER, value);
+        editor.apply();
     }
 
     public void setSongSortOrder(final String value) {

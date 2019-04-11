@@ -4,15 +4,15 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
-import com.bumptech.glide.BitmapRequestBuilder;
-import com.bumptech.glide.DrawableRequestBuilder;
-import com.bumptech.glide.DrawableTypeRequest;
+import com.bumptech.glide.GenericTransitionOptions;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+
 import com.bumptech.glide.signature.MediaStoreSignature;
 import com.ldt.musicr.R;
+import com.ldt.musicr.glide.audiocover.AudioFileCover;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.MusicUtil;
 
@@ -57,12 +57,12 @@ public class SongGlideRequest {
             return this;
         }
 
-        public DrawableRequestBuilder<GlideDrawable> build() {
+        public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
             return createBaseRequest(requestManager, song, ignoreMediaStore)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
+                    .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .signature(createSignature(song));
         }
     }
@@ -74,13 +74,12 @@ public class SongGlideRequest {
             this.builder = builder;
         }
 
-        public BitmapRequestBuilder<?, Bitmap> build() {
+        public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
             return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
-                    .asBitmap()
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
+                    .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }
     }
@@ -94,23 +93,23 @@ public class SongGlideRequest {
             this.context = context;
         }
 
-        public BitmapRequestBuilder<?, BitmapPaletteWrapper> build() {
+        public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
             return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
-                    .asBitmap()
-                    .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
+
+              //     .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .animate(DEFAULT_ANIMATION)
+                    .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }
     }
 
-    public static DrawableTypeRequest createBaseRequest(RequestManager requestManager, Song song, boolean ignoreMediaStore) {
+    public static RequestBuilder<Bitmap> createBaseRequest(RequestManager requestManager, Song song, boolean ignoreMediaStore) {
         if (ignoreMediaStore) {
-            return requestManager.load(new AudioFileCover(song.data));
+            return requestManager.asBitmap().load(new AudioFileCover(song.data));
         } else {
-            return requestManager.loadFromMediaStore(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));
+            return requestManager.asBitmap().load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));
         }
     }
 

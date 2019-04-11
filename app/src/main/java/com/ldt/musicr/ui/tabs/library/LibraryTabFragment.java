@@ -18,6 +18,7 @@ import com.ldt.musicr.util.Tool;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LibraryTabFragment extends SupportFragment {
     private static final String TAG ="LibraryTabFragment";
@@ -41,6 +42,11 @@ public class LibraryTabFragment extends SupportFragment {
         return inflater.inflate(R.layout.library_tab,container,false);
     }
 
+    @OnClick(R.id.search_view)
+    void searchViewClicked() {
+        mSearchView.onActionViewExpanded();
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,6 +65,13 @@ public class LibraryTabFragment extends SupportFragment {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         // mTabLayout.setTabsFromPagerAdapter(mTabAdapter);//deprecated
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mSearchView.onActionViewExpanded();
+        mSearchView.clearFocus();
     }
 
     public void goToSongTab() {

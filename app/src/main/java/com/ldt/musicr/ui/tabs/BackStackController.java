@@ -34,8 +34,8 @@ import static android.content.Context.VIBRATOR_SERVICE;
 
 public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener {
     private static final String TAG ="BackStackController";
-    @BindView(R.id.root)
-    CardView mRoot;
+    @BindView(R.id.root) CardView mRoot;
+    @BindView(R.id.dim_view) View mDimView;
     private float mNavigationHeight;
 
     BottomNavigationPagerAdapter mNavigationAdapter;
@@ -82,7 +82,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
                             if(pc<0.01f) pc=0f;else if(pc>1) pc =1;
                              mRoot.setRadius(oneDP*14*pc);
                             Log.d(TAG, "run: pc = "+pc);
-                         //   mRoot.setDarken(0.3f*(attrs.get(actives.get(0)).getRuntimePercent()),true);
+                         mDimView.setAlpha(0.4f*(attrs.get(actives.get(0)).getRuntimePercent()));
                           //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),false);
                             mRoot.setAlpha(1);
         } else if(me !=0 )
@@ -97,6 +97,9 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
             float darken = min + hieu*heSo_truoc + hieu*(heSo_sau - heSo_truoc)*attrs.get(actives.get(0)).getRuntimePercent();
             // Log.d(TAG, "darken = " + darken);
           //  mRoot.setDarken(darken,false);
+            if(darken<0) darken = 0;
+            if(darken>1) darken = 1;
+            mDimView.setAlpha(darken);
             //   TabSwitcherFrameLayout.setDarken(0.3f + 0.6f*pcOnTopLayer,false);
           //  mRoot.setRoundNumber(1,true);
             mRoot.setRadius(oneDP*14);

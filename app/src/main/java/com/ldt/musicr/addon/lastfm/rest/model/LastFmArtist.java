@@ -18,7 +18,22 @@ public class LastFmArtist {
         this.artist = artist;
     }
 
+    @Override
+    public String toString() {
+        return "LastFmArtist{" +
+                "artist=" + artist +
+                '}';
+    }
+
     public static class Artist {
+        @Override
+        public String toString() {
+            return "Artist{" +
+                    "image=" + image +
+                    ", bio=" + bio +
+                    '}';
+        }
+
         @Expose
         private List<Image> image = new ArrayList<>();
         @Expose
@@ -51,6 +66,13 @@ public class LastFmArtist {
             public void setContent(String content) {
                 this.content = content;
             }
+
+            @Override
+            public String toString() {
+                return "Bio{" +
+                        "content='" + content + '\'' +
+                        '}';
+            }
         }
 
         public static class Image {
@@ -74,6 +96,14 @@ public class LastFmArtist {
 
             public void setSize(String size) {
                 this.size = size;
+            }
+
+            @Override
+            public String toString() {
+                return "Image{" +
+                        "Text='" + Text + '\'' +
+                        ", size='" + size + '\'' +
+                        '}';
             }
         }
     }

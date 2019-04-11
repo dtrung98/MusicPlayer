@@ -21,7 +21,7 @@
         android:id="@+id/number"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:text="1"
+        tools:text="1"
         android:textColor="#AAEEEEEE"
         android:layout_gravity="center_vertical"
         android:gravity="center"
@@ -43,7 +43,9 @@
             android:scaleType="centerInside"
             android:padding="6dp"
             app:riv_corner_radius="2dp"
-            android:layout_marginRight="10dp" />
+            tools:src="@drawable/music_style"
+            tools:riv_border_width="1dp"
+            app:riv_border_color="#88000000"/>
         <ImageView
             android:id="@+id/quick_play_pause"
             android:layout_width="0dp"
@@ -53,9 +55,9 @@
             app:layout_constraintTop_toTopOf="@id/image"
             app:layout_constraintBottom_toBottomOf="@id/image"
             app:layout_constraintEnd_toEndOf="@id/image"
-            android:src="@drawable/ic_volume_up_black_24dp"
+            tools:src="@drawable/ic_volume_up_black_24dp"
             android:tint="@color/FlatWhite"
-
+            tools:visibility="gone"
             />
         <TextView
             android:id="@id/title"

@@ -12,4 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"/>
+    <View
+        android:id="@+id/dim_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:alpha="0"/>
 </android.support.v7.widget.CardView>

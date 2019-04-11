@@ -19,11 +19,21 @@ import com.ldt.musicr.BuildConfig;
 import com.ldt.musicr.helpers.StackBlur;
 import com.ldt.musicr.util.ImageUtil;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class BlurTransformation extends BitmapTransformation {
     public static final float DEFAULT_BLUR_RADIUS = 5f;
+
+    private static String STRING_CHARSET_NAME = "UTF-8";
+    private static final String ID = "com.ldt.musicr.glide.BlurTransformation";
+    private static Charset CHARSET = Charset.forName(STRING_CHARSET_NAME);
+    private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
+
+    private static int MAX_RADIUS = 25;
 
     private Context context;
     private float blurRadius;
@@ -36,12 +46,12 @@ public class BlurTransformation extends BitmapTransformation {
     }
 
     private BlurTransformation(Builder builder) {
-        super(builder.context);
+        super();
         init(builder);
     }
 
     private BlurTransformation(Builder builder, BitmapPool bitmapPool) {
-        super(bitmapPool);
+        super();
         init(builder);
     }
 
@@ -142,7 +152,16 @@ public class BlurTransformation extends BitmapTransformation {
     }
 
     @Override
-    public String getId() {
-        return "BlurTransformation(radius=" + blurRadius + ", sampling=" + sampling + ")";
+    public int hashCode() {
+        return ID.hashCode();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BlurTransformation;
+    }
+
+    @Override
+    public void updateDiskCacheKey(MessageDigest messageDigest) {
+        messageDigest.update(ID_BYTES);
     }
 }

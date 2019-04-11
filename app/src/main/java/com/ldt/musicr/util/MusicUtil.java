@@ -24,7 +24,7 @@ import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 
 
 import java.io.File;

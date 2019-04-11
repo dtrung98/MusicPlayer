@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.service.MusicStateListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;

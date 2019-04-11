@@ -1,11 +1,14 @@
-package com.ldt.musicr.ui.playinglist;
+package com.ldt.musicr.ui.playingqueue;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,23 +18,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.services.MusicPlayer;
-import com.ldt.musicr.services.MusicService;
-import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.model.Song;
+import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicService;
+import com.ldt.musicr.service.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class PlayingListController extends BaseLayerFragment implements MusicStateListener {
-    private static final String TAG ="PlayingListController";
+public class PlayingQueueController extends BaseLayerFragment implements MusicStateListener {
+    private static final String TAG ="PlayingQueueController";
     @BindView(R.id.rootCardView)
     CardView mRootCardView;
 
@@ -42,7 +47,7 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
     private float mMaxRadius = 18;
 
     @BindView(R.id.constraint_root)
-    MotionLayout mConstraintRoot;
+    ViewGroup mConstraintRoot;
 
 
     @BindView(R.id.playlist_title)
@@ -51,6 +56,11 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
     ImageView mDownIcon;
     @BindView(R.id.shuffle_button) ImageView mShuffleButton;
     @BindView(R.id.repeat_button) ImageView mRepeatButton;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    private PlayingQueueAdapter mAdapter;
+
 
 
     @OnTouch({R.id.playlist_title,R.id.down})
@@ -78,18 +88,33 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.playing_list_controller,container,false);
+        return inflater.inflate(R.layout.playing_queue_controller,container,false);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mPlaylistTitle.setSelected(true);
+        mAdapter = new PlayingQueueAdapter(getContext());
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mRecyclerView.setAdapter(mAdapter);
 
         if(getActivity() instanceof MainActivity)
             ((MainActivity)getActivity()).addMusicStateListener(this);
+        onMetaChanged();
+    }
+    @OnTouch(R.id.recycler_view)
+    boolean onTouchRecyclerView(RecyclerView view, MotionEvent event) {
+        boolean recycer_handle = view.onTouchEvent(event);
+
+        Log.d(TAG, "onTouchRecyclerView: "+recycer_handle);
+        if(!recycer_handle)
+            return mLayerController.streamOnTouchEvent(mRoot,event);
+        return true;
+
     }
 
     @Override
@@ -125,16 +150,29 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
         }
         return false;
     }
+    float mPrevProgress = 0;
 
     @Override
     public void onTranslateChanged(LayerController.Attr attr) {
-        Log.d(TAG, "onTranslateChanged");
-        if(mRoot!=null) {
+            Log.d(TAG, "onTranslateChanged");
+
             float pc = attr.getRuntimePercent();
             if(pc>1) pc=1;
             else if(pc<0) pc = 0;
             setRadius(pc);
-        }
+        /*    if(mConstraintRoot instanceof MotionLayout) {
+                MotionLayout motionLayout = ((MotionLayout)mConstraintRoot);
+                float currentProgress = motionLayout.getProgress();
+                if(isTranslateUp(pc)&&currentProgress<pc) motionLayout.setProgress(pc);
+                else if(isTranslateDown(pc)&&currentProgress>pc) motionLayout.setProgress(pc);
+            }
+        mPrevProgress = pc;*/
+    }
+    private boolean isTranslateUp(float pc) {
+        return mPrevProgress <= pc;
+    }
+    private boolean isTranslateDown(float pc) {
+        return mPrevProgress>pc;
     }
     private void updateShuffleState() {
       int  mode =  MusicPlayer.getShuffleMode();
@@ -157,7 +195,7 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
     }
 
     @OnClick(R.id.repeat_button)
-    void cycleRepeate() {
+    void cycleRepeat() {
         MusicPlayer.cycleRepeat();
         updateShuffleState();
         updateRepeatState();
@@ -178,7 +216,7 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
                 break;
             case MusicService.REPEAT_ALL:
                 mRepeatButton.setImageResource(R.drawable.repeat);
-                mRepeatButton.setColorFilter(Tool.getHeavyColor());
+                mRepeatButton.setColorFilter(Tool.getBaseColor());
                 Log.d(TAG, "updateRepeatState: All");
         }
     }
@@ -231,8 +269,28 @@ public class PlayingListController extends BaseLayerFragment implements MusicSta
 
     @Override
     public void onMetaChanged() {
+
         updateShuffleState();
         updateRepeatState();
+
+    }
+
+    public void setData(List<Song> songs2) {
+        if(songs2==null||songs2.isEmpty())
+        mAdapter.setData(songs2);
+        else {
+            int current = MusicPlayer.getQueuePosition();
+            if(current<songs2.size()) {
+                List<Song> songWillPlay = songs2.subList(current,songs2.size()-1);
+                mAdapter.setData(songWillPlay);
+            }
+        }
+        int[] history = MusicPlayer.getQueueHistoryList();
+        String historyStr = "";
+        for (int h: history){
+            historyStr +=" | "+h;
+        }
+        Log.d(TAG, "History :"+historyStr);
     }
 
 }

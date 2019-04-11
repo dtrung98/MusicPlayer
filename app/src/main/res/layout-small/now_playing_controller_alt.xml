@@ -86,7 +86,7 @@
             android:textColor="#999"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:background="@drawable/ripple_for_playlist_title"
+            android:background="@drawable/ripple_16dp_translucent"
             android:clickable="true"
             android:focusable="true"
             android:textSize="10sp"

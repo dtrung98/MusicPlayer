@@ -1,4 +1,4 @@
-package com.ldt.musicr.services;
+package com.ldt.musicr.service;
 
 import android.content.Context;
 import android.content.Intent;

@@ -1,10 +1,11 @@
 package com.ldt.musicr.glide.audiocover;
 
 import android.media.MediaMetadataRetriever;
+import android.support.annotation.NonNull;
 
 import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
-import com.ldt.musicr.glide.AudioFileCover;
 
 
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -31,12 +32,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
         this.model = model;
     }
 
-    @Override
-    public String getId() {
-        // makes sure we never ever return null here
-        return String.valueOf(model.filePath);
-    }
-
+/*
     @Override
     public InputStream loadData(Priority priority) throws Exception {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -51,7 +47,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
         } finally {
             retriever.release();
         }
-    }
+    }*/
 
     private static final String[] FALLBACKS = {"cover.jpg", "album.jpg", "folder.jpg", "cover.png", "album.png", "folder.png"};
 
@@ -85,6 +81,26 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     }
 
     @Override
+    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(model.filePath);
+            byte[] picture = retriever.getEmbeddedPicture();
+            if (picture != null) {
+                callback.onDataReady(new ByteArrayInputStream(picture));
+            } else {
+                try {
+                    callback.onDataReady(fallback(model.filePath));
+                } catch (FileNotFoundException e) {
+                    callback.onLoadFailed(e);
+                }
+            }
+        } finally {
+            retriever.release();
+        }
+    }
+
+    @Override
     public void cleanup() {
         // already cleaned up in loadData and ByteArrayInputStream will be GC'd
         if (stream != null) {
@@ -99,5 +115,17 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     @Override
     public void cancel() {
         // cannot cancel
+    }
+
+    @NonNull
+    @Override
+    public Class<InputStream> getDataClass() {
+        return InputStream.class;
+    }
+
+    @NonNull
+    @Override
+    public DataSource getDataSource() {
+        return DataSource.LOCAL;
     }
 }

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.tabs.PlaylistPagerFragment;
+import com.ldt.musicr.ui.tabs.pager.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.tabs.feature.FeaturePlaylistAdapter;

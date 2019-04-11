@@ -616,85 +616,8 @@ public class LayerController {
     private boolean onDown = true;
     private long timeDown = 0;
     private boolean onTouchEvent(int i, View view, MotionEvent event) {
-        if(true) return onLayerTouchEvent(i,view,event);
-//
-//
-//        // không xử lý layer phía sau layer focusLayer
-//        if (i==mBaseLayers.size()-1) return false;
-//        BaseLayer listener = mBaseLayers.get(i);
-//       View parent = mBaseAttrs.get(i).parent;
-//        Attr attr = mBaseAttrs.get(i);
-//
-//
-//
-//        if(currentLayerEvent!=i) {
-//        // reset variables
-//            onDown = true;
-//            _xDelta = 0;
-//            _yDelta = 0;
-//            topMargin = 0;
-//            currentLayerEvent = i;
-//        }
-//
-//        final int X = (int) event.getRawX();
-//        final int Y = (int) event.getRawY();
-//
-//        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-//            case MotionEvent.ACTION_DOWN:
-//                timeDown = System.currentTimeMillis();
-//                FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) parent.getLayoutParams();
-//                topMargin = params.topMargin;
-//             //   _xDelta = X - params.leftMargin; // chênh lệch vị trí giữa event và vật
-//                _yDelta = Y - topMargin;
-//                break;
-//
-//            case MotionEvent.ACTION_UP:
-//                long elapsedMsec = System.currentTimeMillis() - timeDown;
-//                if (elapsedMsec <= 300) {
-//                    // A Quick Touch - A Click, what should we do ?
-//                    if(attr.Pc<=0.2f) AnimateLayer(i,listener,attr,attr.Pc,1);
-//                    else if(attr.Pc>=0.8f) AnimateLayer(i,listener,attr,attr.Pc,0);
-//                }
-//                if( attr.Pc==1)
-//                    AnimateLayer(i,listener,attr,1,0);
-//                else if(attr.Pc ==0)
-//                    AnimateLayer(i,listener,attr,0,1);
-//                else if(onDown) // nếu kéo tay xuống
-//                {
-//                    if(attr.Pc <=0.8f) AnimateLayer(i,listener,attr,attr.Pc,0);
-//                    else     AnimateLayer(i,listener,attr,attr.Pc,1);
-//                }
-//                else // nếu kéo tay lên
-//                {
-//                    if(attr.Pc >=0.2f) AnimateLayer(i,listener,attr,attr.Pc,1);
-//                    else AnimateLayer(i,listener,attr,attr.Pc,0);
-//                }
-//                currentLayerEvent = -1;
-//                break;
-//
-//            case MotionEvent.ACTION_POINTER_DOWN:
-//
-//                break;
-//            case MotionEvent.ACTION_POINTER_UP:
-//
-//                break;
-//            case MotionEvent.ACTION_MOVE:
-//                //     layoutParams.leftMargin = X - _xDelta;
-//                float new_self_translate = Y - _yDelta;
-//                float new_pc = new_self_translate/(attr.getgetMaxPosition()() - attr.minPosition);
-//
-//                //  nếu topMargin ở quá vị trí maxTopmargin
-//                // thì chiều cao bị kéo dãn ra và có khoảng chênh lệch
-//                // over_height = new_height - old_height
-//                onDown = (attr.Pc> new_pc);
-//
-//                if(attr.Pc !=new_pc) {
-//                    setPositionAndSizeLayer(attr,currentLayerEvent,new_pc);
-//                }
-//                break;
-//        }
+       return onLayerTouchEvent(i,view,event);
 
-        return true;
     }
 
     CountDownTimer countDownTimer;

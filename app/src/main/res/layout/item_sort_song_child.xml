@@ -5,8 +5,10 @@
     android:clickable="true"
     android:focusable="true"
     android:background="@drawable/ripple_effect"
+    tools:background="@color/background_panel_color"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
     <ImageView
         android:id="@+id/sort_image"
         android:layout_width="45dp"
@@ -26,7 +28,7 @@
         app:layout_constraintStart_toEndOf="@id/sort_image"
         app:layout_constraintBottom_toBottomOf="@id/sort_image"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Sort descending"
+        android:text="Sort alphabetically (Desc)"
         android:gravity="center_vertical"
         android:textColor="@color/FlatWhite"
         android:textSize="15sp"

@@ -31,10 +31,10 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.loader.QueueLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.services.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayer;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
-import com.ldt.musicr.services.MusicStateListener;
+import com.ldt.musicr.service.MusicStateListener;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
@@ -155,7 +155,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
             mDimView.setAlpha(darken);
             setRadius(1);
         }
-        checkStatusStyle();
+      //  checkStatusStyle();
     }
 
     @Override
@@ -265,6 +265,9 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         if(!songs2.isEmpty()) {
             mAdapter.setData(songs2);
             mRecyclerView.smoothScrollToPosition(MusicPlayer.getQueuePosition());
+
+            if(getActivity() instanceof MainActivity)
+                ((MainActivity)getActivity()).setDataForPlayingQueue(songs2);
         }
         long time5 = System.currentTimeMillis() - start;
         String path = MusicPlayer.getPath();

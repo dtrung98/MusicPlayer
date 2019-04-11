@@ -1,12 +1,15 @@
 package com.ldt.musicr.ui.tabs.library;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +19,20 @@ import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.ArtistGlideRequest;
-import com.ldt.musicr.glide.ColoredTarget;
+import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.loader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
+import com.ldt.musicr.util.PhonographColorUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +51,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         mContext = context;
     }
 
-    public void setData(List<Artist> data, ArrayList<Genre>[] genres) {
+    /*public void setData(List<Artist> data, ArrayList<Genre>[] genres) {
         mData.clear();
         if(data!=null) {
             mData.addAll(data);
@@ -50,7 +59,15 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         }
         notifyDataSetChanged();
     }
-
+*/
+    public void setData(List<Artist> data) {
+        mData.clear();
+        if(data!=null) {
+            mData.addAll(data);
+            mGenres = new ArrayList[data.size()];
+        }
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -135,11 +152,57 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         TextView mCount;
 
         public void bind(Artist artist, ArrayList<Genre> genres) {
-            long start = System.currentTimeMillis();
             mArtist.setText(artist.getName());
             mCount.setText(String.format("%d %s", artist.songCount, mCount.getContext().getResources().getString(R.string.songs)));
+            if(genres==null) {
+                mGenreOne.setText("⋯");
+                mGenreTwo.setVisibility(View.GONE);
+                Log.d(TAG, "load genre item "+getAdapterPosition() );
+                new GenreOfArtistTask(ArtistAdapter.this,artist,getAdapterPosition()).execute();
+            } else bindGenre(genres);
+            //try {
+                loadArtistImage(artist);
+          // } catch (Exception ignored) {}
+        }
+        private void loadArtistImage(Artist artist) {
+          /* String[] artists = artist.getName().replace(" ft ",",").replace(';',',').split("\\s*,\\s*");
+           Artist artistTemp;
+           if(artists.length>1)
+               artistTemp = new Artist(artist.id,artists[0].replace(",",""),artist.albumCount,artist.songCount);
+           else artistTemp = artist;*/
 
-            if(genres==null||genres.isEmpty()) {
+            ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist)
+                    .generatePalette(mContext)
+                    .build()
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            int color;
+                            if(resource!=null)
+                            color  = PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(resource), mContext.getResources().getColor(R.color.FlatBlue));
+                            else color =  mContext.getResources().getColor(R.color.FlatBlue);
+                            int fixedColor = lighter(color,0.55f,0x90);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                mPanelColor.getBackground().setTint(fixedColor);
+                            else mPanelColor.getBackground().setColorFilter(fixedColor, PorterDuff.Mode.SRC_ATOP);
+//
+//                            if (usePalette)
+//                                setColors(color, holder);
+//                            else
+//                                setColors(getDefaultFooterColor(), holder);
+                            return false;
+                        }
+                    })
+                    .into(mImage);
+        }
+
+        public void bindGenre(ArrayList<Genre> genres) {
+           if(genres.isEmpty()) {
                 mGenreOne.setText("Unknown Genres");
                 mGenreOne.setVisibility(View.VISIBLE);
                 mGenreTwo.setVisibility(View.GONE);
@@ -153,43 +216,52 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
                 mGenreOne.setVisibility(View.VISIBLE);
                 mGenreTwo.setVisibility(View.VISIBLE);
             }
-            long start2 = System.currentTimeMillis() - start;
-            try {
-                loadArtistImage(artist);
-            } catch (Exception ignored) {}
-            long start3 = System.currentTimeMillis() - start - start2;
-            Log.d(TAG, "bind: start2 = "+ start2+", start3 = "+ start3);
         }
-        private void loadArtistImage(Artist artist) {
-           String[] artists = artist.getName().replace(';',',').split("\\s*,\\s*");
-           Artist artistTemp;
-           if(artists.length>1)
-               artistTemp = new Artist(artist.id,artists[0],artist.albumCount,artist.songCount);
-           else artistTemp = artist;
+    }
+    private static class GenreOfArtistTask extends AsyncTask<Void,Void,ArrayList<Genre>> {
+        private WeakReference<ArtistAdapter> mAAReference;
+        private int mItemPos;
+        private Artist mArtist;
+        public GenreOfArtistTask(ArtistAdapter adapter, Artist artist, int itemPos) {
+            super();
+            mAAReference = new WeakReference<>(adapter);
+            mArtist = artist;
+            mItemPos = itemPos;
+        }
 
+        @Override
+        protected ArrayList<Genre> doInBackground(Void... voids) {
 
-            ArtistGlideRequest.Builder.from(Glide.with(mContext), artistTemp)//.build().into(mImage);
-                    .generatePalette(mContext).build()
-                    .into(new ColoredTarget(mImage) {
-                        @Override
-                        public void onLoadCleared(Drawable placeholder) {
-                            super.onLoadCleared(placeholder);
-//                            setColors(getDefaultFooterColor(), holder);
-                        }
+            if(mAAReference.get()!=null&&mArtist!=null) {
+                return GenreLoader.getGenreForArtist(mAAReference.get().mContext, mArtist.id);
+            }
+            return null;
+        }
 
-                        @Override
-                        public void onColorReady(int color) {
-                            int fixedColor = lighter(color,0.55f,0x90);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                mPanelColor.getBackground().setTint(fixedColor);
-                            else mPanelColor.getBackground().setColorFilter(fixedColor, PorterDuff.Mode.SRC_ATOP);
-//
-//                            if (usePalette)
-//                                setColors(color, holder);
-//                            else
-//                                setColors(getDefaultFooterColor(), holder);
-                        }
-                    });
+        @Override
+        protected void onPostExecute(ArrayList<Genre> genres) {
+            if(genres!=null&&mAAReference.get()!=null) {
+             mAAReference.get().attachGenreByPosition(genres, mArtist, mItemPos);
+            }
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ItemHolder holder, int position, @NonNull List<Object> payloads) {
+    if(!payloads.isEmpty()) {
+            if((payloads.get(0)).equals(GENRE_UPDATE)&&position<mGenres.length)
+                holder.bindGenre(mGenres[position]);
+    } else
+        super.onBindViewHolder(holder, position, payloads);
+    }
+    private static final String GENRE_UPDATE = "genre_update";
+
+    private void attachGenreByPosition(ArrayList<Genre> genres, Artist artist, int itemPos) {
+        if(itemPos>=0 && itemPos<mData.size()) {
+            if (artist.equals(mData.get(itemPos))&&mGenres[itemPos]==null)  {
+                mGenres[itemPos] = genres;
+               notifyItemChanged(itemPos,GENRE_UPDATE);
+            }
         }
     }
 }

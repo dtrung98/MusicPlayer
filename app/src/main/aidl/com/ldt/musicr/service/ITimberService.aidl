@@ -1,5 +1,5 @@
 // IR_TimberService.aidl
-package com.ldt.musicr.services;
+package com.ldt.musicr.service;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 // Declare any non-default types here with import statements
 

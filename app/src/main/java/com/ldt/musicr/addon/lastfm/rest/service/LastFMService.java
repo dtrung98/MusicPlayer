@@ -14,8 +14,9 @@ import retrofit2.http.Query;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
+
 public interface LastFMService {
-    String API_KEY = "bd9c6ea4d55ec9ed3af7d276e5ece304";
+    String API_KEY = "0627c43f6df6bdb7ab193077dec2f98d";
     String BASE_QUERY_PARAMETERS = "?format=json&autocorrect=1&api_key=" + API_KEY;
 
     @GET(BASE_QUERY_PARAMETERS + "&method=album.getinfo")
