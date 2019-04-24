@@ -1,71 +1,95 @@
-/*
- * Copyright (C) 2015 Naman Dwivedi
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.ldt.musicr.loader;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AudioColumns;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
-
+import android.support.annotation.Nullable;
 
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.util.PreferencesUtility;
+import com.ldt.musicr.provider.BlacklistStore;
+import com.ldt.musicr.util.PreferenceUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * @author Karim Abou Zeid (kabouzeid)
+ */
 public class SongLoader {
-    private static final long[] sEmptyList = new long[0];
-
-    protected static final String BASE_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + "=1" + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''";
-    public static final String[] BASE_PROJECTION = new String[]{
+    protected static final String BASE_SELECTION = AudioColumns.IS_MUSIC + "=1" + " AND " + AudioColumns.TITLE + " != ''";
+    protected static final String[] BASE_PROJECTION = new String[]{
             BaseColumns._ID,// 0
-            MediaStore.Audio.AudioColumns.TITLE,// 1
-            MediaStore.Audio.AudioColumns.TRACK,// 2
-            MediaStore.Audio.AudioColumns.YEAR,// 3
-            MediaStore.Audio.AudioColumns.DURATION,// 4
-            MediaStore.Audio.AudioColumns.DATA,// 5
-            MediaStore.Audio.AudioColumns.DATE_MODIFIED,// 6
-            MediaStore.Audio.AudioColumns.ALBUM_ID,// 7
-            MediaStore.Audio.AudioColumns.ALBUM,// 8
-            MediaStore.Audio.AudioColumns.ARTIST_ID,// 9
-            MediaStore.Audio.AudioColumns.ARTIST,// 10
+            AudioColumns.TITLE,// 1
+            AudioColumns.TRACK,// 2
+            AudioColumns.YEAR,// 3
+            AudioColumns.DURATION,// 4
+            AudioColumns.DATA,// 5
+            AudioColumns.DATE_MODIFIED,// 6
+            AudioColumns.ALBUM_ID,// 7
+            AudioColumns.ALBUM,// 8
+            AudioColumns.ARTIST_ID,// 9
+            AudioColumns.ARTIST,// 10
     };
 
-    public static ArrayList<Song> getAllSongs(Context context) {
-        Cursor  cursor = makeSongCursor(context, null, null);
-        return getSongsForCursor(cursor);
+    @NonNull
+    public static ArrayList<Song> getAllSongs(@NonNull Context context) {
+        Cursor cursor = makeSongCursor(context, null, null);
+        return getSongs(cursor);
     }
-
     public static ArrayList<Song> getAllSongs(Context context, String sortOrder) {
         Cursor  cursor = makeSongCursor(context, null, null,sortOrder);
-        return getSongsForCursor(cursor);
+        return getSongs(cursor);
     }
 
     @NonNull
-    private static Song getSongAtThisColumnIndex(@NonNull Cursor cursor) {
+    public static ArrayList<Song> getSongs(@NonNull final Context context, final String query) {
+        Cursor cursor = makeSongCursor(context, AudioColumns.TITLE + " LIKE ?", new String[]{"%" + query + "%"});
+        return getSongs(cursor);
+    }
+
+    @NonNull
+    public static Song getSong(@NonNull final Context context, final int queryId) {
+        Cursor cursor = makeSongCursor(context, AudioColumns._ID + "=?", new String[]{String.valueOf(queryId)});
+        return getSong(cursor);
+    }
+
+    @NonNull
+    public static ArrayList<Song> getSongs(@Nullable final Cursor cursor) {
+        ArrayList<Song> songs = new ArrayList<>();
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                songs.add(getSongFromCursorImpl(cursor));
+            } while (cursor.moveToNext());
+        }
+
+        if (cursor != null)
+            cursor.close();
+        return songs;
+    }
+
+    @NonNull
+    public static Song getSong(@Nullable Cursor cursor) {
+        Song song;
+        if (cursor != null && cursor.moveToFirst()) {
+            song = getSongFromCursorImpl(cursor);
+        } else {
+            song = Song.EMPTY_SONG;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return song;
+    }
+
+    @NonNull
+    private static Song getSongFromCursorImpl(@NonNull Cursor cursor) {
         final int id = cursor.getInt(0);
         final String title = cursor.getString(1);
         final int trackNumber = cursor.getInt(2);
         final int year = cursor.getInt(3);
-        final int duration = cursor.getInt(4);
+        final long duration = cursor.getLong(4);
         final String data = cursor.getString(5);
         final long dateModified = cursor.getLong(6);
         final int albumId = cursor.getInt(7);
@@ -76,115 +100,50 @@ public class SongLoader {
         return new Song(id, title, trackNumber, year, duration, data, dateModified, albumId, albumName, artistId, artistName);
     }
 
-    public static ArrayList<Song> getSongsForCursor(Cursor cursor) {
-        ArrayList<Song> songs = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                songs.add(getSongAtThisColumnIndex(cursor));
-            } while (cursor.moveToNext());
-        }
-
-        if (cursor != null)
-            cursor.close();
-        return songs;
+    @Nullable
+    public static Cursor makeSongCursor(@NonNull final Context context, @Nullable final String selection, final String[] selectionValues) {
+        return makeSongCursor(context, selection, selectionValues, PreferenceUtil.getInstance(context).getSongSortOrder());
     }
 
-    /**
-     *  Get song with a query
-     * @param context
-     * @param query
-     * @return
-     */
-    @NonNull
-    public static ArrayList<Song> getSongsForCursor(@NonNull final Context context, final String query) {
-        Cursor cursor = makeSongCursor(context, MediaStore.Audio.AudioColumns.TITLE + " LIKE ?", new String[]{"%" + query + "%"});
-        return getSongsForCursor(cursor);
-    }
-
-    public static Song getSongForCursor(Cursor cursor) {
-        Song song;
-        if (cursor != null && cursor.moveToFirst()) {
-            song = getSongAtThisColumnIndex(cursor);
+    @Nullable
+    public static Cursor makeSongCursor(@NonNull final Context context, @Nullable String selection, String[] selectionValues, final String sortOrder) {
+        if (selection != null && !selection.trim().equals("")) {
+            selection = BASE_SELECTION + " AND " + selection;
         } else {
-            song = new Song();
+            selection = BASE_SELECTION;
         }
-        if (cursor != null) {
-            cursor.close();
-        }
-        return song;
-    }
 
-    public static final long[] getSongListForCursor(Cursor cursor) {
-        if (cursor == null) {
-            return sEmptyList;
+        // Blacklist
+        ArrayList<String> paths = BlacklistStore.getInstance(context).getPaths();
+        if (!paths.isEmpty()) {
+            selection = generateBlacklistSelection(selection, paths.size());
+            selectionValues = addBlacklistSelectionValues(selectionValues, paths);
         }
-        final int len = cursor.getCount();
-        final long[] list = new long[len];
-        cursor.moveToFirst();
-        int columnIndex = -1;
+
         try {
-            columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Audio.Playlists.Members.AUDIO_ID);
-        } catch (final IllegalArgumentException notaplaylist) {
-            columnIndex = cursor.getColumnIndexOrThrow(BaseColumns._ID);
+            return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    BASE_PROJECTION, selection, selectionValues, sortOrder);
+        } catch (SecurityException e) {
+            return null;
         }
-        for (int i = 0; i < len; i++) {
-            list[i] = cursor.getLong(columnIndex);
-            cursor.moveToNext();
+    }
+
+    private static String generateBlacklistSelection(String selection, int pathCount) {
+        String newSelection = selection != null && !selection.trim().equals("") ? selection + " AND " : "";
+        newSelection += AudioColumns.DATA + " NOT LIKE ?";
+        for (int i = 0; i < pathCount - 1; i++) {
+            newSelection += " AND " + AudioColumns.DATA + " NOT LIKE ?";
         }
-        cursor.close();
-        cursor = null;
-        return list;
+        return newSelection;
     }
 
-    public static Song getSongFromPath(String path, Context context) {
-        ContentResolver cr = context.getContentResolver();
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Media.DATA;
-        String[] selectionArgs = {path};
-        String[] projection = BASE_PROJECTION;
-        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
-
-        Cursor cursor = cr.query(uri, projection, selection + "=?", selectionArgs, sortOrder);
-
-        if (cursor != null && cursor.getCount() > 0) {
-            Song song = getSongForCursor(cursor);
-            cursor.close();
-            return song;
+    private static String[] addBlacklistSelectionValues(String[] selectionValues, ArrayList<String> paths) {
+        if (selectionValues == null) selectionValues = new String[0];
+        String[] newSelectionValues = new String[selectionValues.length + paths.size()];
+        System.arraycopy(selectionValues, 0, newSelectionValues, 0, selectionValues.length);
+        for (int i = selectionValues.length; i < newSelectionValues.length; i++) {
+            newSelectionValues[i] = paths.get(i - selectionValues.length) + "%";
         }
-        else return new Song();
+        return newSelectionValues;
     }
-
-    public static long[] getSongListInFolder(Context context, String path) {
-        String[] whereArgs = new String[]{path + "%"};
-        return getSongListForCursor(makeSongCursor(context, MediaStore.Audio.Media.DATA + " LIKE ?", whereArgs, null));
-    }
-
-    public static Song getSongWithId(Context context, long id) {
-        return getSongForCursor(makeSongCursor(context, "_id=" + String.valueOf(id), null));
-    }
-
-    public static List<Song> searchSongs(Context context, String searchString, int limit) {
-        ArrayList<Song> result = getSongsForCursor(makeSongCursor(context, "title LIKE ?", new String[]{searchString + "%"}));
-        if (result.size() < limit) {
-            result.addAll(getSongsForCursor(makeSongCursor(context, "title LIKE ?", new String[]{"%_" + searchString + "%"})));
-        }
-        return result.size() < limit ? result : result.subList(0, limit);
-    }
-
-    public static Cursor makeSongCursor(Context context, String selection, String[] paramArrayOfString) {
-        final String songSortOrder = PreferencesUtility.getInstance(context).getSongSortOrder();
-        return makeSongCursor(context, selection, paramArrayOfString, songSortOrder);
-    }
-
-    private static Cursor makeSongCursor(Context context, String selection, String[] paramArrayOfString, String sortOrder) {
-        String selectionStatement = "is_music=1 AND title != ''";
-
-        if (!TextUtils.isEmpty(selection)) {
-            selectionStatement = selectionStatement + " AND " + selection;
-        }
-        return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, BASE_PROJECTION, selectionStatement, paramArrayOfString, sortOrder);
-
-    }
-
 }

@@ -25,7 +25,7 @@ import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.tabs.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import com.ldt.musicr.ui.widget.bubblepopupmenu.BubbleMenuCenter;
+
 import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;
 
 import java.util.List;
@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity {
         return mAudioPreviewPlayer;
     }
 
-    public BubbleMenuCenter bubbleMenuCenter;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult) {
@@ -71,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(mAudioPreviewPlayer!=null) removeMusicStateListener(mAudioPreviewPlayer);
+        if(mAudioPreviewPlayer!=null) removeMusicServiceEventListener(mAudioPreviewPlayer);
         super.onDestroy();
     }
 
@@ -111,10 +110,9 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.basic_activity_layout);
         ButterKnife.bind(this);
         mLayerContainer.setVisibility(View.GONE);
-        if(mAudioPreviewPlayer!=null) addMusicStateListener(mAudioPreviewPlayer);
+        if(mAudioPreviewPlayer!=null) addMusicServiceEventListener(mAudioPreviewPlayer);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
-        bubbleMenuCenter = new BubbleMenuCenter(this);
 
         mRootEverything.post(new Runnable() {
             @Override

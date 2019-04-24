@@ -133,5 +133,11 @@
     </style>
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
         <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Theme.Phonograph.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
+
+    <style name="Theme.Phonograph.Notification.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title" />
+
 </resources>

@@ -44,7 +44,7 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
     }
 
     private void refreshData() {
-        mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getPlaylists(getActivity(),true));
+        mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getAllPlaylists(getActivity()));
         mFeatureLinearHolder.setSuggestedSongs(SongLoader.getAllSongs(getActivity()));
         mSwipeRefreshLayout.setRefreshing(false);
     }

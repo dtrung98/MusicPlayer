@@ -1,55 +1,102 @@
-/*
- * Copyright (C) 2015 Naman Dwivedi
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.ldt.musicr.model;
 
-import com.ldt.musicr.util.MusicUtil;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-import static com.ldt.musicr.model.Artist.UNKNOWN_ARTIST_DISPLAY_NAME;
+import java.util.ArrayList;
 
-public class Album {
-    public final long artistId;
+/**
+ * @author Karim Abou Zeid (kabouzeid)
+ */
+public class Album implements Parcelable {
+    public final ArrayList<Song> songs;
 
-    public String getArtistName() {
-        if (MusicUtil.isArtistNameUnknown(artistName)) {
-            return UNKNOWN_ARTIST_DISPLAY_NAME;
-        }
-        return artistName;
+    public Album(ArrayList<Song> songs) {
+        this.songs = songs;
     }
-
-    private final String artistName;
-    public final long id;
-    public final int songCount;
-    public final String title;
-    public final int year;
 
     public Album() {
-        this.id = -1;
-        this.title = "";
-        this.artistName = "";
-        this.artistId = -1;
-        this.songCount = -1;
-        this.year = -1;
+        this.songs = new ArrayList<>();
     }
 
-    public Album(long _id, String _title, String _artistName, long _artistId, int _songCount, int _year) {
-        this.id = _id;
-        this.title = _title;
-        this.artistName = _artistName;
-        this.artistId = _artistId;
-        this.songCount = _songCount;
-        this.year = _year;
+    public int getId() {
+        return safeGetFirstSong().albumId;
     }
 
+    public String getTitle() {
+        return safeGetFirstSong().albumName;
+    }
+
+    public int getArtistId() {
+        return safeGetFirstSong().artistId;
+    }
+
+    public String getArtistName() {
+        return safeGetFirstSong().artistName;
+    }
+
+    public int getYear() {
+        return safeGetFirstSong().year;
+    }
+
+    public long getDateModified() {
+        return safeGetFirstSong().dateModified;
+    }
+
+    public int getSongCount() {
+        return songs.size();
+    }
+
+    @NonNull
+    public Song safeGetFirstSong() {
+        return songs.isEmpty() ? Song.EMPTY_SONG : songs.get(0);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Album that = (Album) o;
+
+        return songs != null ? songs.equals(that.songs) : that.songs == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return songs != null ? songs.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "songs=" + songs +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(songs);
+    }
+
+    protected Album(Parcel in) {
+        this.songs = in.createTypedArrayList(Song.CREATOR);
+    }
+
+    public static final Creator<Album> CREATOR = new Creator<Album>() {
+        public Album createFromParcel(Parcel source) {
+            return new Album(source);
+        }
+
+        public Album[] newArray(int size) {
+            return new Album[size];
+        }
+    };
 }

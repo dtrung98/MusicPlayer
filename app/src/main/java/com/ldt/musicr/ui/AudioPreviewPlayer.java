@@ -5,8 +5,9 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
-import com.ldt.musicr.service.MusicPlayer;
-import com.ldt.musicr.service.MusicStateListener;
+
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.widget.soundfile.CheapSoundFile;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, MusicStateListener {
+public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, MusicServiceEventListener {
     private static final String TAG ="AudioPreviewPlayer";
 
     String mPath;
@@ -29,7 +30,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
 
     public AudioPreviewPlayer() {
         mPath ="";
-        onMetaChanged();
+
     }
 
     public AudioPreviewPlayer setListener(AudioPreviewerListener listener) {
@@ -40,22 +41,49 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
         mListener = null;
     }
 
+
     @Override
-    public void restartLoader() {
+    public void onServiceConnected() {
 
     }
 
     @Override
-    public void onPlaylistChanged() {
+    public void onServiceDisconnected() {
 
     }
 
     @Override
-    public void onMetaChanged() {
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
         checkingMusicState();
     }
+
+    @Override
+    public void onPlayStateChanged() {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+
+    }
+
     private void checkingMusicState() {
-        if(MusicPlayer.isPlaying())
+        if(MusicPlayerRemote.isPlaying())
             forceStop();
     }
 
@@ -350,7 +378,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
     }
 
     private void onSoundFileReady() {
-        if(!mIsStateLocked) mSavedPlayState = MusicPlayer.isPlaying();
+        if(!mIsStateLocked) mSavedPlayState = MusicPlayerRemote.isPlaying();
 
         releaseOldMediaPlayer();
 

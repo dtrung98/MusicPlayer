@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.glide.palette.BitmapPaletteTarget;
+import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 import com.ldt.musicr.util.PhonographColorUtil;
 
 

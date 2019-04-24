@@ -17,11 +17,12 @@ package com.ldt.musicr.loader;
 
 import android.database.AbstractCursor;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * This cursor basically wraps a song cursor and is given a list of the order of the ids of the
@@ -34,92 +35,74 @@ public class SortedCursor extends AbstractCursor {
     // the map of external indices to internal indices
     private ArrayList<Integer> mOrderedPositions;
     // this contains the ids that weren't found in the underlying cursor
-    private ArrayList<Long> mMissingIds;
+    private ArrayList<String> mMissingValues;
     // this contains the mapped cursor positions and afterwards the extra ids that weren't found
-    private HashMap<Long, Integer> mMapCursorPositions;
-    // extra we want to store with the cursor
-    private ArrayList<Object> mExtraData;
+    private HashMap<String, Integer> mMapCursorPositions;
 
     /**
      * @param cursor     to wrap
      * @param order      the list of unique ids in sorted order to display
      * @param columnName the column name of the id to look up in the internal cursor
      */
-    public SortedCursor(final Cursor cursor, final long[] order, final String columnName,
-                        final List<? extends Object> extraData) {
-        if (cursor == null) {
-            throw new IllegalArgumentException("Non-null cursor is needed");
-        }
-
+    public SortedCursor(@NonNull final Cursor cursor, @Nullable final String[] order, final String columnName) {
         mCursor = cursor;
-        mMissingIds = buildCursorPositionMapping(order, columnName, extraData);
+        mMissingValues = buildCursorPositionMapping(order, columnName);
     }
 
     /**
      * This function populates mOrderedPositions with the cursor positions in the order based
      * on the order passed in
      *
-     * @param order     the target order of the internal cursor
-     * @param extraData Extra data we want to add to the cursor
+     * @param order the target order of the internal cursor
      * @return returns the ids that aren't found in the underlying cursor
      */
-    private ArrayList<Long> buildCursorPositionMapping(final long[] order,
-                                                       final String columnName, final List<? extends Object> extraData) {
-        ArrayList<Long> missingIds = new ArrayList<Long>();
+    @NonNull
+    private ArrayList<String> buildCursorPositionMapping(@Nullable final String[] order, final String columnName) {
+        ArrayList<String> missingValues = new ArrayList<>();
 
-        mOrderedPositions = new ArrayList<Integer>(mCursor.getCount());
-        mExtraData = new ArrayList<Object>();
+        mOrderedPositions = new ArrayList<>(mCursor.getCount());
 
-        mMapCursorPositions = new HashMap<Long, Integer>(mCursor.getCount());
-        final int idPosition = mCursor.getColumnIndex(columnName);
+        mMapCursorPositions = new HashMap<>(mCursor.getCount());
+        final int valueColumnIndex = mCursor.getColumnIndex(columnName);
 
         if (mCursor.moveToFirst()) {
             // first figure out where each of the ids are in the cursor
             do {
-                mMapCursorPositions.put(mCursor.getLong(idPosition), mCursor.getPosition());
+                mMapCursorPositions.put(mCursor.getString(valueColumnIndex), mCursor.getPosition());
             } while (mCursor.moveToNext());
 
-            // now create the ordered positions to map to the internal cursor given the
-            // external sort order
-            for (int i = 0; order != null && i < order.length; i++) {
-                final long id = order[i];
-                if (mMapCursorPositions.containsKey(id)) {
-                    mOrderedPositions.add(mMapCursorPositions.get(id));
-                    mMapCursorPositions.remove(id);
-                    if (extraData != null) {
-                        mExtraData.add(extraData.get(i));
+            if (order != null) {
+                // now create the ordered positions to map to the internal cursor given the
+                // external sort order
+                for (final String value : order) {
+                    if (mMapCursorPositions.containsKey(value)) {
+                        mOrderedPositions.add(mMapCursorPositions.get(value));
+                        mMapCursorPositions.remove(value);
+                    } else {
+                        missingValues.add(value);
                     }
-                } else {
-                    missingIds.add(id);
                 }
             }
 
             mCursor.moveToFirst();
         }
 
-        return missingIds;
+        return missingValues;
     }
 
     /**
      * @return the list of ids that weren't found in the underlying cursor
      */
-    public ArrayList<Long> getMissingIds() {
-        return mMissingIds;
+    public ArrayList<String> getMissingValues() {
+        return mMissingValues;
     }
 
     /**
      * @return the list of ids that were in the underlying cursor but not part of the ordered list
      */
-    public Collection<Long> getExtraIds() {
+    @NonNull
+    public Collection<String> getExtraValues() {
         return mMapCursorPositions.keySet();
-    }
-
-    /**
-     * @return the extra object data that was passed in to be attached to the current row
-     */
-    public Object getExtraData() {
-        int position = getPosition();
-        return position < mExtraData.size() ? mExtraData.get(position) : null;
     }
 
     @Override

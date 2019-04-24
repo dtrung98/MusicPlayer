@@ -45,7 +45,7 @@ public class PlaylistChildTab extends Fragment implements FeaturePlaylistAdapter
         refreshData();
 ;    }
     private void refreshData() {
-      mAdapter.setData(PlaylistLoader.getPlaylists(getActivity(),true));
+      mAdapter.setData(PlaylistLoader.getAllPlaylists(getActivity()));
     }
 
     @Override

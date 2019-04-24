@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.ldt.musicr.model.Rectangle;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,11 +36,11 @@ public class Tool {
         if(tool==null) tool = new Tool();
         tool.context = context;
         Tool.getScreenSize(context);
-        tool.resumeWallpaperTracking();
+
     }
 
     public void destroy() {
-        stopWallpaperTracking();
+
         clear();
         context = null;
         tool = null;
@@ -82,7 +81,7 @@ public class Tool {
     private Bitmap blurWallBitmap() {
         return BitmapEditor.getBlurredWithGoodPerformance(context,originalWallPaper,1,12,1.6f);
     }
-    private Bitmap getCropCenterScreenBitmap(Bitmap source_bitmap) {
+    /*private Bitmap getCropCenterScreenBitmap(Bitmap source_bitmap) {
         Rectangle rect_parent_in_bitmap = new Rectangle();
         float parentWidth = screenSize[0];
         float parentHeight = screenSize[1];
@@ -109,19 +108,8 @@ public class Tool {
         Canvas canvas = new Canvas(ret);
         canvas.drawBitmap(source_bitmap,rect_parent_in_bitmap.getRectGraphic(),new Rect(0,0,screenSize[0],screenSize[1]),null);
         return ret;
-    }
-    private boolean status = false;
-    public void stopWallpaperTracking() {
-        if(status) {
-            status = false;
-            mHandler.removeCallbacks(mHandlerTask);
-        }
-    }
-    boolean first_run = true;
-    public void startWallpaperTracking() {
-        first_run = false;
-        resumeWallpaperTracking();
-    }
+    }*/
+
 
     public static int lighter(int color, float factor) {
         int red = (int) ((Color.red(color) * (1 - factor) / 255 + factor) * 255);
@@ -130,85 +118,7 @@ public class Tool {
         return Color.argb(Color.alpha(color), red, green, blue);
     }
 
-    public void resumeWallpaperTracking() {
-        if(first_run) return;
-        if(!status) {
-            status = true;
-            mHandlerTask.run();
-        }
-    }
-    private final static int INTERVAL = 1000  * 2; //2 minutes
-    private Handler mHandler = new Handler();
-    private boolean runningAsyncTask = false;
 
-    private Runnable mHandlerTask = new Runnable()
-    {
-        @Override
-        public void run() {
-            if (!runningAsyncTask) {
-                runningAsyncTask = true;
-                new WallpaperLoadAndCompare().execute(Tool.this);
-            }
-            mHandler.postDelayed(mHandlerTask, INTERVAL);
-        }
-    };
-    private static class WallpaperLoadAndCompare extends AsyncTask<Tool, Void,Boolean> {
-        Tool tool;
-        @Override
-        protected void onPostExecute(Boolean result) {
-            //  Log.d(TAG,"compare result : "+result);
-            if(tool.status) {
-                if (result) {
-                    // nếu có thay đổi
-                    for (int i = 0; i < tool.notifiers.size(); i++) {
-                        WallpaperChangedNotifier item = tool.notifiers.get(i);
-                        item.onWallpaperChanged(tool.originalWallPaper, tool.blurWallPaper);
-                        tool.CallFirstTime.set(i, true);
-                    }
-
-                } else {
-                    // ngược lại duyệt mảng xem phần tử nào chưa dc gọi lần đầu thì gọi
-                    for (int i = tool.notifiers.size() - 1; i != -1; i--) {
-                        if (!tool.CallFirstTime.get(i)) {
-                            tool.CallFirstTime.set(i, true);
-                            tool.notifiers.get(i).onWallpaperChanged(tool.originalWallPaper, tool.blurWallPaper);
-                        } else break;
-                    }
-
-                }
-            }
-            tool.runningAsyncTask = false;
-        }
-
-        @Override
-        protected Boolean doInBackground(Tool... t) {
-            this.tool = t[0];
-            Bitmap origin = tool.originalWallPaper;
-
-            // nếu ảnh gốc chưa được load lần đầu
-            if(origin ==null) {
-                tool.originalWallPaper = tool.getCropCenterScreenBitmap(tool.getActiveWallPaper());
-                makeWallPaper();
-                return true;
-            }
-            // ngược lại ta so sánh ảnh mới và ảnh gốc
-            Bitmap newOrigin = tool.getCropCenterScreenBitmap(tool.getActiveWallPaper());
-            if(!origin.sameAs(newOrigin)) {
-                tool.originalWallPaper = newOrigin;
-                makeWallPaper();
-                return true;
-            } else return false;
-        }
-        private void makeWallPaper() {
-            Bitmap tmpBlur = tool.blurWallBitmap();
-            int[] c = BitmapEditor.getAverageColorRGB(tmpBlur);
-            tool.mAverageColor = Color.rgb(c[0],c[1],c[2]);
-            Tool.setSurfaceColor(tool.mAverageColor);
-            tool.mDarkWallpaper =  BitmapEditor.PerceivedBrightness(160,c);
-            tool.blurWallPaper = tool.getCropCenterScreenBitmap(tmpBlur);
-            tmpBlur.recycle();
-        }
-    }
     private boolean mDarkWallpaper = false;
     private int mAverageColor = Color.WHITE;
     public int getAverageColor() {

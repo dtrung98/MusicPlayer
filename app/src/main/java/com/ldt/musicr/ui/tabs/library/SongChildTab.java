@@ -17,11 +17,11 @@ import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicStateListener;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.popup.SortOrderBottomSheet;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Util;
 import com.ldt.musicr.util.Animation;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import com.squareup.picasso.Picasso;
@@ -32,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack, MusicStateListener {
+public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack, MusicServiceEventListener {
     private static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)
@@ -98,14 +98,14 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
 
         refreshData();
         if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicStateListener(this);
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
         }
     }
 
     @Override
     public void onDestroyView() {
         if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).removeMusicStateListener(this);
+            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
         mAdapter.removeCallBack();
         mAdapter.removeOrderListener();
         super.onDestroyView();
@@ -132,7 +132,7 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
         mArtist.setText(song.artistName);
 
         Picasso.get()
-                .load(Utils.getAlbumArtUri(song.albumId))
+                .load(Util.getAlbumArtUri(song.albumId))
                 .placeholder(R.drawable.music_empty)
                 .error(R.drawable.music_empty)
                 .into(mImage);
@@ -142,31 +142,33 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
     @Override
     public void onResume() {
         super.onResume();
-       Activity a = getActivity();
-       if(a instanceof BaseActivity)
-           ((BaseActivity)a).addMusicStateListener(this);
+
     }
 
     @Override
     public void onPause() {
-        Activity a = getActivity();
-        if(a instanceof BaseActivity)
-            ((BaseActivity)a).removeMusicStateListener(this);
+
         super.onPause();
     }
 
+
     @Override
-    public void restartLoader() {
+    public void onServiceConnected() {
 
     }
 
     @Override
-    public void onPlaylistChanged() {
+    public void onServiceDisconnected() {
 
     }
 
     @Override
-    public void onMetaChanged() {
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
         if(mRecyclerView instanceof FastScrollRecyclerView) {
             FastScrollRecyclerView recyclerView = ((FastScrollRecyclerView)mRecyclerView);
             recyclerView.setPopupBgColor(Tool.getHeavyColor());
@@ -174,6 +176,26 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
         }
 
         if(mAdapter!=null)mAdapter.notifyMetaChanged();
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        if(mAdapter!=null)mAdapter.notifyMetaChanged();
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+
     }
 
     @Override

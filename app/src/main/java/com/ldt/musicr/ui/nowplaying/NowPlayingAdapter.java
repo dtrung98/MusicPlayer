@@ -1,7 +1,6 @@
 package com.ldt.musicr.ui.nowplaying;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,15 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.ldt.musicr.R;
-import com.ldt.musicr.glide.GlideApp;
-import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -84,13 +77,13 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
             ButterKnife.bind(this,itemView);
         }
         private void bind(Song song) {
-            Picasso.get().load(Utils.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).stableKey("album_id="+song.albumId+"_"+song.dateModified).into(mImage,NowPlayingAdapter.this);
+            Picasso.get().load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).stableKey("album_id="+song.albumId+"_"+song.dateModified).into(mImage,NowPlayingAdapter.this);
          /*   SongGlideRequest.Builder.from(GlideApp.with(mContext), song)
                     .ignoreMediaStore(false)
                     .build().into(mImage);*/
 
       /*   RequestOptions options = RequestOptions.overrideOf(Tool.getScreenSize(mContext)[0],Tool.getScreenSize(mContext)[1]).skipMemoryCache(true);
-            Glide.with(mContext).load(Utils.getAlbumArtUri(song.albumId)).apply(options).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).into(mImage);*/
+            Glide.with(mContext).load(Util.getAlbumArtUri(song.albumId)).apply(options).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).into(mImage);*/
         }
     }
 }

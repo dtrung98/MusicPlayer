@@ -28,23 +28,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.tabs.BaseLayerFragment;
-import com.ldt.musicr.loader.QueueLoader;
+
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayer;
+
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
-import com.ldt.musicr.service.MusicStateListener;
+
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +53,7 @@ import butterknife.OnClick;
 
 import static com.ldt.musicr.util.BitmapEditor.updateSat;
 
-public class NowPlayingController extends BaseLayerFragment implements MusicStateListener, AudioVisualSeekBar.OnSeekBarChangeListener, ColorPickerAdapter.OnColorChangedListener {
+public class NowPlayingController extends BaseLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, ColorPickerAdapter.OnColorChangedListener {
     private static final String TAG ="NowPlayingController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
@@ -106,21 +107,98 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
 
         mRecyclerView.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
-        mVisualSeekBar.setOnTouchListener((v, event) -> {
-            return mLayerController.streamOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN;
-        });
+        mVisualSeekBar.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN);
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
-       if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).addMusicStateListener(this,true);
-       onMetaChanged();
+        Log.d(TAG, "onViewCreated");
+       if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).addMusicServiceEventListener(this,true);
+       setUp();
     }
 
     @Override
     public void onDestroyView() {
         if(mLoadQueueTask!=null) mLoadQueueTask.cancel();
-        if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).removeMusicStateListener(this);
-
+        if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
+    }
+
+    /*
+     *
+     *  Implement MusicServiceEventListener
+     *
+     */
+
+    @Override
+    public void onServiceConnected() {
+        Log.d(TAG, "onServiceConnected");
+      setUp();
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+        Log.d(TAG, "onServiceDisconnected");
+    }
+
+    @Override
+    public void onQueueChanged() {
+        Log.d(TAG, "onQueueChanged");
+        updateQueue();
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+        Log.d(TAG, "onPlayingMetaChanged");
+        updatePlayingSongInfo();
+        updateQueuePosition();
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        Log.d(TAG, "onPlayStateChanged");
+        updatePlayPauseState();
+        mVisualSeekBar.postDelayed(mUpdateProgress,10);
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+        Log.d(TAG, "onRepeatModeChanged");
+        /*
+        Unused
+         */
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+        Log.d(TAG, "onShuffleModeChanged");
+        /*
+        Unused
+         */
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+        Log.d(TAG, "onMediaStoreChanged");
+        updateQueue();
+    }
+
+    /*
+     *
+     *   End of Implementing MusicServiceEventListener
+    *
+    */
+
+    private void updateQueue() {
+        mAdapter.setData(MusicPlayerRemote.getPlayingQueue());
+    }
+
+    private void updateQueuePosition() {
+        mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
+    }
+    public void setUp() {
+        updatePlayingSongInfo();
+        updatePlayPauseState();
+        updateQueue();
+        updateQueuePosition();
     }
 
     private void setRadius(float value) {
@@ -160,7 +238,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @Override
     public void onTranslateChanged(LayerController.Attr attr) {
-        Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
+        //Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
         if(getMaxPositionType())
         setRadius(0);
         else setRadius(attr.getRuntimePercent());
@@ -170,7 +248,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         if(mConstraintRoot.getProgress()!=0&&!mTimeTextIsSync) mTimeTextView.setText(timeTextViewTemp);
         if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1)
             try {
-                mRecyclerView.scrollToPosition(MusicPlayer.getQueuePosition());
+                mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
             } catch (Exception ignore) {}
         //checkStatusStyle();
     }
@@ -195,27 +273,26 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         return TAG;
     }
 
-    @Override
-    public void restartLoader() {
-
-    }
     @OnClick({R.id.play_pause_button,R.id.button_right})
     void playOrPause() {
-        Handler handler = new Handler();
-        handler.postDelayed(MusicPlayer::playOrPause,100);
+        MusicPlayerRemote.playOrPause();
+/*        Handler handler = new Handler();
+        handler.postDelayed(MusicPlayerRemote::playOrPause,50);*/
     }
     @OnClick(R.id.prev_button)
     void goToPrevSong() {
-        Handler handler = new Handler();
-        handler.postDelayed(() -> {MusicPlayer.previous(getActivity(),true);},100);
+        MusicPlayerRemote.back();
+   /*     Handler handler = new Handler();
+        handler.postDelayed(MusicPlayerRemote::back,50);*/
     }
     @OnClick(R.id.next_button)
     void goToNextSong() {
-        Handler handler = new Handler();
-        handler.postDelayed(MusicPlayer::next,100);
+        MusicPlayerRemote.playNextSong();
+/*        Handler handler = new Handler();
+        handler.postDelayed(MusicPlayer::next,100);*/
     }
     void updatePlayPauseState(){
-        if(MusicPlayer.isPlaying()) {
+        if(MusicPlayerRemote.isPlaying()) {
             mButtonRight.setImageResource(R.drawable.ic_pause_black_24dp);
             mPlayPauseButton.setImageResource(R.drawable.pause_round);
         } else {
@@ -224,10 +301,6 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         }
     }
 
-    @Override
-    public void onPlaylistChanged() {
-        Log.d(TAG, "onPlaylistChanged");
-    }
     @BindView(R.id.title) TextView mTitle;
     @BindView(R.id.playlist_title) TextView mPlaylistTitle;
     @BindView(R.id.button_right)
@@ -237,7 +310,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @BindView(R.id.play_pause_button)
     ImageView mPlayPauseButton;
-    LoadQueueTask mLoadQueueTask;
+    PaletteGeneratorTask mLoadQueueTask;
 
     @OnClick(R.id.playlist_title)
     void popUpPlayingList() {
@@ -246,17 +319,38 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
             ((MainActivity)getActivity()).popUpPlaylistTab();
         }
     }
-    @Override
+    private void updatePlayingSongInfo() {
+       Song song = MusicPlayerRemote.getCurrentSong();
+       if(song==null) return;
+        mTitle.setText(String.format("%s %s %s", song.title, getString(R.string.middle_dot), song.artistName));
+        mBigTitle.setText(song.title);
+        mBigArtist.setText(song.artistName);
+
+        String path = song.data;
+        long duration = song.duration;
+        if(duration>0&&path!=null&&!path.isEmpty()&&!mVisualSeekBar.getCurrentFileName().equals(path)) {
+            Log.d(TAG, "start visualize "+ path +"dur = "+ duration+", pos = "+ MusicPlayerRemote.getSongProgressMillis());
+            mVisualSeekBar.visualize(path, duration, MusicPlayerRemote.getSongProgressMillis());
+        } else {
+            Log.d(TAG, "ignore visualize "+path);
+        }
+        mVisualSeekBar.postDelayed(mUpdateProgress,10);
+
+    }
+
+  /*  @Override
     public void onMetaChanged() {
         mTitle.setText(String.format("%s %s %s", MusicPlayer.getTrackName(), getString(R.string.middle_dot), MusicPlayer.getArtistName()));
         mBigTitle.setText(MusicPlayer.getTrackName());
         mBigArtist.setText(MusicPlayer.getArtistName());
 
       if(mLoadQueueTask!=null) mLoadQueueTask.cancel();
-      mLoadQueueTask = new LoadQueueTask(this);
+      mLoadQueueTask = new PaletteGeneratorTask(this);
       mLoadQueueTask.execute();
-    }
-    private void onQueueReady(List<Song> songs2) {
+    }*/
+
+   /*
+        private void onQueueReady(List<Song> songs2) {
         long start = System.currentTimeMillis();
 
         long time3 = System.currentTimeMillis() - start;
@@ -270,6 +364,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
                 ((MainActivity)getActivity()).setDataForPlayingQueue(songs2);
         }
         long time5 = System.currentTimeMillis() - start;
+
         String path = MusicPlayer.getPath();
         long duration = MusicPlayer.duration();
         if(duration>0&&path!=null&&!path.isEmpty()&&!mVisualSeekBar.getCurrentFileName().equals(path))
@@ -279,6 +374,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
         Log.d(TAG, "onMetaChanged: time3 = "+time3+", time4 = "+time4+", time5 = "+time5);
         updatePlayPauseState();
     }
+    */
     private void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
         Log.d(TAG, "onColorPaletteReady :"+color1+", "+color2+", "+alpha1+", "+alpha2);
         mPlayPauseButton.setColorFilter(Tool.getBaseColor());
@@ -384,17 +480,17 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
     public Runnable mUpdateProgress = new Runnable() {
         @Override
         public void run() {
-            long position = MusicPlayer.position();
+            long position = MusicPlayerRemote.getSongProgressMillis();
 
             if(!isTouchedVisualSeekbar)
-                setTextTime(position,MusicPlayer.duration());
+                setTextTime(position,MusicPlayerRemote.getSongDurationMillis());
 
             if(mVisualSeekBar!=null) {
                 mVisualSeekBar.setProgress((int) position);
                 //TODO: Set elapsedTime
             }
             overflowcounter--;
-            if(MusicPlayer.isPlaying()) {
+            if(MusicPlayerRemote.isPlaying()) {
                 //TODO: ???
                 int delay = (int) (150 -(position)%100);
                 if(overflowcounter<0 && !fragmentPaused) {
@@ -406,7 +502,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
     };
     @Override
     public void onSeekBarSeekTo(AudioVisualSeekBar seekBar, int i, boolean b) {
-        if(b) MusicPlayer.seek(i);
+        if(b) MusicPlayerRemote.seekTo(i);
     }
 
     @Override
@@ -421,7 +517,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     @Override
     public void onSeekBarSeeking(int seekingValue) {
-        setTextTime(seekingValue,MusicPlayer.duration());
+        setTextTime(seekingValue,MusicPlayerRemote.getSongDurationMillis());
     }
     private void setTextTime(long pos, long duration) {
         int minute = (int) (pos/1000/60);
@@ -454,9 +550,9 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
 
     Handler mHandler = new Handler();
 
-    private static class LoadQueueTask extends AsyncTask<Void,Void,Boolean> {
+    private static class PaletteGeneratorTask extends AsyncTask<Void,Void,Boolean> {
         private NowPlayingController mFragment;
-        LoadQueueTask(NowPlayingController fragment) {
+        PaletteGeneratorTask(NowPlayingController fragment) {
             mFragment = fragment;
         }
         @Override
@@ -470,17 +566,12 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
             }
             long time1 = System.currentTimeMillis() - start;
 
-            try {
-                c = getQueue();
-            } catch (Exception ignore) {
-                c = false;
-            }
-            long time2 = System.currentTimeMillis() - time1 - start;
-            Log.d(TAG, "doInBackground: time1 = "+time1+", time2 = "+time2);
+
+            Log.d(TAG, "doInBackground: time1 = "+time1);
 
             return c;
         }
-        private boolean getQueue() {
+      /*  private boolean getQueue() {
             List<Song> songs2;
             if(mFragment!=null)
                 songs2 =  QueueLoader.getQueueSongs(mFragment.getContext());
@@ -493,11 +584,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicStat
                 });
             else return false;
             return true;
-        }
+        }*/
         private boolean getColor() {
             Bitmap bitmap;
             try {
-                bitmap = Picasso.get().load(Utils.getAlbumArtUri(MusicPlayer.getCurrentAlbumId())).error(R.drawable.speaker2).get();
+                bitmap = Picasso.get().load(Util.getAlbumArtUri(MusicPlayerRemote.getCurrentSong().albumId)).error(R.drawable.speaker2).get();
             } catch (Exception e) {
                 bitmap = ((BitmapDrawable)mFragment.getResources().getDrawable(R.drawable.speaker2)).getBitmap();
             }

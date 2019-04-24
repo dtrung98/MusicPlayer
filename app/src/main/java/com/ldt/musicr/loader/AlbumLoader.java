@@ -1,78 +1,83 @@
-/*
- * Copyright (C) 2015 Naman Dwivedi
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.ldt.musicr.loader;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.AudioColumns;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 
 import com.ldt.musicr.model.Album;
-import com.ldt.musicr.util.PreferencesUtility;
+import com.ldt.musicr.model.Song;
+import com.ldt.musicr.util.PreferenceUtil;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
+/**
+ * @author Karim Abou Zeid (kabouzeid)
+ */
 public class AlbumLoader {
 
+    public static String getSongLoaderSortOrder(Context context) {
+        return PreferenceUtil.getInstance(context).getAlbumSortOrder() + ", " + PreferenceUtil.getInstance(context).getAlbumSongSortOrder();
+    }
 
-    public static Album getAlbum(Cursor cursor) {
-        Album album = new Album();
-        if (cursor != null) {
-            if (cursor.moveToFirst())
-                album = new Album(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4), cursor.getInt(5));
-        }
-        if (cursor != null)
-            cursor.close();
+    @NonNull
+    public static ArrayList<Album> getAllAlbums(@NonNull final Context context) {
+        ArrayList<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(
+                context,
+                null,
+                null,
+                getSongLoaderSortOrder(context))
+        );
+        return splitIntoAlbums(songs);
+    }
+
+    @NonNull
+    public static ArrayList<Album> getAlbums(@NonNull final Context context, String query) {
+        ArrayList<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(
+                context,
+                AudioColumns.ALBUM + " LIKE ?",
+                new String[]{"%" + query + "%"},
+                getSongLoaderSortOrder(context))
+        );
+        return splitIntoAlbums(songs);
+    }
+
+    @NonNull
+    public static Album getAlbum(@NonNull final Context context, int albumId) {
+        ArrayList<Song> songs = SongLoader.getSongs(SongLoader.makeSongCursor(context, AudioColumns.ALBUM_ID + "=?", new String[]{String.valueOf(albumId)}, getSongLoaderSortOrder(context)));
+        Album album = new Album(songs);
+        sortSongsByTrackNumber(album);
         return album;
     }
 
-
-    public static List<Album> getAlbumsForCursor(Cursor cursor) {
-        ArrayList<Album> arrayList = new ArrayList<>();
-        if ((cursor != null) && (cursor.moveToFirst()))
-            do {
-                arrayList.add(new Album(cursor.getLong(0), cursor.getString(1), cursor.getString(2), cursor.getLong(3), cursor.getInt(4), cursor.getInt(5)));
+    @NonNull
+    public static ArrayList<Album> splitIntoAlbums(@Nullable final ArrayList<Song> songs) {
+        ArrayList<Album> albums = new ArrayList<>();
+        if (songs != null) {
+            for (Song song : songs) {
+                getOrCreateAlbum(albums, song.albumId).songs.add(song);
             }
-            while (cursor.moveToNext());
-        if (cursor != null)
-            cursor.close();
-        return arrayList;
-    }
-
-    public static List<Album> getAllAlbums(Context context) {
-        return getAlbumsForCursor(makeAlbumCursor(context, null, null));
-    }
-
-    public static Album getAlbum(Context context, long id) {
-        return getAlbum(makeAlbumCursor(context, "_id=?", new String[]{String.valueOf(id)}));
-    }
-
-    public static List<Album> getAlbums(Context context, String paramString, int limit) {
-        List<Album> result = getAlbumsForCursor(makeAlbumCursor(context, "album LIKE ?", new String[]{paramString + "%"}));
-        if (result.size() < limit) {
-            result.addAll(getAlbumsForCursor(makeAlbumCursor(context, "album LIKE ?", new String[]{"%_" + paramString + "%"})));
         }
-        return result.size() < limit ? result : result.subList(0, limit);
+        for (Album album : albums) {
+            sortSongsByTrackNumber(album);
+        }
+        return albums;
     }
 
+    private static Album getOrCreateAlbum(ArrayList<Album> albums, int albumId) {
+        for (Album album : albums) {
+            if (!album.songs.isEmpty() && album.songs.get(0).albumId == albumId) {
+                return album;
+            }
+        }
+        Album album = new Album();
+        albums.add(album);
+        return album;
+    }
 
-    public static Cursor makeAlbumCursor(Context context, String selection, String[] paramArrayOfString) {
-        final String albumSortOrder = PreferencesUtility.getInstance(context).getAlbumSortOrder();
-        Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, new String[]{"_id", "album", "artist", "artist_id", "numsongs", "minyear"}, selection, paramArrayOfString, albumSortOrder);
-
-        return cursor;
+    private static void sortSongsByTrackNumber(Album album) {
+        Collections.sort(album.songs, (o1, o2) -> o1.trackNumber - o2.trackNumber);
     }
 }

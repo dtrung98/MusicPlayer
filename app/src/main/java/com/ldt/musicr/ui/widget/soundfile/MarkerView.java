@@ -37,7 +37,7 @@ package com.ldt.musicr.ui.widget.soundfile;
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>
  */
-public class MarkerView extends ImageView {
+public class MarkerView extends android.support.v7.widget.AppCompatImageView {
 
     public interface MarkerListener {
         public void markerTouchStart(MarkerView marker, float pos);

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 
 import com.bumptech.glide.signature.ObjectKey;
+import com.ldt.musicr.App;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -24,6 +25,13 @@ public class ArtistSignatureUtil {
     public static ArtistSignatureUtil getInstance(@NonNull final Context context) {
         if (sInstance == null) {
             sInstance = new ArtistSignatureUtil(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    public static ArtistSignatureUtil getInstance() {
+        if (sInstance == null) {
+            sInstance = new ArtistSignatureUtil(App.getInstance().getApplicationContext());
         }
         return sInstance;
     }

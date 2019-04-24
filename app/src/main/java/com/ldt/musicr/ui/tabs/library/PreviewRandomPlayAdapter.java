@@ -13,8 +13,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayer;
-import com.ldt.musicr.util.Utils;
+
+import com.ldt.musicr.service.MultiPlayer;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.util.Util;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
@@ -40,7 +42,8 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
     public void shuffle() {
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
-            MusicPlayer.playAll(mContext, getRealSongIds(), 0, -1, Utils.IdType.NA, false);
+            MusicPlayerRemote.openQueue(mData,0,true);
+            //MusicPlayer.playAll(mContext, getRealSongIds(), 0, -1, Util.IdType.NA, false);
             randommize();
         },100);
     }
@@ -132,7 +135,7 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
                 requestManager = Glide.with(mContext);
             else requestManager = Glide.with(itemView.getContext());
 
-            requestManager.load(Utils.getAlbumArtUri(song.albumId))
+            requestManager.load(Util.getAlbumArtUri(song.albumId))
                     .placeholder(R.drawable.music_empty)
                     .error(R.drawable.music_empty)
                     .into(mImage);
@@ -142,7 +145,8 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
         public void onClick(View v) {
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
-                MusicPlayer.playAll(mContext, getRealSongIds(), getAdapterPosition(), -1, Utils.IdType.NA, false);
+                MusicPlayerRemote.openQueue(mData,getAdapterPosition(),true);
+                //MusicPlayer.playAll(mContext, getRealSongIds(), getAdapterPosition(), -1, Util.IdType.NA, false);
                 randommize();
             },100);
         }

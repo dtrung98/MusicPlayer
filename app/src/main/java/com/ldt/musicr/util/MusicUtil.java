@@ -19,12 +19,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Album;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayerRemote;
 
 
 import java.io.File;
@@ -99,8 +100,8 @@ public class MusicUtil {
 
     @NonNull
     public static String getArtistInfoString(@NonNull final Context context, @NonNull final Artist artist) {
-        int albumCount = artist.albumCount;
-        int songCount = artist.songCount;
+        int albumCount = artist.getAlbumCount();
+        int songCount = artist.getSongCount();
 
         return MusicUtil.buildInfoString(
             MusicUtil.getAlbumCountString(context, albumCount),
@@ -110,7 +111,7 @@ public class MusicUtil {
 
     @NonNull
     public static String getAlbumInfoString(@NonNull final Context context, @NonNull final Album album) {
-        int songCount = album.songCount;
+        int songCount = album.getSongCount();
 
         return MusicUtil.buildInfoString(
             album.getArtistName(),
@@ -270,7 +271,8 @@ public class MusicUtil {
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
                     final int id = cursor.getInt(0);
-                    MusicPlayer.removeTrack(id);
+                    final Song song = SongLoader.getSong(context, id);
+                    MusicPlayerRemote.removeFromQueue(song);
                     cursor.moveToNext();
                 }
 

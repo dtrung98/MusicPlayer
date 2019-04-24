@@ -19,9 +19,9 @@ import android.widget.TextView;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
-import com.ldt.musicr.service.MusicStateListener;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class PlayingQueueController extends BaseLayerFragment implements MusicStateListener {
+public class PlayingQueueController extends BaseLayerFragment implements MusicServiceEventListener {
     private static final String TAG ="PlayingQueueController";
     @BindView(R.id.rootCardView)
     CardView mRootCardView;
@@ -103,8 +103,8 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSt
         mRecyclerView.setAdapter(mAdapter);
 
         if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).addMusicStateListener(this);
-        onMetaChanged();
+            ((MainActivity)getActivity()).addMusicServiceEventListener(this);
+        setUp();
     }
     @OnTouch(R.id.recycler_view)
     boolean onTouchRecyclerView(RecyclerView view, MotionEvent event) {
@@ -120,7 +120,8 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSt
     @Override
     public void onDestroyView() {
         if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).removeMusicStateListener(this);
+            ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
+        setted = false;
         super.onDestroyView();
     }
 
@@ -175,46 +176,44 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSt
         return mPrevProgress>pc;
     }
     private void updateShuffleState() {
-      int  mode =  MusicPlayer.getShuffleMode();
-      if(mode== MusicService.SHUFFLE_NONE)
+      int  mode =  MusicPlayerRemote.getShuffleMode();
+      if(mode== MusicService.SHUFFLE_MODE_NONE)
           Log.d(TAG, "updateShuffleState: None");
-      else if(mode ==MusicService.SHUFFLE_NORMAL)
+      else if(mode ==MusicService.SHUFFLE_MODE_SHUFFLE)
           Log.d(TAG, "updateShuffleState: Normal");
       else Log.d(TAG, "updateShuffleState: Auto");
 
-      if(mode==MusicService.SHUFFLE_NONE)
+      if(mode==MusicService.SHUFFLE_MODE_NONE)
           mShuffleButton.setColorFilter(getResources().getColor(R.color.FlatWhite));
       else mShuffleButton.setColorFilter(Tool.getBaseColor());
     }
 
     @OnClick(R.id.shuffle_button)
     void cycleShuffle() {
-        MusicPlayer.cycleShuffle();
-        updateShuffleState();
-        updateRepeatState();
+        MusicPlayerRemote.toggleShuffleMode();
     }
 
     @OnClick(R.id.repeat_button)
     void cycleRepeat() {
-        MusicPlayer.cycleRepeat();
+        MusicPlayerRemote.cycleRepeatMode();
         updateShuffleState();
         updateRepeatState();
     }
     private void updateRepeatState() {
-        int mode = MusicPlayer.getRepeatMode();
+        int mode = MusicPlayerRemote.getRepeatMode();
 
         switch (mode) {
-            case MusicService.REPEAT_NONE:
+            case MusicService.REPEAT_MODE_NONE:
                 Log.d(TAG, "updateRepeatState: None");
                 mRepeatButton.setImageResource(R.drawable.repeat);
                 mRepeatButton.setColorFilter(getResources().getColor(R.color.FlatWhite));
                 break;
-            case MusicService.REPEAT_CURRENT:
+            case MusicService.REPEAT_MODE_THIS:
                 Log.d(TAG, "updateRepeatState: Current");
                 mRepeatButton.setColorFilter(Tool.getBaseColor());
                 mRepeatButton.setImageResource(R.drawable.repeat_one);
                 break;
-            case MusicService.REPEAT_ALL:
+            case MusicService.REPEAT_MODE_ALL:
                 mRepeatButton.setImageResource(R.drawable.repeat);
                 mRepeatButton.setColorFilter(Tool.getBaseColor());
                 Log.d(TAG, "updateRepeatState: All");
@@ -256,41 +255,61 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSt
                 a.animateToMax();
         }
     }
+    boolean setted = false;
+    private void setUp() {
+        if(setted)  return;
+        setted = true;
+        onQueueChanged();
+        onRepeatModeChanged();
+        onShuffleModeChanged();
+        onPlayStateChanged();
+    }
 
     @Override
-    public void restartLoader() {
+    public void onServiceConnected() {
+        setUp();
+    }
+
+    @Override
+    public void onServiceDisconnected() {
 
     }
 
     @Override
-    public void onPlaylistChanged() {
-        Log.d(TAG, "onPlaylistChanged");
+    public void onQueueChanged() {
+        setData(MusicPlayerRemote.getPlayingQueue());
+    }
+
+
+    @Override
+    public void onMediaStoreChanged() {
+        onQueueChanged();
+    }
+
+
+    @Override
+    public void onPlayingMetaChanged() {
+        mAdapter.notifyMetaChanged();
     }
 
     @Override
-    public void onMetaChanged() {
+    public void onPlayStateChanged() {
 
-        updateShuffleState();
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
         updateRepeatState();
-
     }
+
+    @Override
+    public void onShuffleModeChanged() {
+        updateShuffleState();
+    }
+
 
     public void setData(List<Song> songs2) {
-        if(songs2==null||songs2.isEmpty())
-        mAdapter.setData(songs2);
-        else {
-            int current = MusicPlayer.getQueuePosition();
-            if(current<songs2.size()) {
-                List<Song> songWillPlay = songs2.subList(current,songs2.size()-1);
-                mAdapter.setData(songWillPlay);
-            }
-        }
-        int[] history = MusicPlayer.getQueueHistoryList();
-        String historyStr = "";
-        for (int h: history){
-            historyStr +=" | "+h;
-        }
-        Log.d(TAG, "History :"+historyStr);
+    mAdapter.setData(songs2);
     }
 
 }

@@ -16,7 +16,7 @@ import android.support.annotation.NonNull;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.ldt.musicr.BuildConfig;
-import com.ldt.musicr.helpers.StackBlur;
+import com.ldt.musicr.helper.StackBlur;
 import com.ldt.musicr.util.ImageUtil;
 
 import java.nio.charset.Charset;

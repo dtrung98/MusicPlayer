@@ -27,21 +27,22 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayer;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.ui.tabs.library.ArtistAdapter;
+import com.ldt.musicr.ui.tabs.library.SongAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Util;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,17 +119,15 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
             sheet.setListener(id -> {
                         switch (id) {
                             case R.id.popup_song_remove_playlist:
-                                Utils.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
+                                Util.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
                                 removeSongAt(position);
                                 notifyItemRemoved(position);
                                 break;
                             case R.id.popup_song_play:
-                                MusicPlayer.playAll(mContext, mSongIDs, position, -1, Utils.IdType.NA, false);
+                                MusicPlayerRemote.openQueue(mData,position,true);
                                 break;
                             case R.id.popup_song_play_next:
-                                long[] ids = new long[1];
-                                ids[0] = mData.get(position).id;
-                                MusicPlayer.playNext(mContext, ids, -1, Utils.IdType.NA);
+                                MusicPlayerRemote.playNext(mData.get(position));
                                 break;
                             case R.id.popup_song_goto_album:
                                 //TODO:   NavigationUtils.goToAlbum(mContext, mData.get(position).albumId);
@@ -137,19 +136,17 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
                                 //TODO: NavigationUtils.goToArtist(mContext, mData.get(position).artistId);
                                 break;
                             case R.id.popup_song_addto_queue:
-                                long[] _id = new long[1];
-                                _id[0] = mData.get(position).id;
-                                MusicPlayer.addToQueue(mContext, _id, -1, Utils.IdType.NA);
+                                MusicPlayerRemote.enqueue(mData.get(position));
                                 break;
                             case R.id.popup_song_addto_playlist:
                                 //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
                                 break;
                             case R.id.popup_song_share:
-                                Utils.shareTrack(mContext, mData.get(position).id);
+                                Util.shareTrack(mContext, mData.get(position).id);
                                 break;
                             case R.id.popup_song_delete:
                                 long[] deleteIds = {mData.get(position).id};
-                                Utils.showDeleteDialog(mContext, mData.get(position).title, deleteIds, this, position);
+                                Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, this, position);
                                 break;
                         }
                         return true;
@@ -163,17 +160,15 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.popup_song_remove_playlist:
-                            Utils.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
+                            Util.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
                             removeSongAt(position);
                             notifyItemRemoved(position);
                             break;
                         case R.id.popup_song_play:
-                            MusicPlayer.playAll(mContext, mSongIDs, position, -1, Utils.IdType.NA, false);
+                            MusicPlayerRemote.openQueue(mData,position,true);
                             break;
                         case R.id.popup_song_play_next:
-                            long[] ids = new long[1];
-                            ids[0] = mData.get(position).id;
-                            MusicPlayer.playNext(mContext, ids, -1, Utils.IdType.NA);
+                            MusicPlayerRemote.playNext(mData.get(position));
                             break;
                         case R.id.popup_song_goto_album:
                             //TODO:   NavigationUtils.goToAlbum(mContext, mData.get(position).albumId);
@@ -182,19 +177,17 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
                             //TODO: NavigationUtils.goToArtist(mContext, mData.get(position).artistId);
                             break;
                         case R.id.popup_song_addto_queue:
-                            long[] id = new long[1];
-                            id[0] = mData.get(position).id;
-                            MusicPlayer.addToQueue(mContext, id, -1, Utils.IdType.NA);
+                            MusicPlayerRemote.enqueue(mData.get(position));
                             break;
                         case R.id.popup_song_addto_playlist:
                             //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
                             break;
                         case R.id.popup_song_share:
-                            Utils.shareTrack(mContext, mData.get(position).id);
+                            Util.shareTrack(mContext, mData.get(position).id);
                             break;
                         case R.id.popup_song_delete:
                             long[] deleteIds = {mData.get(position).id};
-                            Utils.showDeleteDialog(mContext, mData.get(position).title, deleteIds, PlayingQueueAdapter.this, position);
+                            Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, PlayingQueueAdapter.this, position);
                             break;
                     }
                     return false;
@@ -253,34 +246,10 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
         ((MainActivity)mContext).getAudioPreviewPlayer().forceStop();
     }
 
-    public void playAll() {
-        if(!mData.isEmpty()) {
-            final Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                MusicPlayer.playAll(mContext, mSongIDs, 0, -1, Utils.IdType.NA, false);
-                Handler handler1 = new Handler();
-                handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHightLightPos);
-                    notifyItemChanged(0);
-                    mCurrentHightLightPos = 0;
-                }, 50);
-            }, 100);
-        }
-    }
-
-    public int getViewTypeHeight(RecyclerView recyclerView, @Nullable RecyclerView.ViewHolder viewHolder, int viewType) {
-        if (viewType == R.layout.item_sort_song_child) {
-            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_sort_song_child_height);
-        } else if (viewType == R.layout.item_song_child) {
-            return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_song_child_height);
-        }
-        return 0;
-    }
-
     public void notifyMetaChanged() {
         // hightlight truely the playing song
         // check whether old pos is still  the playing song
-        long newPlayingID = MusicPlayer.getCurrentAudioId();
+        long newPlayingID = MusicPlayerRemote.getCurrentSong().id;
         boolean isStillOldPos = false;
         // update old item
         if(-1 < mCurrentHightLightPos && mCurrentHightLightPos< mSongIDs.length) {
@@ -295,6 +264,7 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
             if(newPos!=-1) notifyItemChanged(newPos);
         }
     }
+
 
     public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnAttachStateChangeListener {
 
@@ -320,7 +290,7 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
         public void onClick(View view) {
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
-                MusicPlayer.playAll(mContext, mSongIDs,getAdapterPosition(), -1, Utils.IdType.NA, false);
+                MusicPlayerRemote.openQueue(mData,getAdapterPosition(),true);
                 Handler handler1 = new Handler() ;
                 handler1.postDelayed(() -> {
                     notifyItemChanged(mCurrentHightLightPos);
@@ -340,15 +310,15 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
             mNumber.setText(""+(getAdapterPosition()+1));
             mTitle.setText(song.title);
             mArtist.setText(song.artistName);
-            //   ImageLoader.getInstance().displayImage(Utils.getAlbumArtUri(song.albumId).toString(),mImage,new DisplayImageOptions.Builder().cacheInMemory(true).showImageOnFail(R.drawable.music_empty).resetViewBeforeLoading(true).build());
+            //   ImageLoader.getInstance().displayImage(Util.getAlbumArtUri(song.albumId).toString(),mImage,new DisplayImageOptions.Builder().cacheInMemory(true).showImageOnFail(R.drawable.music_empty).resetViewBeforeLoading(true).build());
 
         /*    Picasso.get()
-                    .load(Utils.getAlbumArtUri(song.albumId))
+                    .load(Util.getAlbumArtUri(song.albumId))
                     .placeholder(R.drawable.music_empty)
                     .error(R.drawable.music_empty)
                     .into(mImage);*/
 
-        /*    Uri uri = Utils.getAlbumArtUri(song.albumId);
+        /*    Uri uri = Util.getAlbumArtUri(song.albumId);
             Log.d(TAG, "bind: song ["+ song.title+"], AlbumArtPath = "+ uri.toString());
             Glide.with(mContext)
                     .load(uri)
@@ -398,14 +368,14 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
         }
 
         private void highLight() {
-            if(MusicPlayer.getCurrentAudioId()==mData.get(getAdapterPosition()).id) {
+            if(MusicPlayerRemote.getCurrentSong().id==mData.get(getAdapterPosition()).id) {
                 mCurrentHightLightPos = getAdapterPosition();
                 int baseColor = ArtistAdapter.lighter(Tool.getBaseColor(),0.6f);
                 mTitle.setTextColor(ArtistAdapter.lighter(Tool.getBaseColor(),0.25f));
                 mArtist.setTextColor(Color.argb(0xAA,Color.red(baseColor),Color.green(baseColor),Color.blue(baseColor)));
                 mQuickPlayPause.setColorFilter(baseColor);
 
-                if(MusicPlayer.isPlaying()) {
+                if(MusicPlayerRemote.isPlaying()) {
                     mQuickPlayPause.setImageResource(R.drawable.ic_volume_up_black_24dp);
                 } else {
                     mQuickPlayPause.setImageResource(R.drawable.ic_volume_mute_black_24dp);

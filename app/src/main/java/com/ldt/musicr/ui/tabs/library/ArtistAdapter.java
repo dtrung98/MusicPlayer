@@ -153,7 +153,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 
         public void bind(Artist artist, ArrayList<Genre> genres) {
             mArtist.setText(artist.getName());
-            mCount.setText(String.format("%d %s", artist.songCount, mCount.getContext().getResources().getString(R.string.songs)));
+            mCount.setText(String.format("%d %s", artist.getSongCount(), mCount.getContext().getResources().getString(R.string.songs)));
             if(genres==null) {
                 mGenreOne.setText("⋯");
                 mGenreTwo.setVisibility(View.GONE);
@@ -233,7 +233,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         protected ArrayList<Genre> doInBackground(Void... voids) {
 
             if(mAAReference.get()!=null&&mArtist!=null) {
-                return GenreLoader.getGenreForArtist(mAAReference.get().mContext, mArtist.id);
+                return GenreLoader.getGenreForArtist(mAAReference.get().mContext, mArtist.getId());
             }
             return null;
         }

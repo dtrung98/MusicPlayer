@@ -48,4 +48,26 @@
     <dimen name="max_radius_layer">18dp</dimen>
     <dimen name="bottom_line_height_card_view">50dp</dimen>
     <dimen name="item_feature_playlist_size">135dp</dimen>
+
+    <!--App Widgets-->
+    <dimen name="app_widget_classic_image_size">96dp</dimen>
+    <dimen name="app_widget_classic_min_width">250dp</dimen>
+    <dimen name="app_widget_classic_min_height">40dp</dimen>
+
+    <dimen name="app_widget_small_button_height">48dp</dimen>
+    <dimen name="app_widget_small_image_size">48dp</dimen>
+    <dimen name="app_widget_small_min_width">250dp</dimen>
+    <dimen name="app_widget_small_min_height">40dp</dimen>
+
+    <dimen name="app_widget_big_min_width">250dp</dimen>
+    <dimen name="app_widget_big_min_height">110dp</dimen>
+
+    <dimen name="app_widget_card_image_size">56dp</dimen>
+    <dimen name="app_widget_card_min_width">250dp</dimen>
+    <dimen name="app_widget_card_min_height">40dp</dimen>
+    <dimen name="app_widget_card_buttons_width">128dp</dimen>
+    <dimen name="app_widget_card_radius">2dp</dimen>
+
+    <dimen name="card_on_app_bar_side_padding">8dp</dimen>
+    <dimen name="notification_big_image_size">128dp</dimen>
 </resources>

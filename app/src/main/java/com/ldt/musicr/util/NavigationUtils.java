@@ -110,7 +110,7 @@ public class NavigationUtils {
         intent.putExtra(Constants.PLAYLIST_NAME, playlistName);
         intent.putExtra(Constants.ACTIVITY_TRANSITION, transitionViews != null);
 
-        if (transitionViews != null && Utils.isLollipop()) {
+        if (transitionViews != null && Util.isLollipop()) {
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(context, transitionViews.get(0), transitionViews.get(1), transitionViews.get(2));
             context.startActivityForResult(intent, Constants.ACTION_DELETE_PLAYLIST, options.toBundle());
         } else {
@@ -121,7 +121,7 @@ public class NavigationUtils {
     public static void navigateToEqualizer(Activity context) {
         try {
             // The google MusicFX apps need to be started using startActivityForResult
-            context.startActivityForResult(Utils.createEffectsIntent(), 666);
+            context.startActivityForResult(Util.createEffectsIntent(), 666);
         } catch (final ActivityNotFoundException notFound) {
             Toast.makeText(context, "Equalizer not found", Toast.LENGTH_SHORT).show();
         }

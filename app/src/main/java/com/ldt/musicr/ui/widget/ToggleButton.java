@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.util.BitmapEditor;
-import com.ldt.musicr.model.coordinate.MCoordinate.MPoint;
+import com.ldt.musicr.coordinate.MCoordinate.MPoint;
 
 import com.ldt.musicr.util.Tool;
 

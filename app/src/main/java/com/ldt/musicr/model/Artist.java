@@ -1,55 +1,110 @@
-/*
- * Copyright (C) 2015 Naman Dwivedi
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.ldt.musicr.model;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.ldt.musicr.util.MusicUtil;
 
-import org.jetbrains.annotations.Nullable;
+import java.util.ArrayList;
 
-public class Artist {
+public class Artist implements Parcelable {
     public static final String UNKNOWN_ARTIST_DISPLAY_NAME = "Unknown Artist";
 
-    public final int albumCount;
-    public final long id;
+    public final ArrayList<Album> albums;
 
-    public String getName() {
-            if (MusicUtil.isArtistNameUnknown(name)) {
-                return UNKNOWN_ARTIST_DISPLAY_NAME;
-            }
-            return name;
+    public Artist(ArrayList<Album> albums) {
+        this.albums = albums;
     }
-
-    private final String name;
-    public final int songCount;
 
     public Artist() {
-        this.id = -1;
-        this.name = "";
-        this.songCount = -1;
-        this.albumCount = -1;
+        this.albums = new ArrayList<>();
     }
 
-    public Artist(long _id, String _name, int _albumCount, int _songCount) {
-        this.id = _id;
-        this.name = _name;
-        this.songCount = _songCount;
-        this.albumCount = _albumCount;
+    public int getId() {
+        return safeGetFirstAlbum().getArtistId();
+    }
+
+    public String getName() {
+        String name = safeGetFirstAlbum().getArtistName();
+        if (MusicUtil.isArtistNameUnknown(name)) {
+            return UNKNOWN_ARTIST_DISPLAY_NAME;
+        }
+        return name;
+    }
+
+    public int getSongCount() {
+        int songCount = 0;
+        for (Album album : albums) {
+            songCount += album.getSongCount();
+        }
+        return songCount;
+    }
+
+    public int getAlbumCount() {
+        return albums.size();
+    }
+
+    public ArrayList<Song> getSongs() {
+        ArrayList<Song> songs = new ArrayList<>();
+        for (Album album : albums) {
+            songs.addAll(album.songs);
+        }
+        return songs;
+    }
+
+    @NonNull
+    public Album safeGetFirstAlbum() {
+        return albums.isEmpty() ? new Album() : albums.get(0);
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        return obj instanceof Artist && ((Artist) obj).getName().equals(this.getName());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Artist artist = (Artist) o;
+
+        return albums != null ? albums.equals(artist.albums) : artist.albums == null;
+
     }
+
+    @Override
+    public int hashCode() {
+        return albums != null ? albums.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Artist{" +
+                "albums=" + albums +
+                '}';
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeTypedList(this.albums);
+    }
+
+    protected Artist(Parcel in) {
+        this.albums = in.createTypedArrayList(Album.CREATOR);
+    }
+
+    public static final Creator<Artist> CREATOR = new Creator<Artist>() {
+        @Override
+        public Artist createFromParcel(Parcel source) {
+            return new Artist(source);
+        }
+
+        @Override
+        public Artist[] newArray(int size) {
+            return new Artist[size];
+        }
+    };
 }

@@ -214,4 +214,30 @@
     <string name="time_added">Time added</string>
     <string name="title">Title</string>
 
+    <!--- Phonograph String Resources -->
+    <string name="today">Today</string>
+    <string name="this_week">This week</string>
+    <string name="past_seven_days">Past 7 days</string>
+    <string name="this_month">This month</string>
+    <string name="past_three_months">Past 3 months</string>
+    <string name="this_year">This year</string>
+    <string name="not_recently_played">Not recently played</string>
+    <string name="unplayable_file">Couldn\u2019t play this song.</string>
+    <string name="history">Recently played</string>
+    <string name="playlist_is_empty">Playlist is empty</string>
+    <string name="playing_notification_description">The playing notification provides actions for play/pause etc.</string>
+    <string name="playing_notification_name">Playing notification</string>
+    <string name="audio_focus_denied">Audio focus denied.</string>
+    <string name="added_title_to_playing_queue">"Added 1 title to the playing queue."</string>
+    <string name="added_x_titles_to_playing_queue">Added %1$d titles to the playing queue.</string>
+    <string name="action_play_next">Play next</string>
+    <string name="action_play">Play</string>
+    <string name="action_play_pause">Play/Pause</string>
+    <string name="action_previous">Previous</string>
+    <string name="action_next">Next</string>
+    <string name="app_widget_big_name">Phonograph - Big</string>
+    <string name="app_widget_classic_name">Phonograph - Classic</string>
+    <string name="app_widget_small_name">Phonograph - Small</string>
+    <string name="app_widget_card_name">Phonograph - Card</string>
+
 </resources>

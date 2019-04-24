@@ -1,6 +1,7 @@
 package com.ldt.musicr.glide;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +13,8 @@ import com.ldt.musicr.glide.artistimage.ArtistImage;
 import com.ldt.musicr.glide.artistimage.ArtistImageLoader;
 import com.ldt.musicr.glide.audiocover.AudioFileCover;
 import com.ldt.musicr.glide.audiocover.AudioFileCoverLoader;
+import com.ldt.musicr.glide.palette.BitmapPaletteTranscoder;
+import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 
 
 import java.io.InputStream;
@@ -28,7 +31,7 @@ public class MyGlideModule extends AppGlideModule {
         super.registerComponents(context, glide, registry);
         registry.append(AudioFileCover.class,InputStream.class,new AudioFileCoverLoader.Factory());
         registry.append(ArtistImage.class,InputStream.class, new ArtistImageLoader.Factory(context));
-
+        registry.register(Bitmap.class, BitmapPaletteWrapper.class, new BitmapPaletteTranscoder());
     }
     @Override
     public boolean isManifestParsingEnabled() {

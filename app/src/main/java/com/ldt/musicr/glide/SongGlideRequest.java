@@ -15,11 +15,8 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.glide.audiocover.AudioFileCover;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.MusicUtil;
+import com.ldt.musicr.util.PreferenceUtil;
 
-
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class SongGlideRequest {
 
     public static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.NONE;
@@ -48,9 +45,9 @@ public class SongGlideRequest {
             return new BitmapBuilder(this);
         }
 
-        /*public Builder checkIgnoreMediaStore(Context context) {
+        public Builder checkIgnoreMediaStore(Context context) {
             return ignoreMediaStore(PreferenceUtil.getInstance(context).ignoreMediaStoreArtwork());
-        }*/
+        }
 
         public Builder ignoreMediaStore(boolean ignoreMediaStore) {
             this.ignoreMediaStore = ignoreMediaStore;

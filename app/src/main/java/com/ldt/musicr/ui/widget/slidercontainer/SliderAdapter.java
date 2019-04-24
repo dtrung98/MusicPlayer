@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.util.Utils;
+import com.ldt.musicr.util.Util;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +59,7 @@ public class SliderAdapter extends android.support.v4.view.PagerAdapter {
         View cardLayout =  LayoutInflater.from(mContext).inflate(R.layout.item_art_now_playing, container, false);
         ImageView image =(cardLayout instanceof ImageView) ?((ImageView)cardLayout) : cardLayout.findViewById(R.id.image);
 
-        Glide.with(mContext).load(Utils.getAlbumArtUri(song.albumId)).error(R.drawable.music_empty).placeholder(R.drawable.music_empty).into(image);
+        Glide.with(mContext).load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.music_empty).placeholder(R.drawable.music_empty).into(image);
         container.addView(cardLayout);
         return cardLayout;
     }

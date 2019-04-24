@@ -83,7 +83,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                         return e;
                     }
                 }
-            } else return new NullPointerException("String Url is null");
+            } else return new Exception("No Artist Image is available : \n"+lastFmArtist.toString());
         }
         return null;
     }

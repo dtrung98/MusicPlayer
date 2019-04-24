@@ -20,14 +20,13 @@ import android.widget.TextView;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.service.MusicStateListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
 
-public class SongOptionBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener,MusicStateListener {
+public class SongOptionBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
 public interface BottomSheetListener {
     boolean onButtonClick(int id);
 }
@@ -64,7 +63,6 @@ public void setListener(BottomSheetListener listener) {
 
         View view = inflater.inflate(R.layout.ex_bottom_sheet_layout, container,
                 false);
-        ((BaseActivity)getActivity()).addMusicStateListener(this);
 
         // get the views and attach the listener
         int[] textViewID = {
@@ -124,20 +122,7 @@ public void setListener(BottomSheetListener listener) {
         }
     }
 
-    @Override
-    public void restartLoader() {
 
-    }
-
-    @Override
-    public void onPlaylistChanged() {
-
-    }
-
-    @Override
-    public void onMetaChanged() {
-
-    }
     private boolean initted = false;
 
 

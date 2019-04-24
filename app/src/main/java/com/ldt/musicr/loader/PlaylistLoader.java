@@ -1,104 +1,91 @@
-/*
- * Copyright (C) 2015 Naman Dwivedi
- *
- * Licensed under the GNU General Public License v3
- *
- * This is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- */
-
 package com.ldt.musicr.loader;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
-
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.ldt.musicr.model.Playlist;
-import com.ldt.musicr.util.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlaylistLoader {
 
-    static ArrayList<Playlist> mPlaylistList;
-    private static Cursor mCursor;
-
-    public static List<Playlist> getPlaylists(Context context, boolean defaultIncluded) {
-
-        mPlaylistList = new ArrayList<>();
-
-        if (defaultIncluded)
-            makeDefaultPlaylists(context);
-
-        mCursor = makePlaylistCursor(context);
-
-        if (mCursor != null && mCursor.moveToFirst()) {
-            do {
-
-                final long id = mCursor.getLong(0);
-
-                final String name = mCursor.getString(1);
-
-                final int songCount = Utils.getSongCountForPlaylist(context, id);
-
-                final Playlist playlist = new Playlist(id, name, songCount);
-
-                mPlaylistList.add(playlist);
-            } while (mCursor.moveToNext());
-        }
-        if (mCursor != null) {
-            mCursor.close();
-            mCursor = null;
-        }
-        return mPlaylistList;
+    @NonNull
+    public static ArrayList<Playlist> getAllPlaylists(@NonNull final Context context) {
+        return getAllPlaylists(makePlaylistCursor(context, null, null));
     }
 
-    private static void makeDefaultPlaylists(Context context) {
-        final Resources resources = context.getResources();
-
-        /* Last added list*/
-        final Playlist lastAdded = new Playlist(Utils.PlaylistType.LastAdded.mId,
-                resources.getString(Utils.PlaylistType.LastAdded.mTitleId), -1);
-        mPlaylistList.add(lastAdded);
-
-        /* Recently Played*/
-        final Playlist recentlyPlayed = new Playlist(Utils.PlaylistType.RecentlyPlayed.mId,
-                resources.getString(Utils.PlaylistType.RecentlyPlayed.mTitleId), -1);
-        mPlaylistList.add(recentlyPlayed);
-
-        /* Top Tracks*/
-        final Playlist topTracks = new Playlist(Utils.PlaylistType.TopTracks.mId,
-                resources.getString(Utils.PlaylistType.TopTracks.mTitleId), -1);
-        mPlaylistList.add(topTracks);
-    }
-
-
-    public static final Cursor makePlaylistCursor(final Context context) {
-        return context.getContentResolver().query(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+    @NonNull
+    public static Playlist getPlaylist(@NonNull final Context context, final int playlistId) {
+        return getPlaylist(makePlaylistCursor(
+                context,
+                BaseColumns._ID + "=?",
                 new String[]{
-                        BaseColumns._ID,
-                        PlaylistsColumns.NAME
-                }, null, null, MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER);
+                        String.valueOf(playlistId)
+                }
+        ));
     }
 
-    public static void deletePlaylists(Context context, long playlistId) {
-        Uri localUri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI;
-        StringBuilder localStringBuilder = new StringBuilder();
-        localStringBuilder.append("_id IN (");
-        localStringBuilder.append((playlistId));
-        localStringBuilder.append(")");
-        context.getContentResolver().delete(localUri, localStringBuilder.toString(), null);
+    @NonNull
+    public static Playlist getPlaylist(@NonNull final Context context, final String playlistName) {
+        return getPlaylist(makePlaylistCursor(
+                context,
+                PlaylistsColumns.NAME + "=?",
+                new String[]{
+                        playlistName
+                }
+        ));
+    }
+
+    @NonNull
+    public static Playlist getPlaylist(@Nullable final Cursor cursor) {
+        Playlist playlist = new Playlist();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            playlist = getPlaylistFromCursorImpl(cursor);
+        }
+        if (cursor != null)
+            cursor.close();
+        return playlist;
+    }
+
+    @NonNull
+    public static ArrayList<Playlist> getAllPlaylists(@Nullable final Cursor cursor) {
+        ArrayList<Playlist> playlists = new ArrayList<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                playlists.add(getPlaylistFromCursorImpl(cursor));
+            } while (cursor.moveToNext());
+        }
+        if (cursor != null)
+            cursor.close();
+        return playlists;
+    }
+
+    @NonNull
+    private static Playlist getPlaylistFromCursorImpl(@NonNull final Cursor cursor) {
+        final int id = cursor.getInt(0);
+        final String name = cursor.getString(1);
+        return new Playlist(id, name);
+    }
+
+    @Nullable
+    public static Cursor makePlaylistCursor(@NonNull final Context context, final String selection, final String[] values) {
+        try {
+            return context.getContentResolver().query(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
+                    new String[]{
+                        /* 0 */
+                            BaseColumns._ID,
+                        /* 1 */
+                            PlaylistsColumns.NAME
+                    }, selection, values, MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER);
+        } catch (SecurityException e) {
+            return null;
+        }
     }
 }
-
