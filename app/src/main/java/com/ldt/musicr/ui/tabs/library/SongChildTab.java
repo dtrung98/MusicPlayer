@@ -133,7 +133,7 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
 
         Picasso.get()
                 .load(Util.getAlbumArtUri(song.albumId))
-                .placeholder(R.drawable.music_empty)
+                .placeholder(R.drawable.music_style)
                 .error(R.drawable.music_empty)
                 .into(mImage);
 

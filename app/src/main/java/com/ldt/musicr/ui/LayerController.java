@@ -780,6 +780,13 @@ public class LayerController {
                mBaseLayers.get(mGestureListener.item).onTranslateChanged(this);
             updateLayerChanged();
         }
+        public void shakeOnMax(float _value) {
+            float value = 10*oneDp + _value;
+            if(value>30*oneDp) value = 30*oneDp;
+            moveTo(mCurrentTranslate - value);
+            animateTo(mCurrentTranslate -value);
+            mBottomNavigationParent.postDelayed(this::animateToMax,300);
+        }
 
         public void animateTo(float selfTranslateY) {
             if(selfTranslateY== mCurrentTranslate) return;
@@ -1029,7 +1036,9 @@ public class LayerController {
         attr.attachView(layer.getParent(activity,mChildLayerContainer, (int) attr.getMaxPosition()));
 
         activity.getSupportFragmentManager().beginTransaction().add(mChildLayerContainer.getId(),layer).commit();
-        attr.parent.setElevation(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            attr.parent.setElevation(0);
+        }
         layer.onAddedToContainer(attr);
        }
 

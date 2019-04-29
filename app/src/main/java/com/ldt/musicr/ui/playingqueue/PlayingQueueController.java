@@ -5,10 +5,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.motion.MotionLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,8 +24,10 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.popup.LyricBottomSheet;
 import com.ldt.musicr.ui.tabs.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -34,6 +37,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_FLING;
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
 
 public class PlayingQueueController extends BaseLayerFragment implements MusicServiceEventListener {
     private static final String TAG ="PlayingQueueController";
@@ -49,7 +56,25 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     @BindView(R.id.constraint_root)
     ViewGroup mConstraintRoot;
 
+    @BindView(R.id.lyric) View mLyricView;
+    @BindView(R.id.lyric_parent) View mLyricParent;
 
+    @OnClick(R.id.lyric)
+    void showLyric() {
+    /*    if(mLyricParent.getVisibility()==View.GONE) {
+            mLyricParent.setVisibility(View.VISIBLE);
+            String content = MusicUtil.getLyrics(MusicPlayerRemote.getCurrentSong());
+            Log.d(TAG, "showLyric: " + content);
+            Spanned spanned = Html.fromHtml(content);
+            mLyricContent.setText(content);
+        } else {
+            mLyricParent.setVisibility(View.GONE);
+        }*/
+    if(getActivity() !=null)
+        LyricBottomSheet.newInstance().show(getActivity().getSupportFragmentManager(),"LyricBottomSheet");
+    }
+
+    @BindView(R.id.lyric_content)  TextView mLyricContent;
     @BindView(R.id.playlist_title)
     TextView mPlaylistTitle;
     @BindView(R.id.down)
@@ -105,16 +130,64 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         if(getActivity() instanceof MainActivity)
             ((MainActivity)getActivity()).addMusicServiceEventListener(this);
         setUp();
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                String ScrollState;
+                switch (recyclerView.getScrollState()) {
+                    case SCROLL_STATE_FLING: ScrollState = "SCROLL_STATE_FLING"; break;
+                    case SCROLL_STATE_IDLE:ScrollState = "SCROLL_STATE_IDLE";break;
+                    case SCROLL_STATE_TOUCH_SCROLL: ScrollState ="SCROLL_STATE_TOUCH_SCROLL";break;
+                    default: ScrollState = "";
+                }
+                Log.d(TAG, "onScrolled: dy = "+dy+",Scroll State = "+ ScrollState);
+                if(!recyclerView.canScrollVertically(-1)) Log.d(TAG, "onScrolled: on top");
+                else if(!recyclerView.canScrollVertically(1)) Log.d(TAG, "onScrolled: on bottom");
+
+                if(!recyclerView.canScrollVertically(-1)&&recyclerView.getScrollState()==SCROLL_STATE_FLING&&dy<0) mLayerController.getMyAttr(PlayingQueueController.this).shakeOnMax(-dy);
+            }
+        });
     }
+    private boolean mFirstTouchEvent = true;
+    private boolean mInStreamEvent = false;
+    private float mPreviousY = 0;
+
     @OnTouch(R.id.recycler_view)
     boolean onTouchRecyclerView(RecyclerView view, MotionEvent event) {
-        boolean recycer_handle = view.onTouchEvent(event);
+        boolean isRecyclerViewOnTop = !view.canScrollVertically(-1);
+        float currentY = event.getY();
 
-        Log.d(TAG, "onTouchRecyclerView: "+recycer_handle);
-        if(!recycer_handle)
-            return mLayerController.streamOnTouchEvent(mRoot,event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                Log.d(TAG, "onTouchRecyclerView: down");
+            //    Toast.makeText(getContext(),"Down",Toast.LENGTH_SHORT).show();
+                mFirstTouchEvent = true;
+                view.onTouchEvent(event);
+                if(isRecyclerViewOnTop) mLayerController.streamOnTouchEvent(mRoot,event);
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.d(TAG, "onTouchRecyclerView: up");
+                mFirstTouchEvent = false;
+                mPreviousY = 0;
+                if(mInStreamEvent) {
+                    mInStreamEvent = false;
+                    mLayerController.streamOnTouchEvent(mRoot, event);
+                }
+                 view.onTouchEvent(event);
+                break;
+            default:
+                Log.d(TAG, "onTouchRecyclerView: "+event.getAction());
+                if(mPreviousY<currentY&&isRecyclerViewOnTop) mInStreamEvent = true;
+                if(mInStreamEvent) mLayerController.streamOnTouchEvent(mRoot,event);
+                else view.onTouchEvent(event);
+                mFirstTouchEvent = false;
+        }
+        mPreviousY = currentY;
         return true;
-
     }
 
     @Override

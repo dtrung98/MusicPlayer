@@ -35,6 +35,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
     private volatile boolean isCancelled;
     private DataFetcher<InputStream> urlFetcher;
     private final Options mOption;
+    private boolean mLoadBiggest = false;
 
     public ArtistImageFetcher(LastFMRestClient lastFMRestClient, ArtistImage model, ModelLoader<GlideUrl, InputStream> urlLoader, int width, int height, Options options) {
         this.lastFMRestClient = lastFMRestClient;
@@ -70,6 +71,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
             String largestArtistImageUrl = LastFMUtil.getLargestArtistImageUrl(lastFmArtist.getArtist().getImage());
             if(largestArtistImageUrl!=null&&!largestArtistImageUrl.isEmpty()) {
+                Log.d(TAG, "loadThisArtist: url = ["+largestArtistImageUrl+"]");
                 GlideUrl url = new GlideUrl(largestArtistImageUrl);
 
                 ModelLoader.LoadData<InputStream> loadData = urlLoader.buildLoadData(url, width, height, mOption);

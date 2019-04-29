@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+    <Transition
+        app:constraintSetStart="@layout/lyric_bottom_sheet"
+        app:constraintSetEnd="@layout/lyric_bottom_sheet_alt"
+        app:duration="350">
+            <OnSwipe
+                app:dragDirection="dragUp"
+                app:touchAnchorId="@id/nested_scroll_view"
+                app:touchAnchorSide="top"
+                />
+    </Transition>
+</MotionScene>

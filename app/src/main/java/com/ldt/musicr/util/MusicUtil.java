@@ -19,29 +19,39 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Album;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.model.lyrics.AbsSynchronizedLyrics;
 import com.ldt.musicr.service.MusicPlayerRemote;
 
 
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.tag.FieldKey;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class MusicUtil {
+    private static final String TAG = "MusicUtil";
 
     public static Uri getMediaStoreAlbumCoverUri(long albumId) {
         final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
-        return ContentUris.withAppendedId(sArtworkUri, albumId);
+        Uri uri = ContentUris.withAppendedId(sArtworkUri, albumId);
+        Log.d(TAG, "getMediaStoreAlbumCoverUri: "+uri.toString()+", "+uri.getPath());
+        return uri;
     }
 
     public static Uri getSongFileUri(int songId) {
@@ -310,12 +320,11 @@ public class MusicUtil {
         return playlist.name != null && playlist.name.equals(context.getString(R.string.favorites));
     }
 
-    /*
     public static Playlist getFavoritesPlaylist(@NonNull final Context context) {
         return PlaylistLoader.getPlaylist(context, context.getString(R.string.favorites));
     }
 
-    private static Playlist getOrCreateFavoritesPlaylist(@NonNull final Context context) {
+    /*private static Playlist getOrCreateFavoritesPlaylist(@NonNull final Context context) {
         return PlaylistLoader.getPlaylist(context, PlaylistsUtil.createPlaylist(context, context.getString(R.string.favorites)));
     }
 
@@ -330,10 +339,10 @@ public class MusicUtil {
         } else {
             PlaylistsUtil.addToPlaylist(context, song, getOrCreateFavoritesPlaylist(context).id, false);
         }
-    }
-    */
+    }*/
 
-    public static boolean isArtistNameUnknown(@Nullable String artistName) {
+    public static boolean isArtistNameUnknown(@Nullable String artistString) {
+        String artistName = artistString;
         if (TextUtils.isEmpty(artistName)) return false;
         if (artistName.equals(Artist.UNKNOWN_ARTIST_DISPLAY_NAME)) return true;
         artistName = artistName.trim().toLowerCase();
@@ -341,7 +350,8 @@ public class MusicUtil {
     }
 
     @NonNull
-    public static String getSectionName(@Nullable String musicMediaTitle) {
+    public static String getSectionName(@Nullable String musicTitle) {
+        String musicMediaTitle = musicTitle;
         if (TextUtils.isEmpty(musicMediaTitle)) return "";
         musicMediaTitle = musicMediaTitle.trim().toLowerCase();
         if (musicMediaTitle.startsWith("the ")) {
@@ -352,7 +362,6 @@ public class MusicUtil {
         if (musicMediaTitle.isEmpty()) return "";
         return String.valueOf(musicMediaTitle.charAt(0)).toUpperCase();
     }
-    /*
     @Nullable
     public static String getLyrics(Song song) {
         String lyrics = null;
@@ -404,5 +413,4 @@ public class MusicUtil {
 
         return lyrics;
     }
-    */
 }

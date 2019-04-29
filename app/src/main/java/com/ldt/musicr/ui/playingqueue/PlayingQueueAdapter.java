@@ -38,6 +38,7 @@ import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
 import com.makeramen.roundedimageview.RoundedImageView;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,7 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapter.ItemHolder> implements AudioPreviewPlayer.AudioPreviewerListener{
+public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapter.ItemHolder> implements AudioPreviewPlayer.AudioPreviewerListener, FastScrollRecyclerView.SectionedAdapter {
     private static final String TAG = "SongAdapter";
     public ArrayList<Song> mData = new ArrayList<>();
     public int mCurrentHightLightPos = 0;
@@ -263,6 +264,14 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
             mCurrentHightLightPos = newPos;
             if(newPos!=-1) notifyItemChanged(newPos);
         }
+    }
+
+    @NonNull
+    @Override
+    public String getSectionName(int i) {
+        if(mData.get(i).title.isEmpty())
+            return "";
+        return mData.get(i).title.substring(0,1);
     }
 
 

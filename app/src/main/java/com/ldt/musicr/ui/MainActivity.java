@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    private static final int MY_PERMISSIONS_READ_STORAGE = 1;
+    private static final int MY_PERMISSIONS_WRITE_STORAGE = 1;
 
     @BindView(R.id.rootEveryThing) public ConstraintLayout mRootEverything;
     @BindView(R.id.layer_container) public FrameLayout mLayerContainer;
@@ -52,9 +53,9 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult) {
         switch (requestCode) {
-            case MY_PERMISSIONS_READ_STORAGE: {
+            case MY_PERMISSIONS_WRITE_STORAGE: {
                 if (grantResult.length > 0 && grantResult[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         // Granted
                         onPermissionGranted();
                     } else onPermissionDenied();
@@ -160,22 +161,22 @@ public class MainActivity extends BaseActivity {
     }
 
     public boolean checkSelfPermission() {
-     return ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+     return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE
-                }, MY_PERMISSIONS_READ_STORAGE);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, MY_PERMISSIONS_WRITE_STORAGE);
 
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{
-                                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
                         },
-                        MY_PERMISSIONS_READ_STORAGE);
+                        MY_PERMISSIONS_WRITE_STORAGE);
 
             }
         } else onPermissionGranted();

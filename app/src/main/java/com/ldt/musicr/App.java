@@ -27,7 +27,7 @@ public class App extends Application {
         L.writeLogs(true);
      //   L.disableLogging();
         L.writeDebugLogs(true);
-        Nammu.init(this);
+    //    Nammu.init(this);
 
     }
 }

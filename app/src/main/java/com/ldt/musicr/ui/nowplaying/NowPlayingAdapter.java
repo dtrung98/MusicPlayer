@@ -77,7 +77,7 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
             ButterKnife.bind(this,itemView);
         }
         private void bind(Song song) {
-            Picasso.get().load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).stableKey("album_id="+song.albumId+"_"+song.dateModified).into(mImage,NowPlayingAdapter.this);
+            Picasso.get().load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.music_style).stableKey("album_id="+song.albumId+"_"+song.dateModified).into(mImage,NowPlayingAdapter.this);
          /*   SongGlideRequest.Builder.from(GlideApp.with(mContext), song)
                     .ignoreMediaStore(false)
                     .build().into(mImage);*/

@@ -117,7 +117,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
     @Override
     public void onDestroyView() {
-        if(mLoadQueueTask!=null) mLoadQueueTask.cancel();
+        if(mThemeGeneratorTask !=null) mThemeGeneratorTask.cancel();
         if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
@@ -192,7 +192,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     }
 
     private void updateQueuePosition() {
-        mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
+        try {
+            int pos = MusicPlayerRemote.getPosition();
+            if(pos>=0)
+            mRecyclerView.smoothScrollToPosition(MusicPlayerRemote.getPosition());
+        } catch (Exception ignore) {}
     }
     public void setUp() {
         updatePlayingSongInfo();
@@ -310,7 +314,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
     @BindView(R.id.play_pause_button)
     ImageView mPlayPauseButton;
-    PaletteGeneratorTask mLoadQueueTask;
+    PaletteGeneratorTask mThemeGeneratorTask;
 
     @OnClick(R.id.playlist_title)
     void popUpPlayingList() {
@@ -334,8 +338,12 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         } else {
             Log.d(TAG, "ignore visualize "+path);
         }
+
         mVisualSeekBar.postDelayed(mUpdateProgress,10);
 
+        if(mThemeGeneratorTask !=null) mThemeGeneratorTask.cancel();
+        mThemeGeneratorTask = new PaletteGeneratorTask(this);
+        mThemeGeneratorTask.execute();
     }
 
   /*  @Override
@@ -344,9 +352,9 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         mBigTitle.setText(MusicPlayer.getTrackName());
         mBigArtist.setText(MusicPlayer.getArtistName());
 
-      if(mLoadQueueTask!=null) mLoadQueueTask.cancel();
-      mLoadQueueTask = new PaletteGeneratorTask(this);
-      mLoadQueueTask.execute();
+      if(mThemeGeneratorTask!=null) mThemeGeneratorTask.cancel();
+      mThemeGeneratorTask = new PaletteGeneratorTask(this);
+      mThemeGeneratorTask.execute();
     }*/
 
    /*
@@ -705,7 +713,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         public void cancel() {
             cancel(true);
             if(mFragment!=null) {
-                mFragment.mLoadQueueTask = null;
+                mFragment.mThemeGeneratorTask = null;
                 mFragment = null;
             }
         }
