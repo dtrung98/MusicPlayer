@@ -43,6 +43,7 @@
         app:riv_mutate_background="true"
         android:elevation="6dp"
         app:riv_oval="true"
+        android:scaleType="centerCrop"
         />
     <TextView
         android:id="@+id/artist"

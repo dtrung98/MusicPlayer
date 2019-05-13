@@ -63,11 +63,11 @@ public class FeaturePlaylistAdapter extends RecyclerView.Adapter<FeaturePlaylist
         this.showAuto = showAuto;
     }
 
-
     public void unBindAdapter() {
         mListener = null;
         mContext = null;
     }
+
     public void setData(List<Playlist> data) {
         mPlaylistData.clear();
         if(data!=null) {

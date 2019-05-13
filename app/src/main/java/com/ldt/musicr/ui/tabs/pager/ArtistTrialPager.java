@@ -1,11 +1,11 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.pager;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,43 +14,43 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.data.DataFetcher;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.ModelLoader;
 import com.ldt.musicr.R;
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
 import com.ldt.musicr.glide.artistimage.ArtistImageFetcher;
 import com.ldt.musicr.model.Artist;
-import com.ldt.musicr.ui.tabs.pager.ResultCallback;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import com.ldt.musicr.util.LastFMUtil;
 import com.ldt.musicr.util.MusicUtil;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Callback;
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-public class GenreChildTab extends Fragment implements ResultCallback {
+public class ArtistTrialPager extends SupportFragment implements ResultCallback {
     private static final String TAG ="ArtistTrialPager";
     // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
     private static final int TIMEOUT = 750;
 
     private static final String ARTIST = "artist";
 
-    public static GenreChildTab newInstance(Artist artist) {
+    public static ArtistTrialPager newInstance(Artist artist) {
 
         Bundle args = new Bundle();
         if(artist!=null)
             args.putParcelable(ARTIST,artist);
 
-        GenreChildTab fragment = new GenreChildTab();
+        ArtistTrialPager fragment = new ArtistTrialPager();
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +66,7 @@ public class GenreChildTab extends Fragment implements ResultCallback {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return inflater.inflate(R.layout.genre_child_tab,container,false);
     }
 
@@ -76,11 +76,20 @@ public class GenreChildTab extends Fragment implements ResultCallback {
         ButterKnife.bind(this,view);
         init();
         mSwipeRefresh.setOnRefreshListener(this::updateData);
+        mSwipeRefresh.setRefreshing(true);
+        updateData();
     }
 
     private void updateData() {
         if(mArtist!=null) {
-            tryToLoadArtistImage(mArtist,this);
+           new AsyncTask<Void,Void,Void>(){
+
+               @Override
+               protected Void doInBackground(Void... voids) {
+                   tryToLoadArtistImage(mArtist,ArtistTrialPager.this);
+                   return null;
+               }
+           }.execute();
         } else mSwipeRefresh.setRefreshing(false);
     }
     Artist mArtist;
@@ -102,12 +111,22 @@ public class GenreChildTab extends Fragment implements ResultCallback {
     private boolean mSkipOkHttpCache = false;
     private boolean mLoadOriginal = true;
 
-
-    @Override
     public void onSuccess(String url) {
         Log.d(TAG, "onSuccess: url = "+url);
-        Glide.with(this).load(url).into(mImage);
-        mSwipeRefresh.setRefreshing(false);
+
+         mText.post(new Runnable() {
+             @Override
+             public void run() {
+                 Glide.with(ArtistTrialPager.this).load(url).into(mImage);
+                 mText.setText(url);
+                 mSwipeRefresh.setRefreshing(false);
+             }
+         });
+    }
+
+    @Override
+    public void onSuccess(LastFmArtist lastFmArtist) {
+
     }
 
     @Override
@@ -118,7 +137,15 @@ public class GenreChildTab extends Fragment implements ResultCallback {
 
     @Override
     public void onSuccess(ArrayList<String> mResult) {
-
+        if(mResult!=null) {
+            if(!mResult.isEmpty()) {
+                onSuccess(mResult.get(0));
+                for (String url :
+                        mResult) {
+                    Log.d(TAG, "onSuccess: ["+url+"]");
+                }
+            }
+        }
     }
 
     private void tryToLoadArtistImage(Artist artist, ResultCallback callback) {
@@ -175,6 +202,7 @@ public class GenreChildTab extends Fragment implements ResultCallback {
         if(!response.isSuccessful())
             return new IOException("Request failed with code: " + response.code());
         else {
+            Log.d(TAG, "loadThisArtist: "+response.toString());
             LastFmArtist lastFmArtist = response.body();
             Log.d(TAG, "loadData: "+lastFmArtist);
 
@@ -189,12 +217,47 @@ public class GenreChildTab extends Fragment implements ResultCallback {
             String largestArtistImageUrl = LastFMUtil.getLargestArtistImageUrl(lastFmArtist.getArtist().getImage());
             if(largestArtistImageUrl!=null&&!largestArtistImageUrl.isEmpty()) {
 
+         /*     Response<String> photoPage = null;
+                try {
+                    photoPage = mLastFmClient.getApiService().getPhotoPage(lastFmArtist.getArtist().getUrl()+"/+images",null,mSkipOkHttpCache ? "no-cache" : null).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return e;
+                }
+                Log.d(TAG, "loadThisArtist: "+photoPage.body());*/
+              //  if(photoPage.body()!=null) {
+                Document document = null;
+                try {
+                    document = Jsoup.connect(lastFmArtist.getArtist().getUrl()+"/+images").get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(document!=null) {
+                Element imageList = document.getElementsByClass("image-list").first();
+                    if (imageList != null) {
+                        Elements imageListItem = document.getElementsByClass("image-list-item");
+                        if(imageListItem!=null) {
+                            ArrayList<String > mResult = new ArrayList<>();
+                            for (Element imageItem :
+                                    imageListItem) {
+                               Element image =  imageItem.selectFirst("img");
+                               if(image!=null) {
+                                  String url =  image.absUrl("src");
+                                  mResult.add(url);
+                               }
+                            }
+                            callback.onSuccess(mResult);
+                            return null;
+                        }
+                    }
+                }
+                return new NullPointerException("Photo page body is null");
+/*
                 if(mLoadOriginal) largestArtistImageUrl = ArtistImageFetcher.findAndReplaceToGetOriginal(largestArtistImageUrl);
                 Log.d(TAG, "loadThisArtist: url = ["+largestArtistImageUrl+"]");
-                callback.onSuccess(largestArtistImageUrl);
+                callback.onSuccess(largestArtistImageUrl);*/
             } else return new Exception("No Artist Image is available : \n"+lastFmArtist.toString());
         }
-        return null;
     }
 }
 

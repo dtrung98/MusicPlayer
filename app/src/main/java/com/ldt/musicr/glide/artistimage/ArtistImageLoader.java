@@ -13,6 +13,7 @@ import com.bumptech.glide.load.model.MultiModelLoaderFactory;
 import com.bumptech.glide.signature.ObjectKey;
 import com.ldt.musicr.App;
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
+import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.util.ArtistSignatureUtil;
 
 import java.io.InputStream;
@@ -26,7 +27,7 @@ import okhttp3.OkHttpClient;
 
 public class ArtistImageLoader implements ModelLoader<ArtistImage, InputStream> {
     // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
-    private static final int TIMEOUT = 500;
+    private static final int TIMEOUT = 750;
 
     private LastFMRestClient lastFMClient;
     private ModelLoader<GlideUrl, InputStream> urlLoader;
@@ -39,7 +40,8 @@ public class ArtistImageLoader implements ModelLoader<ArtistImage, InputStream> 
     @Nullable
     @Override
     public LoadData<InputStream> buildLoadData(@NonNull ArtistImage artistImage, int width, int height, @NonNull Options options) {
-        return new LoadData<>(new ObjectKey(String.valueOf(artistImage.getArtistName())),new ArtistImageFetcher(lastFMClient,artistImage,urlLoader,width,height,options));
+        return new LoadData<>( ArtistSignatureUtil.getInstance(App.getInstance()).getArtistSignature(artistImage.mArtistName, artistImage.mLoadOriginal),new ArtistImageFetcher(lastFMClient,artistImage,urlLoader,width,height,options));
+//        return new LoadData<>(new ObjectKey(String.valueOf(artistImage.getArtistName())),new ArtistImageFetcher(lastFMClient,artistImage,urlLoader,width,height,options));
      //   return new LoadData<>( ArtistSignatureUtil.getInstance(App.getInstance()).getArtistSignature(artistImage.getArtistName()), new ArtistImageFetcher(lastFMClient,artistImage,urlLoader,width,height, options));
     }
 
@@ -73,7 +75,7 @@ public class ArtistImageLoader implements ModelLoader<ArtistImage, InputStream> 
 
         @Override
         public void teardown() {
-            okHttpFactory.teardown();
+          //  okHttpFactory.teardown();
         }
     }
 }

@@ -2,6 +2,7 @@ package com.ldt.musicr.glide.artistimage;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.bumptech.glide.Priority;
@@ -14,11 +15,18 @@ import com.bumptech.glide.load.model.ModelLoader;
 
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
+import com.ldt.musicr.ui.tabs.pager.ResultCallback;
 import com.ldt.musicr.util.LastFMUtil;
 import com.ldt.musicr.util.MusicUtil;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import retrofit2.Response;
 
@@ -35,7 +43,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
     private volatile boolean isCancelled;
     private DataFetcher<InputStream> urlFetcher;
     private final Options mOption;
-    private boolean mLoadBiggest = false;
+    private final  boolean mLoadOriginal;
 
     public ArtistImageFetcher(LastFMRestClient lastFMRestClient, ArtistImage model, ModelLoader<GlideUrl, InputStream> urlLoader, int width, int height, Options options) {
         this.lastFMRestClient = lastFMRestClient;
@@ -44,6 +52,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         this.width = width;
         this.height = height;
         mOption = options;
+        mLoadOriginal = model.mLoadOriginal;
     }
     private Exception loadThisArtist(String artistName, @NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
         Response<LastFmArtist> response;
@@ -71,6 +80,8 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
             String largestArtistImageUrl = LastFMUtil.getLargestArtistImageUrl(lastFmArtist.getArtist().getImage());
             if(largestArtistImageUrl!=null&&!largestArtistImageUrl.isEmpty()) {
+
+                if(mLoadOriginal) largestArtistImageUrl = findAndReplaceToGetOriginal(largestArtistImageUrl);
                 Log.d(TAG, "loadThisArtist: url = ["+largestArtistImageUrl+"]");
                 GlideUrl url = new GlideUrl(largestArtistImageUrl);
 
@@ -80,7 +91,22 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                 else {
                     try {
                         urlFetcher = loadData.fetcher;
-                        urlFetcher.loadData(priority, callback);
+                        DataCallback<? super InputStream> innerCallback = new DataCallback<InputStream>() {
+                            @Override
+                            public void onDataReady(@Nullable InputStream data) {
+                                Log.d(TAG, "onDataReady");
+                                callback.onDataReady(data);
+                            }
+
+                            @Override
+                            public void onLoadFailed(@NonNull Exception e) {
+                                Log.d(TAG, "onLoadFailed: e = "+e.getClass()+" | "+e.getMessage());
+                                callback.onLoadFailed(e);
+                            }
+                        };
+                        Log.d(TAG, "loadThisArtist: start");
+                        urlFetcher.loadData(priority, innerCallback);
+                        Log.d(TAG, "loadThisArtist: end");
                     } catch (Exception e) {
                         return e;
                     }
@@ -88,6 +114,111 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
             } else return new Exception("No Artist Image is available : \n"+lastFmArtist.toString());
         }
         return null;
+    }
+
+    private Exception loadThisArtistWithJSoup(String artistName, @NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
+        Response<LastFmArtist> response;
+        try {
+            response = lastFMRestClient.getApiService().getArtistInfo(artistName, null, model.mSkipOkHttpCache ? "no-cache" : null).execute();
+            Log.d(TAG, "loadData: artistName = ["+artistName+"] : succeed");
+        } catch (Exception e) {
+            Log.d(TAG, "loadData: artistName = ["+artistName+"] : exception");
+            return e;
+        }
+
+        if(!response.isSuccessful())
+            return new IOException("Request failed with code: " + response.code());
+        else {
+            Log.d(TAG, "loadThisArtist: "+response.toString());
+            LastFmArtist lastFmArtist = response.body();
+            Log.d(TAG, "loadData: "+lastFmArtist);
+
+            if (isCancelled) {
+                return new Exception("Cancelled");
+            }
+
+            if (lastFmArtist == null || lastFmArtist.getArtist() == null) {
+                return new NullPointerException("Artist is null");
+            }
+
+            String largestArtistImageUrl = LastFMUtil.getLargestArtistImageUrl(lastFmArtist.getArtist().getImage());
+            if(largestArtistImageUrl!=null&&!largestArtistImageUrl.isEmpty()) {
+
+         /*     Response<String> photoPage = null;
+                try {
+                    photoPage = mLastFmClient.getApiService().getPhotoPage(lastFmArtist.getArtist().getUrl()+"/+images",null,mSkipOkHttpCache ? "no-cache" : null).execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return e;
+                }
+                Log.d(TAG, "loadThisArtist: "+photoPage.body());*/
+                //  if(photoPage.body()!=null) {
+                Document document = null;
+                try {
+                    document = Jsoup.connect(lastFmArtist.getArtist().getUrl()+"/+images").get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(document!=null) {
+                    Element imageList = document.getElementsByClass("image-list").first();
+                    if (imageList != null) {
+                        Elements imageListItem = document.getElementsByClass("image-list-item");
+                        if(imageListItem!=null) {
+                            ArrayList<String > result = new ArrayList<>();
+                            for (Element imageItem :  imageListItem) {
+                                Element image =  imageItem.selectFirst("img");
+                                if(image!=null) {
+                                    String url =  image.absUrl("src");
+                                    result.add(url);
+                                }
+                            }
+                            if(result.isEmpty()) return new Exception("Empty Array List");
+                            String urlString = result.get(0);
+                            if(mLoadOriginal) urlString = findAndReplaceToGetOriginal(urlString);
+                            Log.d(TAG, "loadThisArtist: url = ["+urlString+"]");
+                            GlideUrl url = new GlideUrl(urlString);
+
+                            ModelLoader.LoadData<InputStream> loadData = urlLoader.buildLoadData(url, width, height, mOption);
+                            if (loadData == null)
+                                return  new IOException("Load data fails");
+                            else {
+                                try {
+                                    urlFetcher = loadData.fetcher;
+                                    DataCallback<? super InputStream> innerCallback = new DataCallback<InputStream>() {
+                                        @Override
+                                        public void onDataReady(@Nullable InputStream data) {
+                                            Log.d(TAG, "onDataReady");
+                                            callback.onDataReady(data);
+                                        }
+
+                                        @Override
+                                        public void onLoadFailed(@NonNull Exception e) {
+                                            Log.d(TAG, "onLoadFailed: e = "+e.getClass()+" | "+e.getMessage());
+                                            callback.onLoadFailed(e);
+                                        }
+                                    };
+                                    Log.d(TAG, "loadThisArtist: start");
+                                    urlFetcher.loadData(priority, innerCallback);
+                                    Log.d(TAG, "loadThisArtist: end");
+                                } catch (Exception e) {
+                                    return e;
+                                }
+                            }
+                            return null;
+                        }
+                    }
+                }
+                return new NullPointerException("Photo page body is null");
+/*
+                if(mLoadOriginal) largestArtistImageUrl = ArtistImageFetcher.findAndReplaceToGetOriginal(largestArtistImageUrl);
+                Log.d(TAG, "loadThisArtist: url = ["+largestArtistImageUrl+"]");
+                callback.onSuccess(largestArtistImageUrl);*/
+            } else return new Exception("No Artist Image is available : \n"+lastFmArtist.toString());
+        }
+    }
+
+    public static String findAndReplaceToGetOriginal(String url) {
+        return url.replaceAll("([0-9]+x[0-9]+|avatar170s)","770x0");
     }
 
     @Override
@@ -102,8 +233,8 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                     .replace(","," & ")
                     .replaceAll("( +)"," ").trim();
             Log.d(TAG, start + " afterArtist =["+ artistNames+"]");
-            if(null==loadThisArtist(artistNames,priority,callback)) return;
-            if(null == loadThisArtist(artistNames.replace("&",", ").replaceAll("( +)"," ").trim().replaceAll("\\s+(?=[),])", ""),priority,callback)) return;
+            if(null==loadThisArtistWithJSoup(artistNames,priority,callback)) return;
+            if(null == loadThisArtistWithJSoup(artistNames.replace("&",", ").replaceAll("( +)"," ").trim().replaceAll("\\s+(?=[),])", ""),priority,callback)) return;
 
             // if not, try to get one of artist image
             Exception e = null;
@@ -112,7 +243,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
             String log = "";
             for (String a :
                     artists) {
-                log+=" ["+a+"] ";
+                log += " ["+a+"] ";
             }
             Log.d(TAG, start+" afterSplit ="+log);
 
@@ -124,7 +255,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                     e = new Exception("Empty Artist");
                     continue;
                 }
-                e = loadThisArtist(artistName.trim(), priority, callback);
+                e = loadThisArtistWithJSoup(artistName.trim(), priority, callback);
                 if (e == null) break;
             }
             if (e != null) callback.onLoadFailed(e);

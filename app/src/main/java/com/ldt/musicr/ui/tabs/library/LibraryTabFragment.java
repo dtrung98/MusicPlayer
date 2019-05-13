@@ -77,4 +77,8 @@ public class LibraryTabFragment extends SupportFragment {
     public void goToSongTab() {
         mViewPager.setCurrentItem(0,false);
     }
+
+    public void goToPlaylistTab() {
+        mViewPager.setCurrentItem(1,false);
+    }
 }

@@ -1,15 +1,15 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.library.artist;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +29,9 @@ import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.loader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
+import com.ldt.musicr.ui.tabs.pager.ArtistPagerFragment;
+import com.ldt.musicr.ui.tabs.pager.PlaylistPagerFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import com.ldt.musicr.util.PhonographColorUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
@@ -46,6 +49,17 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
     Context mContext;
     ArrayList<Artist> mData = new ArrayList<>();
     ArrayList<Genre>[] mGenres;
+
+    public interface ArtistClickListener {
+        void onArtistItemClick(Artist artist);
+    }
+    private ArtistClickListener mListener;
+    public void setArtistClickListener(ArtistClickListener listener) {
+        mListener = listener;
+    }
+    public void removeListener() {
+        mListener = null;
+    }
 
     ArtistAdapter(Context context) {
         mContext = context;
@@ -143,7 +157,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 
         @OnClick(R.id.panel)
         void goToThisArtist() {
-
+            if(mListener!=null) mListener.onArtistItemClick(mData.get(getAdapterPosition()));
         }
         @BindView(R.id.root)
         View mRoot;
@@ -172,8 +186,11 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
            else artistTemp = artist;*/
 
             ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist)
-                    .generatePalette(mContext)
+                   // .tryToLoadOriginal(true)
+                    .generateBuilder(mContext)
                     .build()
+                    .centerCrop()
+                    .error(R.drawable.music_style)
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {

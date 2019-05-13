@@ -68,6 +68,9 @@ public class MainActivity extends BaseActivity {
     public void goToSongTab() {
         mBackStackController.goToSongTab();
     }
+    public void goToPlaylistTab() {
+        mBackStackController.goToPlaylistTab();
+    }
 
     @Override
     protected void onDestroy() {
@@ -78,6 +81,8 @@ public class MainActivity extends BaseActivity {
     public void setDataForPlayingQueue(List<Song> songs2) {
         if(mPlaylistController!=null) mPlaylistController.setData(songs2);
     }
+
+
 
 
     public interface PermissionListener {

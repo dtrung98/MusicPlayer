@@ -6,10 +6,12 @@ import android.support.annotation.Nullable;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmAlbum;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -24,4 +26,7 @@ public interface LastFMService {
 
     @GET(BASE_QUERY_PARAMETERS + "&method=artist.getinfo")
     Call<LastFmArtist> getArtistInfo(@Query("artist") String artistName, @Nullable @Query("lang") String language, @Nullable @Header("Cache-Control") String cacheControl);
+
+    @GET
+    public Call<String> getPhotoPage(@Url String url, @Nullable @Query("lang") String language, @Nullable @Header("Cache-Control") String cacheControl);
 }

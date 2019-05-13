@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="74dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/ripple_effect">
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image"
@@ -28,7 +29,7 @@
         android:textStyle="bold"
         android:textColor="@color/FlatWhite"
         app:layout_constraintEnd_toStartOf="@id/more"
-        android:text="Blame"
+        tools:text="Blame"
         android:textSize="14sp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -43,7 +44,7 @@
         app:layout_constraintEnd_toStartOf="@id/more"
         android:textStyle="bold"
         android:textColor="#CCF5F5F5"
-        android:text="KYLE."
+        tools:text="KYLE."
         android:ellipsize="end"
         android:maxLines="1"
         android:textSize="13sp"
@@ -55,7 +56,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/ic_more_horiz_black_24dp"
+        app:srcCompat="@drawable/ic_more_horiz_black_24dp"
         android:tint="@color/FlatWhite"
         android:padding="22dp"
         android:background="@drawable/ripple_effect"/>

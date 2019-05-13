@@ -7,16 +7,33 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.ldt.musicr.R;
 import com.ldt.musicr.model.Playlist;
 
 import java.util.ArrayList;
 
 public class PlaylistLoader {
+    private static final String TAG = "PlaylistLoader";
+
 
     @NonNull
     public static ArrayList<Playlist> getAllPlaylists(@NonNull final Context context) {
         return getAllPlaylists(makePlaylistCursor(context, null, null));
+    }
+
+    public static ArrayList<Playlist> getAllPlaylistsWithAuto(@NonNull final  Context context) {
+        ArrayList<Playlist> playlists = new ArrayList<>();
+        playlists.add(new Playlist(-1,context.getResources().getString(R.string.playlist_last_added)));
+        playlists.add(new Playlist(-2,context.getResources().getString(R.string.playlist_recently_played)));
+        playlists.add(new Playlist(-3,context.getResources().getString(R.string.playlist_top_tracks)));
+        playlists.addAll(getAllPlaylists(context));
+        for (Playlist p :
+                playlists) {
+            Log.d(TAG, "getAllPlaylistsWithAuto: id = "+p.id+", name = "+p.name);
+        }
+        return playlists;
     }
 
     @NonNull

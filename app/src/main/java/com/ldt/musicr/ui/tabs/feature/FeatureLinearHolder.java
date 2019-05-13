@@ -71,13 +71,20 @@ public class FeatureLinearHolder {
 
     public class PlaylistMiniAdapter {
         private View mItemView;
-        @BindView(R.id.header_panel) View mHeaderPanel;
+        @BindView(R.id.back_top_header) View mHeaderPanel;
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
         @BindView(R.id.number) TextView mCount;
 
         FeaturePlaylistAdapter mPlaylistAdapter;
+
+        @OnClick(R.id.back_top_header)
+        void goToPlaylistChildTab() {
+            if(mContext instanceof MainActivity) {
+                ((MainActivity)mContext).goToPlaylistTab();
+            }
+        }
 
         private void setItemClickListener(FeaturePlaylistAdapter.PlaylistClickListener listener) {
             if(mPlaylistAdapter!=null) mPlaylistAdapter.setListener(listener);
@@ -109,7 +116,7 @@ public class FeatureLinearHolder {
     }
     public class SongMiniAdapter {
         private View mItemView;
-        @BindView(R.id.header_panel) View mHeaderPanel;
+        @BindView(R.id.back_top_header) View mHeaderPanel;
         @BindView(R.id.title)
         TextView mTitle;
         @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
@@ -117,7 +124,7 @@ public class FeatureLinearHolder {
         @BindView(R.id.refresh)
         ImageView mRefreshButton;
 
-        @OnClick(R.id.see_all)
+        @OnClick({R.id.see_all, R.id.back_top_header})
         void seeAll() {
             if(mContext instanceof MainActivity)
                 ((MainActivity)mContext).goToSongTab();

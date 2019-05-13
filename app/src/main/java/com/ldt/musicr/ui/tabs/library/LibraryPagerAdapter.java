@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.ui.tabs.library.artist.ArtistChildTab;
+import com.ldt.musicr.ui.tabs.library.playlist.PlaylistChildTab;
+import com.ldt.musicr.ui.tabs.library.song.SongChildTab;
 
 import java.util.ArrayList;
 

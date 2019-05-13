@@ -30,6 +30,7 @@
         android:id="@+id/playlist_title"
         android:text="Playlist A"
         android:gravity="center"
+        android:maxLines="2"
         android:layout_below="@id/playlist_image"
         android:textSize="14sp"
         android:textStyle="bold"

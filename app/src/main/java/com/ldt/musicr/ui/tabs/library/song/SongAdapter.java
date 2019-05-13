@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.library.song;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -6,15 +6,12 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.RippleDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -34,8 +30,8 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.popup.SortOrderBottomSheet;
+import com.ldt.musicr.ui.tabs.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
-import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
@@ -43,15 +39,10 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Util;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

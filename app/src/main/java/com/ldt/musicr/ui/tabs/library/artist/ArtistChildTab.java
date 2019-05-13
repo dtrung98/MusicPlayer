@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.library.artist;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,9 +16,12 @@ import android.view.ViewGroup;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.ArtistLoader;
-import com.ldt.musicr.loader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
+import com.ldt.musicr.ui.tabs.library.GenreChildTab;
+import com.ldt.musicr.ui.tabs.pager.ArtistPagerFragment;
+import com.ldt.musicr.ui.tabs.pager.ArtistTrialPager;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -28,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ArtistChildTab extends Fragment {
+public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClickListener {
     private static final String TAG ="ArtistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -54,6 +57,7 @@ public class ArtistChildTab extends Fragment {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ArtistAdapter(getActivity());
+        mAdapter.setArtistClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         if(mSwipeRefreshLayout!=null)
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
@@ -82,6 +86,15 @@ public class ArtistChildTab extends Fragment {
     public void onDestroy() {
         if(mLoadArtist!=null) mLoadArtist.cancel(true);
         super.onDestroy();
+    }
+
+    @Override
+    public void onArtistItemClick(Artist artist) {
+        SupportFragment sf = ArtistPagerFragment.newInstance(artist);
+  /*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*/
+            Fragment parentFragment = getParentFragment();
+            if(parentFragment instanceof SupportFragment)
+                ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);
     }
 
     private static class AsyncResult {

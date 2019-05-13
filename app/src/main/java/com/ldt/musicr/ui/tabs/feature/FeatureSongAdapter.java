@@ -19,7 +19,6 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
 import com.ldt.musicr.model.Song;
 
-import com.ldt.musicr.ui.tabs.library.SongAdapter;
 import com.ldt.musicr.util.Util;
 import com.ldt.musicr.util.Tool;
 import com.squareup.picasso.Picasso;

@@ -12,9 +12,11 @@ public class ArtistImage {
     }
 
     public final boolean mSkipOkHttpCache;
+    public final boolean mLoadOriginal;
 
-    public ArtistImage(String artistName, boolean skipOkHttpCache) {
+    public ArtistImage(String artistName, boolean skipOkHttpCache, boolean loadOriginal) {
         this.mArtistName = artistName;
         this.mSkipOkHttpCache = skipOkHttpCache;
+        this.mLoadOriginal = loadOriginal;
     }
 }

@@ -116,7 +116,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
         ButterKnife.bind(this,view);
-        mAlignView.getLayoutParams ().height = (int) (Tool.getScreenSize(getContext())[1] - Tool.getStatusHeight(getResources()) - getResources().getDimension(R.dimen.oneDP)*25f);
+        mAlignView.getLayoutParams ().height = (int) (Tool.getScreenSize(getContext())[1]);
         mAlignView.requestLayout();
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {

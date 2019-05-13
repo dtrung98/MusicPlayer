@@ -61,5 +61,6 @@
     <color name="app_shortcut_default_background">@color/md_grey_50</color>
     <color name="lyric_end_color">#DD080808</color>
     <color name="lyric_center_color">#66080808</color>
+    <color name="background_artist_header_color">#88080808</color>
 
 </resources>

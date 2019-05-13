@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.Registry;
 import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.AppGlideModule;
 import com.ldt.musicr.glide.artistimage.ArtistImage;
 import com.ldt.musicr.glide.artistimage.ArtistImageLoader;
@@ -32,6 +34,7 @@ public class MyGlideModule extends AppGlideModule {
         registry.append(AudioFileCover.class,InputStream.class,new AudioFileCoverLoader.Factory());
         registry.append(ArtistImage.class,InputStream.class, new ArtistImageLoader.Factory(context));
         registry.register(Bitmap.class, BitmapPaletteWrapper.class, new BitmapPaletteTranscoder());
+        registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
     }
     @Override
     public boolean isManifestParsingEnabled() {

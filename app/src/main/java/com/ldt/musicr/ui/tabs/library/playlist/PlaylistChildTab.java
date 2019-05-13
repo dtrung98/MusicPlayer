@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.library.playlist;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -45,7 +45,7 @@ public class PlaylistChildTab extends Fragment implements FeaturePlaylistAdapter
         refreshData();
 ;    }
     private void refreshData() {
-      mAdapter.setData(PlaylistLoader.getAllPlaylists(getActivity()));
+      mAdapter.setData(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
     }
 
     @Override

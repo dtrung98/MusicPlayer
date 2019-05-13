@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.tabs.library;
+package com.ldt.musicr.ui.tabs.library.song;
 
 import android.content.Context;
 import android.os.Handler;
@@ -14,7 +14,6 @@ import com.bumptech.glide.RequestManager;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
 
-import com.ldt.musicr.service.MultiPlayer;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.util.Util;
 import com.makeramen.roundedimageview.RoundedImageView;
