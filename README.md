@@ -22,7 +22,7 @@ Comming soon
   <tr>
     <td>
 <img width="360"
-src="https://user-images.githubusercontent.com/33343210/54081117-bcb5cb80-4331-11e9-8205-3b124858a52e.png"/>
+src="https://user-images.githubusercontent.com/33343210/57590440-f97e8880-7555-11e9-8752-de58c3661f30.png"/>
        <td><img width="360"
 src="https://user-images.githubusercontent.com/33343210/54081299-34392a00-4335-11e9-82ef-dcbaea8defdb.png"/>
     </td>
@@ -37,7 +37,7 @@ src="https://user-images.githubusercontent.com/33343210/54081062-97748d80-4330-1
     <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/54081173-dc012880-4332-11e9-982b-08458ad1f4ae.png"/></td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/54081100-60eb4280-4331-11e9-98b4-57a9eb22bcdc.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/57590480-406c7e00-7556-11e9-8af3-b8234faffa84.png"/></td>
      <td> <img width="360"
 src="https://user-images.githubusercontent.com/33343210/57590345-5b8abe00-7555-11e9-99bb-0a00cc66fbca.png"/></td>
   </tr>
