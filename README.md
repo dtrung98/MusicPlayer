@@ -15,6 +15,11 @@ The app will be available in Google Play Store soon.
 ```
 Comming soon
 ```
+### APK
+Download apk file here [Music Player v1305](https://github.com/dtrung98/Source/raw/master/music_player_13_05.apk)
+```
+https://github.com/dtrung98/Source/raw/master/music_player_13_05.apk
+```
 ## Screenshots
 </br>
 <div align="center">
