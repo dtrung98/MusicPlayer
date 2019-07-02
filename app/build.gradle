@@ -130,6 +130,9 @@ dependencies {
 
     // Jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.11.3'
+
+    // Fancy Toast
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
 }
 
 apply plugin: 'kotlin-android-extensions'

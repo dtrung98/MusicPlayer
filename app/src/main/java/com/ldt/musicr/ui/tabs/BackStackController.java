@@ -215,6 +215,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
                         bringToTopThisTab(2);
                     }
                     return true;
+
             }
             return false;
         }

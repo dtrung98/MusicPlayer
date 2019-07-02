@@ -673,9 +673,9 @@ public class LayerController {
             return;
         }
        inCountDownTime = true;
-        Tool.showToast(activity,"Back again to exit",500);
+        Tool.showToast(activity,activity.getString(R.string.alert_ext),350);
 
-        if(countDownTimer==null) countDownTimer = new CountDownTimer(2000,2000) {
+        if(countDownTimer==null) countDownTimer = new CountDownTimer(1500,1500) {
             @Override
             public void onTick(long l) {
 
@@ -685,7 +685,6 @@ public class LayerController {
             public void onFinish() {
                 countDownTimer = null;
                 inCountDownTime = false;
-                Tool.showToast(activity,"exit cancelAndUnBind",500);
             }
         };
         countDownTimer.start();

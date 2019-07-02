@@ -239,4 +239,5 @@
     <string name="app_widget_classic_name">Phonograph - Classic</string>
     <string name="app_widget_small_name">Phonograph - Small</string>
     <string name="app_widget_card_name">Phonograph - Card</string>
+    <string name="alert_ext">Press once again to exit</string>
 </resources>
