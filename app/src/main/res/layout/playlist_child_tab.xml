@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:background="@color/library_back_color">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
@@ -14,6 +16,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_playlist_child"
         android:clipToPadding="false"
+        tools:layoutManager="GridLayoutManager"
+        tools:spanCount="2"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="8dp"
         android:paddingBottom="@dimen/bottom_navigation_height"
         />
 </android.support.constraint.ConstraintLayout>
