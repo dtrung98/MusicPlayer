@@ -63,7 +63,7 @@ public class ArtistPagerFragment extends SupportFragment {
 
 
     @BindView(R.id.big_image)
-    ImageView mBigImage;
+    PhotoView mBigImage;
 
     @BindView(R.id.group)
     Group mGroup;
@@ -97,10 +97,14 @@ public class ArtistPagerFragment extends SupportFragment {
         mBlockPhotoView = !mBlockPhotoView;
         if(mBlockPhotoView) {
             mGroup.setVisibility(View.VISIBLE);
+            mBigImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            mBigImage.setBackgroundResource(android.R.color.transparent);
             mFullScreenButton.setImageResource(R.drawable.fullscreen);
         }
         else {
             mGroup.setVisibility(View.GONE);
+            mBigImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            mBigImage.setBackgroundResource(android.R.color.black);
             mFullScreenButton.setImageResource(R.drawable.minimize);
         }
     }

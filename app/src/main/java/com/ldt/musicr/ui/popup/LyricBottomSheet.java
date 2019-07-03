@@ -12,12 +12,14 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
+import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 
 import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
 
@@ -55,6 +58,23 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     NestedScrollView mScrollView;
 
     @BindView(R.id.align_view) View mAlignView;
+
+    @BindView(R.id.edit) View mEdit;
+
+    String mLyricString = "";
+
+    @BindView(R.id.menu) ImageView mMenuButton;
+
+    @OnClick(R.id.menu)
+    void playOrPause() {
+        MusicPlayerRemote.playOrPause();
+    }
+
+    void updateMenuButton() {
+        boolean isPlaying = MusicPlayerRemote.isPlaying();
+        if(isPlaying) mMenuButton.setImageResource(R.drawable.ic_pause_circle_filled_black_24dp);
+        else mMenuButton.setImageResource(R.drawable.ic_play_circle_filled_black_24dp);
+    }
 
     @OnClick({R.id.back,R.id.parent})
     void doDismiss() {
@@ -148,6 +168,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
             mShouldAutoUpdate = bundle.getBoolean(SHOULD_AUTO_UPDATE_KEY,false);
         }
         updateLyric();
+        updateMenuButton();
         if(getActivity() instanceof BaseActivity)
             ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
     }
@@ -165,17 +186,18 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     ImageView mImageView;
     private void updateLyric() {
         if(mSong !=null) {
-           String lyric = MusicUtil.getLyrics(mSong);
-           if(lyric==null||lyric.isEmpty()) lyric = "This song has no lyric.";
+           mLyricString = MusicUtil.getLyrics(mSong);
+           if(mLyricString==null||mLyricString.isEmpty())
+               mLyricString = "This song has no lyric.";
 
-           boolean isHtml = isHtml(lyric);
+           boolean isHtml = isHtml(mLyricString);
            if(isHtml) {
-               Spanned spanned = Html.fromHtml(lyric);
+               Spanned spanned = Html.fromHtml(mLyricString);
                mLyricContent.setText(spanned);
            } else
-           mLyricContent.setText(lyric);
+           mLyricContent.setText(mLyricString);
 
-            Log.d(TAG, "updateLyric: "+lyric);
+            Log.d(TAG, "updateLyric: "+mLyricString);
             mTitle.setText(mSong.title);
             mArtist.setText(mSong.artistName);
             if(getContext() !=null)
@@ -197,11 +219,27 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
             Toast.makeText(getContext(),"Copied",Toast.LENGTH_SHORT).show();
         }
     }
-
+    @BindView(R.id.lyric_constraint_root) View mLyricConstraintRoot;
+    @BindView(R.id.edit_constraint_root) View mEditConstraintRoot;
+    @BindView(R.id.edit_text) EditText mEditText;
     @OnClick(R.id.edit)
     void edit() {
-
+        mEditText.setText(mLyricString);
+        mLyricConstraintRoot.setVisibility(View.GONE);
+        mEditConstraintRoot.setVisibility(View.VISIBLE);
     }
+
+    @OnClick(R.id.save)
+    void saveLyric() {
+        Toasty.normal(mEditText.getContext(),"Coming soon!").show();
+    }
+
+    @OnClick(R.id.cancel)
+    void cancelEditLyric() {
+        mEditConstraintRoot.setVisibility(View.GONE);
+        mLyricConstraintRoot.setVisibility(View.VISIBLE);
+    }
+
     // adapted from re posted by Phil Haack and modified to match better
     public final static String tagStart=
             "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
@@ -249,7 +287,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
 
     @Override
     public void onPlayStateChanged() {
-
+        updateMenuButton();
     }
 
     @Override

@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
  */
 public class LayerController {
     private static final String TAG = "LayerController";
-    public static int SINGLE_TAP_COMFIRM = 1;
+    public static int SINGLE_TAP_CONFIRM = 1;
     public static int SINGLE_TAP_UP = 3;
     public static int LONG_PRESSED = 2;
 
@@ -569,7 +569,7 @@ public class LayerController {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
        //     Toast.makeText(activity,"single tap confirmed",Toast.LENGTH_SHORT).show();
-            if(isLayerAvailable()) return layer.onGestureDetected(SINGLE_TAP_COMFIRM);
+            if(isLayerAvailable()) return layer.onGestureDetected(SINGLE_TAP_CONFIRM);
             return super.onSingleTapConfirmed(e);
         }
     }

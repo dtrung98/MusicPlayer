@@ -240,4 +240,7 @@
     <string name="app_widget_small_name">Phonograph - Small</string>
     <string name="app_widget_card_name">Phonograph - Card</string>
     <string name="alert_ext">Press once again to exit</string>
+    <string name="copy">Copy</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
 </resources>
