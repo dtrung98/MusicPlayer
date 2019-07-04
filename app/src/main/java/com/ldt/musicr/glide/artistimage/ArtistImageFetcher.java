@@ -1,13 +1,11 @@
 package com.ldt.musicr.glide.artistimage;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.Option;
 import com.bumptech.glide.load.Options;
 import com.bumptech.glide.load.data.DataFetcher;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -15,7 +13,6 @@ import com.bumptech.glide.load.model.ModelLoader;
 
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
-import com.ldt.musicr.ui.tabs.pager.ResultCallback;
 import com.ldt.musicr.util.LastFMUtil;
 import com.ldt.musicr.util.MusicUtil;
 

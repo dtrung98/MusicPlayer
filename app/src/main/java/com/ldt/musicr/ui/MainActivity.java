@@ -24,7 +24,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
-import com.ldt.musicr.ui.tabs.BackStackController;
+import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 
 import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;

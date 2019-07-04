@@ -28,9 +28,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.tabs.BaseLayerFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
 
 import com.ldt.musicr.model.Song;
 
@@ -38,14 +39,16 @@ import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.tabs.SongOptionBottomSheet;
+import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
+import com.ldt.musicr.util.SortOrder;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,9 +78,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
     @OnClick(R.id.more)
     void more() {
-        SongOptionBottomSheet sheet =  SongOptionBottomSheet.newInstance();
-        sheet.show((getActivity()).getSupportFragmentManager(),
-                "song_popup_menu");
+        if(getActivity() != null) {
+            SongOptionBottomSheet sheet = SongOptionBottomSheet.newInstance();
+            sheet.show(getActivity().getSupportFragmentManager(),
+                    "song_popup_menu");
+        }
     }
 
     @Nullable
@@ -325,7 +330,12 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     }
     private void updatePlayingSongInfo() {
        Song song = MusicPlayerRemote.getCurrentSong();
-       if(song==null) return;
+       if(song==null||song.id==-1) {
+           ArrayList<Song> list = SongLoader.getAllSongs(mPlayPauseButton.getContext(), SortOrder.SongSortOrder.SONG_DATE);
+           if(list.isEmpty()) return;
+           MusicPlayerRemote.openQueue(list,0,false);
+           return;
+       }
         mTitle.setText(String.format("%s %s %s", song.title, getString(R.string.middle_dot), song.artistName));
         mBigTitle.setText(song.title);
         mBigArtist.setText(song.artistName);
