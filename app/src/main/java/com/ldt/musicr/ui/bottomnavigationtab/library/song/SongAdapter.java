@@ -44,6 +44,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -55,7 +56,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener, SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG = "SongAdapter";
     public ArrayList<Song> mData = new ArrayList<>();
-    public int mCurrentHightLightPos = 0;
+    public int mCurrentHighLightPos = 0;
     private Context mContext;
     private long[] mSongIDs;
     private boolean isPlaylist;
@@ -272,9 +273,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             //MusicPlayer.playAll(mContext, mSongIDs, mSelected, -1, Util.IdType.NA, false);
             Handler handler1 = new Handler() ;
             handler1.postDelayed(() -> {
-                notifyItemChanged(mCurrentHightLightPos);
+                notifyItemChanged(mCurrentHighLightPos);
                 notifyItemChanged(mSelected);
-                mCurrentHightLightPos = mSelected;
+                mCurrentHighLightPos = mSelected;
                 randommize();
             },50);
         },100);
@@ -296,6 +297,12 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         if(mPreviewItem!=-1)
             notifyItemChanged(mPreviewItem,false);
+
+        ArrayList<Song> data = new ArrayList<>(mData);
+        Collections.shuffle(data);
+        ((MainActivity)mContext).getSongPreviewController.previewSongs(data);
+        if(true) return;
+
         String path = mData.get(getPositionInData(itemHolder)).data;
         mPreviewItem = itemHolder.getAdapterPosition();
         ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(SongAdapter.this,path);
@@ -342,9 +349,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 MusicPlayerRemote.openQueue(mData,0,true);
                 Handler handler1 = new Handler();
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHightLightPos);
+                    notifyItemChanged(mCurrentHighLightPos);
                     notifyItemChanged(0);
-                    mCurrentHightLightPos = 0;
+                    mCurrentHighLightPos = 0;
                 }, 50);
             }, 100);
         }
@@ -370,15 +377,15 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         long newPlayingID = MusicPlayerRemote.getCurrentSong().id;
         boolean isStillOldPos = false;
         // update old item
-        if(-1 < mCurrentHightLightPos && mCurrentHightLightPos< mSongIDs.length) {
-            isStillOldPos = mSongIDs[mCurrentHightLightPos] ==newPlayingID;
-            notifyItemChanged(mCurrentHightLightPos);
+        if(-1 < mCurrentHighLightPos && mCurrentHighLightPos < mSongIDs.length) {
+            isStillOldPos = mSongIDs[mCurrentHighLightPos] ==newPlayingID;
+            notifyItemChanged(mCurrentHighLightPos);
         }
         // find new pos
         if(!isStillOldPos) {
             // compare songid with song
             int newPos = mData.indexOf(newPlayingID);
-            mCurrentHightLightPos = newPos;
+            mCurrentHighLightPos = newPos;
             if(newPos!=-1) notifyItemChanged(newPos);
         }
     }
@@ -432,9 +439,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 //MusicPlayer.playAll(mContext, mSongIDs, getPositionInData(this), -1, Util.IdType.NA, false);
                 Handler handler1 = new Handler() ;
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHightLightPos);
+                    notifyItemChanged(mCurrentHighLightPos);
                     notifyItemChanged(getAdapterPosition());
-                    mCurrentHightLightPos = getAdapterPosition();
+                    mCurrentHighLightPos = getAdapterPosition();
                 },50);
             },100);
         }
@@ -508,7 +515,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         private void highLight() {
             if(MusicPlayerRemote.getCurrentSong().id==mData.get(getPositionInData(this)).id) {
-                mCurrentHightLightPos = getAdapterPosition();
+                mCurrentHighLightPos = getAdapterPosition();
                 int baseColor = ArtistAdapter.lighter(Tool.getBaseColor(),0.6f);
                 mTitle.setTextColor(ArtistAdapter.lighter(Tool.getBaseColor(),0.25f));
                 mArtist.setTextColor(Color.argb(0xAA,Color.red(baseColor),Color.green(baseColor),Color.blue(baseColor)));
