@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
-    tools:context="com.ldt.musicr.ui.tabs.library.LibraryTabFragment"
+    tools:context="com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment"
     app:progress="0"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"

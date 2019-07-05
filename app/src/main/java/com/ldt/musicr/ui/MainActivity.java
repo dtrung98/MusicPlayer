@@ -21,10 +21,11 @@ import android.widget.FrameLayout;
 
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
-import com.ldt.musicr.ui.tabs.BackStackController;
+import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 
 import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;
@@ -45,9 +46,13 @@ public class MainActivity extends BaseActivity {
     BottomNavigationView mBottomNavigationView;
     AudioPreviewPlayer mAudioPreviewPlayer = new AudioPreviewPlayer();
 
+    SongPreviewController mSongPreviewController = new SongPreviewController();
+
     public AudioPreviewPlayer getAudioPreviewPlayer() {
         return mAudioPreviewPlayer;
     }
+
+    public SongPreviewController getSongPreviewController = new SongPreviewController();
 
 
     @Override

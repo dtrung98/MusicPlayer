@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.tabs.BaseLayerFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.Animation;
 import com.ldt.musicr.util.Tool;

@@ -36,7 +36,7 @@ public class IntroStepOneFragment extends SupportFragment implements MainActivit
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
         getMainActivity().setPermissionListener(this);
-        return inflater.inflate(R.layout.intro_step_one,container,false);
+        return inflater.inflate(R.layout.grant_permission_screen,container,false);
     }
 
     @Override

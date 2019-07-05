@@ -251,4 +251,7 @@
     <string name="could_not_scan_files">Could not scan %d files.</string>
     <string name="saving_changes">Saving changes</string>
 
+    <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the app can\'t run properly.</string>
+    <string name="access_external_storage">Access External Storage</string>
+    <string name="allow_access">Allow Access</string>
 </resources>

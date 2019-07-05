@@ -424,10 +424,8 @@ public final class PreferenceUtil {
     }
 
 
-
-
     public final int getSongChildSortOrder() {
-        return mPreferences.getInt(SONG_CHILD_SORT_ORDER,0);
+        return mPreferences.getInt(SONG_CHILD_SORT_ORDER,1);
     }
 
     public final void setSongChildSortOrder(int value) {
