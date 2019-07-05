@@ -32,10 +32,18 @@ import com.ldt.musicr.model.lyrics.Lyrics;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.tabs.pager.TagEditorFragment;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Picasso;
 
+import org.jaudiotagger.tag.FieldKey;
+
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
@@ -222,8 +230,11 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     @BindView(R.id.lyric_constraint_root) View mLyricConstraintRoot;
     @BindView(R.id.edit_constraint_root) View mEditConstraintRoot;
     @BindView(R.id.edit_text) EditText mEditText;
+
+    private Song mEditingSong;
     @OnClick(R.id.edit)
     void edit() {
+        mEditingSong = mSong;
         mEditText.setText(mLyricString);
         mLyricConstraintRoot.setVisibility(View.GONE);
         mEditConstraintRoot.setVisibility(View.VISIBLE);
@@ -231,7 +242,24 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
 
     @OnClick(R.id.save)
     void saveLyric() {
-        Toasty.normal(mEditText.getContext(),"Coming soon!").show();
+        if(mEditingSong !=null) {
+            ArrayList<String> path = new ArrayList<>(1);
+            path.add(mEditingSong.data);
+
+            Map<FieldKey, String> fieldKeyValueMap = new EnumMap<>(FieldKey.class);
+            /*fieldKeyValueMap.put(FieldKey.TITLE, songTitle.getText().toString());
+            fieldKeyValueMap.put(FieldKey.ALBUM, albumTitle.getText().toString());
+            fieldKeyValueMap.put(FieldKey.ARTIST, artist.getText().toString());
+            fieldKeyValueMap.put(FieldKey.GENRE, genre.getText().toString());
+            fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
+            fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());*/
+            fieldKeyValueMap.put(FieldKey.LYRICS, mEditText.getText().toString());
+            writeValuesToFiles(path, fieldKeyValueMap, null);
+        }
+    }
+    protected void writeValuesToFiles(List<String> path, final Map<FieldKey, String> fieldKeyValueMap, @Nullable final TagEditorFragment.ArtworkInfo artworkInfo) {
+        Util.hideSoftKeyboard(getActivity());
+        new TagEditorFragment.WriteTagsAsyncTask(mEditText.getContext()).execute(new TagEditorFragment.WriteTagsAsyncTask.LoadingInfo(path, fieldKeyValueMap, artworkInfo));
     }
 
     @OnClick(R.id.cancel)
