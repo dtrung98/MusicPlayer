@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
  */
 public class LayerController {
     private static final String TAG = "LayerController";
-    public static int SINGLE_TAP_COMFIRM = 1;
+    public static int SINGLE_TAP_CONFIRM = 1;
     public static int SINGLE_TAP_UP = 3;
     public static int LONG_PRESSED = 2;
 
@@ -569,7 +569,7 @@ public class LayerController {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
        //     Toast.makeText(activity,"single tap confirmed",Toast.LENGTH_SHORT).show();
-            if(isLayerAvailable()) return layer.onGestureDetected(SINGLE_TAP_COMFIRM);
+            if(isLayerAvailable()) return layer.onGestureDetected(SINGLE_TAP_CONFIRM);
             return super.onSingleTapConfirmed(e);
         }
     }
@@ -673,9 +673,9 @@ public class LayerController {
             return;
         }
        inCountDownTime = true;
-        Tool.showToast(activity,"Back again to exit",500);
+        Tool.showToast(activity,activity.getString(R.string.alert_ext),350);
 
-        if(countDownTimer==null) countDownTimer = new CountDownTimer(2000,2000) {
+        if(countDownTimer==null) countDownTimer = new CountDownTimer(1500,1500) {
             @Override
             public void onTick(long l) {
 
@@ -685,7 +685,6 @@ public class LayerController {
             public void onFinish() {
                 countDownTimer = null;
                 inCountDownTime = false;
-                Tool.showToast(activity,"exit cancelAndUnBind",500);
             }
         };
         countDownTimer.start();

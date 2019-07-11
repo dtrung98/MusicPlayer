@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.motion.MotionLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,9 +23,9 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -191,7 +192,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     public void onDestroyView() {
         if(getActivity() instanceof MainActivity)
             ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
-        setted = false;
+        mSet = false;
         super.onDestroyView();
     }
 
@@ -231,13 +232,13 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
             if(pc>1) pc=1;
             else if(pc<0) pc = 0;
             setRadius(pc);
-        /*    if(mConstraintRoot instanceof MotionLayout) {
+            if(mConstraintRoot instanceof MotionLayout) {
                 MotionLayout motionLayout = ((MotionLayout)mConstraintRoot);
                 float currentProgress = motionLayout.getProgress();
                 if(isTranslateUp(pc)&&currentProgress<pc) motionLayout.setProgress(pc);
                 else if(isTranslateDown(pc)&&currentProgress>pc) motionLayout.setProgress(pc);
             }
-        mPrevProgress = pc;*/
+        mPrevProgress = pc;
     }
     private boolean isTranslateUp(float pc) {
         return mPrevProgress <= pc;
@@ -325,10 +326,10 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
                 a.animateToMax();
         }
     }
-    boolean setted = false;
+    boolean mSet = false;
     private void setUp() {
-        if(setted)  return;
-        setted = true;
+        if(mSet)  return;
+        mSet = true;
         onQueueChanged();
         onRepeatModeChanged();
         onShuffleModeChanged();

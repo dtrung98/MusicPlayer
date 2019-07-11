@@ -48,7 +48,6 @@ import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +75,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     @BindView(R.id.color_picker_recycler_view) RecyclerView mColorPickerRecyclerView;
     private ColorPickerAdapter mColorPickerAdapter;
 
-    @OnClick(R.id.more)
+    @OnClick(R.id.menu_button)
     void more() {
         if(getActivity() != null) {
             SongOptionBottomSheet sheet = SongOptionBottomSheet.newInstance();

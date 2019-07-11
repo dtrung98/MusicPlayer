@@ -19,13 +19,18 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import com.ldt.musicr.R;
+
 import java.io.File;
 import java.util.ArrayList;
+
+import es.dmoral.toasty.Toasty;
 
 public class Tool {
     private static final String TAG="Tool";
@@ -395,21 +400,11 @@ public class Tool {
     }
     public static void showToast(Context context,String text, int time)
     {
-
-        final Toast toast =   Toast.makeText(context,text,Toast.LENGTH_SHORT);
+      final Toast toast;
+      //toast =  Toasty.warning(context,text,time);
+      toast = Toasty.custom(context,text, R.drawable.emoticon_excited,R.color.library_back_color,time,true,true);
+      toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
         toast.show();
-        //   TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
-        //  textView.setBackgroundColor(Color.WHITE);
-        //textView.setTitleColorType(Color.BLACK);
-        //   ((View)textView.getParent()).setBackground(R.drawable.corner_layout);
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toast.cancel();
-
-            }
-        }, time);
     }
     private static boolean drawn = false;
 

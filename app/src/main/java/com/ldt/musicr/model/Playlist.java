@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class Playlist implements Parcelable {
+public class Playlist extends Media implements Parcelable {
     public final int id;
     public final String name;
 

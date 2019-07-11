@@ -49,7 +49,7 @@
             android:textColor="@color/FlatYellow"
             android:background="@drawable/count_round_drawable"/>
         <TextView
-            android:id="@+id/more"
+            android:id="@+id/menu_button"
             android:layout_width="wrap_content"
             android:paddingRight="15dp"
             android:paddingLeft="15dp"

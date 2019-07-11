@@ -3,7 +3,6 @@ package com.ldt.musicr.ui.bottomnavigationtab.library.song;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,8 +15,7 @@ import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
@@ -31,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack, MusicServiceEventListener {
+public class SongChildTab extends BaseMusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack{
     private static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)
@@ -48,7 +46,7 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
     @BindView(R.id.title)
     TextView mTitle;
 
-    @BindView(R.id.artist)
+    @BindView(R.id.description)
     TextView mArtist;
 
     private int mCurrentSortOrder = 0;
@@ -73,7 +71,7 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
     @OnClick(R.id.refresh)
     void refresh() {
         mRefresh.animate().rotationBy(360).setInterpolator(Animation.getInterpolator(6)).setDuration(650);
-        mRefresh.postDelayed(mAdapter::randommize,300);
+        mRefresh.postDelayed(mAdapter::randomize,300);
     }
 
 
@@ -96,17 +94,11 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
         mRecyclerView.setAdapter(mAdapter);
 
         refreshData();
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
-        }
     }
 
     @Override
     public void onDestroyView() {
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
-        mAdapter.removeCallBack();
-        mAdapter.removeOrderListener();
+        mAdapter.destroy();
         super.onDestroyView();
     }
 
@@ -139,34 +131,6 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onPause() {
-
-        super.onPause();
-    }
-
-
-    @Override
-    public void onServiceConnected() {
-
-    }
-
-    @Override
-    public void onServiceDisconnected() {
-
-    }
-
-    @Override
-    public void onQueueChanged() {
-
-    }
-
-    @Override
     public void onPlayingMetaChanged() {
         if(mRecyclerView instanceof FastScrollRecyclerView) {
             FastScrollRecyclerView recyclerView = ((FastScrollRecyclerView)mRecyclerView);
@@ -183,18 +147,10 @@ public class SongChildTab extends Fragment implements SortOrderBottomSheet.SortO
     }
 
     @Override
-    public void onRepeatModeChanged() {
-
-    }
-
-    @Override
-    public void onShuffleModeChanged() {
-
-    }
-
-    @Override
     public void onMediaStoreChanged() {
-
+        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(),SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
+        mAdapter.setData(songs);
+        showOrHidePreview(!songs.isEmpty());
     }
 
     @Override

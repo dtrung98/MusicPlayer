@@ -3,7 +3,7 @@ package com.ldt.musicr.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Genre implements Parcelable {
+public class Genre extends Media implements Parcelable {
     public final int id;
     public final String name;
     public final int songCount;

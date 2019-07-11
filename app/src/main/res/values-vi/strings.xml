@@ -200,4 +200,18 @@
     <string name="random_play">Chơi ngẫu nhiên</string>
     <string name="sort">Sáp xếp</string>
     <string name="playlist">Danh sách phát</string>
+    <string name="alert_ext">Nhấn thêm lần nữa để ra thoát</string>
+    <string name="today">Hôm nay</string>
+    <string name="title">Tiêu đề</string>
+    <string name="time_added">Thời điểm thêm vào</string>
+    <string name="this_year">Năm này</string>
+    <string name="this_week">Tuần này</string>
+    <string name="this_month">Tháng này</string>
+    <string name="save">Lưu</string>
+    <string name="see_all_songs">Xem toàn bộ bài hát</string>
+    <string name="playlist_is_empty">Danh sách phát trống</string>
+    <string name="history">Lịch sử</string>
+    <string name="edit">Chỉnh Sửa</string>
+    <string name="copy">Sao chép</string>
+    <string name="unplayable_file">Tập tin không thể chơi</string>
 </resources>

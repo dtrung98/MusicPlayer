@@ -16,6 +16,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
@@ -24,6 +25,7 @@ import com.ldt.musicr.model.Song;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.WeakHashMap;
 
@@ -128,7 +130,7 @@ public class MusicPlayerRemote {
             if(musicService.isPlaying())
                 musicService.pause();
             else musicService.play();
-        }
+        } else Log.d(TAG, "playOrPause: music service is null");
     }
 
     public static void pauseSong() {
@@ -177,7 +179,7 @@ public class MusicPlayerRemote {
     /**
      * Async
      */
-    public static void openQueue(final ArrayList<Song> queue, final int startPosition, final boolean startPlaying) {
+    public static void openQueue(final List<Song> queue, final int startPosition, final boolean startPlaying) {
         if (!tryToHandleOpenPlayingQueue(queue, startPosition, startPlaying) && musicService != null) {
             musicService.openQueue(queue, startPosition, startPlaying);
         }
@@ -198,7 +200,7 @@ public class MusicPlayerRemote {
         }
     }
 
-    private static boolean tryToHandleOpenPlayingQueue(final ArrayList<Song> queue, final int startPosition, final boolean startPlaying) {
+    private static boolean tryToHandleOpenPlayingQueue(final List<Song> queue, final int startPosition, final boolean startPlaying) {
         if (getPlayingQueue() == queue) {
             if (startPlaying) {
                 playSongAt(startPosition);

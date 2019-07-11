@@ -85,13 +85,13 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/art"
                 app:layout_constraintTop_toTopOf="@+id/art"
-                app:layout_constraintBottom_toTopOf="@id/artist"
+                app:layout_constraintBottom_toTopOf="@id/description"
                 app:layout_constraintVertical_chainStyle="packed"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="?attr/actionBarSize" />
 
             <TextView
-                android:id="@+id/artist"
+                android:id="@+id/description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:minHeight="25dp"
@@ -187,7 +187,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="@dimen/minimum_bottom_back_stack_margin"
-        tools:listitem="@layout/item_song_child"
+        tools:listitem="@layout/item_song_normal"
         app:fastScrollAutoHide="true"
         app:fastScrollAutoHideDelay="1500"
         app:fastScrollPopupBackgroundSize="88dp"

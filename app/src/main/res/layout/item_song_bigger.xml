@@ -60,19 +60,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/genre"
+        app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintStart_toEndOf="@id/image"
         app:layout_constraintVertical_chainStyle="packed"
         android:textStyle="bold"
         android:textColor="@color/FlatWhite"
-        app:layout_constraintEnd_toStartOf="@id/present"
+        app:layout_constraintEnd_toStartOf="@id/preview_button"
         tools:text="Blame"
         android:textSize="14sp"
         android:ellipsize="end"
         android:maxLines="1"
         android:layout_marginStart="12dp"/>
     <TextView
-        android:id="@+id/genre"
+        android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,16 +87,16 @@
         android:textSize="13sp"
         />
     <com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar
-        android:id="@+id/present"
+        android:id="@+id/preview_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/more"
+        app:layout_constraintEnd_toStartOf="@id/menu_button"
         android:background="@drawable/ripple_oval"
         android:padding="9dp"/>
     <ImageView
-        android:id="@+id/more"
+        android:id="@+id/menu_button"
         android:layout_width="48dp"
         android:layout_height="48dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,6 +115,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         android:elevation="1dp"
+        android:padding="12dp"
         android:tint="#394545"
         android:alpha="0.55"/>
 </android.support.constraint.ConstraintLayout>

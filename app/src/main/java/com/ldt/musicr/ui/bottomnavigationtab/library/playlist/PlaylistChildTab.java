@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
@@ -21,7 +24,7 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlaylistChildTab extends Fragment implements FeaturePlaylistAdapter.PlaylistClickListener {
+public class PlaylistChildTab extends BaseMusicServiceFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
     private static final String TAG ="PlaylistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -42,9 +45,14 @@ public class PlaylistChildTab extends Fragment implements FeaturePlaylistAdapter
         mAdapter.setOnItemClickListener(this);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
+
+        if(getActivity() instanceof BaseActivity) {
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        }
         refreshData();
 ;    }
     private void refreshData() {
+        if(getActivity() !=null)
       mAdapter.setData(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
     }
 
@@ -55,4 +63,10 @@ public class PlaylistChildTab extends Fragment implements FeaturePlaylistAdapter
         if(parentFragment instanceof SupportFragment)
             ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);
     }
+
+    @Override
+    public void onMediaStoreChanged() {
+        refreshData();
+    }
+
 }

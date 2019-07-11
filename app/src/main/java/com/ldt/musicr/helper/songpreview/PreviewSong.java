@@ -1,15 +1,20 @@
 package com.ldt.musicr.helper.songpreview;
 
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.ldt.musicr.model.Song;
 
+import java.io.File;
+import java.sql.SQLSyntaxErrorException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class PreviewSong {
+public class PreviewSong {
     private static final String TAG = "PreviewSong";
 
     public static final int NOT_PLAY = 0;
@@ -21,11 +26,40 @@ class PreviewSong {
 
     @Override
     public boolean equals(Object obj) {
-        if(this==obj) return true;
+        if(this == obj) {
+            return true;
+        }
+
         if(obj instanceof PreviewSong) {
             return mSong.equals(((PreviewSong) obj).mSong);
         }
+
         return false;
+    }
+
+    public boolean isPlaying() {
+        boolean result = false;
+        if(mMediaPlayer!=null)
+        try {
+            result = mMediaPlayer.isPlaying();
+            Log.d(TAG, "isPlaying: result = "+result);
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+    }
+
+    public long getTimePlayed() {
+        if(mMediaPlayer!=null)
+             try {
+                 long c = mMediaPlayer.getCurrentPosition();
+                 long s = getStart();
+                 Log.d(TAG, "getTimePlayed: current = "+ c+", start = "+ s+", played = "+ (c - s));
+                return  c- s;
+             } catch (Exception ignored) {
+                 return -1;
+             }
+        return -1;
     }
 
     public interface OnPreviewSongStateChangedListener {
@@ -48,6 +82,7 @@ class PreviewSong {
     private PreviewSong setState(int state) {
         if(mState != state) {
             this.mState = state;
+            Log.d(TAG, "set new state: "+ state);
             if(mListener!=null) mListener.onPreviewSongStateChanged(this,state);
         }
         return this;
@@ -69,6 +104,7 @@ class PreviewSong {
         if(start < 0) start =0;
         if(finish > song.duration) finish = (int) song.duration;
 
+      //  if(finish-start>10000) finish = start+10000;
 
          this.mSong = song;
          this.mStart = start;
@@ -84,6 +120,10 @@ class PreviewSong {
         return mFinish;
     }
 
+    public int getTotalPreviewDuration() {
+        return getFinish() - getStart();
+    }
+
     public MediaPlayer getPlayer() {
         return mMediaPlayer;
     }
@@ -96,22 +136,29 @@ class PreviewSong {
             return;
         }
 
+        long start = System.currentTimeMillis();
         if(mMediaPlayer!=null) release();
-        this.mMediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
+        long time1 = System.currentTimeMillis();
         try {
             mMediaPlayer.setDataSource(mSong.data);
-            mMediaPlayer.prepare();
+            long time2 = System.currentTimeMillis();
+            mMediaPlayer.prepareAsync();
+            mMediaPlayer.setOnPreparedListener(mp -> {
+                mMediaPlayer.seekTo(mStart);
 
-
-            mMediaPlayer.seekTo(mStart);
-            setState(PREPARE_TO_PLAY);
-            fadeIn();
+                Log.d(TAG, "play: init = "+(time1 - start)+", setDataSource = "+ (time2-time1)+", prepare = "+(System.currentTimeMillis()-time2));
+                setState(PREPARE_TO_PLAY);
+                fadeIn();
+            });
 
         } catch (Exception e) {
             setState(FAILURE);
         }
+        Log.d(TAG, "time to prepare : "+ (System.currentTimeMillis() - start));
 
     }
+
 
     public void release() {
         if(mMediaPlayer==null)
@@ -120,16 +167,18 @@ class PreviewSong {
         if(getState()==PLAYING) {
             mPlayHandler.removeCallbacks(mFinishPlayRunnable);
             mPlayHandler.post(mFinishPlayRunnable);
-        } else destroy();
-
-
+        }
+        else
+        destroy();
     }
 
     private void onAudioStartFadeIn() {
+        long start = System.currentTimeMillis();
         mMediaPlayer.start();
+        long time1 = System.currentTimeMillis();
         setState(PLAYING);
-        mPlayHandler.postDelayed(mFinishPlayRunnable,mFinish - mStart - FADE_OUT_DURATION - FADE_IN_DURATION);
-    }
+        Log.d(TAG, "media start time = "+ (time1 - start)+", notify time = "+(System.currentTimeMillis()- time1));
+      }
 
     private void onAudioFinishFadeOut() {
         Log.d(TAG, "onAudioFinishFadeOut");
@@ -168,16 +217,19 @@ class PreviewSong {
 
     private float mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
-    private static final int FADE_IN_DURATION = 450;
-    private static final int FADE_OUT_DURATION = 450;
+    private static final int FADE_IN_DURATION = 300;
+    private static final int FADE_OUT_DURATION = 350;
 
-    private static final int FADE_INTERVAL = 10;
+    private static final int FADE_INTERVAL = 25;
 
     //Calculate the number of fade steps
-    private static final int NUMBER_OF_STEPS = FADE_IN_DURATION/FADE_INTERVAL;
+    private static final int NUMBER_OF_STEPS_IN = FADE_IN_DURATION/FADE_INTERVAL;
+    private static final int NUMBER_OF_STEPS_OUT = FADE_OUT_DURATION/FADE_INTERVAL;
 
     //Calculate by how much the mCurrentOutVolume changes each step
-    final float DELTA_VOLUME = DEFAULT_PLAY_VOLUME / (float) NUMBER_OF_STEPS;
+    private static final float DELTA_IN_VOLUME = (DEFAULT_PLAY_VOLUME  - DEFAULT_IN_VOLUME)/ (float) NUMBER_OF_STEPS_IN;
+    private static final float DELTA_OUT_VOLUME = (DEFAULT_PLAY_VOLUME - DEFAULT_OUT_VOLUME)/ (float)NUMBER_OF_STEPS_OUT;
+
 
 
     private int mFadeState = NOT_FADE;
@@ -186,7 +238,6 @@ class PreviewSong {
         @Override
         public void run() {
             if(!onIntervalUpdate()) {
-
                 if(mFadeState==FADE_OUT) onAudioFinishFadeOut();
 
                 mFadeState = NOT_FADE;
@@ -203,42 +254,56 @@ class PreviewSong {
             case FADE_IN:
                 if(mCurrentVolume<=DEFAULT_IN_VOLUME) mCurrentVolume = DEFAULT_IN_VOLUME;
 
-                mCurrentVolume += DELTA_VOLUME;
+                mCurrentVolume += DELTA_IN_VOLUME;
 
-                if(mCurrentVolume>=DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
-                try {
-                    mMediaPlayer.setVolume(mCurrentVolume, mCurrentVolume);
-                } catch (Exception ignored) {};
+                if(mCurrentVolume>=DEFAULT_PLAY_VOLUME)
+                    mCurrentVolume = DEFAULT_PLAY_VOLUME;
+
+                updateVolume("Fade In");
+
                 if(mCurrentVolume==DEFAULT_PLAY_VOLUME)
                     return false;
                 return true;
 
             case FADE_OUT:
-                if(mCurrentVolume >= DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
+                if(mCurrentVolume > DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
-                mCurrentVolume -= DELTA_VOLUME;
+                mCurrentVolume -= DELTA_OUT_VOLUME;
 
-                if(mCurrentVolume<=DEFAULT_OUT_VOLUME) mCurrentVolume = DEFAULT_OUT_VOLUME;
-                try {
-                    mMediaPlayer.setVolume(mCurrentVolume, mCurrentVolume);
-                } catch (Exception ignored) {}
+                if(mCurrentVolume<DEFAULT_OUT_VOLUME) mCurrentVolume = DEFAULT_OUT_VOLUME;
+
+                updateVolume("Fade Out");
 
                 if(mCurrentVolume==DEFAULT_OUT_VOLUME)
                     return false;
-
                 return true;
             default:
                 return false;
         }
     }
+    private void setVolume(float newVolume) {
+        mCurrentVolume  = newVolume;
+        updateVolume("Set");
+    }
+    private long startFadeOut = -1;
+    private void updateVolume(String why) {
+        if(why.equals("Fade Out")&&startFadeOut==-1) startFadeOut = System.currentTimeMillis();
+
+        try {
+            mMediaPlayer.setVolume(mCurrentVolume, mCurrentVolume);
+            if(startFadeOut!=-1)
+                Log.d(TAG, why+" : song "+mSong.title +", update new volume = "+ mCurrentVolume+", thread id "+Thread.currentThread().getId() +", time fade out = "+(System.currentTimeMillis() - startFadeOut));
+            else
+            Log.d(TAG, why+" : song "+mSong.title +", update new volume = "+ mCurrentVolume+", thread id "+Thread.currentThread().getId());
+        } catch (Exception ignored) {
+            Log.d(TAG, "exception when update song "+ mSong.title+"  volume = "+ mCurrentVolume);
+        }
+    }
 
     private void fadeIn() {
-
-        mCurrentVolume = DEFAULT_IN_VOLUME;
-        try {
-            mMediaPlayer.setVolume(DEFAULT_IN_VOLUME, DEFAULT_IN_VOLUME);
-        } catch (Exception ignored) {}
         onAudioStartFadeIn();
+        setVolume(DEFAULT_IN_VOLUME);
+        mPlayHandler.postDelayed(mFinishPlayRunnable,mFinish - mStart - FADE_OUT_DURATION - FADE_IN_DURATION);
         mFadeState = FADE_IN;
         update();
     }
@@ -267,10 +332,6 @@ class PreviewSong {
     }
 
     private void fadeOut() {
-        mCurrentVolume = DEFAULT_PLAY_VOLUME;
-        try {
-            mMediaPlayer.setVolume(DEFAULT_PLAY_VOLUME, DEFAULT_PLAY_VOLUME);
-        } catch (Exception ignored) {}
         mFadeState = FADE_OUT;
         update();
     }

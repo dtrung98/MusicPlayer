@@ -33,7 +33,9 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,9 +44,14 @@ import butterknife.OnClick;
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder> implements FastScrollRecyclerView.SectionedAdapter {
     private static final String TAG = "ArtistAdapter";
 
-    Context mContext;
-    ArrayList<Artist> mData = new ArrayList<>();
-    ArrayList<Genre>[] mGenres;
+    private static final int UN_SET = 0;
+    private static final int AVAILABLE = 1;
+    private static final int RUNNING = 2;
+
+    private Context mContext;
+    private ArrayList<Artist> mData = new ArrayList<>();
+    private ArrayList<Genre>[] mGenres;
+    private HashMap<Artist, GenreArtistTask> mGenreArtistTaskMap = new HashMap<>();
 
     public interface ArtistClickListener {
         void onArtistItemClick(Artist artist);
@@ -72,11 +79,37 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 */
     public void setData(List<Artist> data) {
         mData.clear();
+        clearAndCancelAllTask();
         if(data!=null) {
             mData.addAll(data);
-            mGenres = new ArrayList[data.size()];
+            int size = data.size();
+            mGenres = new ArrayList[size];
+
         }
         notifyDataSetChanged();
+    }
+
+    private void clearAndCancelAllTask() {
+        for (Map.Entry<Artist, GenreArtistTask> map:
+             mGenreArtistTaskMap.entrySet()) {
+            GenreArtistTask task = map.getValue();
+            if(task!=null) task.cancel();
+        }
+
+        mGenreArtistTaskMap.clear();
+    }
+
+    private void onTaskComplete(Artist artist, ArrayList<Genre> genres, int positionSaved) {
+        mGenreArtistTaskMap.remove(artist);
+        attachGenreByPosition(genres,artist,positionSaved);
+    }
+    private void attachGenreByPosition(ArrayList<Genre> genres, Artist artist, int itemPos) {
+        if(itemPos>=0 && itemPos<mData.size()) {
+            if (artist.equals(mData.get(itemPos))&&mGenres[itemPos]==null)  {
+                mGenres[itemPos] = genres;
+                notifyItemChanged(itemPos,GENRE_UPDATE);
+            }
+        }
     }
 
     @NonNull
@@ -134,7 +167,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
                 mImage.setClipToOutline(true);
             }
         }
-        @BindView(R.id.artist)
+        @BindView(R.id.description)
         TextView mArtist;
 
         @BindView(R.id.image)
@@ -168,7 +201,14 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
                 mGenreOne.setText("⋯");
                 mGenreTwo.setVisibility(View.GONE);
                 Log.d(TAG, "load genre item "+getAdapterPosition() );
-                new GenreOfArtistTask(ArtistAdapter.this,artist,getAdapterPosition()).execute();
+
+                GenreArtistTask task = mGenreArtistTaskMap.get(artist);
+                if(task==null) {
+                    task = new GenreArtistTask(ArtistAdapter.this, artist, getAdapterPosition());
+                    mGenreArtistTaskMap.put(artist,task);
+                    task.execute();
+                }
+
             } else bindGenre(genres);
             //try {
                 loadArtistImage(artist);
@@ -216,7 +256,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 
         public void bindGenre(ArrayList<Genre> genres) {
            if(genres.isEmpty()) {
-                mGenreOne.setText("Unknown Genres");
+                mGenreOne.setText(R.string.unknown_genres);
                 mGenreOne.setVisibility(View.VISIBLE);
                 mGenreTwo.setVisibility(View.GONE);
             } else if(genres.size()==1) {
@@ -231,21 +271,29 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
             }
         }
     }
-    private static class GenreOfArtistTask extends AsyncTask<Void,Void,ArrayList<Genre>> {
+    private static class GenreArtistTask extends AsyncTask<Void,Void,ArrayList<Genre>> {
         private WeakReference<ArtistAdapter> mAAReference;
         private int mItemPos;
         private Artist mArtist;
-        public GenreOfArtistTask(ArtistAdapter adapter, Artist artist, int itemPos) {
+        public GenreArtistTask(ArtistAdapter adapter, Artist artist, int itemPos) {
             super();
             mAAReference = new WeakReference<>(adapter);
             mArtist = artist;
             mItemPos = itemPos;
         }
 
+        private boolean mCancelled = false;
+        private void cancel() {
+            mCancelled = true;
+            cancel(true);
+            mAAReference.clear();
+
+        }
+
         @Override
         protected ArrayList<Genre> doInBackground(Void... voids) {
 
-            if(mAAReference.get()!=null&&mArtist!=null) {
+            if(mAAReference.get()!=null&&mArtist!=null&&!mCancelled) {
                 return GenreLoader.getGenreForArtist(mAAReference.get().mContext, mArtist.getId());
             }
             return null;
@@ -253,8 +301,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 
         @Override
         protected void onPostExecute(ArrayList<Genre> genres) {
-            if(genres!=null&&mAAReference.get()!=null) {
-             mAAReference.get().attachGenreByPosition(genres, mArtist, mItemPos);
+            if(genres!=null&&mAAReference.get()!=null&&!mCancelled) {
+             mAAReference.get().onTaskComplete( mArtist, genres, mItemPos);
             }
         }
     }
@@ -269,12 +317,5 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
     }
     private static final String GENRE_UPDATE = "genre_update";
 
-    private void attachGenreByPosition(ArrayList<Genre> genres, Artist artist, int itemPos) {
-        if(itemPos>=0 && itemPos<mData.size()) {
-            if (artist.equals(mData.get(itemPos))&&mGenres[itemPos]==null)  {
-                mGenres[itemPos] = genres;
-               notifyItemChanged(itemPos,GENRE_UPDATE);
-            }
-        }
-    }
+
 }

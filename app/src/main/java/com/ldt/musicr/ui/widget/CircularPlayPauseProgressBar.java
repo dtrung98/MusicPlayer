@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -36,10 +38,6 @@ public class CircularPlayPauseProgressBar extends View {
         init(attrs);
     }
 
-    public CircularPlayPauseProgressBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(attrs);
-    }
     float oneDp =1;
     Paint mPaint;
     private int mColor;
@@ -51,18 +49,23 @@ public class CircularPlayPauseProgressBar extends View {
             t.recycle();
         }
             mWaveDrawable = getResources().getDrawable(R.drawable.wave_metro);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWaveDrawable.setTint(mColor);
+        }
 
 
-            mPauseDrawable = getResources().getDrawable(R.drawable.ic_pause_black_24dp);
+        mPauseDrawable = getResources().getDrawable(R.drawable.ic_pause_black_24dp);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mPauseDrawable.setTint(mColor);
+        }
 
         oneDp = getResources().getDimension(R.dimen.oneDP);
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setColor(getResources().getColor(R.color.FlatWhite));
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(oneDp*2f);
-        setWillNotDraw(false);
+
+        //setWillNotDraw(false);
     }
 
     int mLeftWithPadding = 0;
@@ -139,6 +142,7 @@ public class CircularPlayPauseProgressBar extends View {
         });
         mValueAnimator.start();
     }
+    private RectF mRectF;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -169,10 +173,25 @@ public class CircularPlayPauseProgressBar extends View {
                 mPauseDrawable.draw(canvas);
             }
             mPaint.setAlpha(60);
-            canvas.drawArc(centerX-radius,centerY-radius,centerX+radius,centerY+radius,-90,360,false,mPaint);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                canvas.drawArc(centerX-radius,centerY-radius,centerX+radius,centerY+radius,-90,360,false,mPaint);
+                mPaint.setAlpha(205);
+                canvas.drawArc(centerX-radius,centerY-radius,centerX+radius,centerY+radius,-90,mAnimateValue*360f,false,mPaint);
 
-            mPaint.setAlpha(205);
-            canvas.drawArc(centerX-radius,centerY-radius,centerX+radius,centerY+radius,-90,mAnimateValue*360f,false,mPaint);
+            } else {
+                if (mRectF==null)
+                    mRectF = new RectF(centerX - radius,centerY - radius, centerX + radius,centerY + radius);
+                else {
+                    mRectF.left = centerX - radius;
+                    mRectF.top = centerY - radius;
+                    mRectF.right = centerX + radius;
+                    mRectF.bottom = centerY + radius;
+                }
+                canvas.drawArc(mRectF, -90, 360, false, mPaint);
+                mPaint.setAlpha(205);
+                canvas.drawArc(mRectF,-90,mAnimateValue*360f,false,mPaint);
+
+            }
         }
 
     }

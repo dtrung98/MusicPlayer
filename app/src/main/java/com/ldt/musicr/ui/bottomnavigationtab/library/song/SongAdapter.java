@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +27,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
+import com.ldt.musicr.helper.songpreview.PreviewSong;
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
+import com.ldt.musicr.helper.songpreview.SongPreviewListener;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.AudioPreviewPlayer;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
@@ -44,7 +47,6 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -53,8 +55,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter,
-        FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener, SortOrderBottomSheet.SortOrderChangedListener {
+     FastScrollRecyclerView.MeasurableAdapter, SongPreviewListener, SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG = "SongAdapter";
+
     public ArrayList<Song> mData = new ArrayList<>();
     public int mCurrentHighLightPos = 0;
     private Context mContext;
@@ -67,6 +70,10 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     public SongAdapter(Context context) {
         this.mContext = context;
+        if(context instanceof MainActivity) {
+           SongPreviewController controller = ((MainActivity)context).getSongPreviewController();
+           controller.addSongPreviewListener(this);
+        }
     }
     public ArrayList<Song> getData() {
         return mData;
@@ -83,14 +90,29 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         if(data!=null) mData.addAll(data);
         this.mSongIDs = getSongIds();
-        randommize();
-        notifyDataSetChanged();
+        randomize();
+
+        if(mContext instanceof MainActivity) {
+            SongPreviewController controller = ((MainActivity) mContext).getSongPreviewController();
+           mPreviewSong = controller.getCurrentPreviewSong();
+        }
+            notifyDataSetChanged();
+    }
+
+    public void destroy() {
+        if(mContext instanceof MainActivity) {
+           SongPreviewController controller  = ((MainActivity)mContext).getSongPreviewController();
+           if(controller!=null) controller.removeAudioPreviewerListener(this);
+        }
+
+        removeCallBack();
+        removeOrderListener();
     }
 
     @Override
     public int getItemViewType(int position) {
        if(position==0) return R.layout.item_sort_song_child;
-       return R.layout.item_song_child;
+       return R.layout.item_song_normal;
     }
 
     @Override
@@ -250,7 +272,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         });
     }
 
-    public void randommize() {
+    public void randomize() {
         if(mData.isEmpty()) return;
         mSelected = mRandom.nextInt(mData.size());
         if(mCallBack!=null) mCallBack.onFirstItemCreated(mData.get(mSelected));
@@ -260,6 +282,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         mCallBack = callBack;
         return this;
     }
+
     public void removeCallBack() {
         mCallBack = null;
     }
@@ -276,7 +299,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 notifyItemChanged(mCurrentHighLightPos);
                 notifyItemChanged(mSelected);
                 mCurrentHighLightPos = mSelected;
-                randommize();
+                randomize();
             },50);
         },100);
     }
@@ -291,55 +314,71 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return mData.get(position-1).title.substring(0,1);
     }
 
-    private int mPreviewItem = -1;
-
     private void playPreviewThisItem(ItemHolder itemHolder) {
 
-        if(mPreviewItem!=-1)
-            notifyItemChanged(mPreviewItem,false);
-
-        ArrayList<Song> data = new ArrayList<>(mData);
-        Collections.shuffle(data);
-        ((MainActivity)mContext).getSongPreviewController.previewSongs(data);
-        if(true) return;
-
-        String path = mData.get(getPositionInData(itemHolder)).data;
-        mPreviewItem = itemHolder.getAdapterPosition();
-        ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(SongAdapter.this,path);
-
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
-       if(holder instanceof ItemHolder && !payloads.isEmpty() && payloads.get(0) instanceof Boolean) {
-          ((ItemHolder)holder).resetProgress();
-      }
-          super.onBindViewHolder(holder,position,payloads);
-    }
-    private long mNotifyDuration =0;
-    private long mNotifyTime = System.currentTimeMillis();
-
-    @Override
-    public void onPreviewStart(int totalTime) {
-        if(mPreviewItem!=-1) {
-            mNotifyDuration = totalTime;
-            mNotifyTime = System.currentTimeMillis();
-            notifyItemChanged(mPreviewItem, totalTime);
-        }
-    }
-
-    @Override
-    public void onPreviewDestroy() {
-        if(mPreviewItem!=-1) {
-            int temp = mPreviewItem;
-            mPreviewItem = -1;
-            notifyItemChanged(temp, false);
+        if(mContext instanceof MainActivity) {
+           SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+           if(preview!=null) {
+               if (preview.isPlayingPreview()&&preview.isThisSongCurrentPreview(mData.get(getPositionInData(itemHolder))))
+                   preview.cancelPreview();
+               else {
+                  /* ArrayList<Song> data = new ArrayList<>(mData);
+                   Collections.shuffle(data);*/
+                   preview.previewSongs(mData.get(getPositionInData(itemHolder)));
+               }
+           }
         }
     }
 
     public void forceStopPreview() {
-        mPreviewItem = -1;
-        ((MainActivity)mContext).getAudioPreviewPlayer().forceStop();
+        mPreviewSong = null;
+        if(mContext instanceof MainActivity) {
+            SongPreviewController controller =  ((MainActivity)mContext).getSongPreviewController();
+            if(controller!=null) controller.cancelPreview();
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+
+       if(holder instanceof ItemHolder && !payloads.isEmpty() && payloads.get(0) instanceof Boolean) {
+          ((ItemHolder)holder).resetProgress();
+      }
+
+       if(holder instanceof ItemHolder)
+           for (Object payload :
+                   payloads) {
+               if(payload instanceof PreviewSong) {
+                   ((ItemHolder)holder).bindPresent(mData.get(getPositionInData((ItemHolder) holder)));
+               }
+               else if(payload instanceof Boolean) {
+                   ((ItemHolder)holder).resetProgress();
+               }
+           }
+
+          super.onBindViewHolder(holder,position,payloads);
+    }
+
+    private PreviewSong mPreviewSong = null;
+    @Override
+    public void onSongPreviewStart(PreviewSong song) {
+        int position = mData.indexOf(song.getSong());
+
+        Log.d(TAG, "onSongPreviewStart: position = "+ position);
+        if (position != -1) {
+            mPreviewSong = song;
+            notifyItemChanged(position + 1, mPreviewSong);
+        }
+    }
+
+    @Override
+    public void onSongPreviewFinish(PreviewSong song) {
+        mPreviewSong = null;
+        int position = mData.indexOf(song.getSong());
+        Log.d(TAG, "onSongPreviewFinish: position = "+ position);
+
+        if(position!=-1)
+            notifyItemChanged(position+1, false);
     }
 
     public void playAll() {
@@ -360,7 +399,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     public int getViewTypeHeight(RecyclerView recyclerView, @Nullable RecyclerView.ViewHolder viewHolder, int viewType) {
         if (viewType == R.layout.item_sort_song_child) {
             return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_sort_song_child_height);
-        } else if (viewType == R.layout.item_song_child) {
+        } else if (viewType == R.layout.item_song_normal) {
             return recyclerView.getResources().getDimensionPixelSize(R.dimen.item_song_child_height);
         }
         return 0;
@@ -377,19 +416,18 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         long newPlayingID = MusicPlayerRemote.getCurrentSong().id;
         boolean isStillOldPos = false;
         // update old item
-        if(-1 < mCurrentHighLightPos && mCurrentHighLightPos < mSongIDs.length) {
-            isStillOldPos = mSongIDs[mCurrentHighLightPos] ==newPlayingID;
+        if (-1 < mCurrentHighLightPos && mCurrentHighLightPos < mSongIDs.length) {
+            isStillOldPos = mSongIDs[mCurrentHighLightPos] == newPlayingID;
             notifyItemChanged(mCurrentHighLightPos);
         }
         // find new pos
-        if(!isStillOldPos) {
+        if (!isStillOldPos) {
             // compare songid with song
             int newPos = mData.indexOf(newPlayingID);
             mCurrentHighLightPos = newPos;
-            if(newPos!=-1) notifyItemChanged(newPos);
+            if (newPos != -1) notifyItemChanged(newPos);
         }
     }
-
 
     public class SortHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.sort_text) TextView mSortText;
@@ -412,23 +450,21 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
     }
 
-    public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnAttachStateChangeListener {
+    public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.title) TextView mTitle;
-        @BindView(R.id.artist) TextView mArtist;
+        @BindView(R.id.description) TextView mArtist;
         @BindView(R.id.image) ImageView mImage;
-        @BindView(R.id.more) View mMoreButton;
+        @BindView(R.id.menu_button) View mMoreButton;
         @BindView(R.id.quick_play_pause) ImageView mQuickPlayPause;
         @BindView(R.id.number) TextView mNumber;
 
-        @BindView(R.id.loader) View mLoader;
-        @BindView(R.id.present) View mPresentButton;
+        @BindView(R.id.preview_button) View mPresentButton;
 
         public ItemHolder(View view) {
             super(view);
             ButterKnife.bind(this,view);
             view.setOnClickListener(this);
-            mLoader.addOnAttachStateChangeListener(this);
         }
 
         @Override
@@ -503,12 +539,20 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public void bindPresent(Song song) {
             //Log.d(TAG, "bindPresent");
             if(mPresentButton instanceof CircularPlayPauseProgressBar) {
-                if(getAdapterPosition()!=mPreviewItem&&((CircularPlayPauseProgressBar) mPresentButton).getMode()==CircularPlayPauseProgressBar.PLAYING)
-                ((CircularPlayPauseProgressBar) mPresentButton).resetProgress();
-                else if(getAdapterPosition()==mPreviewItem) {
-                    long timePlayed = System.currentTimeMillis() - mNotifyTime;
-                    if(timePlayed<=mNotifyDuration)
-                    ((CircularPlayPauseProgressBar) mPresentButton).syncProgress((int)mNotifyDuration,(int)timePlayed);
+                CircularPlayPauseProgressBar presentButton = (CircularPlayPauseProgressBar) mPresentButton;
+
+                if((mPreviewSong==null || !mPreviewSong.getSong().equals(mData.get(getPositionInData(this))))
+                                && presentButton.getMode() == CircularPlayPauseProgressBar.PLAYING)
+                presentButton.resetProgress();
+                else if(mPreviewSong!=null && mPreviewSong.getSong().equals(mData.get(getPositionInData(this)))) {
+                    long timePlayed = mPreviewSong.getTimePlayed();
+                    Log.d(TAG, "bindPresent: timePlayed = " + timePlayed);
+                    if (timePlayed == -1) presentButton.resetProgress();
+                    else {
+                        if (timePlayed < 0) timePlayed = 0;
+                        if (timePlayed <= mPreviewSong.getTotalPreviewDuration())
+                            ((CircularPlayPauseProgressBar) mPresentButton).syncProgress(mPreviewSong.getTotalPreviewDuration(), (int) timePlayed);
+                    }
                 }
             }
         }
@@ -535,33 +579,23 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             }
         }
 
-        @OnClick(R.id.present)
+        @OnClick(R.id.preview_button)
         void clickPresent() {
 
-            // set previewItem = -1 if the preview is end
-            if(mPresentButton instanceof  CircularPlayPauseProgressBar) {
+         /*   if(mPresentButton instanceof  CircularPlayPauseProgressBar) {
                 CircularPlayPauseProgressBar mProgressBar = (CircularPlayPauseProgressBar)mPresentButton;
-                if(mPreviewItem==getAdapterPosition()&&mProgressBar.getMode()==CircularPlayPauseProgressBar.RESET)
-                    mPreviewItem = -1;
-            }
+                if(mPreviewItemInData ==getAdapterPosition()&&mProgressBar.getMode()==CircularPlayPauseProgressBar.RESET)
+                    mPreviewItemInData = -1;
+            }*/
 
 
-            if(mPreviewItem!=getAdapterPosition())
-                playPreviewThisItem(this);
-            else {
+            if(mPreviewSong!=null&&mPreviewSong.getSong().equals(mData.get(getPositionInData(this))))
+            {
                 resetProgress();
                 forceStopPreview();
+            }else {
+                playPreviewThisItem(this);
             }
-        }
-
-        @Override
-        public void onViewAttachedToWindow(View v) {
-            mLoader.clearAnimation();
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v) {
-            mLoader.clearAnimation();
         }
     }
 

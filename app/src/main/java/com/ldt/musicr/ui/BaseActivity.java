@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 
@@ -39,9 +40,15 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
     private MusicStateReceiver musicStateReceiver;
     private boolean receiverRegistered;
 
+    private SongPreviewController mSongPreviewController = null;
+
+    public SongPreviewController getSongPreviewController() {
+        return mSongPreviewController;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(createBundleNoFragmentRestore(savedInstanceState));
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         serviceToken = MusicPlayerRemote.bindToService(this, new ServiceConnection() {
             @Override
@@ -55,16 +62,35 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
             }
         });
 
+        if(mSongPreviewController==null) mSongPreviewController = new SongPreviewController();
+        addMusicServiceEventListener(mSongPreviewController);
+    }
+
+    /**
+     * Improve bundle to prevent restoring of fragments.
+     * @param bundle bundle container
+     * @return improved bundle with removed "fragments parcelable"
+     */
+    private static Bundle createBundleNoFragmentRestore(Bundle bundle) {
+        if (bundle != null) {
+            bundle.remove("android:support:fragments");
+        }
+        return bundle;
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+
+        if(mSongPreviewController!=null) mSongPreviewController.destroy();
+
         MusicPlayerRemote.unbindFromService(serviceToken);
         if (receiverRegistered) {
             unregisterReceiver(musicStateReceiver);
             receiverRegistered = false;
         }
+
+        removeAllMusicServiceEventListener();
+        super.onDestroy();
     }
 
     public void addMusicServiceEventListener(final MusicServiceEventListener listener) {
@@ -77,6 +103,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
         if (listener != null) {
             mMusicServiceEventListeners.remove(listener);
         }
+    }
+    public void removeAllMusicServiceEventListener() {
+        mMusicServiceEventListeners.clear();
     }
 
     @Override

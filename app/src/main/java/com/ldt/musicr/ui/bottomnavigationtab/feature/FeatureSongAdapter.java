@@ -197,9 +197,9 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
     public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.title) TextView mTitle;
-        @BindView(R.id.artist) TextView mArtist;
+        @BindView(R.id.description) TextView mArtist;
         @BindView(R.id.image) ImageView mImage;
-        @BindView(R.id.more) View mMenuButton;
+        @BindView(R.id.menu_button) View mMenuButton;
         @BindView(R.id.quick_play_pause) ImageView mQuickPlayPause;
 
         @OnClick(R.id.quick_play_pause)

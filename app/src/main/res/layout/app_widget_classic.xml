@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/widget_selector_light"
-                tools:src="@drawable/ic_play_arrow_white_24dp"
+                tools:src="@drawable/ic_play_white"
                 tools:tint="@color/ate_secondary_text_light" />
 
             <ImageButton

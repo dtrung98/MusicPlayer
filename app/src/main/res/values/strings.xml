@@ -239,7 +239,26 @@
     <string name="app_widget_classic_name">Phonograph - Classic</string>
     <string name="app_widget_small_name">Phonograph - Small</string>
     <string name="app_widget_card_name">Phonograph - Card</string>
+    <string name="alert_ext">Press once again to exit</string>
+    <string name="copy">Copy</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="saved_x_playlists_to_x_failed_to_save_x">Saved %1$d playlists to %2$s, failed to save %3$d.</string>
+    <string name="not_listed_in_media_store"><![CDATA[<b>%s</b> is not listed in the media store.]]></string>
+    <string name="some_files_are_not_listed_in_the_media_store">Some files are not listed in the media store.</string>
+    <string name="nothing_to_scan">Nothing to scan.</string>
+    <string name="scanned_files">Scanned %1$d of %2$d files.</string>
+    <string name="could_not_scan_files">Could not scan %d files.</string>
+    <string name="saving_changes">Saving changes</string>
+
     <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the app can\'t run properly.</string>
     <string name="access_external_storage">Access External Storage</string>
     <string name="allow_access">Allow Access</string>
+    <string name="fill_this_field_by_lyric">Fill this field by lyric</string>
+    <string name="save_as">Save as</string>
+    <string name="unknown_genres">Unknown Genres</string>
+    <string name="lyric">Lyric</string>
+    <string name="all_songs">All Songs</string>
+    <string name="play_in">play in</string>
+    <string name="unknown_playlist">Unknown Playlist</string>
 </resources>

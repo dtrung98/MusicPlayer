@@ -241,7 +241,7 @@
         android:layout_marginStart="20dp"
         />
     <ImageView
-        android:id="@+id/more"
+        android:id="@+id/menu_button"
         android:layout_width="@dimen/now_laying_height_in_minimize_mode"
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
         app:layout_constraintTop_toTopOf="parent"
@@ -258,7 +258,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/more"
+        app:layout_constraintTop_toBottomOf="@id/menu_button"
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_color_picker"
         tools:layoutManager="LinearLayoutManager"

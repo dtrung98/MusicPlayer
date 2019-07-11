@@ -135,6 +135,12 @@ dependencies {
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
+
+    // Fancy Toast
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
+
+    // Loader View
+    implementation 'com.tuyenmonkey:mkloader:1.4.0'
 }
 
 apply plugin: 'kotlin-android-extensions'

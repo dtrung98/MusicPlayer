@@ -40,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_playing_queue"
+        tools:listitem="@layout/item_song_big"
         tools:layoutManager="LinearLayoutManager"
         android:overScrollMode="never"
         android:layout_marginTop="12dp"
@@ -65,7 +65,7 @@
         android:textColor="@color/FlatWhite"/>
 
     <TextView
-        android:id="@+id/artist"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@id/playlist_title"
@@ -120,7 +120,7 @@
         android:id="@+id/shuffle_button"
         android:layout_width="50dp"
         android:layout_height="40dp"
-        app:layout_constraintTop_toBottomOf="@id/artist"
+        app:layout_constraintTop_toBottomOf="@id/description"
         app:layout_constraintStart_toEndOf="@id/play_pause_button"
         android:src="@drawable/shufflel"
         android:tint="@color/FlatWhite"

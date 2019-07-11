@@ -18,6 +18,8 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.loader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
@@ -29,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClickListener {
+public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClickListener, MusicServiceEventListener {
     private static final String TAG ="ArtistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -59,16 +61,21 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
         mRecyclerView.setAdapter(mAdapter);
         if(mSwipeRefreshLayout!=null)
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
+
+        if(getActivity() instanceof MainActivity)
+            ((MainActivity)getActivity()).addMusicServiceEventListener(this);
         refresh();
 
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        if(getActivity() instanceof MainActivity)
+            ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
 
         if(mUnbinder!=null)
-        mUnbinder.unbind();
+            mUnbinder.unbind();
+        super.onDestroyView();
     }
     private LoadArtistAsyncTask mLoadArtist;
 
@@ -93,6 +100,46 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
             Fragment parentFragment = getParentFragment();
             if(parentFragment instanceof SupportFragment)
                 ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);
+    }
+
+    @Override
+    public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+
+    }
+
+    @Override
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+        refresh();
     }
 
     private static class AsyncResult {
@@ -130,8 +177,16 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
             return result;
         }
 
+        public void cancel() {
+            mCancelled = true;
+            cancel(true);
+            mFragment.clear();
+        }
+        private boolean mCancelled = false;
+
         @Override
         protected void onPostExecute(AsyncResult asyncResult) {
+            if(mCancelled) return;
             ArtistChildTab fragment = mFragment.get();
             if(fragment!=null&&!fragment.isDetached()) {
                 if (fragment.mSwipeRefreshLayout != null)

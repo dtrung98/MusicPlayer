@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
     <Transition
-        app:constraintSetStart="@layout/artist_pager"
-        app:constraintSetEnd="@layout/artist_pager_end"
+        app:constraintSetStart="@layout/artist_pager_middle"
+        app:constraintSetEnd="@layout/artist_pager_top"
         app:duration="350">
         <OnSwipe
             app:dragDirection="dragUp"
@@ -12,4 +12,10 @@
             app:touchAnchorSide="top"
             />
     </Transition>
+ <!--   <Transition
+        app:constraintSetStart="@layout/artist_pager_below"
+        app:constraintSetEnd="@layout/artist_pager_middle"
+        app:duration="350">
+
+    </Transition>-->
 </MotionScene>

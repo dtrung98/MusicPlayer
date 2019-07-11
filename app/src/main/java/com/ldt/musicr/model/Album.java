@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class Album implements Parcelable {
+public class Album extends Media implements Parcelable {
     public final ArrayList<Song> songs;
 
     public Album(ArrayList<Song> songs) {

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class Song implements Parcelable {
+public class Song extends Media implements Parcelable {
     public static final Song EMPTY_SONG = new Song(-1, "", -1, -1, -1, "", -1, -1, "", -1, "");
 
     public final int id;
