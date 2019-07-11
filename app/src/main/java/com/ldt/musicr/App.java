@@ -30,4 +30,9 @@ public class App extends Application {
     //    Nammu.init(this);
 
     }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 }

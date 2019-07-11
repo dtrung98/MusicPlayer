@@ -130,6 +130,11 @@ dependencies {
 
     // Jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.11.3'
+
+    // Leak Canary
+    // debugImplementation because LeakCanary should only run in debug builds.
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 }
 
 apply plugin: 'kotlin-android-extensions'
