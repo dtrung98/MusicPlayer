@@ -2,7 +2,6 @@ package com.ldt.musicr.ui.bottomnavigationtab.library.song;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.RippleDrawable;
@@ -13,10 +12,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -25,50 +22,41 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.ldt.musicr.R;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.helper.songpreview.PreviewSong;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.helper.songpreview.SongPreviewListener;
+import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
+import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.R;
-import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
-import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Util;
-
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter,
-     FastScrollRecyclerView.MeasurableAdapter, SongPreviewListener, SortOrderBottomSheet.SortOrderChangedListener {
-    private static final String TAG = "SongAdapter";
+public class BasePreviewSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements SongPreviewListener {
+    private static final String TAG = "BasePreviewSongAdapter";
 
-    public ArrayList<Song> mData = new ArrayList<>();
-    public int mCurrentHighLightPos = 0;
+    private ArrayList<Song> mData = new ArrayList<>();
+    private int mPlayingDetectedItemPosition = 0;
+
     private Context mContext;
     private long[] mSongIDs;
-    private boolean isPlaylist;
-    private boolean animate;
-    private int lastPosition = -1;
-    private long playlistId;
-    private int mSortType = 0;
 
-    public SongAdapter(Context context) {
+
+
+    public BasePreviewSongAdapter(Context context) {
         this.mContext = context;
         if(context instanceof MainActivity) {
            SongPreviewController controller = ((MainActivity)context).getSongPreviewController();
@@ -80,23 +68,28 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     }
 
     public void setData(List<Song> data) {
-        initializeSong(data);
-    }
-    public int mSelected = 0;
-    private Random mRandom = new Random();
-
-    private void initializeSong(List<Song> data) {
         mData.clear();
 
         if(data!=null) mData.addAll(data);
         this.mSongIDs = getSongIds();
-        randomize();
+
+        initializeSong();
 
         if(mContext instanceof MainActivity) {
             SongPreviewController controller = ((MainActivity) mContext).getSongPreviewController();
-           mPreviewSong = controller.getCurrentPreviewSong();
+            mPreviewSong = controller.getCurrentPreviewSong();
         }
-            notifyDataSetChanged();
+        notifyDataSetChanged();
+    }
+
+    protected abstract void initializeSong();
+
+    public int getPlayingDetectedItemPosition() {
+        return mPlayingDetectedItemPosition;
+    }
+
+    public void setPlayingDetectedItemPosition(int mPlayingDetectedItemPosition) {
+        this.mPlayingDetectedItemPosition = mPlayingDetectedItemPosition;
     }
 
     public void destroy() {
@@ -104,23 +97,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
            SongPreviewController controller  = ((MainActivity)mContext).getSongPreviewController();
            if(controller!=null) controller.removeAudioPreviewerListener(this);
         }
-
-        removeCallBack();
-        removeOrderListener();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-       if(position==0) return R.layout.item_sort_song_child;
-       return R.layout.item_song_child;
-    }
-
-    @Override
-    public int getItemCount() {
-        return mData.size() + 1;
-    }
-
-    private long[] getSongIds() {
+    protected long[] getSongIds() {
         long[] ret = new long[mData.size()];
         for (int i = 0; i < mData.size(); i++) {
             ret[i] = mData.get(i).id;
@@ -129,58 +108,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         return ret;
     }
 
-    @Override
-    public int getSavedOrder() {
-        if(mSortOrderListener!=null)
-            return mSortOrderListener.getSavedOrder();
-        return 0;
-    }
-
-    @Override
-    public void onOrderChanged(int newType, String name) {
-        if(mSortOrderListener!=null) {
-            mSortOrderListener.onOrderChanged(newType, name);
-            notifyItemChanged(0);
-        }
-    }
-    private SortOrderBottomSheet.SortOrderChangedListener mSortOrderListener;
-    public void setSortOrderChangedListener(SortOrderBottomSheet.SortOrderChangedListener listener) {
-        mSortOrderListener = listener;
-    }
-    public void removeOrderListener() {
-        mSortOrderListener = null;
-    }
-
-    private void sortHolderClicked() {
-        if(mContext instanceof AppCompatActivity) {
-            SortOrderBottomSheet bs = SortOrderBottomSheet.newInstance(this);
-            bs.show(((AppCompatActivity)mContext).getSupportFragmentManager(),TAG);
-        }
-    }
-
-
-    @NotNull
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(viewType,viewGroup,false);
-
-        if(viewType==R.layout.item_sort_song_child)
-            return new SongAdapter.SortHolder(v);
-
-        return new SongAdapter.ItemHolder(v);
-    }
-    @Override
-    public void onBindViewHolder(@NotNull RecyclerView.ViewHolder itemHolder, int position) {
-        if(itemHolder instanceof ItemHolder)
-            ((ItemHolder)itemHolder).bind(mData.get(position-1));
-        else ((SortHolder)itemHolder).bind();
-    }
-
-    private int getPositionInData(ItemHolder holder) {
-        return holder.getAdapterPosition() - 1;
-    }
-
-    private void setOnPopupMenuListener(SongAdapter.ItemHolder itemHolder, final int position) {
+    private void setOnPopupMenuListener(BasePreviewSongAdapter.ItemHolder itemHolder, final int position) {
         itemHolder.mMoreButton.setOnClickListener(v -> {
             SongOptionBottomSheet sheet =  SongOptionBottomSheet.newInstance();
             sheet.show(((AppCompatActivity)mContext).getSupportFragmentManager(),
@@ -215,7 +143,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                         break;
                     case R.id.popup_song_delete:
                         long[] deleteIds = {mData.get(position).id};
-                        Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, SongAdapter.this, position);
+                        Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, BasePreviewSongAdapter.this, position);
                         break;
                 }
                 return true;
@@ -258,7 +186,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                             break;
                         case R.id.popup_song_delete:
                             long[] deleteIds = {mData.get(position).id};
-                            Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, SongAdapter.this, position);
+                            Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, BasePreviewSongAdapter.this, position);
                             break;
                     }
                     return false;
@@ -270,48 +198,6 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             if(isPlaylist)
                 menu.getMenu().findItem(R.id.popup_song_remove_playlist).setVisible(true);
         });
-    }
-
-    public void randomize() {
-        if(mData.isEmpty()) return;
-        mSelected = mRandom.nextInt(mData.size());
-        if(mCallBack!=null) mCallBack.onFirstItemCreated(mData.get(mSelected));
-    }
-
-    public SongAdapter setCallBack(PreviewRandomPlayAdapter.FirstItemCallBack callBack) {
-        mCallBack = callBack;
-        return this;
-    }
-
-    public void removeCallBack() {
-        mCallBack = null;
-    }
-
-    private PreviewRandomPlayAdapter.FirstItemCallBack mCallBack;
-
-    public void shuffle() {
-        final Handler handler = new Handler();
-        handler.postDelayed(() -> {
-            MusicPlayerRemote.openQueue(mData,mSelected,true);
-            //MusicPlayer.playAll(mContext, mSongIDs, mSelected, -1, Util.IdType.NA, false);
-            Handler handler1 = new Handler() ;
-            handler1.postDelayed(() -> {
-                notifyItemChanged(mCurrentHighLightPos);
-                notifyItemChanged(mSelected);
-                mCurrentHighLightPos = mSelected;
-                randomize();
-            },50);
-        },100);
-    }
-
-
-    @NonNull
-    @Override
-    public String getSectionName(int position) {
-        if(position==0) return "A";
-        if(mData.get(position-1).title.isEmpty())
-        return "A";
-        return mData.get(position-1).title.substring(0,1);
     }
 
     private void playPreviewThisItem(ItemHolder itemHolder) {
@@ -388,9 +274,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 MusicPlayerRemote.openQueue(mData,0,true);
                 Handler handler1 = new Handler();
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHighLightPos);
+                    notifyItemChanged(mPlayingDetectedItemPosition);
                     notifyItemChanged(0);
-                    mCurrentHighLightPos = 0;
+                    mPlayingDetectedItemPosition = 0;
                 }, 50);
             }, 100);
         }
@@ -416,38 +302,17 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         long newPlayingID = MusicPlayerRemote.getCurrentSong().id;
         boolean isStillOldPos = false;
         // update old item
-        if (-1 < mCurrentHighLightPos && mCurrentHighLightPos < mSongIDs.length) {
-            isStillOldPos = mSongIDs[mCurrentHighLightPos] == newPlayingID;
-            notifyItemChanged(mCurrentHighLightPos);
+        if (-1 < mPlayingDetectedItemPosition && mPlayingDetectedItemPosition < mSongIDs.length) {
+            isStillOldPos = mSongIDs[mPlayingDetectedItemPosition] == newPlayingID;
+            notifyItemChanged(mPlayingDetectedItemPosition);
         }
         // find new pos
         if (!isStillOldPos) {
             // compare songid with song
             int newPos = mData.indexOf(newPlayingID);
-            mCurrentHighLightPos = newPos;
+            mPlayingDetectedItemPosition = newPos;
             if (newPos != -1) notifyItemChanged(newPos);
         }
-    }
-
-    public class SortHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.sort_text) TextView mSortText;
-        @OnClick(R.id.sort_parent)
-        void sortClicked() {
-            sortHolderClicked();
-        }
-
-        public SortHolder(View view) {
-            super(view);
-            ButterKnife.bind(this,view);
-        }
-
-        public void bind() {
-            if(mSortOrderListener!=null) {
-              String str =  mContext.getResources().getString(
-                        SortOrderBottomSheet.mSortStringRes[mSortOrderListener.getSavedOrder()]);
-              mSortText.setText(str);
-            }
-            }
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnAttachStateChangeListener {
@@ -477,9 +342,9 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 //MusicPlayer.playAll(mContext, mSongIDs, getPositionInData(this), -1, Util.IdType.NA, false);
                 Handler handler1 = new Handler() ;
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHighLightPos);
+                    notifyItemChanged(mPlayingDetectedItemPosition);
                     notifyItemChanged(getAdapterPosition());
-                    mCurrentHighLightPos = getAdapterPosition();
+                    mPlayingDetectedItemPosition = getAdapterPosition();
                 },50);
             },100);
         }
@@ -562,7 +427,7 @@ public class SongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
         private void highLight() {
             if(MusicPlayerRemote.getCurrentSong().id==mData.get(getPositionInData(this)).id) {
-                mCurrentHighLightPos = getAdapterPosition();
+                mPlayingDetectedItemPosition = getAdapterPosition();
                 int baseColor = ArtistAdapter.lighter(Tool.getBaseColor(),0.6f);
                 mTitle.setTextColor(ArtistAdapter.lighter(Tool.getBaseColor(),0.25f));
                 mArtist.setTextColor(Color.argb(0xAA,Color.red(baseColor),Color.green(baseColor),Color.blue(baseColor)));

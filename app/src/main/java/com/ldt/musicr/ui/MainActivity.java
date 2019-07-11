@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
-import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
@@ -30,7 +29,6 @@ import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 
 import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;
 
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,16 +42,12 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.layer_container) public FrameLayout mLayerContainer;
     @BindView(R.id.bottom_navigation_view)
     BottomNavigationView mBottomNavigationView;
-    AudioPreviewPlayer mAudioPreviewPlayer = new AudioPreviewPlayer();
 
-    SongPreviewController mSongPreviewController = new SongPreviewController();
+    SongPreviewController mSongPreviewController = null;
 
-    public AudioPreviewPlayer getAudioPreviewPlayer() {
-        return mAudioPreviewPlayer;
+    public SongPreviewController getSongPreviewController() {
+        return mSongPreviewController;
     }
-
-    public SongPreviewController getSongPreviewController = new SongPreviewController();
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult) {
@@ -79,16 +73,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(mAudioPreviewPlayer!=null) removeMusicServiceEventListener(mAudioPreviewPlayer);
+        if(mSongPreviewController!=null) removeMusicServiceEventListener(mSongPreviewController);
+        if(mSongPreviewController!=null) mSongPreviewController.destroy();
         super.onDestroy();
     }
-
-    public void setDataForPlayingQueue(List<Song> songs2) {
-        if(mPlaylistController!=null) mPlaylistController.setData(songs2);
-    }
-
-
-
 
     public interface PermissionListener {
         void onPermissionGranted();
@@ -121,7 +109,9 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.basic_activity_layout);
         ButterKnife.bind(this);
         mLayerContainer.setVisibility(View.GONE);
-        if(mAudioPreviewPlayer!=null) addMusicServiceEventListener(mAudioPreviewPlayer);
+
+        if(mSongPreviewController==null) mSongPreviewController = new SongPreviewController();
+        addMusicServiceEventListener(mSongPreviewController);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
 

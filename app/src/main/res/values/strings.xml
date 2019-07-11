@@ -254,4 +254,11 @@
     <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the app can\'t run properly.</string>
     <string name="access_external_storage">Access External Storage</string>
     <string name="allow_access">Allow Access</string>
+    <string name="fill_this_field_by_lyric">Fill this field by lyric</string>
+    <string name="save_as">Save as</string>
+    <string name="unknown_genres">Unknown Genres</string>
+    <string name="lyric">Lyric</string>
+    <string name="all_songs">All Songs</string>
+    <string name="play_in">play in</string>
+    <string name="unknown_playlist">Unknown Playlist</string>
 </resources>

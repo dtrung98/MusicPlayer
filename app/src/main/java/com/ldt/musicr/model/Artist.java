@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.ldt.musicr.util.MusicUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class Artist implements Parcelable {
@@ -74,6 +76,7 @@ public class Artist implements Parcelable {
         return albums != null ? albums.hashCode() : 0;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return "Artist{" +

@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
@@ -20,7 +22,7 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
+public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG ="FeatureTabFragment";
 
     @Nullable
@@ -40,12 +42,18 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
 
+        if(getActivity() instanceof BaseActivity) {
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        }
+
         refreshData();
     }
 
     private void refreshData() {
-        mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
-        mFeatureLinearHolder.setSuggestedSongs(SongLoader.getAllSongs(getActivity()));
+        if(getActivity()!=null) {
+            mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
+            mFeatureLinearHolder.setSuggestedSongs(SongLoader.getAllSongs(getActivity()));
+        }
         mSwipeRefreshLayout.setRefreshing(false);
     }
     FeatureLinearHolder mFeatureLinearHolder;
@@ -73,5 +81,55 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
         SupportFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
         getNavigationController().presentFragment(sf);
+    }
+
+    @Override
+    public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+
+    }
+
+    @Override
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+        refreshData();
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        if(getActivity() instanceof BaseActivity) {
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        }
+
+        super.onDestroyView();
     }
 }

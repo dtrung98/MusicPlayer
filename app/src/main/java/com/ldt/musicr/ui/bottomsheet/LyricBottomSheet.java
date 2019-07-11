@@ -3,7 +3,6 @@ package com.ldt.musicr.ui.bottomsheet;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,13 +11,13 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.widget.NestedScrollView;
 import android.text.Html;
-import android.text.InputType;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -28,10 +27,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.model.lyrics.Lyrics;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
@@ -48,15 +47,13 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import es.dmoral.toasty.Toasty;
 
 import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
 
-public class LyricBottomSheet extends BottomSheetDialogFragment  implements MusicServiceEventListener {
+public class LyricBottomSheet extends BottomSheetDialogFragment  implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     private static final String TAG = "LyricBottomSheet";
     private static final String SONG_KEY = "song";
     private static final String SHOULD_AUTO_UPDATE_KEY = "should_auto_update";
-
     @BindView(R.id.lyric_content)
     TextView mLyricContent;
     @BindView(R.id.root) View mRoot;
@@ -84,7 +81,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     }
 
     @OnClick({R.id.back,R.id.parent})
-    void doDismiss() {
+    void back() {
         dismiss();
     }
 
@@ -117,16 +114,6 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     }
     Song mSong;
 
-/*    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(getView() !=null) {
-            ViewParent v = getView().getParent();
-            if (v instanceof View) {
-                ((View) v).setBackgroundColor(Color.TRANSPARENT);
-            }
-        }
-    }*/
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,13 +130,18 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
         ButterKnife.bind(this,view);
-        mAlignView.getLayoutParams ().height = (int) (Tool.getScreenSize(getContext())[1]);
+        mAlignView.getLayoutParams ().height = (Tool.getScreenSize(getContext())[1]);
         mAlignView.requestLayout();
 
         view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
-            FrameLayout bottomSheet = (FrameLayout)
-                    dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+
+            Window window = dialog.getWindow();
+
+            if(window!=null)
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+            FrameLayout bottomSheet = dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
             BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             behavior.setPeekHeight(-Tool.getNavigationHeight(requireActivity()));
@@ -193,22 +185,22 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     ImageView mImageView;
     private void updateLyric() {
         if(mSong !=null) {
-           mLyricString = MusicUtil.getLyrics(mSong);
-           if(mLyricString==null||mLyricString.isEmpty())
-               mLyricString = "This song has no lyric.";
+            mLyricString = MusicUtil.getLyrics(mSong);
+            if(mLyricString==null||mLyricString.isEmpty())
+                mLyricString = "This song has no lyric.";
 
-           boolean isHtml = isHtml(mLyricString);
-           if(isHtml) {
-               Spanned spanned = Html.fromHtml(mLyricString);
-               mLyricContent.setText(spanned);
-           } else
-           mLyricContent.setText(mLyricString);
+            boolean isHtml = isHtml(mLyricString);
+            if(isHtml) {
+                Spanned spanned = Html.fromHtml(mLyricString);
+                mLyricContent.setText(spanned);
+            } else
+                mLyricContent.setText(mLyricString);
 
             Log.d(TAG, "updateLyric: "+mLyricString);
             mTitle.setText(mSong.title);
             mArtist.setText(mSong.artistName);
             if(getContext() !=null)
-            Glide.with(getContext()).load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
+                Glide.with(getContext()).load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
             else Picasso.get().load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
         }
         else Log.d(TAG, "updateLyric: Song is null");
@@ -235,12 +227,15 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     void edit() {
         mEditingSong = mSong;
         mEditText.setText(mLyricString);
-        mLyricConstraintRoot.setVisibility(View.GONE);
+        mLyricConstraintRoot.setVisibility(View.INVISIBLE);
         mEditConstraintRoot.setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.save)
     void saveLyric() {
+        if(getActivity()!=null)
+            Util.hideSoftKeyboard(getActivity());
+
         if(mEditingSong !=null) {
             ArrayList<String> path = new ArrayList<>(1);
             path.add(mEditingSong.data);
@@ -253,17 +248,22 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
             fieldKeyValueMap.put(FieldKey.YEAR, year.getText().toString());
             fieldKeyValueMap.put(FieldKey.TRACK, trackNumber.getText().toString());*/
             fieldKeyValueMap.put(FieldKey.LYRICS, mEditText.getText().toString());
-          //  writeValuesToFiles(path, fieldKeyValueMap, null);
+            writeValuesToFiles(path, fieldKeyValueMap, null);
         }
     }
-    /*protected void writeValuesToFiles(List<String> path, final Map<FieldKey, String> fieldKeyValueMap, @Nullable final TagEditorFragment.ArtworkInfo artworkInfo) {
+
+    protected void writeValuesToFiles(List<String> path, final Map<FieldKey, String> fieldKeyValueMap, @Nullable final WriteTagDialog.ArtworkInfo artworkInfo) {
         Util.hideSoftKeyboard(getActivity());
-        new TagEditorFragment.WriteTagsAsyncTask(mEditText.getContext()).execute(new TagEditorFragment.WriteTagsAsyncTask.LoadingInfo(path, fieldKeyValueMap, artworkInfo));
-    }*/
+        WriteTagDialog.LoadingInfo loadingInfo = new WriteTagDialog.LoadingInfo(path, fieldKeyValueMap, artworkInfo);
+        WriteTagDialog.newInstance(loadingInfo).setWritingTagResultListener(this).show(getChildFragmentManager(),WriteTagDialog.TAG);
+    }
 
     @OnClick(R.id.cancel)
     void cancelEditLyric() {
-        mEditConstraintRoot.setVisibility(View.GONE);
+        mEditText.clearFocus();
+        if(getActivity()!=null)
+            Util.hideSoftKeyboard(getActivity());
+        mEditConstraintRoot.setVisibility(View.INVISIBLE);
         mLyricConstraintRoot.setVisibility(View.VISIBLE);
     }
 
@@ -329,6 +329,17 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
 
     @Override
     public void onMediaStoreChanged() {
+        Log.d(TAG, "onMediaStoreChanged");
+    }
 
+    @Override
+    public void onWritingTagFinish(boolean result) {
+        if(getActivity()!=null)
+            Util.hideSoftKeyboard(getActivity());
+
+        mEditConstraintRoot.setVisibility(View.INVISIBLE);
+        mLyricConstraintRoot.setVisibility(View.VISIBLE);
+
+        updateLyric();
     }
 }

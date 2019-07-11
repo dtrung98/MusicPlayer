@@ -26,6 +26,7 @@ import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
@@ -41,6 +42,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,7 +52,7 @@ import butterknife.OnClick;
 public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapter.ItemHolder> implements AudioPreviewPlayer.AudioPreviewerListener, FastScrollRecyclerView.SectionedAdapter {
     private static final String TAG = "SongAdapter";
     public ArrayList<Song> mData = new ArrayList<>();
-    public int mCurrentHightLightPos = 0;
+    public int mCurrentHighLightPos = 0;
     private Context mContext;
     private long[] mSongIDs;
     private boolean isPlaylist;
@@ -206,12 +208,28 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
 
         if(mPreviewItem!=-1)
             notifyItemChanged(mPreviewItem,false);
-        String path = mData.get(itemHolder.getAdapterPosition()).data;
-        mPreviewItem = itemHolder.getAdapterPosition();
-        ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(this,path);
 
+        if(mContext instanceof MainActivity) {
+            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+            if(preview!=null) {
+                if (preview.isPlayingPreview())
+                    preview.cancelPreview();
+                else {
+                    ArrayList<Song> data = new ArrayList<>(mData);
+                    Collections.shuffle(data);
+                    preview.previewSongs(data);
+                }
+            }
+        }
     }
 
+    public void forceStopPreview() {
+        mPreviewItem = -1;
+        if(mContext instanceof MainActivity) {
+            SongPreviewController controller =  ((MainActivity)mContext).getSongPreviewController();
+            if(controller!=null) controller.cancelPreview();
+        }
+    }
     @Override
     public void onBindViewHolder(@NonNull ItemHolder holder, int position, @NonNull List<Object> payloads) {
         if(!payloads.isEmpty() && payloads.get(0) instanceof Boolean) {
@@ -240,26 +258,21 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
         }
     }
 
-    public void forceStopPreview() {
-        mPreviewItem = -1;
-        ((MainActivity)mContext).getAudioPreviewPlayer().forceStop();
-    }
-
     public void notifyMetaChanged() {
         // hightlight truely the playing song
         // check whether old pos is still  the playing song
         long newPlayingID = MusicPlayerRemote.getCurrentSong().id;
         boolean isStillOldPos = false;
         // update old item
-        if(-1 < mCurrentHightLightPos && mCurrentHightLightPos< mSongIDs.length) {
-            isStillOldPos = mSongIDs[mCurrentHightLightPos] ==newPlayingID;
-            notifyItemChanged(mCurrentHightLightPos);
+        if(-1 < mCurrentHighLightPos && mCurrentHighLightPos < mSongIDs.length) {
+            isStillOldPos = mSongIDs[mCurrentHighLightPos] ==newPlayingID;
+            notifyItemChanged(mCurrentHighLightPos);
         }
         // find new pos
         if(!isStillOldPos) {
             // compare songid with song
             int newPos = mData.indexOf(newPlayingID);
-            mCurrentHightLightPos = newPos;
+            mCurrentHighLightPos = newPos;
             if(newPos!=-1) notifyItemChanged(newPos);
         }
     }
@@ -300,9 +313,9 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
                 MusicPlayerRemote.openQueue(mData,getAdapterPosition(),true);
                 Handler handler1 = new Handler() ;
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(mCurrentHightLightPos);
+                    notifyItemChanged(mCurrentHighLightPos);
                     notifyItemChanged(getAdapterPosition());
-                    mCurrentHightLightPos = getAdapterPosition();
+                    mCurrentHighLightPos = getAdapterPosition();
                 },50);
             },100);
         }
@@ -376,7 +389,7 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
 
         private void highLight() {
             if(MusicPlayerRemote.getCurrentSong().id==mData.get(getAdapterPosition()).id) {
-                mCurrentHightLightPos = getAdapterPosition();
+                mCurrentHighLightPos = getAdapterPosition();
                 int baseColor = ArtistAdapter.lighter(Tool.getBaseColor(),0.6f);
                 mTitle.setTextColor(ArtistAdapter.lighter(Tool.getBaseColor(),0.25f));
                 mArtist.setTextColor(Color.argb(0xAA,Color.red(baseColor),Color.green(baseColor),Color.blue(baseColor)));
@@ -411,7 +424,7 @@ public class PlayingQueueAdapter extends RecyclerView.Adapter<PlayingQueueAdapte
                 playPreviewThisItem(this);
             else {
                 resetProgress();
-                forceStopPreview();
+                playPreviewThisItem(this);
             }
         }
 

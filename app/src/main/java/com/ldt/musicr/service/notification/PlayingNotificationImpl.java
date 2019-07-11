@@ -13,10 +13,10 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
@@ -25,18 +25,20 @@ import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.SongGlideRequest;
-import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.util.ImageUtil;
-import com.ldt.musicr.util.PhonographColorUtil;
 import com.ldt.musicr.util.PreferenceUtil;
 
+import org.jetbrains.annotations.NotNull;
+
 public class PlayingNotificationImpl extends PlayingNotification {
+    private static final String TAG = "NotificationImpl";
 
     private Target<Bitmap> target;
+    private boolean isPlaying = true;
 
     @Override
     public synchronized void update() {
@@ -44,7 +46,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
         final Song song = service.getCurrentSong();
 
-        final boolean isPlaying = service.isPlaying();
+        isPlaying = service.isPlaying();
 
         final RemoteViews notificationLayout = new RemoteViews(service.getPackageName(), R.layout.notification);
         final RemoteViews notificationLayoutBig = new RemoteViews(service.getPackageName(), R.layout.notification_big);
@@ -96,7 +98,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
                         .build()
                         .into(new SimpleTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
                             @Override
-                            public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
+                            public void onResourceReady(@NotNull Bitmap bitmap, Transition<? super Bitmap> transition) {
                                 update(bitmap, Color.TRANSPARENT);
                             }
 
@@ -137,7 +139,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
                                 Bitmap prev = createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_previous_white_24dp, primary), 1.5f);
                                 Bitmap next = createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_skip_next_white_24dp, primary), 1.5f);
-                                Bitmap playPause = createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp, primary), 1.5f);
+                                Bitmap playPause = createBitmap(ImageUtil.getTintedVectorDrawable(service, isPlaying ? R.drawable.ic_pause_white : R.drawable.ic_play_white, primary), 1.5f);
                                 Bitmap close = createBitmap(ImageUtil.getTintedVectorDrawable(service, R.drawable.ic_close_white_24dp, secondary), 1f);
 
                                 notificationLayout.setTextColor(R.id.title, primary);

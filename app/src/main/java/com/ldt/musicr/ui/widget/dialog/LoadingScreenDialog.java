@@ -50,13 +50,16 @@ public class LoadingScreenDialog extends DialogFragment {
     }
 
     public void showSuccessThenDismiss(String message) {
-        mLoader.setVisibility(View.GONE);
-        mSuccessView.setVisibility(View.VISIBLE);
-        mSuccessView.startTickAnim();
+        if(isResumed())
+        try {
+            mLoader.setVisibility(View.GONE);
+            mSuccessView.setVisibility(View.VISIBLE);
+            mSuccessView.startTickAnim();
 
-        if(message!=null&&!message.isEmpty())
-        Toasty.success(mSuccessView.getContext(),message).show();
-
+            if (message != null && !message.isEmpty())
+                Toasty.success(mSuccessView.getContext(), message).show();
+            mLoader.postDelayed(this::dismiss,1000);
+        } catch (Exception ignored) {}
     }
 
     public void showFailureThenDismiss(String error) {

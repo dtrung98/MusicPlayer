@@ -115,6 +115,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintBottom_toBottomOf="@id/image"
         android:elevation="1dp"
+        android:padding="12dp"
         android:tint="#394545"
         android:alpha="0.55"/>
 </android.support.constraint.ConstraintLayout>

@@ -1,16 +1,20 @@
 package com.ldt.musicr.helper.songpreview;
 
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.Log;
 
 import com.ldt.musicr.model.Song;
 
+import java.io.File;
 import java.sql.SQLSyntaxErrorException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class PreviewSong {
+public class PreviewSong {
     private static final String TAG = "PreviewSong";
 
     public static final int NOT_PLAY = 0;
@@ -31,6 +35,31 @@ class PreviewSong {
         }
 
         return false;
+    }
+
+    public boolean isPlaying() {
+        boolean result = false;
+        if(mMediaPlayer!=null)
+        try {
+            result = mMediaPlayer.isPlaying();
+            Log.d(TAG, "isPlaying: result = "+result);
+        } catch (Exception e) {
+            result = false;
+        }
+        return result;
+    }
+
+    public long getTimePlayed() {
+        if(mMediaPlayer!=null)
+             try {
+                 long c = mMediaPlayer.getCurrentPosition();
+                 long s = getStart();
+                 Log.d(TAG, "getTimePlayed: current = "+ c+", start = "+ s+", played = "+ (c - s));
+                return  c- s;
+             } catch (Exception ignored) {
+                 return -1;
+             }
+        return -1;
     }
 
     public interface OnPreviewSongStateChangedListener {
@@ -75,7 +104,7 @@ class PreviewSong {
         if(start < 0) start =0;
         if(finish > song.duration) finish = (int) song.duration;
 
-        if(finish-start>5000) finish = start+5000;
+      //  if(finish-start>10000) finish = start+10000;
 
          this.mSong = song;
          this.mStart = start;
@@ -89,6 +118,10 @@ class PreviewSong {
 
     public int getFinish() {
         return mFinish;
+    }
+
+    public int getTotalPreviewDuration() {
+        return getFinish() - getStart();
     }
 
     public MediaPlayer getPlayer() {
@@ -105,21 +138,27 @@ class PreviewSong {
 
         long start = System.currentTimeMillis();
         if(mMediaPlayer!=null) release();
-        this.mMediaPlayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
+        long time1 = System.currentTimeMillis();
         try {
             mMediaPlayer.setDataSource(mSong.data);
-            mMediaPlayer.prepare();
+            long time2 = System.currentTimeMillis();
+            mMediaPlayer.prepareAsync();
+            mMediaPlayer.setOnPreparedListener(mp -> {
+                mMediaPlayer.seekTo(mStart);
 
-
-            mMediaPlayer.seekTo(mStart);
-            setState(PREPARE_TO_PLAY);
-            fadeIn();
+                Log.d(TAG, "play: init = "+(time1 - start)+", setDataSource = "+ (time2-time1)+", prepare = "+(System.currentTimeMillis()-time2));
+                setState(PREPARE_TO_PLAY);
+                fadeIn();
+            });
 
         } catch (Exception e) {
             setState(FAILURE);
         }
         Log.d(TAG, "time to prepare : "+ (System.currentTimeMillis() - start));
+
     }
+
 
     public void release() {
         if(mMediaPlayer==null)
@@ -128,16 +167,18 @@ class PreviewSong {
         if(getState()==PLAYING) {
             mPlayHandler.removeCallbacks(mFinishPlayRunnable);
             mPlayHandler.post(mFinishPlayRunnable);
-        } else destroy();
-
-
+        }
+        else
+        destroy();
     }
 
     private void onAudioStartFadeIn() {
+        long start = System.currentTimeMillis();
         mMediaPlayer.start();
+        long time1 = System.currentTimeMillis();
         setState(PLAYING);
-        mPlayHandler.postDelayed(mFinishPlayRunnable,mFinish - mStart - FADE_OUT_DURATION - FADE_IN_DURATION);
-    }
+        Log.d(TAG, "media start time = "+ (time1 - start)+", notify time = "+(System.currentTimeMillis()- time1));
+      }
 
     private void onAudioFinishFadeOut() {
         Log.d(TAG, "onAudioFinishFadeOut");
@@ -176,16 +217,19 @@ class PreviewSong {
 
     private float mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
-    private static final int FADE_IN_DURATION = 450;
-    private static final int FADE_OUT_DURATION = 450;
+    private static final int FADE_IN_DURATION = 300;
+    private static final int FADE_OUT_DURATION = 350;
 
-    private static final int FADE_INTERVAL = 10;
+    private static final int FADE_INTERVAL = 25;
 
     //Calculate the number of fade steps
-    private static final int NUMBER_OF_STEPS = FADE_IN_DURATION/FADE_INTERVAL;
+    private static final int NUMBER_OF_STEPS_IN = FADE_IN_DURATION/FADE_INTERVAL;
+    private static final int NUMBER_OF_STEPS_OUT = FADE_OUT_DURATION/FADE_INTERVAL;
 
     //Calculate by how much the mCurrentOutVolume changes each step
-    private final float DELTA_VOLUME = DEFAULT_PLAY_VOLUME / (float) NUMBER_OF_STEPS;
+    private static final float DELTA_IN_VOLUME = (DEFAULT_PLAY_VOLUME  - DEFAULT_IN_VOLUME)/ (float) NUMBER_OF_STEPS_IN;
+    private static final float DELTA_OUT_VOLUME = (DEFAULT_PLAY_VOLUME - DEFAULT_OUT_VOLUME)/ (float)NUMBER_OF_STEPS_OUT;
+
 
 
     private int mFadeState = NOT_FADE;
@@ -210,7 +254,7 @@ class PreviewSong {
             case FADE_IN:
                 if(mCurrentVolume<=DEFAULT_IN_VOLUME) mCurrentVolume = DEFAULT_IN_VOLUME;
 
-                mCurrentVolume += DELTA_VOLUME;
+                mCurrentVolume += DELTA_IN_VOLUME;
 
                 if(mCurrentVolume>=DEFAULT_PLAY_VOLUME)
                     mCurrentVolume = DEFAULT_PLAY_VOLUME;
@@ -224,7 +268,7 @@ class PreviewSong {
             case FADE_OUT:
                 if(mCurrentVolume > DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
-                mCurrentVolume -= DELTA_VOLUME;
+                mCurrentVolume -= DELTA_OUT_VOLUME;
 
                 if(mCurrentVolume<DEFAULT_OUT_VOLUME) mCurrentVolume = DEFAULT_OUT_VOLUME;
 
@@ -257,9 +301,9 @@ class PreviewSong {
     }
 
     private void fadeIn() {
-
-        setVolume(DEFAULT_IN_VOLUME);
         onAudioStartFadeIn();
+        setVolume(DEFAULT_IN_VOLUME);
+        mPlayHandler.postDelayed(mFinishPlayRunnable,mFinish - mStart - FADE_OUT_DURATION - FADE_IN_DURATION);
         mFadeState = FADE_IN;
         update();
     }

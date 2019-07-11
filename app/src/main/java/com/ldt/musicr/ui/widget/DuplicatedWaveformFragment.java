@@ -224,7 +224,7 @@ public abstract class DuplicatedWaveformFragment extends Fragment implements Mar
         this.mHandler.postDelayed(this.mTimerRunnable, 100L);
     }
 
-    public void onDestroy() {
+    public void destroy() {
         if(this.mPlayer != null && this.mPlayer.isPlaying()) {
             this.mPlayer.stop();
             this.mPlayer.release();
@@ -233,7 +233,7 @@ public abstract class DuplicatedWaveformFragment extends Fragment implements Mar
 
         this.mSoundFile = null;
         this.mWaveformView = null;
-        super.onDestroy();
+        super.destroy();
     }
 
     public void waveformDraw() {

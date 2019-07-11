@@ -123,7 +123,7 @@ public class ArtistPagerFragment extends SupportFragment {
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.artist_pager,container,false);
+        return inflater.inflate(R.layout.artist_pager_middle,container,false);
     }
 
     @Override

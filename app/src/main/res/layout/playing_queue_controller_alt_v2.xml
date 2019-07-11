@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.ldt.musicr.ui.widget.viewgroup.SlidingMotionLayout android:id="@+id/constraint_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:ec="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/root"
-    tools:context="com.ldt.musicr.ui.playingqueue.PlayingQueueController">
-<android.support.v7.widget.CardView
-    android:id="@+id/rootCardView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardBackgroundColor="@color/background_panel_color"
-    app:cardPreventCornerOverlap="true">
-<com.ldt.musicr.ui.widget.viewgroup.SlidingMotionLayout
-    android:id="@+id/constraint_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutDescription="@xml/playing_queue_animation">
+    tools:background="@color/background_panel_color">
     <View
         android:id="@+id/minimize_bar"
         android:layout_width="0dp"
@@ -40,6 +28,7 @@
         android:tint="@color/FlatBlue"
         android:layout_marginTop="2dp"
         />
+
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
@@ -74,8 +63,8 @@
         android:paddingBottom="2dp"
         app:layout_constraintTop_toTopOf="@id/playlist_title"
         app:layout_constraintEnd_toStartOf="parent"
-        tools:text="36 Songs"
-        android:textSize="12sp"
+        android:text="36 Songs"
+        android:textSize="11sp"
         android:textStyle="bold"
         android:maxWidth="250dp"
         android:textColor="@color/FlatWhite"
@@ -116,7 +105,7 @@
         android:textColor="@color/FlatBlue"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:text="@string/all_songs"
+        android:text="All Songs"
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:ellipsize="marquee"
@@ -220,7 +209,7 @@
         app:layout_constraintBottom_toBottomOf="@id/playlist_title"
         android:gravity="center"
         android:textSize="14sp"
-        android:text="@string/lyric"
+        android:text="Lyric"
         app:layout_constraintStart_toEndOf="@id/down"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/ripple_16dp_border"
@@ -228,12 +217,17 @@
         android:paddingEnd="12dp"
         android:textStyle="bold"
         android:paddingTop="4dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:alpha="0"
+        android:visibility="invisible"
         android:paddingBottom="4dp"/>
     <TextView
         android:id="@+id/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/down"
+        app:layout_constraintTop_toTopOf="@id/playlist_title"
+        app:layout_constraintBottom_toBottomOf="@id/playlist_title"
         android:gravity="center"
         android:textSize="14sp"
         android:text="@string/save_as"
@@ -244,13 +238,7 @@
         android:paddingEnd="12dp"
         android:textStyle="bold"
         android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:alpha="0"
-        android:visibility="invisible"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:clickable="true"
-        android:focusable="true"/>
+        android:paddingBottom="4dp"/>
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/lyric_parent"
         android:layout_width="0dp"
@@ -274,16 +262,3 @@
         />
     </android.support.v4.widget.NestedScrollView>
 </com.ldt.musicr.ui.widget.viewgroup.SlidingMotionLayout>
-    <View
-        android:id="@+id/dim_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:alpha="0"/>
-</android.support.v7.widget.CardView>
-<View
-android:layout_width="match_parent"
-android:layout_height="50dp"
-android:layout_gravity="bottom"
-android:background="@color/background_panel_color" />
-    </FrameLayout>

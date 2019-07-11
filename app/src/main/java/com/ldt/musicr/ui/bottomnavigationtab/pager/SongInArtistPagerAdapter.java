@@ -26,6 +26,7 @@ import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
@@ -43,6 +44,7 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -52,7 +54,8 @@ import butterknife.OnClick;
 
 public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements FastScrollRecyclerView.SectionedAdapter,
         FastScrollRecyclerView.MeasurableAdapter, AudioPreviewPlayer.AudioPreviewerListener, SortOrderBottomSheet.SortOrderChangedListener {
-    private static final String TAG = "SongAdapter";
+    private static final String TAG = "SongInArtistPagerAdapter";
+
     public ArrayList<Song> mData = new ArrayList<>();
     public int mCurrentHighLightPos = 0;
     private Context mContext;
@@ -295,10 +298,19 @@ public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.
 
         if(mPreviewItem!=-1)
             notifyItemChanged(mPreviewItem,false);
-        String path = mData.get(getPositionInData(itemHolder)).data;
-        mPreviewItem = itemHolder.getAdapterPosition();
-        ((MainActivity)mContext).getAudioPreviewPlayer().previewThisFile(SongInArtistPagerAdapter.this,path);
 
+        if(mContext instanceof MainActivity) {
+            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+            if(preview!=null) {
+                if (preview.isPlayingPreview())
+                    preview.cancelPreview();
+                else {
+                    ArrayList<Song> data = new ArrayList<>(mData);
+                    Collections.shuffle(data);
+                    preview.previewSongs(data);
+                }
+            }
+        }
     }
 
     @Override
@@ -331,7 +343,10 @@ public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     public void forceStopPreview() {
         mPreviewItem = -1;
-        ((MainActivity)mContext).getAudioPreviewPlayer().forceStop();
+        if(mContext instanceof MainActivity) {
+            SongPreviewController controller =  ((MainActivity)mContext).getSongPreviewController();
+            if(controller!=null) controller.cancelPreview();
+        }
     }
 
     public void playAll() {

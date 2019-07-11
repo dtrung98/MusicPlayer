@@ -191,6 +191,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         if(a instanceof BaseActivity)
             ((BaseActivity)a).removeMusicServiceEventListener(this);
 
+        mAdapter.destroy();
         super.onDestroyView();
     }
 

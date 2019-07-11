@@ -10,15 +10,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.app.NotificationCompat.MediaStyle;
-import android.support.v7.graphics.Palette;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ldt.musicr.R;
-import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
-import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.MainActivity;
@@ -31,7 +29,8 @@ import static com.ldt.musicr.service.MusicService.ACTION_TOGGLE_PAUSE;
 
 
 public class PlayingNotificationImpl24 extends PlayingNotification {
-
+    private static final String TAG = "NotificationImpl24";
+    private int playButtonResId  = R.drawable.ic_pause_white;
     @Override
     public synchronized void update() {
         stopped = false;
@@ -41,8 +40,10 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
         final boolean isPlaying = service.isPlaying();
         final String text = MusicUtil.getSongInfoString(song);
 
-        final int playButtonResId = isPlaying
-                ? R.drawable.ic_pause_white_24dp : R.drawable.ic_play_arrow_white_24dp;
+
+        Log.d(TAG, "update: isPlaying = "+ isPlaying+", playRes = "+ playButtonResId);
+        playButtonResId = isPlaying
+                ? R.drawable.ic_pause_white : R.drawable.ic_play_white;
 
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -55,13 +56,12 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
 
         final int bigNotificationImageSize = service.getResources().getDimensionPixelSize(R.dimen.notification_big_image_size);
         service.runOnUiThread(() ->
-                SongGlideRequest.Builder.from(GlideApp.with(service), song)
+                SongGlideRequest.Builder.from(Glide.with(service), song)
                 .checkIgnoreMediaStore(service)
                 .generatePalette(service).build()
                 .into(new SimpleTarget<Bitmap>(bigNotificationImageSize, bigNotificationImageSize) {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-
                         update(resource, Color.TRANSPARENT);
                     }
 
@@ -73,6 +73,8 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
                     void update(Bitmap bitmap, int color) {
                         if (bitmap == null)
                             bitmap = BitmapFactory.decodeResource(service.getResources(), R.drawable.default_album_art);
+
+                        Log.d(TAG, "update after glide : playRes = "+ playButtonResId);
                         NotificationCompat.Action playPauseAction = new NotificationCompat.Action(playButtonResId,
                                 service.getString(R.string.action_play_pause),
                                 retrievePlaybackAction(ACTION_TOGGLE_PAUSE));

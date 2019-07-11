@@ -27,7 +27,7 @@
             app:mk_type="Whirlpool"
             app:mk_color="#aaffffff"
             android:layout_gravity="center"/>
-        <com.spacer.event.ui.widget.SuccessTickView
+        <com.ldt.musicr.ui.widget.view.SuccessTickView
             android:id="@+id/success_view"
             android:layout_width="40dp"
             android:layout_height="40dp"

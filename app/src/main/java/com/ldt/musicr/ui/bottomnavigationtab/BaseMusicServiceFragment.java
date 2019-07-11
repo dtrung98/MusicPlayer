@@ -50,4 +50,13 @@ public abstract class BaseMusicServiceFragment extends Fragment implements Music
 
     }
 
+    @Override
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+
+    }
 }
