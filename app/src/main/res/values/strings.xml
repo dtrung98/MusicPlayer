@@ -50,8 +50,8 @@
     <string name="the_artist_of_the_song">The Artist Of The Song</string>
     <string name="this_is_artist_of_the_song">This Is Artist Of The Song</string>
     <string name="error_playing_track">Error Playing Track</string>
-
-
+    <string name="no_equalizer">No equalizer found.</string>
+    <string name="no_audio_ID">"Play a song first, then try again."</string>
     <string name="accessibility_play">Play</string>
     <string name="accessibility_pause">Pause</string>
     <string name="accessibility_next">Next</string>
@@ -77,11 +77,15 @@
     <string name="sort_order_entry_number_of_songs">Number of songs</string>
     <string name="sort_order_entry_number_of_albums">Number of albums</string>
     <string name="sort_order_entry_filename">Filename</string>
-
+    <string name="saved_playlist_to">Saved playlist to %s.</string>
+    <string name="failed_to_save_playlist">Failed to save playlist (%s).</string>
+    <string name="saved_x_playlists_to_x">Saved %1$d playlists to %2$s.</string>
+    <string name="saved_x_playlists_to_x_failed_to_save_x">Saved %1$d playlists to %2$s, failed to save %3$d.</string>
 
     <string name="timber_source">Report any bugs <u> here </u> </string>
     <string name="timber_feature_request">Specify any feature request in the Google+ community <u> here </u></string>
-
+    <string name="dialog_ringtone_title">Set ringtone</string>
+    <string name="dialog_ringtone_message">Allow phonograph to modify audio settings</string>
     <string name="menu_show_as">View As</string>
     <string name="menu_show_as_entry_list">List</string>
     <string name="menu_show_as_entry_grid">Grid</string>

@@ -15,19 +15,19 @@
         android:title="@string/play_next" />
 
     <item
-        android:id="@+id/popup_song_addto_queue"
+        android:id="@+id/popup_song_add_to_queue"
         android:title="@string/add_to_queue" />
 
     <item
-        android:id="@+id/popup_song_addto_playlist"
+        android:id="@+id/popup_song_add_to_playlist"
         android:title="@string/add_to_playlist" />
 
     <item
-        android:id="@+id/popup_song_goto_album"
+        android:id="@+id/popup_song_go_to_album"
         android:title="@string/go_to_album" />
 
     <item
-        android:id="@+id/popup_song_goto_artist"
+        android:id="@+id/popup_song_go_to_artist"
     android:title="@string/go_to_artist" />
 
     <item

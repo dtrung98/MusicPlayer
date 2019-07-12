@@ -177,16 +177,16 @@ public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.
                     case R.id.popup_song_play_next:
                         MusicPlayerRemote.playNext(mData.get(position));
                         break;
-                    case R.id.popup_song_goto_album:
-                        //TODO:   NavigationUtils.goToAlbum(mContext, mData.get(position).albumId);
+                    case R.id.popup_song_go_to_album:
+                        //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
                         break;
-                    case R.id.popup_song_goto_artist:
-                        //TODO: NavigationUtils.goToArtist(mContext, mData.get(position).artistId);
+                    case R.id.popup_song_go_to_artist:
+                        //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
                         break;
-                    case R.id.popup_song_addto_queue:
+                    case R.id.popup_song_add_to_queue:
                         MusicPlayerRemote.enqueue(mData.get(position));
                         break;
-                    case R.id.popup_song_addto_playlist:
+                    case R.id.popup_song_add_to_playlist:
                         //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
                         break;
                     case R.id.popup_song_share:
@@ -219,17 +219,17 @@ public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.
                             MusicPlayerRemote.playNext(mData.get(position));
                             //MusicPlayer.playNext(mContext, ids, -1, Util.IdType.NA);
                             break;
-                        case R.id.popup_song_goto_album:
-                            //TODO:   NavigationUtils.goToAlbum(mContext, mData.get(position).albumId);
+                        case R.id.popup_song_go_to_album:
+                            //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
                             break;
-                        case R.id.popup_song_goto_artist:
-                            //TODO: NavigationUtils.goToArtist(mContext, mData.get(position).artistId);
+                        case R.id.popup_song_go_to_artist:
+                            //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
                             break;
-                        case R.id.popup_song_addto_queue:
+                        case R.id.popup_song_add_to_queue:
 
                             MusicPlayerRemote.enqueue(mData.get(position));
                             break;
-                        case R.id.popup_song_addto_playlist:
+                        case R.id.popup_song_add_to_playlist:
                             //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
                             break;
                         case R.id.popup_song_share:

@@ -1,4 +1,3 @@
-/*
 package com.ldt.musicr.contract;
 
 import android.content.Context;
@@ -11,14 +10,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.DataSource;
@@ -31,7 +27,6 @@ import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.helper.songpreview.PreviewSong;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.helper.songpreview.SongPreviewListener;
-import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.BaseActivity;
@@ -45,20 +40,17 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-*/
 /**
- * Handle Event
- * <br> Click Item
- * <br> Long Click Item
- * <br> Click Preview Button Item
- * <br> Click Menu Button Item
- *//*
+ * Handle Event:
+ * <br>+. Click on item
+ * <br>+. Long Click on item
+ * <br>+. Click Preview Button on item
+ * <br>+. Click Menu Button on item
+ */
 
 public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder, Song> implements SongPreviewListener {
    private static final String TAG = "SimpleSongAdapter";
@@ -132,16 +124,16 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
                     case R.id.popup_song_play_next:
                         MusicPlayerRemote.playNext(mData.get(position));
                         break;
-                    case R.id.popup_song_goto_album:
-                        //TODO:   NavigationUtils.goToAlbum(mContext, mData.get(position).albumId);
+                    case R.id.popup_song_go_to_album:
+                        //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
                         break;
-                    case R.id.popup_song_goto_artist:
-                        //TODO: NavigationUtils.goToArtist(mContext, mData.get(position).artistId);
+                    case R.id.popup_song_go_to_artist:
+                        //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
                         break;
-                    case R.id.popup_song_addto_queue:
+                    case R.id.popup_song_add_to_queue:
                         MusicPlayerRemote.enqueue(mData.get(position));
                         break;
-                    case R.id.popup_song_addto_playlist:
+                    case R.id.popup_song_add_to_playlist:
                         //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
                         break;
                     case R.id.popup_song_share:
@@ -172,9 +164,8 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
                if (preview.isPlayingPreview()&&preview.isThisSongCurrentPreview(getData().get(getPositionInData(itemHolder))))
                    preview.cancelPreview();
                else {
-                  */
-/* ArrayList<Song> data = new ArrayList<>(mData);
-                   Collections.shuffle(data);*//*
+ ArrayList<Song> data = new ArrayList<>(mData);
+                   Collections.shuffle(data);
 
                    preview.previewSongs(mData.get(getPositionInData(itemHolder)));
                }
@@ -367,12 +358,11 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
         @OnClick(R.id.preview_button)
         void clickPresent() {
 
-         */
-/*   if(mPresentButton instanceof  CircularPlayPauseProgressBar) {
+   if(mPresentButton instanceof  CircularPlayPauseProgressBar) {
                 CircularPlayPauseProgressBar mProgressBar = (CircularPlayPauseProgressBar)mPresentButton;
                 if(mPreviewItemInData ==getAdapterPosition()&&mProgressBar.getMode()==CircularPlayPauseProgressBar.RESET)
                     mPreviewItemInData = -1;
-            }*//*
+            }
 
 
 
@@ -386,4 +376,3 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
         }
     }
 }
-*/

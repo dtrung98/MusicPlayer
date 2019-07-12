@@ -26,7 +26,6 @@ public class CircularPlayPauseProgressBar extends View {
     }
     Drawable mWaveDrawable;
     Drawable mPauseDrawable;
-
     public CircularPlayPauseProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(attrs);
