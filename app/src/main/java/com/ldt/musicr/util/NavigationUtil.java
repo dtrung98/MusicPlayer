@@ -22,28 +22,67 @@ import android.media.audiofx.AudioEffect;
 import android.support.annotation.NonNull;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.ArtistLoader;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
+import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 
 import es.dmoral.toasty.Toasty;
 
 public class NavigationUtil {
 
-    public static void goToArtist(@NonNull final Activity activity, final int artistId) {
+    public static void navigateToBackStackController(@NonNull final  MainActivity activity) {
+        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
+        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+
+        if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED&&nowPlayingAttr.getState()!= LayerController.Attr.MINIMIZED) {
+            // 2 layer is maximized
+            playingQueueAttr.animateToMin();
+            playingQueueAttr.getParent().postDelayed(nowPlayingAttr::animateToMin,550);
+        } else if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED) {
+            // only playing queue
+            playingQueueAttr.animateToMin();
+        } else if(nowPlayingAttr.getState()!= LayerController.Attr.MINIMIZED) {
+            // only now playing
+            nowPlayingAttr.animateToMin();
+        }
+    }
+
+    public static void navigateToArtist(@NonNull final Activity activity, final int artistId) {
+        if (activity instanceof MainActivity) {
+            final MainActivity mainActivity = (MainActivity) activity;
+
+            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab();
+            if (fragment != null)
+                fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
+
+            navigateToBackStackController(mainActivity);
+        }
+    }
+
+    public static void navigateToAlbum(@NonNull final Activity activity, final int albumId) {
 
     }
 
-    public static void goToAlbum(@NonNull final Activity activity, final int albumId) {
+    public static void navigateToGenre(@NonNull final Activity activity, final Genre genre) {
 
     }
 
-    public static void goToGenre(@NonNull final Activity activity, final Genre genre) {
+    public static void navigateToPlaylist(@NonNull final Activity activity, final Playlist playlist) {
+        if (activity instanceof MainActivity) {
+            final MainActivity mainActivity = (MainActivity) activity;
 
-    }
-
-    public static void goToPlaylist(@NonNull final Activity activity, final Playlist playlist) {
-
+            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab();
+            if (fragment != null)
+                fragment.getNavigationController().presentFragment(PlaylistPagerFragment.newInstance(activity,playlist,null));
+            navigateToBackStackController(mainActivity);
+        }
     }
 
     public static void openEqualizer(@NonNull final Activity activity) {

@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SongChildTab extends BaseMusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack{
-    private static final String TAG ="SongChildTab";
+    public static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;

@@ -80,12 +80,11 @@
     <string name="saved_playlist_to">Saved playlist to %s.</string>
     <string name="failed_to_save_playlist">Failed to save playlist (%s).</string>
     <string name="saved_x_playlists_to_x">Saved %1$d playlists to %2$s.</string>
-    <string name="saved_x_playlists_to_x_failed_to_save_x">Saved %1$d playlists to %2$s, failed to save %3$d.</string>
 
     <string name="timber_source">Report any bugs <u> here </u> </string>
     <string name="timber_feature_request">Specify any feature request in the Google+ community <u> here </u></string>
     <string name="dialog_ringtone_title">Set ringtone</string>
-    <string name="dialog_ringtone_message">Allow phonograph to modify audio settings</string>
+    <string name="dialog_ringtone_message">Allow app to modify audio settings</string>
     <string name="menu_show_as">View As</string>
     <string name="menu_show_as_entry_list">List</string>
     <string name="menu_show_as_entry_grid">Grid</string>
@@ -206,7 +205,6 @@
     <string name="middle_dot" translatable="false">•</string>
     <string name="see_all_songs">See all songs</string>
     <string name="x_has_been_set_as_ringtone">Set %1$s as your ringtone.</string>
-    <string name="deleted_x_songs">Deleted %1$d songs.</string>
     <string name="favorites">Favorites</string>
     <string name="sort_by_name_asc">Sort by title</string>
     <string name="sort_by_name_desc">Sort by title (Desc)</string>
@@ -254,7 +252,13 @@
     <string name="scanned_files">Scanned %1$d of %2$d files.</string>
     <string name="could_not_scan_files">Could not scan %d files.</string>
     <string name="saving_changes">Saving changes</string>
-
+    <string name="created_playlist_x">Created playlist %1$s.</string>
+    <string name="playlist_exists">Playlist %1$s already exists.</string>
+    <string name="could_not_create_playlist">Couldn\u2019t create playlist.</string>
+    <string name="delete_playlist_x"><![CDATA[Delete the playlist <b>%1$s</b>?]]></string>
+    <string name="clear_playlist_x"><![CDATA[Clear the playlist <b>%1$s</b>? This can\u2019t be undone!]]></string>
+    <string name="inserted_x_songs_into_playlist_x">Inserted %1$d songs into the playlist %2$s.</string>
+    <string name="delete_x_playlists"><![CDATA[Delete <b>%1$d</b> playlists?]]></string>
     <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the app can\'t run properly.</string>
     <string name="access_external_storage">Access External Storage</string>
     <string name="allow_access">Allow Access</string>
@@ -265,4 +269,34 @@
     <string name="all_songs">All Songs</string>
     <string name="play_in">play in</string>
     <string name="unknown_playlist">Unknown Playlist</string>
+    <string name="asc">Asc</string>
+    <string name="desc">Desc</string>
+    <string name="go_to_source_playlist">Go to source playlist</string>
+    <string name="edit_tag">Edit Tag</string>
+    <string name="detail">Detail</string>
+    <string name="set_as_ringtone">Set as ringtone</string>
+    <string name="divider" translatable="false">_devider</string>
+    <string name="remove_from_queue">Remove from queue</string>
+    <string name="repeat_it_again">Repeat it again</string>
+    <string name="add_playlist_to_playlist">Add all songs to another playlist</string>
+    <string name="rename">Rename</string>
+    <string name="delete">Delete</string>
+    <string name="deleted_x_songs">Deleted %1$d songs.</string>
+    <string name="delete_song_x"><![CDATA[Delete the song <b>%1$s</b>?]]></string>
+    <string name="delete_x_songs"><![CDATA[Delete <b>%1$d</b> songs?]]></string>
+    <string name="remove_song_x_from_playlist"><![CDATA[Remove the song <b>%1$s</b> from the playlist?]]></string>
+    <string name="remove_x_songs_from_playlist"><![CDATA[Remove <b>%1$d</b> songs from the playlist?]]></string>
+    <string name="delete_song_title">Delete song</string>
+    <string name="delete_songs_title">Delete songs</string>
+    <string name="remove_song_from_playlist_title">Remove song from playlist</string>
+    <string name="remove_songs_from_playlist_title">Remove songs from playlist</string>
+    <string name="delete_action">Delete</string>
+    <string name="clear_action">Clear</string>
+    <string name="new_playlist_title">New playlist</string>
+    <string name="create_action">Create</string>
+    <string name="playlist_name_empty">Playlist name</string>
+    <string name="add_playlist_title">Choose playlist to add</string>
+    <string name="action_new_playlist">Create new playlist…</string>
+    <string name="play_preview">Play the preview</string>
+
 </resources>

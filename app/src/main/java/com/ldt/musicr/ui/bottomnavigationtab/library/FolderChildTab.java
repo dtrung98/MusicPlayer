@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 
 public class FolderChildTab extends Fragment {
-    private static final String TAG ="FolderChildTab";
+    public static final String TAG ="FolderChildTab";
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

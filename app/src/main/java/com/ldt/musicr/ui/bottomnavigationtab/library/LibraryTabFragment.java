@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -13,6 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import com.ldt.musicr.util.Tool;
 
@@ -74,11 +78,28 @@ public class LibraryTabFragment extends SupportFragment {
         mSearchView.clearFocus();
     }
 
-    public void goToSongTab() {
-        mViewPager.setCurrentItem(0,false);
+    public Fragment navigateToTab(int item) {
+        if(item<mPagerAdapter.getCount()) {
+            mViewPager.setCurrentItem(item, false);
+           return mPagerAdapter.getItem(item);
+        }
+        return null;
     }
 
-    public void goToPlaylistTab() {
-        mViewPager.setCurrentItem(1,false);
+    public Fragment navigateToTab(final String tag) {
+        switch (tag) {
+            case SongChildTab.TAG:
+                 return navigateToTab(0);
+            case PlaylistChildTab.TAG:
+                return navigateToTab(1);
+            case ArtistChildTab.TAG:
+                return navigateToTab(2);
+            case GenreChildTab.TAG:
+                return navigateToTab(3);
+            case FolderChildTab.TAG:
+                return navigateToTab(4);
+             default:
+                 return null;
+        }
     }
 }

@@ -262,7 +262,6 @@ public class LayerController {
             pcOfFocusLayer_End = a.getPercent();
         }
 
-
         for(int item = 1; item < activeSize; item++) {
 
             // layer trên cùng mặc nhiên scale = 1 nên không cần phải tính
@@ -779,6 +778,7 @@ public class LayerController {
                mBaseLayers.get(mGestureListener.item).onTranslateChanged(this);
             updateLayerChanged();
         }
+
         public void shakeOnMax(float _value) {
             float value = 10*oneDp + _value;
             if(value>30*oneDp) value = 30*oneDp;
@@ -786,6 +786,7 @@ public class LayerController {
             animateTo(mCurrentTranslate -value);
             mBottomNavigationParent.postDelayed(this::animateToMax,300);
         }
+
 
         public void animateTo(float selfTranslateY) {
             if(selfTranslateY== mCurrentTranslate) return;
@@ -816,6 +817,7 @@ public class LayerController {
                 parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);
             }
         }
+
         private int computeSettleDuration( int dx, int dy, int xvel, int yvel) {
             xvel = clampMag(xvel, (int) mMinVelocity, (int) mMaxVelocity);
             yvel = clampMag(yvel, (int) mMinVelocity, (int) mMaxVelocity);

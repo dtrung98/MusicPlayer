@@ -25,13 +25,23 @@ import butterknife.ButterKnife;
 public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG ="FeatureTabFragment";
 
+    @BindView(R.id.status_bar)
+    View mStatusView;
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @BindView(R.id.scroll_view)
+    NestedScrollView mNestedScrollView;
+
+    FeatureLinearHolder mFeatureLinearHolder;
+
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.feature_tab_fragment, container, false);
     }
-    @BindView(R.id.scroll_view)
-    NestedScrollView mNestedScrollView;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -45,7 +55,6 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         if(getActivity() instanceof BaseActivity) {
             ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
         }
-
         refreshData();
     }
 
@@ -56,19 +65,7 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         }
         mSwipeRefreshLayout.setRefreshing(false);
     }
-    FeatureLinearHolder mFeatureLinearHolder;
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-    @BindView(R.id.status_bar) View mStatusView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
     public void onSetStatusBarMargin(int value) {
         if(mStatusView!=null) {
@@ -125,9 +122,8 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
 
     @Override
     public void onDestroyView() {
-
         if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
         }
 
         super.onDestroyView();

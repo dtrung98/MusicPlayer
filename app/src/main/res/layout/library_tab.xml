@@ -12,7 +12,6 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
    >
-
     <View
         android:id="@+id/gradient_back"
         android:layout_width="0dp"

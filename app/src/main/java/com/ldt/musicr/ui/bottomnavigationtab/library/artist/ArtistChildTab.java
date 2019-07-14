@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClickListener, MusicServiceEventListener {
-    private static final String TAG ="ArtistChildTab";
+    public static final String TAG ="ArtistChildTab";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;

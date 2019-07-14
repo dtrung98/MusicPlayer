@@ -12,11 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.bumptech.glide.load.DataSource;
@@ -26,18 +24,18 @@ import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.glide.SongGlideRequest;
+import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AudioPreviewPlayer;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
-import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.bottomnavigationtab.library.song.PreviewRandomPlayAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Util;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
@@ -161,93 +159,9 @@ public class SongInArtistPagerAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private void setOnPopupMenuListener(SongInArtistPagerAdapter.ItemHolder itemHolder, final int position) {
         itemHolder.mMoreButton.setOnClickListener(v -> {
-            SongOptionBottomSheet sheet =  SongOptionBottomSheet.newInstance();
-            sheet.show(((AppCompatActivity)mContext).getSupportFragmentManager(),
-                    "song_popup_menu");
-            sheet.setListener(id -> {
-                switch (id) {
-                    case R.id.popup_song_remove_playlist:
-                        Util.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
-                        removeSongAt(position);
-                        notifyItemRemoved(position);
-                        break;
-                    case R.id.popup_song_play:
-                        MusicPlayerRemote.openQueue(mData,position,true);
-                        break;
-                    case R.id.popup_song_play_next:
-                        MusicPlayerRemote.playNext(mData.get(position));
-                        break;
-                    case R.id.popup_song_go_to_album:
-                        //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
-                        break;
-                    case R.id.popup_song_go_to_artist:
-                        //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
-                        break;
-                    case R.id.popup_song_add_to_queue:
-                        MusicPlayerRemote.enqueue(mData.get(position));
-                        break;
-                    case R.id.popup_song_add_to_playlist:
-                        //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
-                        break;
-                    case R.id.popup_song_share:
-                        Util.shareTrack(mContext, mData.get(position).id);
-                        break;
-                    case R.id.popup_song_delete:
-                        long[] deleteIds = {mData.get(position).id};
-                        Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, SongInArtistPagerAdapter.this, position);
-                        break;
-                }
-                return true;
-            }
-            );
-            ;
-            if(true) return;
-            final PopupMenu menu = new PopupMenu(mContext, v);
-            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.popup_song_remove_playlist:
-                            Util.removeFromPlaylist(mContext, mData.get(position).id, playlistId);
-                            removeSongAt(position);
-                            notifyItemRemoved(position);
-                            break;
-                        case R.id.popup_song_play:
-                            MusicPlayerRemote.openQueue(mData,position,true);
-                            break;
-                        case R.id.popup_song_play_next:
-                            MusicPlayerRemote.playNext(mData.get(position));
-                            //MusicPlayer.playNext(mContext, ids, -1, Util.IdType.NA);
-                            break;
-                        case R.id.popup_song_go_to_album:
-                            //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
-                            break;
-                        case R.id.popup_song_go_to_artist:
-                            //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
-                            break;
-                        case R.id.popup_song_add_to_queue:
-
-                            MusicPlayerRemote.enqueue(mData.get(position));
-                            break;
-                        case R.id.popup_song_add_to_playlist:
-                            //TODO: AddPlaylistDialog.newInstance(mData.get(position)).show(mContext.getSupportFragmentManager(), "ADD_PLAYLIST");
-                            break;
-                        case R.id.popup_song_share:
-                            Util.shareTrack(mContext, mData.get(position).id);
-                            break;
-                        case R.id.popup_song_delete:
-                            long[] deleteIds = {mData.get(position).id};
-                            Util.showDeleteDialog(mContext, mData.get(position).title, deleteIds, SongInArtistPagerAdapter.this, position);
-                            break;
-                    }
-                    return false;
-                }
-            });
-            menu.inflate(R.menu.popup_song);
-
-            menu.show();
-            if(isPlaylist)
-                menu.getMenu().findItem(R.id.popup_song_remove_playlist).setVisible(true);
+            OptionBottomSheet
+                    .newInstance(SongMenuHelper.SONG_ARTIST_OPTION,mData.get(position))
+                    .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
         });
     }
 

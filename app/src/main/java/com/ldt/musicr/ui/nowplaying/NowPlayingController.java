@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
@@ -39,7 +41,7 @@ import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.SortOrder;
@@ -77,11 +79,10 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
     @OnClick(R.id.menu_button)
     void more() {
-        if(getActivity() != null) {
-            SongOptionBottomSheet sheet = SongOptionBottomSheet.newInstance();
-            sheet.show(getActivity().getSupportFragmentManager(),
-                    "song_popup_menu");
-        }
+        if(getActivity() !=null)
+            OptionBottomSheet
+                    .newInstance(SongMenuHelper.NOW_PLAYING_OPTION,MusicPlayerRemote.getCurrentSong())
+                    .show(getActivity().getSupportFragmentManager(), "song_popup_menu");
     }
 
     @Nullable
@@ -253,7 +254,10 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
         mConstraintRoot.setProgress(attr.getRuntimePercent());
         // sync time text view
-        if(mConstraintRoot.getProgress()!=0&&!mTimeTextIsSync) mTimeTextView.setText(timeTextViewTemp);
+        if(mConstraintRoot.getProgress()!=0&&!mTimeTextIsSync) {
+            mTimeTextView.setText(timeTextViewTemp);
+            Log.d(TAG, "onTranslateChanged: timeTextView : "+timeTextViewTemp);
+        }
         if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1)
             try {
                 mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
@@ -437,7 +441,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     @Override
     public boolean onGestureDetected(int gesture) {
         if(gesture==LayerController.SINGLE_TAP_UP) {
-            LayerController.Attr a = mLayerController.getMyAttr(this);
+            LayerController.Attr a = getLayerController().getMyAttr(this);
             if(a!=null) {
                 if(a.getState()== LayerController.Attr.MINIMIZED)
                     a.animateToMax();
@@ -553,6 +557,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         text+=dur_second;
         if(mConstraintRoot.getProgress()!=0) {
             mTimeTextView.setText(text);
+            Log.d(TAG, "setTextTime: "+text);
             mTimeTextIsSync = true;
         }
         else {

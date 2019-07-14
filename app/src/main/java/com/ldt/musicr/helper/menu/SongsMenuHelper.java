@@ -1,7 +1,7 @@
-package com.ldt.musicr.contract.menu;
+package com.ldt.musicr.helper.menu;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
@@ -14,9 +14,9 @@ import java.util.List;
  * modified by Le Dinh Trung (dtrung98)
  */
 public class SongsMenuHelper {
-    public static boolean handleMenuClick(@NonNull FragmentActivity activity, @NonNull List<Song> songs, int menuItemId) {
+/*    public static boolean handleMenuClick(@NonNull Activity activity, @NonNull List<Song> songs, int menuItemId) {
         switch (menuItemId) {
-            case R.id.action_play_next:
+            case R.id.:
                 MusicPlayerRemote.playNext(songs);
                 return true;
             case R.id.action_add_to_current_playing:
@@ -30,5 +30,5 @@ public class SongsMenuHelper {
                 return true;
         }
         return false;
-    }
+    }*/
 }

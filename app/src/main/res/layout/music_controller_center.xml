@@ -230,7 +230,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:padding="@dimen/padding_button_option_center"
-            android:src="@drawable/shufflel"/>
+            android:src="@drawable/smooth_shuffle"/>
 
         <ImageView
             android:id="@+id/more_button_bar"

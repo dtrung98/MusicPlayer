@@ -1,3 +1,4 @@
+/*
 package com.ldt.musicr.contract;
 
 import android.content.Context;
@@ -31,7 +32,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.SongOptionBottomSheet;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
@@ -44,13 +45,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+*/
 /**
  * Handle Event:
  * <br>+. Click on item
  * <br>+. Long Click on item
  * <br>+. Click Preview Button on item
  * <br>+. Click Menu Button on item
- */
+ *//*
+
 
 public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder, Song> implements SongPreviewListener {
    private static final String TAG = "SimpleSongAdapter";
@@ -108,7 +111,7 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
     @Override
     protected void onPopupMenuItem(AbsDynamicHolder itemHolder, final int position) {
 
-            SongOptionBottomSheet sheet =  SongOptionBottomSheet.newInstance();
+            OptionBottomSheet sheet =  OptionBottomSheet.newInstance();
             sheet.show(((AppCompatActivity)mContext).getSupportFragmentManager(),
                     "song_popup_menu");
             sheet.setListener(id -> {
@@ -128,7 +131,7 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
                         //TODO:   NavigationUtil.goToAlbum(mContext, mData.get(position).albumId);
                         break;
                     case R.id.popup_song_go_to_artist:
-                        //TODO: NavigationUtil.goToArtist(mContext, mData.get(position).artistId);
+                        //TODO: NavigationUtil.navigateToArtist(mContext, mData.get(position).artistId);
                         break;
                     case R.id.popup_song_add_to_queue:
                         MusicPlayerRemote.enqueue(mData.get(position));
@@ -376,3 +379,4 @@ public abstract class SimpleSongAdapter extends AbsMediaAdapter<AbsDynamicHolder
         }
     }
 }
+*/

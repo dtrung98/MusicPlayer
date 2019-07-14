@@ -183,7 +183,7 @@
         android:paddingEnd="8dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        tools:text="02:38 | 04:07"
+        android:text="02:38 | 04:07"
         android:textColor="@color/FlatWhite"
         android:textSize="10sp"
         android:alpha="0.85"

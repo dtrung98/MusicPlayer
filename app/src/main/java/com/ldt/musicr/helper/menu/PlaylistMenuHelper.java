@@ -1,10 +1,9 @@
-package com.ldt.musicr.contract.menu;
+package com.ldt.musicr.helper.menu;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
+import android.support.annotation.StringRes;
 import android.widget.Toast;
 
 import com.ldt.musicr.App;
@@ -13,11 +12,10 @@ import com.ldt.musicr.loader.PlaylistSongLoader;
 import com.ldt.musicr.model.AbsCustomPlaylist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.widget.WeakContextAsyncTask;
+import com.ldt.musicr.util.PlaylistsUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,7 +23,18 @@ import java.util.List;
  * modified by Le Dinh Trung (dtrung98)
  */
 public class PlaylistMenuHelper {
-    public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull final Playlist playlist, @NonNull MenuItem item) {
+    @StringRes
+    public static final int[] PLAYLIST_OPTION = new int[]{
+            /*   R.string.play,*/
+            R.string.play,
+            R.string.play_next,
+            R.string.add_to_queue,
+            R.string.add_playlist_to_playlist,
+            R.string.rename,
+            R.string.delete
+    };
+
+    /*public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull final Playlist playlist, @NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_play:
                 MusicPlayerRemote.openQueue(new ArrayList<>(getPlaylistSongs(activity, playlist)), 0, true);
@@ -50,7 +59,7 @@ public class PlaylistMenuHelper {
                 return true;
         }
         return false;
-    }
+    }*/
 
     @NonNull
     private static List<? extends Song> getPlaylistSongs(@NonNull Activity activity, Playlist playlist) {

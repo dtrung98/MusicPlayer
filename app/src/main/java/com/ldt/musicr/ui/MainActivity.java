@@ -15,24 +15,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-
-
 import android.widget.FrameLayout;
 
-
 import com.ldt.musicr.R;
-import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 
-import com.ldt.musicr.ui.widget.RoundClippingFrameLayout;
-
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
@@ -42,6 +34,16 @@ public class MainActivity extends BaseActivity {
     @BindView(R.id.layer_container) public FrameLayout mLayerContainer;
     @BindView(R.id.bottom_navigation_view)
     BottomNavigationView mBottomNavigationView;
+
+    public BackStackController mBackStackController;
+    public NowPlayingController mNowPlayingController;
+    public PlayingQueueController mPlayingQueueController;
+
+    public LayerController getLayerController() {
+        return mLayerController;
+    }
+
+    public LayerController mLayerController;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResult) {
@@ -56,13 +58,6 @@ public class MainActivity extends BaseActivity {
             }
 
         }
-    }
-
-    public void goToSongTab() {
-        mBackStackController.goToSongTab();
-    }
-    public void goToPlaylistTab() {
-        mBackStackController.goToPlaylistTab();
     }
 
     @Override
@@ -96,9 +91,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.basic_activity_layout);
         ButterKnife.bind(this);
         mLayerContainer.setVisibility(View.GONE);
@@ -134,9 +127,9 @@ public class MainActivity extends BaseActivity {
         mLayerController = new LayerController(this);
         mBackStackController = new BackStackController();
         mNowPlayingController = new NowPlayingController();
-        mPlaylistController = new PlayingQueueController();
+        mPlayingQueueController = new PlayingQueueController();
         mBackStackController.attachBottomNavigationView(this);
-        mLayerController.init(mLayerContainer,mBackStackController,mNowPlayingController, mPlaylistController);
+        mLayerController.init(mLayerContainer,mBackStackController,mNowPlayingController, mPlayingQueueController);
     }
 
     public boolean checkSelfPermission() {
@@ -160,9 +153,6 @@ public class MainActivity extends BaseActivity {
             }
         } else onPermissionGranted();
     }
-
-     public LayerController mLayerController;
-     RoundClippingFrameLayout TabSwitcherFrameLayout;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -199,14 +189,21 @@ public class MainActivity extends BaseActivity {
     }
 
     public void setPlaylistColorPalette(int color1, int color2, float alpha1, float alpha2) {
-        if(mPlaylistController!=null) mPlaylistController.onColorPaletteReady(color1,color2,alpha1,alpha2);
+        if(mPlayingQueueController !=null) mPlayingQueueController.onColorPaletteReady(color1,color2,alpha1,alpha2);
     }
     public void popUpPlaylistTab() {
-        if(mPlaylistController!=null) mPlaylistController.popUp();
+        if(mPlayingQueueController !=null) mPlayingQueueController.popUp();
     }
 
-    public BackStackController mBackStackController;
-    public NowPlayingController mNowPlayingController;
-    public PlayingQueueController mPlaylistController;
+    public BackStackController getBackStackController() {
+        return mBackStackController;
+    }
 
+    public NowPlayingController getNowPlayingController() {
+        return mNowPlayingController;
+    }
+
+    public PlayingQueueController getPlayingQueueController() {
+        return mPlayingQueueController;
+    }
 }

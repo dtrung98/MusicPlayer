@@ -18,6 +18,10 @@ import java.util.ArrayList;
 public abstract class BaseLayerFragment extends RuntimeThemeFragment implements LayerController.BaseLayer {
     private static final String TAG ="BaseLayerFragment";
 
+    public LayerController getLayerController() {
+        return mLayerController;
+    }
+
     public LayerController mLayerController;
     public  void setLayerController(LayerController layerController) {
         this.mLayerController = layerController;

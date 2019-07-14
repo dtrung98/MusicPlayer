@@ -18,11 +18,14 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
 
 import java.util.ArrayList;
@@ -180,16 +183,24 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
             vibrator.vibrate(50);
         }
     }
-    public void goToSongTab() {
-        mViewPager.setCurrentItem(1);
-        Fragment fragment =  mNavigationAdapter.getItem(1);
+
+    public LibraryTabFragment navigateToLibraryTab() {
+       Fragment fragment = navigateToTab(1);
+       if(fragment instanceof LibraryTabFragment) {
+           return (LibraryTabFragment)fragment;
+       }
+       return null;
+    }
+
+    public Fragment navigateToTab(int item) {
+        mViewPager.setCurrentItem(item);
+        Fragment fragment = mNavigationAdapter.getItem(1);
         if(fragment instanceof NavigateFragment) {
             ((NavigateFragment)fragment).popToRootFragment();
-           Fragment lib = ((NavigateFragment)fragment).getRootFragment();
-           if(lib instanceof LibraryTabFragment)
-            ((LibraryTabFragment)lib).goToSongTab();
-        } else Log.d(TAG, "goToSongTab: not librarytabfragment");
+            return ((NavigateFragment)fragment).getRootFragment();
+        } return null;
     }
+
     public void removeBottomNavigationView() {
         mBottomNavigationView = null;
     }
@@ -273,14 +284,4 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
     }
 
-    public void goToPlaylistTab() {
-        mViewPager.setCurrentItem(1);
-        Fragment fragment =  mNavigationAdapter.getItem(1);
-        if(fragment instanceof NavigateFragment) {
-            ((NavigateFragment)fragment).popToRootFragment();
-            Fragment lib = ((NavigateFragment)fragment).getRootFragment();
-            if(lib instanceof LibraryTabFragment)
-                ((LibraryTabFragment)lib).goToPlaylistTab();
-        } else Log.d(TAG, "goToSongTab: not librarytabfragment");
-    }
 }

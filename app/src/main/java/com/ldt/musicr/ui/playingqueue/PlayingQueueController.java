@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,14 +19,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
+import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -54,25 +62,17 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     @BindView(R.id.constraint_root)
     ViewGroup mConstraintRoot;
 
-    @BindView(R.id.lyric) View mLyricView;
-    @BindView(R.id.lyric_parent) View mLyricParent;
-
     @OnClick(R.id.lyric)
     void showLyric() {
-    /*    if(mLyricParent.getVisibility()==View.GONE) {
-            mLyricParent.setVisibility(View.VISIBLE);
-            String content = MusicUtil.getLyrics(MusicPlayerRemote.getCurrentSong());
-            Log.d(TAG, "showLyric: " + content);
-            Spanned spanned = Html.fromHtml(content);
-            mLyricContent.setText(content);
-        } else {
-            mLyricParent.setVisibility(View.GONE);
-        }*/
     if(getActivity() !=null)
         LyricBottomSheet.newInstance().show(getActivity().getSupportFragmentManager(),"LyricBottomSheet");
     }
 
-    @BindView(R.id.lyric_content)  TextView mLyricContent;
+    @OnClick(R.id.save)
+    void saveCurrentPlaylist() {
+
+    }
+
     @BindView(R.id.playlist_title)
     TextView mPlaylistTitle;
     @BindView(R.id.down)
@@ -83,9 +83,6 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     RecyclerView mRecyclerView;
 
     private PlayingQueueAdapter mAdapter;
-
-
-
     @OnTouch({R.id.playlist_title,R.id.down})
     boolean touchDetected(View view, MotionEvent event) {
         return mLayerController.streamOnTouchEvent(mRoot,event);
