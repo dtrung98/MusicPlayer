@@ -31,7 +31,7 @@ import com.ldt.musicr.loader.LastAddedLoader;
 
 import com.ldt.musicr.loader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongAdapter;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildAdapter;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
@@ -85,12 +85,12 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
 
-    SongAdapter mAdapter;
+    SongChildAdapter mAdapter;
 
     Playlist mPlaylist;
     @OnClick(R.id.play_all_panel)
     void playAll() {
-    mAdapter.playAll();
+    mAdapter.playAll(0,true);
     }
 
     @OnTouch(R.id.art)
@@ -139,12 +139,12 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     @Override
     public void onPlayingMetaChanged() {
         setTheme();
-        mAdapter.notifyMetaChanged();
+        mAdapter.notifyOnMediaStateChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        mAdapter.notifyMetaChanged();
+        mAdapter.notifyOnMediaStateChanged();
     }
 
     @Override
@@ -206,7 +206,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
         initSortOrder();
-        mAdapter = new SongAdapter(getActivity());
+        mAdapter = new SongChildAdapter(getActivity());
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setAdapter(mAdapter);
 

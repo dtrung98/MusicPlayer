@@ -19,6 +19,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
+import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
 import java.lang.ref.WeakReference;
@@ -28,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class ArtistPagerFragment extends SupportFragment {
+public class ArtistPagerFragment extends SupportFragment implements MusicServiceEventListener {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
     public static ArtistPagerFragment newInstance(Artist artist) {
@@ -139,14 +140,14 @@ public class ArtistPagerFragment extends SupportFragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        updateData();
+        refreshData();
     }
     private void updateSongs() {
         if(mArtist==null) return;
         mAdapter.setData(mArtist.getSongs());
     }
 
-    public void updateData() {
+    public void refreshData() {
         if(mArtist==null) return;
         mArtistText.setText(mArtist.getName());
         String bio ="";
@@ -174,6 +175,46 @@ public class ArtistPagerFragment extends SupportFragment {
                 .into(mBigImage);
 
                 updateSongs();
+    }
+
+    @Override
+    public void onServiceConnected() {
+        refreshData();
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+
+    }
+
+    @Override
+    public void onQueueChanged() {
+        refreshData();
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+        mAdapter.notifyOnMediaStateChanged();
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        mAdapter.notifyOnMediaStateChanged();
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+        refreshData();
     }
 
     private static class ArtistInfoTask extends AsyncTask<Void,Void,Void> {

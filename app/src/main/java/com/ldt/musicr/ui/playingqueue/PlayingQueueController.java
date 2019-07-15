@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,21 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.ArtistLoader;
-import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
-import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
-import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistChildTab;
-import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
-import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -357,7 +349,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
 
     @Override
     public void onPlayingMetaChanged() {
-        mAdapter.notifyMetaChanged();
+        mAdapter.notifyOnMediaStateChanged();
     }
 
     @Override

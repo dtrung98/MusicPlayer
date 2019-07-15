@@ -21,8 +21,7 @@ import com.ldt.musicr.util.RingtoneManager;
  * modified by Le Dinh Trung (dtrung98)
  */
 
-public class SongMenuHelper {
-
+public class MediaMenuHelper {
     @StringRes
     public static final int[] SONG_OPTION = new int[]{
             /*   R.string.play,*/
@@ -97,7 +96,14 @@ public class SongMenuHelper {
             R.string.delete_from_device
     };
 
-    public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Song song, int string_res_option) {
+    public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Object object, int string_res_option) {
+        if(object instanceof Song) {
+            return handleMenuClick(activity,(Song)object,string_res_option);
+        }
+        return false;
+    }
+
+    private static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Song song, int string_res_option) {
         switch (string_res_option) {
             case R.string.play_preview:
                 if(activity instanceof MainActivity) {

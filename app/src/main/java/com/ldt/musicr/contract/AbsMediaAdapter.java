@@ -1,10 +1,21 @@
 package com.ldt.musicr.contract;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
+import com.ldt.musicr.helper.menu.MediaMenuHelper;
 import com.ldt.musicr.model.Media;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
+import com.ldt.musicr.util.Tool;
 
-public abstract class AbsMediaAdapter<VH extends AbsDynamicHolder, I extends Media> extends AbsDynamicAdapter<VH, I> {
+/**
+ * Implements these features:
+ * <br> Menu button click
+ * <br> Long press
+ */
+public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Media> extends AbsDataAdapter<VH, I> {
     private static final String TAG = "AbsMediaAdapter";
 
     protected Context mContext;
@@ -20,11 +31,11 @@ public abstract class AbsMediaAdapter<VH extends AbsDynamicHolder, I extends Med
         super.destroy();
     }
 
-    protected void onPopupMenuItem(AbsDynamicHolder holder, final int position) {
-    }
+    protected abstract void onMenuItemClick(final int positionInData);
 
-    protected void onLongPressedItem(AbsDynamicHolder holder, final int position) {
-
+    protected boolean onLongPressedItem(AbsBindAbleHolder holder, final int position) {
+        Tool.vibrate(mContext);
+        return true;
     }
 
     public void notifyOnMediaStateChanged() {
@@ -32,5 +43,22 @@ public abstract class AbsMediaAdapter<VH extends AbsDynamicHolder, I extends Med
 
     boolean isMediaPlayItemAvailable() {
         return -1 < mMediaPlayDataItem && mMediaPlayDataItem < getData().size();
+    }
+
+    public class AbsMediaHolder<I extends Media> extends AbsBindAbleHolder<I> implements View.OnClickListener, View.OnLongClickListener {
+        public AbsMediaHolder(@NonNull View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            return onLongPressedItem(this,getAdapterPosition());
+        }
     }
 }

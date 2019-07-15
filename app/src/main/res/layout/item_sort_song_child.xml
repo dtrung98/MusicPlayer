@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/sort_descending"
+        app:srcCompat="@drawable/sort_descending"
         android:tint="@color/FlatWhite"
         android:padding="12dp"
         android:layout_marginStart="10dp"/>
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toEndOf="@id/sort_image"
         app:layout_constraintBottom_toBottomOf="@id/sort_image"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="Sort alphabetically (Desc)"
+        android:text="@string/sort_by_name_asc"
         android:gravity="center_vertical"
         android:textColor="@color/FlatWhite"
         android:textSize="15sp"

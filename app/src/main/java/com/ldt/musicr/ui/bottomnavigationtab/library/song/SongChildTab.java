@@ -65,7 +65,7 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
         mAdapter.shuffle();
     }
 
-    SongAdapter mAdapter;
+    SongChildAdapter mAdapter;
 //    PreviewRandomPlayAdapter mPreviewAdapter;
 
     @OnClick(R.id.refresh)
@@ -87,7 +87,7 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
         ButterKnife.bind(this,view);
         initSortOrder();
 
-        mAdapter = new SongAdapter(getActivity());
+        mAdapter = new SongChildAdapter(getActivity());
         mAdapter.setCallBack(this);
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
@@ -138,12 +138,12 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
             recyclerView.setThumbColor(Tool.getHeavyColor());
         }
 
-        if(mAdapter!=null)mAdapter.notifyMetaChanged();
+        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        if(mAdapter!=null)mAdapter.notifyMetaChanged();
+        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged();
     }
 
     @Override

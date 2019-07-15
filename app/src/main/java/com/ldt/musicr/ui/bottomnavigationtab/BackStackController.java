@@ -27,6 +27,7 @@ import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
+import com.ldt.musicr.util.Util;
 
 import java.util.ArrayList;
 
@@ -172,7 +173,6 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
 
         } catch (Exception ignore) {}
-
         return this;
     }
     Vibrator vibrator;

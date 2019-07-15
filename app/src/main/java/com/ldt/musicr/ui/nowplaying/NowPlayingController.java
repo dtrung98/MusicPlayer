@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.motion.MotionLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.helper.menu.SongMenuHelper;
+import com.ldt.musicr.helper.menu.MediaMenuHelper;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
@@ -81,7 +80,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     void more() {
         if(getActivity() !=null)
             OptionBottomSheet
-                    .newInstance(SongMenuHelper.NOW_PLAYING_OPTION,MusicPlayerRemote.getCurrentSong())
+                    .newInstance(MediaMenuHelper.NOW_PLAYING_OPTION,MusicPlayerRemote.getCurrentSong())
                     .show(getActivity().getSupportFragmentManager(), "song_popup_menu");
     }
 
