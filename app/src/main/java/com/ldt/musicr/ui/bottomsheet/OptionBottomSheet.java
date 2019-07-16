@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ldt.musicr.helper.menu.MediaMenuHelper;
+import com.ldt.musicr.loader.ArtistLoader;
 import com.ldt.musicr.model.Media;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Tool;
@@ -107,7 +108,12 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
             }
             TextView view  = new TextView(context);
             view.setPadding((int)(12*dp),0,(int)(12*dp),0);
+
+           /* if(options[i]==R.string.go_to_artist &&mObject instanceof Song && !((Song)mObject).artistName.isEmpty()) {
+                view.setText(getString(R.string.see_more_about)+" "+ ((Song)mObject).artistName);
+            } else*/
             view.setText(options[i]);
+
             view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
             view.setTypeface(Typeface.DEFAULT_BOLD);
 

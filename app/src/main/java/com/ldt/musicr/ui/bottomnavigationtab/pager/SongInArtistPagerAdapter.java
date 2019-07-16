@@ -59,9 +59,15 @@ public class SongInArtistPagerAdapter extends SongChildAdapter {
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if(position==0) return R.layout.item_sort_song_child;
+        return R.layout.item_song_bigger;
+    }
+
+    @Override
     protected void onMenuItemClick(int positionInData) {
         OptionBottomSheet
-                .newInstance(MediaMenuHelper.SONG_ARTIST_OPTION,getData().get(getDataPosition(positionInData)))
+                .newInstance(MediaMenuHelper.SONG_ARTIST_OPTION,getData().get(positionInData))
                 .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
     }
 }

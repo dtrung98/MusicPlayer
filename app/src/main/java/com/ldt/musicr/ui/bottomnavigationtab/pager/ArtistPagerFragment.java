@@ -54,7 +54,7 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
 
     private Artist mArtist;
 
-    @BindView(R.id.description)
+    @BindView(R.id.title)
     TextView mArtistText;
 
 
@@ -64,7 +64,7 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
     @BindView(R.id.group)
     Group mGroup;
 
-    @BindView(R.id.wiki) TextView mWiki;
+    @BindView(R.id.description) TextView mWiki;
 
     private boolean mBlockPhotoView = true;
 
@@ -105,6 +105,10 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
         }
     }
 
+    @OnClick(R.id.preview_button)
+    void previewAllSong() {
+        mAdapter.previewAll(true);
+    }
 
     @OnClick(R.id.back)
     void goBack() {

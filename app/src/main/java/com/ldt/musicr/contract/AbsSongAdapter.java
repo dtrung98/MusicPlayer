@@ -33,6 +33,9 @@ import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -73,7 +76,25 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         }
     }
 
-    private void previewThisSong(int positionData) {
+    public  void previewAll(boolean shuffle) {
+        if(mContext instanceof MainActivity) {
+            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+            if(preview!=null) {
+                if (preview.isPlayingPreview())
+                    preview.cancelPreview();
+                else {
+                    if(shuffle) {
+                        ArrayList<Song> list = new ArrayList<>(getData());
+                        Collections.shuffle(list);
+                        preview.previewSongs(list);
+                    } else
+                    preview.previewSongs(getData());
+                }
+            }
+        }
+    }
+
+    protected void previewThisSong(int positionData) {
 
         if(mContext instanceof MainActivity) {
            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
@@ -162,6 +183,8 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         @BindView(R.id.quick_play_pause) ImageView mQuickPlayPause;
         @BindView(R.id.menu_button) View mMenuButton;
 
+        @BindView(R.id.panel) View mPanel;
+
         @OnClick(R.id.menu_button)
         void clickMenu() {
             onMenuItemClick(getDataPosition(getAdapterPosition()));
@@ -208,14 +231,18 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
                     })
                    .into(mImage);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                ((RippleDrawable) itemView.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-                ((RippleDrawable) mMenuButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-                ((RippleDrawable) mPreviewButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-            }
+          bindTheme();
 
             bindMediaPlayState();
             bindPreviewButton(song);
+        }
+
+        protected void bindTheme() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ((RippleDrawable) mPanel.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+                ((RippleDrawable) mMenuButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+                ((RippleDrawable) mPreviewButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            }
         }
 
         private void bindPreviewButton(Song song) {

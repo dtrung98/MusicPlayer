@@ -86,7 +86,7 @@
         android:textColor="@color/FlatWhite"
         />
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/title"
@@ -102,7 +102,7 @@
         android:layout_height="1dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintTop_toBottomOf="@id/title"
         android:layout_marginTop="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"

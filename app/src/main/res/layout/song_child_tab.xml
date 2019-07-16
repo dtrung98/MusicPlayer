@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="#444"
     tools:context=".ui.bottomnavigationtab.library.song.SongChildTab">
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/recycler_view"
@@ -75,7 +76,7 @@
         app:layout_constraintTop_toTopOf="@id/image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/image"
-        android:src="@drawable/ic_shuffle_black_24dp"
+        app:srcCompat="@drawable/ic_shuffle_black_24dp"
         android:paddingTop="13dp"
         android:paddingBottom="13dp"
         android:tint="@color/FlatWhite"

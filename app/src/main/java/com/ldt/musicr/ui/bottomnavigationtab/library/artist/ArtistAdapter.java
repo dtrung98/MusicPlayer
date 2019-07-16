@@ -23,6 +23,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsBindAbleHolder;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.loader.GenreLoader;
@@ -40,16 +42,15 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 
-public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder> implements FastScrollRecyclerView.SectionedAdapter {
+public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> implements FastScrollRecyclerView.SectionedAdapter {
     private static final String TAG = "ArtistAdapter";
 
     private static final int UN_SET = 0;
     private static final int AVAILABLE = 1;
     private static final int RUNNING = 2;
 
-    private Context mContext;
-    private ArrayList<Artist> mData = new ArrayList<>();
     private ArrayList<Genre>[] mGenres;
     private HashMap<Artist, GenreArtistTask> mGenreArtistTaskMap = new HashMap<>();
 
@@ -65,28 +66,17 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
     }
 
     ArtistAdapter(Context context) {
-        mContext = context;
+        super(context);
     }
 
-    /*public void setData(List<Artist> data, ArrayList<Genre>[] genres) {
-        mData.clear();
-        if(data!=null) {
-            mData.addAll(data);
-            mGenres = genres;
-        }
-        notifyDataSetChanged();
-    }
-*/
-    public void setData(List<Artist> data) {
-        mData.clear();
-        clearAndCancelAllTask();
-        if(data!=null) {
-            mData.addAll(data);
-            int size = data.size();
-            mGenres = new ArrayList[size];
+    @Override
+    protected void onMenuItemClick(int positionInData) {
 
-        }
-        notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDataSet() {
+        mGenres = new ArrayList[getData().size()];
     }
 
     private void clearAndCancelAllTask() {
@@ -104,8 +94,8 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         attachGenreByPosition(genres,artist,positionSaved);
     }
     private void attachGenreByPosition(ArrayList<Genre> genres, Artist artist, int itemPos) {
-        if(itemPos>=0 && itemPos<mData.size()) {
-            if (artist.equals(mData.get(itemPos))&&mGenres[itemPos]==null)  {
+        if(itemPos>=0 && itemPos<getData().size()) {
+            if (artist.equals(getData().get(itemPos))&&mGenres[itemPos]==null)  {
                 mGenres[itemPos] = genres;
                 notifyItemChanged(itemPos,GENRE_UPDATE);
             }
@@ -114,15 +104,23 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
 
     @NonNull
     @Override
-    public ItemHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public AbsBindAbleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         return new ItemHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_artist_child,viewGroup,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemHolder itemHolder, int i) {
-        if(mGenres!=null&&mGenres.length>i-1)
-        itemHolder.bind(mData.get(i), mGenres[i]);
-        else itemHolder.bind(mData.get(i),null);
+    public void onBindViewHolder(@NonNull AbsBindAbleHolder itemHolder, int i) {
+        if(itemHolder instanceof ItemHolder) {
+            if (mGenres != null && mGenres.length > i - 1)
+                ((ItemHolder)itemHolder).bind(getData().get(i), mGenres[i]);
+            else ((ItemHolder)itemHolder).bind(getData().get(i), null);
+        }
+    }
+
+    @Override
+    protected boolean onLongPressedItem(AbsBindAbleHolder holder, int position) {
+        if(mListener!=null) mListener.onArtistItemClick(getData().get(position));
+        return super.onLongPressedItem(holder, position);
     }
 
     public static int lighter(int color, float factor) {
@@ -138,21 +136,16 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         return Color.argb(alpha, red, green, blue);
     }
 
-    @Override
-    public int getItemCount() {
-        return mData.size();
-    }
-
 
     @NonNull
     @Override
     public String getSectionName(int i) {
-        if(mData.get(i).getName().isEmpty())
+        if(getData().get(getDataPosition(i)).getName().isEmpty())
             return "";
-        return mData.get(i).getName().substring(0,1);
+        return getData().get(getDataPosition(i)).getName().substring(0,1);
     }
 
-    class ItemHolder extends RecyclerView.ViewHolder {
+    class ItemHolder extends AbsMediaHolder {
 
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
@@ -167,7 +160,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
                 mImage.setClipToOutline(true);
             }
         }
-        @BindView(R.id.description)
+        @BindView(R.id.title)
         TextView mArtist;
 
         @BindView(R.id.image)
@@ -184,9 +177,14 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
         @BindView(R.id.panel_color)
         View mPanelColor;
 
+        @OnLongClick(R.id.panel)
+        boolean onLongClickPanel() {
+            return onLongPressedItem(this,getAdapterPosition());
+        }
+
         @OnClick(R.id.panel)
         void goToThisArtist() {
-            if(mListener!=null) mListener.onArtistItemClick(mData.get(getAdapterPosition()));
+            if(mListener!=null) mListener.onArtistItemClick(getData().get(getAdapterPosition()));
         }
         @BindView(R.id.root)
         View mRoot;
@@ -271,6 +269,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
             }
         }
     }
+
     private static class GenreArtistTask extends AsyncTask<Void,Void,ArrayList<Genre>> {
         private WeakReference<ArtistAdapter> mAAReference;
         private int mItemPos;
@@ -308,10 +307,10 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ItemHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemHolder holder, int position, @NonNull List<Object> payloads) {
-    if(!payloads.isEmpty()) {
+    public void onBindViewHolder(@NonNull AbsBindAbleHolder holder, int position, @NonNull List<Object> payloads) {
+    if(!payloads.isEmpty()&&holder instanceof ItemHolder) {
             if((payloads.get(0)).equals(GENRE_UPDATE)&&position<mGenres.length)
-                holder.bindGenre(mGenres[position]);
+                ((ItemHolder)holder).bindGenre(mGenres[position]);
     } else
         super.onBindViewHolder(holder, position, payloads);
     }

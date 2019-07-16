@@ -25,7 +25,7 @@ public class IntroController {
 
     }
 
-    public void Init(AppCompatActivity activity, Bundle savedInstanceState) {
+    public void init(AppCompatActivity activity, Bundle savedInstanceState) {
         initBackStack(activity, savedInstanceState);
 
     }

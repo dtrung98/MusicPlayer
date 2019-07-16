@@ -75,11 +75,12 @@ public class SongChildAdapter extends AbsSongAdapter
                 .newInstance(mOptionRes,getData().get(positionInData))
                 .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
     }
+    public int MEDIA_LAYOUT_RESOURCE = R.layout.item_song_normal;
 
     @Override
     public int getItemViewType(int position) {
        if(position==0) return R.layout.item_sort_song_child;
-       return R.layout.item_song_normal;
+       return MEDIA_LAYOUT_RESOURCE;
     }
 
     @Override

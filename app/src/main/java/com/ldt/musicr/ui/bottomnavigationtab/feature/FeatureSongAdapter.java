@@ -110,7 +110,7 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
     public class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.title) TextView mTitle;
-        @BindView(R.id.description) TextView mArtist;
+        @BindView(R.id.description) TextView mDescription;
         @BindView(R.id.image) ImageView mImage;
         @BindView(R.id.menu_button) View mMenuButton;
         @BindView(R.id.quick_play_pause) ImageView mQuickPlayPause;
@@ -146,7 +146,7 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
         public void bind(Song song) {
 
             mTitle.setText(song.title);
-            mArtist.setText(song.artistName);
+            mDescription.setText(song.artistName);
 
          /*   RequestManager requestManager;
             if(mContext instanceof Activity)

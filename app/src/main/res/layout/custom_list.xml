@@ -44,7 +44,7 @@
             android:layout_marginRight="7dp"
             android:ellipsize="end"
             android:layout_toRightOf="@id/image"
-            android:id="@+id/description"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:gravity="top"
             android:layout_height="0dp"

@@ -259,7 +259,7 @@
     <string name="clear_playlist_x"><![CDATA[Clear the playlist <b>%1$s</b>? This can\u2019t be undone!]]></string>
     <string name="inserted_x_songs_into_playlist_x">Inserted %1$d songs into the playlist %2$s.</string>
     <string name="delete_x_playlists"><![CDATA[Delete <b>%1$d</b> playlists?]]></string>
-    <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the app can\'t run properly.</string>
+    <string name="grant_permission_order_description">Music ® needs storage permission to access your music library. Without this permission, the application couldn\'t run properly.</string>
     <string name="access_external_storage">Access External Storage</string>
     <string name="allow_access">Allow Access</string>
     <string name="fill_this_field_by_lyric">Fill this field by lyric</string>
@@ -298,5 +298,11 @@
     <string name="add_playlist_title">Choose playlist to add</string>
     <string name="action_new_playlist">Create new playlist…</string>
     <string name="play_preview">Play the preview</string>
-
+    <string name="see_more_about">See more about</string>
+    <string name="rename_playlist_title">Rename playlist</string>
+    <string name="delete_playlist_title">Delete playlist</string>
+    <string name="delete_playlists_title">Delete playlists</string>
+    <string name="clear_playlist_title">Clear playlist</string>
+    <string name="save_playlist_title">Save as file</string>
+    <string name="save_playlists_title">Save as files</string>
 </resources>

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root"
+    android:id="@+id/panel"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_song_child_height"
     android:background="@drawable/ripple_effect"

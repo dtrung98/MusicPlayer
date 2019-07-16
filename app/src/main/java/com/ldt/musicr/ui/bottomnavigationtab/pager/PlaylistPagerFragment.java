@@ -27,11 +27,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.App;
+import com.ldt.musicr.helper.menu.PlaylistMenuHelper;
 import com.ldt.musicr.loader.LastAddedLoader;
 
 import com.ldt.musicr.loader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildAdapter;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
@@ -67,8 +69,6 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     @BindView(R.id.play_all_icon) ImageView mPlayAllIcon;
     @BindView(R.id.shuffle_play_button) TextView mPlayRandomButton;
 
-    @BindView(R.id.more_playlist) View mMoreButton;
-
     @BindView(R.id.playlist_big_rv) RecyclerView mRecyclerView;
 
     @BindView(R.id.art) ImageView mImage;
@@ -88,6 +88,15 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     SongChildAdapter mAdapter;
 
     Playlist mPlaylist;
+
+    @OnClick(R.id.menu_button)
+    void onClickMenu() {
+        if(mPlaylist!=null && mPlaylist.id <0)
+            OptionBottomSheet.newInstance(PlaylistMenuHelper.AUTO_PLAYLIST_OPTION,mPlaylist).show(getChildFragmentManager(),"playlist_option_menu");
+        else
+        OptionBottomSheet.newInstance(PlaylistMenuHelper.PLAYLIST_OPTION,mPlaylist).show(getChildFragmentManager(),"playlist_option_menu");
+    }
+
     @OnClick(R.id.play_all_panel)
     void playAll() {
     mAdapter.playAll(0,true);
@@ -207,6 +216,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         ButterKnife.bind(this,view);
         initSortOrder();
         mAdapter = new SongChildAdapter(getActivity());
+        //mAdapter.MEDIA_LAYOUT_RESOURCE = R.layout.item_song_bigger;
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -232,7 +242,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     }
 
     public static List<Song> getPlaylistWithListId(@NonNull Context context, Playlist list, String sortOrder) {
-
+        Log.d(TAG, "getPlaylistWithListId: "+list.id);
         if(list.name.equals(context.getString(R.string.playlist_last_added))) return LastAddedLoader.getLastAddedSongs(context);
         else if(list.name.equals(context.getString(R.string.playlist_recently_played))) {
            return TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(context);
@@ -243,6 +253,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
             return songlist;
         }
     }
+
     private void setName() {
         mTitle.setText(mPlaylist.name);
         List<Song> songs = mAdapter.getData();

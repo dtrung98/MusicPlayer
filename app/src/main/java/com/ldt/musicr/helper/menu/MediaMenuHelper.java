@@ -7,6 +7,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.MainActivity;
@@ -99,9 +100,12 @@ public class MediaMenuHelper {
     public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Object object, int string_res_option) {
         if(object instanceof Song) {
             return handleMenuClick(activity,(Song)object,string_res_option);
-        }
+        } else if (object instanceof Playlist)
+            return PlaylistMenuHelper.handleMenuClick(activity,(Playlist) object,string_res_option);
         return false;
     }
+
+
 
     private static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Song song, int string_res_option) {
         switch (string_res_option) {

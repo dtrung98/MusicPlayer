@@ -171,7 +171,7 @@
                  android:alpha="0.85"
                  android:textStyle="bold"
                  />
-            <com.ldt.musicr.ui.widget.AudioVisualSeekBar
+            <com.ldt.musicr.ui.widget.view.AudioVisualSeekBar
                 android:id="@+id/visual_seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"

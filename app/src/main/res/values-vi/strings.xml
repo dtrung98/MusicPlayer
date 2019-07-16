@@ -165,7 +165,7 @@
 
     <string name="add_to_playlist">Thêm vào danh sách</string>
     <string name="go_to_album">Đi tới album</string>
-    <string name="go_to_artist">Đi tới nghệ sỹ</string>
+    <string name="go_to_artist">Xem trang nghệ sỹ</string>
     <string name="add_to_queue">Thêm vào hàng đợi</string>
     <string name="play_next">Chơi kế tiếp</string>
     <string name="new_playlist">Danh sách phát mới</string>
@@ -217,7 +217,7 @@
     <string name="play_in">được phát từ</string>
     <string name="playlist_exists">Danh sách phát %1$s đã tồn tại</string>
     <string name="save_as">Lưu lại</string>
-    <string name="saved_playlist_to">Đã lưu danh sách phát tới</string>
+    <string name="saved_playlist_to">Đã lưu danh sách phát tới %s</string>
     <string name="saving_changes">Đang lưu thay đổi</string>
     <string name="scanned_files">Đã quét xong</string>
     <string name="some_files_are_not_listed_in_the_media_store">Một vài tập tin không tìm thấy trong Media Store</string>
@@ -253,4 +253,7 @@
     <string name="allow_access">Cho phép truy cập</string>
     <string name="delete">Xóa</string>
     <string name="rename">Đổi tên</string>
+    <string name="grant_permission_order_description">Music ® cần quyền bộ nhớ để có thể truy cập vào thư viện nhạc. Nếu không có quyền này, ứng dụng sẽ không hoạt động đúng.</string>
+    <string name="see_more_about">Xem thêm về</string>
+
 </resources>

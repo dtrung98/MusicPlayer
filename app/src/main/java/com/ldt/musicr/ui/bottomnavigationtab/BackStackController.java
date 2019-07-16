@@ -27,6 +27,7 @@ import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
+import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
 
 import java.util.ArrayList;
@@ -63,7 +64,6 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
         oneDP = getResources().getDimension(R.dimen.oneDP);
-       vibrator  = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
        mNavigationHeight = getActivity().getResources().getDimension(R.dimen.bottom_navigation_height);
        mNavigationAdapter = new BottomNavigationPagerAdapter(getActivity(),getChildFragmentManager());
        mViewPager.setAdapter(mNavigationAdapter);
@@ -175,14 +175,6 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         } catch (Exception ignore) {}
         return this;
     }
-    Vibrator vibrator;
-    private void vibrate() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(50);
-        }
-    }
 
     public LibraryTabFragment navigateToLibraryTab() {
        Fragment fragment = navigateToTab(1);
@@ -233,7 +225,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     };
     ArrayList<Integer> mNavigationStack = new ArrayList<>();
     private void bringToTopThisTab(Integer tabPosition) {
-        vibrate();
+        Tool.vibrate(getContext());
         Log.d(TAG, "bringToTopThisTab: after : "+mNavigationStack);
         boolean b = mNavigationStack.remove(tabPosition);
         if(b)

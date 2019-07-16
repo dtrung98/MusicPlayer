@@ -41,7 +41,7 @@ import com.ldt.musicr.ui.LayerController;
 
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
-import com.ldt.musicr.ui.widget.AudioVisualSeekBar;
+import com.ldt.musicr.ui.widget.view.AudioVisualSeekBar;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.SortOrder;
 import com.ldt.musicr.util.Tool;

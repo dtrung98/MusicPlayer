@@ -19,9 +19,11 @@
         android:id="@+id/layer_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:background="@android:color/transparent"
         >
-        <!--switch_page_containeriner đảm nhiệm switching các trang fragment -->
+        <!--switch_page_container inner đảm nhiệm switching các trang fragment -->
         <FrameLayout
             android:id="@+id/child_layer_container"
             android:layout_width="match_parent"

@@ -29,10 +29,11 @@
         app:title="@string/playlist"
         app:titleTextColor="@color/FlatWhite">
         <ImageView
-            android:id="@+id/more_playlist"
+            android:id="@+id/menu_button"
             android:layout_width="?attr/actionBarSize"
             android:layout_height="?attr/actionBarSize"
-            android:src="@drawable/ic_more_horiz_black_24dp"
+            app:srcCompat="@drawable/ic_more_horiz_black_24dp"
+            android:background="@drawable/ripple_oval"
             android:tint="@color/FlatWhite"
             android:padding="18dp"
             android:layout_gravity="end"/>
@@ -97,7 +98,7 @@
                 android:minHeight="25dp"
                 android:text="@string/artists"
                 android:textColor="@color/FlatWhite"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:ellipsize="end"
                 android:textSize="13sp"
                 android:alpha="0.9"
@@ -125,8 +126,8 @@
             android:id="@+id/play_all_icon"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:src="@drawable/ic_play_arrow_black_24dp"
-            android:tint="#BBFFCC00"
+            app:srcCompat="@drawable/ic_play_arrow_black_24dp"
+            android:tint="#BBFF9500"
             android:layout_marginStart="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/play_all_button"
@@ -134,9 +135,7 @@
             android:paddingBottom="5dp"
             android:paddingStart="8dp"
             android:paddingEnd="0dp"
-            android:layout_marginLeft="?attr/actionBarSize"
-            android:paddingRight="0dp"
-            android:paddingLeft="8dp" />
+             />
             <TextView
                 android:id="@+id/play_all_button"
                 android:layout_width="wrap_content"
@@ -149,9 +148,8 @@
                 android:textStyle="bold"
                 android:paddingEnd="14dp"
                 android:paddingStart="0dp"
-                android:textColor="#BBFFCC00"
-                android:paddingLeft="0dp"
-                android:paddingRight="14dp" />
+                android:textColor="#BBFF9500"
+                 />
             <TextView
                 android:id="@+id/shuffle_play_button"
                 android:layout_width="wrap_content"
@@ -167,7 +165,7 @@
                 android:gravity="center"
                 android:text="@string/play_random"
                 android:textStyle="bold"
-                android:textColor="#BBFFCC00"
+                android:textColor="#BBFF9500"
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/play_all_button" />
     </com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout>

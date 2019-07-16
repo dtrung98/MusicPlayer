@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+
 
 /**
  *  Lớp điều khiển cách hành xử của một giao diện gồm các layer ui chồng lên nhau
@@ -119,6 +119,13 @@ public class LayerController {
 
     @BindView(R.id.bottom_navigation_parent) View mBottomNavigationParent;
 
+    private void bindView(View view) {
+        mChildLayerContainer = view.findViewById(R.id.child_layer_container);
+        mBottomNavigationParent = view.findViewById(R.id.bottom_navigation_parent);
+        mBottomNavigationView = mBottomNavigationParent.findViewById(R.id.bottom_navigation_view);
+
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     public LayerController(AppCompatActivity activity) {
         this.activity =  activity;
@@ -149,32 +156,43 @@ public class LayerController {
         mGestureDetector = new GestureDetector(activity,mGestureListener);
 
     }
+    private long mStart = System.currentTimeMillis();
+    private void assign(Object mark) {
+        long current = System.currentTimeMillis();
+        Log.d(TAG, "logTime: Time "+ mark+" = "+(current - mStart));
+        mStart = current;
+    }
 
     public void init(FrameLayout layerContainer, BaseLayerFragment... fragments) {
+        assign(0);
         mLayerContainer = layerContainer;
 
-        ButterKnife.bind(this,layerContainer);
-
+        //ButterKnife.bind(this,layerContainer);
+        bindView(layerContainer);
+        assign("bind");
         mBaseLayers.clear();
 
         for (int i = 0; i < fragments.length; i++) {
-            BaseLayerFragment b = fragments[i];
-            addTabLayerFragment(b,0);
+            addTabLayerFragment(fragments[i],0);
+            assign("add base layer "+ i);
         }
 
         mLayerContainer.setVisibility(View.VISIBLE);
         float value = activity.getResources().getDimension(R.dimen.bottom_navigation_height);
+
         mBottomNavigationParent.setTranslationY(value);
         mBottomNavigationParent.animate().translationYBy(-value);
         for (int i = 0; i < mBaseAttrs.size(); i++) {
             mBaseAttrs.get(i).animateOnInit();
         }
+
+        assign(3);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ObjectAnimator.ofArgb(mLayerContainer,"backgroundColor",0,0x11000000).setDuration(350).start();
         } else {
             ObjectAnimator.ofObject(mLayerContainer, "backgroundColor", new ArgbEvaluator(), 0,0x11000000).setDuration(350).start();
         }
-
+        assign(4);
     }
 
 
