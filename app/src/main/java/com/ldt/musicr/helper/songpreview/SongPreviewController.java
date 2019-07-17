@@ -59,6 +59,11 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     public void onMediaStoreChanged() {}
 
     @Override
+    public void onPaletteChanged() {
+
+    }
+
+    @Override
     public void onSongPreviewStart(PreviewSong song) {
         for (SongPreviewListener listener :
                 mListeners) {

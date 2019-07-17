@@ -50,7 +50,7 @@
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_right"
-            android:text="Scars to your beautiful • Alessia Cara - BRAVO The Hits 2016"
+            tools:text="Scars to your beautiful • Alessia Cara - BRAVO The Hits 2016"
             android:textColor="@color/color_aaa"
             android:gravity="center"
             android:paddingStart="20dp"
@@ -69,7 +69,7 @@
             app:layout_constraintTop_toTopOf="@id/playlist_title"
             app:layout_constraintStart_toStartOf="@id/title"
             app:layout_constraintEnd_toStartOf="@id/playlist_title"
-            android:text="play in"
+            android:text="@string/play_in"
             android:textColor="#888"
             android:textSize="10sp"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -87,7 +87,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/play_in"
             app:layout_constraintEnd_toStartOf="@id/button_right"
-            android:text="Tất cả bài hát"
+            tools:text="Tất cả bài hát"
             android:textColor="#999"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
@@ -110,7 +110,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_pause_black_24dp"
+            app:srcCompat="@drawable/ic_pause_black_24dp"
             android:tint="#AAA"
             android:padding="12dp"/>
     </android.support.constraint.ConstraintLayout>
@@ -186,7 +186,7 @@
         android:paddingEnd="8dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        android:text="02:38 | 04:07"
+        tools:text="02:38 | 04:07"
         android:textColor="@color/FlatWhite"
         android:textSize="10sp"
         android:alpha="0.85"
@@ -196,7 +196,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/visual_seek_bar"
         />
-    <com.ldt.musicr.ui.widget.AudioVisualSeekBar
+    <com.ldt.musicr.ui.widget.view.AudioVisualSeekBar
         android:id="@+id/visual_seek_bar"
         android:layout_width="0dp"
         android:layout_height="120dp"
@@ -210,7 +210,7 @@
 
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_pause_black_24dp"
+        app:srcCompat="@drawable/ic_pause_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/bottom_navigation_height"
         app:layout_constraintStart_toStartOf="parent"
@@ -251,7 +251,7 @@
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
         app:layout_constraintTop_toBottomOf="@id/title_panel"
         app:layout_constraintStart_toEndOf="parent"
-        android:src="@drawable/ic_more_vert_black_24dp"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp"
         android:padding="12dp"
         android:tint="@color/FlatWhite"
         android:scaleX="0.75"

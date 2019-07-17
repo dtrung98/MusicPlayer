@@ -36,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/group"
-        app:constraint_referenced_ids="back,description,wiki,recycler_view,header_gradient,gradient_top_background,play"
+        app:constraint_referenced_ids="back,title,description,recycler_view,header_gradient,gradient_top_background,play"
         />
     <FrameLayout
         android:id="@+id/status_bar_parent"
@@ -78,14 +78,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="2"
         android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/wiki"
+        app:layout_constraintBottom_toTopOf="@id/description"
         tools:text="Son Tung M-TP"
         android:textStyle="bold"
         android:textSize="24sp"
@@ -97,14 +97,14 @@
         />
 
     <TextView
-        android:id="@+id/wiki"
+        android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Erik, Hungarian pop-rock singer, known from the song Élni kell"
         android:maxLines="3"
         app:layout_constraintBottom_toTopOf="@id/recycler_view"
-        app:layout_constraintStart_toStartOf="@id/description"
-        app:layout_constraintEnd_toEndOf="@id/description"
+        app:layout_constraintStart_toStartOf="@id/title"
+        app:layout_constraintEnd_toEndOf="@id/title"
         android:gravity="center_vertical"
         android:textColor="#AAF5F5F5"
         android:textSize="13sp"
@@ -146,7 +146,7 @@
         app:layout_constraintStart_toStartOf="@id/big_image"
         app:layout_constraintEnd_toEndOf="@id/big_image"
         app:layout_constraintTop_toTopOf="@id/big_image"
-        app:layout_constraintBottom_toBottomOf="@id/wiki"
+        app:layout_constraintBottom_toBottomOf="@id/description"
         android:src="@drawable/play_round"
         android:tint="#F5F5F5"
         android:background="@drawable/circle_border"/>

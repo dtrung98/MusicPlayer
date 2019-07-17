@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PlaylistChildTab extends BaseMusicServiceFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
-    private static final String TAG ="PlaylistChildTab";
+    public static final String TAG ="PlaylistChildTab";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;

@@ -14,6 +14,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.RequiresApi;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -32,16 +34,35 @@ import java.util.ArrayList;
 
 import es.dmoral.toasty.Toasty;
 
+import static android.content.Context.VIBRATOR_SERVICE;
+
 public class Tool {
     private static final String TAG="Tool";
 
     private static Tool tool;
     private Context context;
+
+    public static int ColorOne = getMostCommonColor();
+    public static int ColorTwo = getBaseColor();
+    public static float AlphaOne = 1;
+    public static float AlphaTwo = 1;
+
     public static void init(Context context) {
         if(tool==null) tool = new Tool();
         tool.context = context;
         Tool.getScreenSize(context);
 
+    }
+
+    public static void vibrate(Context context) {
+        if(context==null) return;
+        Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(50);
+        }
     }
 
     public void destroy() {

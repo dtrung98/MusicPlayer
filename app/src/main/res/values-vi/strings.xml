@@ -155,7 +155,7 @@
     <string name="load_artist_image_mobile">Load artist images on mobile data</string>
     <string name="load_artist_image_mobile_summary">Load artist images even if there is no wifi</string>
 
-    <string name="gestures">Gestures</string>
+    <string name="gestures">Cử chỉ</string>
     <string name="switching_tracks_by_gestures">Switching tracks using gestures</string>
     <string name="widget_standard">Timber standard widget</string>
     <string name="widget_small">Timber small widget</string>
@@ -164,15 +164,15 @@
 
 
     <string name="add_to_playlist">Thêm vào danh sách</string>
-    <string name="go_to_album">Đi tới Album</string>
-    <string name="go_to_artist">Đi tới nghệ sỹ</string>
+    <string name="go_to_album">Đi tới album</string>
+    <string name="go_to_artist">Xem trang nghệ sỹ</string>
     <string name="add_to_queue">Thêm vào hàng đợi</string>
     <string name="play_next">Chơi kế tiếp</string>
     <string name="new_playlist">Danh sách phát mới</string>
 
 
-    <string name="nothing_found">Nothing found</string>
-    <string name="folders">Folders</string>
+    <string name="nothing_found">Không tìm thấy</string>
+    <string name="folders">Thư mục</string>
     <string name="select_storage">Select storage</string>
 
     <string name="lastfm_pref">Login to LastFM to scrobble</string>
@@ -214,4 +214,46 @@
     <string name="edit">Chỉnh Sửa</string>
     <string name="copy">Sao chép</string>
     <string name="unplayable_file">Tập tin không thể chơi</string>
+    <string name="play_in">được phát từ</string>
+    <string name="playlist_exists">Danh sách phát %1$s đã tồn tại</string>
+    <string name="save_as">Lưu lại</string>
+    <string name="saved_playlist_to">Đã lưu danh sách phát tới %s</string>
+    <string name="saving_changes">Đang lưu thay đổi</string>
+    <string name="scanned_files">Đã quét xong</string>
+    <string name="some_files_are_not_listed_in_the_media_store">Một vài tập tin không tìm thấy trong Media Store</string>
+    <string name="sort_by_favor_asc">Sắp theo độ yêu thích</string>
+    <string name="sort_by_favor_desc">Sắp theo độ yêu thích (ngược)</string>
+    <string name="sort_by_name_asc">Sắp theo tên</string>
+    <string name="sort_by_name_desc">Sắp theo tên (ngược)</string>
+    <string name="sort_by_time_asc">Sắp theo thời gian thêm vào</string>
+    <string name="sort_by_time_desc">Sắp theo thời gian thêm vào (ngược)</string>
+    <string name="unknown_genres">Không rõ thể loại</string>
+    <string name="unknown_playlist">Không rõ</string>
+    <string name="all_songs">Tất cả bài hát</string>
+    <string name="lyric">Lời bài hát</string>
+    <string name="favorite">Độ yêu thích</string>
+    <string name="favorites">Yêu thích</string>
+    <string name="asc">Xuôi</string>
+    <string name="desc">Ngược</string>
+    <string name="set_as_ringtone">Cài làm nhạc chuông</string>
+    <string name="edit_tag">Chỉnh sửa thẻ nhạc</string>
+    <string name="detail">Chi tiết</string>
+    <string name="go_to_source_playlist">Đi tới nguồn phát</string>
+    <string name="repeat_it_again">Lặp lại lần nữa</string>
+    <string name="play_preview">Nghe thử</string>
+    <string name="access_external_storage">Truy cập bộ nhớ</string>
+    <string name="action_new_playlist">Tạo danh sách mới...</string>
+    <string name="action_next">Kế</string>
+    <string name="action_play">Chơi</string>
+    <string name="action_play_next">Chơi kế</string>
+    <string name="action_play_pause">Chơi/Tam dừng</string>
+    <string name="action_previous">Liền trước</string>
+    <string name="add_playlist_title">Chọn danh sách để thêm</string>
+    <string name="add_playlist_to_playlist">Thêm tất cả bài hát vào danh sách khác</string>
+    <string name="allow_access">Cho phép truy cập</string>
+    <string name="delete">Xóa</string>
+    <string name="rename">Đổi tên</string>
+    <string name="grant_permission_order_description">Music ® cần quyền bộ nhớ để có thể truy cập vào thư viện nhạc. Nếu không có quyền này, ứng dụng sẽ không hoạt động đúng.</string>
+    <string name="see_more_about">Xem thêm về</string>
+
 </resources>

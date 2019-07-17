@@ -23,11 +23,7 @@
     <declare-styleable name="SupportDarkenFrameLayout">
         <attr name="how_dark" format="integer"/>
     </declare-styleable>
-    <declare-styleable name="BlurringView">
-        <attr name="blurRadius" format="integer"/>
-        <attr name="downsampleFactor" format="integer"/>
-        <attr name="overlayColor" format="color"/>
-    </declare-styleable>
+
 
     <declare-styleable name="BlurImageViewChildConstraintLayout">
         <attr name="imageViewId" format="reference"/>

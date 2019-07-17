@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/playlist_root">
 <com.makeramen.roundedimageview.RoundedImageView
     android:layout_width="@dimen/item_feature_playlist_size"
@@ -13,8 +14,7 @@
     android:padding="6dp"
     app:riv_corner_radius="3dp"
     app:riv_border_width="0dp"
-    android:src="@drawable/default_image_round"
-    android:elevation="8dp"
+    tools:src="@drawable/default_image_round"
    />
     <TextView
         android:layout_width="0dp"
@@ -28,7 +28,7 @@
         android:paddingEnd="12dp"
         android:ellipsize="end"
         android:id="@+id/playlist_title"
-        android:text="Playlist A"
+        tools:text="Playlist A"
         android:gravity="center"
         android:maxLines="2"
         android:layout_below="@id/playlist_image"

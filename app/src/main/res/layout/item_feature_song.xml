@@ -4,7 +4,8 @@
     android:layout_height="74dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/ripple_effect">
+    android:background="@drawable/ripple_effect"
+    tools:background="#444444">
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image"
         android:layout_width="52dp"

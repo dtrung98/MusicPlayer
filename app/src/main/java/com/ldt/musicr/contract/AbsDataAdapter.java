@@ -5,8 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbsDynamicAdapter<VH extends AbsDynamicHolder, I> extends RecyclerView.Adapter<VH> {
-    private static final String TAG = "AbsDynamicAdapter";
+public abstract class AbsDataAdapter<VH extends AbsBindAbleHolder, I> extends RecyclerView.Adapter<VH> {
+    private static final String TAG = "AbsDataAdapter";
 
     private final List<I> mData = new ArrayList<>();
 
@@ -58,7 +58,7 @@ public abstract class AbsDynamicAdapter<VH extends AbsDynamicHolder, I> extends 
         notifyItemRemoved(i);
     }
 
-    protected int getItemHolderPosition(int dataPosition) {
+    protected int getMediaHolderPosition(int dataPosition) {
         return dataPosition;
     }
 

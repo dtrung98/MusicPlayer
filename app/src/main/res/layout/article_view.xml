@@ -265,7 +265,7 @@
                             android:padding="10dp"
                             android:layout_height="40dp"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:src="@drawable/shufflel"
+                            android:src="@drawable/smooth_shuffle"
                             android:scaleType="centerInside"/>
 
                         <FrameLayout

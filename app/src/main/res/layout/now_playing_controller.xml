@@ -183,7 +183,7 @@
         android:paddingEnd="8dp"
         android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        tools:text="02:38 | 04:07"
+        android:text="02:38 | 04:07"
         android:textColor="@color/FlatWhite"
         android:textSize="10sp"
         android:alpha="0.85"
@@ -193,7 +193,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/visual_seek_bar"
         />
-    <com.ldt.musicr.ui.widget.AudioVisualSeekBar
+    <com.ldt.musicr.ui.widget.view.AudioVisualSeekBar
         android:id="@+id/visual_seek_bar"
         android:layout_width="0dp"
         android:layout_height="120dp"

@@ -129,12 +129,26 @@ public class SortOrderBottomSheet extends BottomSheetDialogFragment {
             });
         });
 
+        setTheme();
         // onViewCreated
         if(mListener!=null)  {
          updateSort(mListener.getSavedOrder());
         }
 
     }
+
+    private void setTheme() {
+        for (ImageView tickView : mOrderTicks
+             ) {
+            tickView.setColorFilter(Tool.getBaseColor());
+        }
+
+        for (ImageView tickView : mSortTicks
+        ) {
+            tickView.setColorFilter(Tool.getBaseColor());
+        }
+    }
+
     public void updateAndNotifyNewSort(int newSort) {
         if(updateSort(newSort)&&mListener!=null) {
             mListener.onOrderChanged(newSort,getString(mSortStringRes[newSort]));

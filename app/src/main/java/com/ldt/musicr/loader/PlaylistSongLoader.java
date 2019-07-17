@@ -66,7 +66,7 @@ public class PlaylistSongLoader {
                             MediaStore.Audio.Playlists.Members._ID // 11
                     }, SongLoader.BASE_SELECTION, null,
                     MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER);
-        } catch (SecurityException e) {
+        } catch (Exception e) {
             return null;
         }
     }

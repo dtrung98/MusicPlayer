@@ -14,6 +14,10 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
+import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.util.Animation;
 
 import java.util.List;
@@ -82,7 +86,11 @@ public class FeatureLinearHolder {
         @OnClick(R.id.back_top_header)
         void goToPlaylistChildTab() {
             if(mContext instanceof MainActivity) {
-                ((MainActivity)mContext).goToPlaylistTab();
+                BackStackController controller = ((MainActivity) mContext).getBackStackController();
+                if (controller != null) {
+                    LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab();
+                    if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(PlaylistChildTab.TAG);
+                }
             }
         }
 
@@ -126,8 +134,13 @@ public class FeatureLinearHolder {
 
         @OnClick({R.id.see_all, R.id.back_top_header})
         void seeAll() {
-            if(mContext instanceof MainActivity)
-                ((MainActivity)mContext).goToSongTab();
+            if(mContext instanceof MainActivity) {
+                BackStackController controller = ((MainActivity) mContext).getBackStackController();
+                if (controller != null) {
+                  LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab();
+                          if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(SongChildTab.TAG);
+                }
+            }
         }
 
         @OnClick(R.id.refresh_front)

@@ -18,12 +18,25 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.glide.ArtistGlideRequest;
+import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.model.Artist;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.library.playlist.PlaylistChildTab;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildTab;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
+import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.util.Util;
 
 import java.util.ArrayList;
 
@@ -32,10 +45,13 @@ import butterknife.ButterKnife;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
-public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener {
+public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener, MusicServiceEventListener {
     private static final String TAG ="BackStackController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
+    @BindView(R.id.back_image)
+    ImageView mBackImageView;
+
     private float mNavigationHeight;
 
     BottomNavigationPagerAdapter mNavigationAdapter;
@@ -53,19 +69,25 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         return inflater.inflate(R.layout.back_stack_controller,container,false);
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+
+        if(getActivity() instanceof BaseActivity)
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+
         oneDP = getResources().getDimension(R.dimen.oneDP);
-       vibrator  = (Vibrator) getActivity().getSystemService(VIBRATOR_SERVICE);
        mNavigationHeight = getActivity().getResources().getDimension(R.dimen.bottom_navigation_height);
        mNavigationAdapter = new BottomNavigationPagerAdapter(getActivity(),getChildFragmentManager());
        mViewPager.setAdapter(mNavigationAdapter);
        mViewPager.setOffscreenPageLimit(3);
        mViewPager.addOnPageChangeListener(this);
        mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
+       mBackImageView.setVisibility(View.VISIBLE);
+       onPlayingMetaChanged();
     }
 
     public boolean streamOnTouchEvent(MotionEvent event) {
@@ -169,27 +191,26 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
 
         } catch (Exception ignore) {}
-
         return this;
     }
-    Vibrator vibrator;
-    private void vibrate() {
-        if (Build.VERSION.SDK_INT >= 26) {
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(50);
-        }
+
+    public LibraryTabFragment navigateToLibraryTab() {
+       Fragment fragment = navigateToTab(1);
+       if(fragment instanceof LibraryTabFragment) {
+           return (LibraryTabFragment)fragment;
+       }
+       return null;
     }
-    public void goToSongTab() {
-        mViewPager.setCurrentItem(1);
-        Fragment fragment =  mNavigationAdapter.getItem(1);
+
+    public Fragment navigateToTab(int item) {
+        mViewPager.setCurrentItem(item);
+        Fragment fragment = mNavigationAdapter.getItem(1);
         if(fragment instanceof NavigateFragment) {
             ((NavigateFragment)fragment).popToRootFragment();
-           Fragment lib = ((NavigateFragment)fragment).getRootFragment();
-           if(lib instanceof LibraryTabFragment)
-            ((LibraryTabFragment)lib).goToSongTab();
-        } else Log.d(TAG, "goToSongTab: not librarytabfragment");
+            return ((NavigateFragment)fragment).getRootFragment();
+        } return null;
     }
+
     public void removeBottomNavigationView() {
         mBottomNavigationView = null;
     }
@@ -222,7 +243,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     };
     ArrayList<Integer> mNavigationStack = new ArrayList<>();
     private void bringToTopThisTab(Integer tabPosition) {
-        vibrate();
+        Tool.vibrate(getContext());
         Log.d(TAG, "bringToTopThisTab: after : "+mNavigationStack);
         boolean b = mNavigationStack.remove(tabPosition);
         if(b)
@@ -273,14 +294,77 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
     }
 
-    public void goToPlaylistTab() {
-        mViewPager.setCurrentItem(1);
-        Fragment fragment =  mNavigationAdapter.getItem(1);
-        if(fragment instanceof NavigateFragment) {
-            ((NavigateFragment)fragment).popToRootFragment();
-            Fragment lib = ((NavigateFragment)fragment).getRootFragment();
-            if(lib instanceof LibraryTabFragment)
-                ((LibraryTabFragment)lib).goToPlaylistTab();
-        } else Log.d(TAG, "goToSongTab: not librarytabfragment");
+    @Override
+    public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+
+    }
+
+    @Override
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+        if(getContext()!=null) {
+            Artist artist = ArtistLoader.getArtist(getContext(), MusicPlayerRemote.getCurrentSong().artistId);
+            if (mBackImageView.getVisibility() == View.VISIBLE)
+                ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), artist)
+                        .tryToLoadOriginal(true)
+                        .generateBuilder(getContext())
+                        .build()
+                        /*    .error(
+                                    ArtistGlideRequest
+                                            .Builder
+                                            .from(GlideApp.with(getContext()),mArtist)
+                                            .tryToLoadOriginal(false)
+                                            .generateBuilder(getContext())
+                                            .build())*/
+                        .thumbnail(
+                                ArtistGlideRequest
+                                        .Builder
+                                        .from(GlideApp.with(getContext()), artist)
+                                        .tryToLoadOriginal(false)
+                                        .generateBuilder(getContext())
+                                        .build())
+                        .into(mBackImageView);
+        }
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+
+    }
+
+    @Override
+    public void onPaletteChanged() {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        if(getActivity() instanceof BaseActivity)
+            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
+        super.onDestroyView();
     }
 }

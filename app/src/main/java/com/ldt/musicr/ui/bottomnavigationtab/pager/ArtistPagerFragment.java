@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.Group;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,9 +17,12 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
 import java.lang.ref.WeakReference;
@@ -28,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class ArtistPagerFragment extends SupportFragment {
+public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
     public static ArtistPagerFragment newInstance(Artist artist) {
@@ -53,7 +57,7 @@ public class ArtistPagerFragment extends SupportFragment {
 
     private Artist mArtist;
 
-    @BindView(R.id.description)
+    @BindView(R.id.title)
     TextView mArtistText;
 
 
@@ -63,7 +67,7 @@ public class ArtistPagerFragment extends SupportFragment {
     @BindView(R.id.group)
     Group mGroup;
 
-    @BindView(R.id.wiki) TextView mWiki;
+    @BindView(R.id.description) TextView mWiki;
 
     private boolean mBlockPhotoView = true;
 
@@ -104,6 +108,10 @@ public class ArtistPagerFragment extends SupportFragment {
         }
     }
 
+    @OnClick(R.id.preview_button)
+    void previewAllSong() {
+        mAdapter.previewAll(true);
+    }
 
     @OnClick(R.id.back)
     void goBack() {
@@ -119,6 +127,12 @@ public class ArtistPagerFragment extends SupportFragment {
     RecyclerView mRecyclerView;
 
     private SongInArtistPagerAdapter mAdapter;
+
+    @Override
+    public void onDestroyView() {
+        mAdapter.destroy();
+        super.onDestroyView();
+    }
 
     @Nullable
     @Override
@@ -136,17 +150,18 @@ public class ArtistPagerFragment extends SupportFragment {
             mArtist = bundle.getParcelable(ARTIST);
         }
         mAdapter = new SongInArtistPagerAdapter(getContext());
+        mAdapter.setName(TAG);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
-        updateData();
+        refreshData();
     }
     private void updateSongs() {
         if(mArtist==null) return;
         mAdapter.setData(mArtist.getSongs());
     }
 
-    public void updateData() {
+    public void refreshData() {
         if(mArtist==null) return;
         mArtistText.setText(mArtist.getName());
         String bio ="";
@@ -174,6 +189,45 @@ public class ArtistPagerFragment extends SupportFragment {
                 .into(mBigImage);
 
                 updateSongs();
+    }
+
+    @Override
+    public void onServiceConnected() {
+        refreshData();
+    }
+
+
+    @Override
+    public void onPlayingMetaChanged() {
+        Log.d(TAG, "onPlayingMetaChanged");
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onPaletteChanged() {
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+        super.onPaletteChanged();
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+        Log.d(TAG, "onPlayStateChanged");
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+        refreshData();
     }
 
     private static class ArtistInfoTask extends AsyncTask<Void,Void,Void> {

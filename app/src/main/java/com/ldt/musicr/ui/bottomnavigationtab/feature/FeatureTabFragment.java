@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
@@ -22,16 +23,26 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
+public class FeatureTabFragment extends BaseMusicServiceSupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG ="FeatureTabFragment";
+
+    @BindView(R.id.status_bar)
+    View mStatusView;
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @BindView(R.id.scroll_view)
+    NestedScrollView mNestedScrollView;
+
+    FeatureLinearHolder mFeatureLinearHolder;
 
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
         return inflater.inflate(R.layout.feature_tab_fragment, container, false);
     }
-    @BindView(R.id.scroll_view)
-    NestedScrollView mNestedScrollView;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -42,9 +53,6 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
 
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
-        }
 
         refreshData();
     }
@@ -56,19 +64,7 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         }
         mSwipeRefreshLayout.setRefreshing(false);
     }
-    FeatureLinearHolder mFeatureLinearHolder;
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-    @BindView(R.id.status_bar) View mStatusView;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout mSwipeRefreshLayout;
     @Override
     public void onSetStatusBarMargin(int value) {
         if(mStatusView!=null) {
@@ -123,13 +119,4 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         refreshData();
     }
 
-    @Override
-    public void onDestroyView() {
-
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
-        }
-
-        super.onDestroyView();
-    }
 }

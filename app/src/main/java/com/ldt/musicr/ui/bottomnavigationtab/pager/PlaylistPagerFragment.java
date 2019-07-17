@@ -27,11 +27,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.App;
+import com.ldt.musicr.contract.AbsMediaAdapter;
+import com.ldt.musicr.helper.menu.PlaylistMenuHelper;
 import com.ldt.musicr.loader.LastAddedLoader;
 
 import com.ldt.musicr.loader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongAdapter;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildAdapter;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
@@ -55,7 +59,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class PlaylistPagerFragment extends SupportFragment implements MusicServiceEventListener, SortOrderBottomSheet.SortOrderChangedListener {
+public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment implements SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG ="PlaylistPagerFragment";
 
     @Override
@@ -66,8 +70,6 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     @BindView(R.id.play_all_button) TextView mPlayAllButton;
     @BindView(R.id.play_all_icon) ImageView mPlayAllIcon;
     @BindView(R.id.shuffle_play_button) TextView mPlayRandomButton;
-
-    @BindView(R.id.more_playlist) View mMoreButton;
 
     @BindView(R.id.playlist_big_rv) RecyclerView mRecyclerView;
 
@@ -85,12 +87,21 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
 
-    SongAdapter mAdapter;
+    SongChildAdapter mAdapter;
 
     Playlist mPlaylist;
+
+    @OnClick(R.id.menu_button)
+    void onClickMenu() {
+        if(mPlaylist!=null && mPlaylist.id <0)
+            OptionBottomSheet.newInstance(PlaylistMenuHelper.AUTO_PLAYLIST_OPTION,mPlaylist).show(getChildFragmentManager(),"playlist_option_menu");
+        else
+        OptionBottomSheet.newInstance(PlaylistMenuHelper.PLAYLIST_OPTION,mPlaylist).show(getChildFragmentManager(),"playlist_option_menu");
+    }
+
     @OnClick(R.id.play_all_panel)
     void playAll() {
-    mAdapter.playAll();
+    mAdapter.playAll(0,true);
     }
 
     @OnTouch(R.id.art)
@@ -138,13 +149,19 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
 
     @Override
     public void onPlayingMetaChanged() {
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onPaletteChanged() {
         setTheme();
-        mAdapter.notifyMetaChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+        super.onPaletteChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        mAdapter.notifyMetaChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
@@ -187,9 +204,6 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     public void onDestroyView() {
         if(mLoadPlaylist!=null) mLoadPlaylist.cancel();
 
-        Activity a = getActivity();
-        if(a instanceof BaseActivity)
-            ((BaseActivity)a).removeMusicServiceEventListener(this);
 
         mAdapter.destroy();
         super.onDestroyView();
@@ -206,7 +220,8 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
         initSortOrder();
-        mAdapter = new SongAdapter(getActivity());
+        mAdapter = new SongChildAdapter(getActivity());
+        //mAdapter.MEDIA_LAYOUT_RESOURCE = R.layout.item_song_bigger;
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -226,13 +241,10 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         setName();
         mSwipeRefresh.setColorSchemeResources(R.color.FlatOrange);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
-        Activity a = getActivity();
-        if(a instanceof BaseActivity)
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
     }
 
     public static List<Song> getPlaylistWithListId(@NonNull Context context, Playlist list, String sortOrder) {
-
+        Log.d(TAG, "getPlaylistWithListId: "+list.id);
         if(list.name.equals(context.getString(R.string.playlist_last_added))) return LastAddedLoader.getLastAddedSongs(context);
         else if(list.name.equals(context.getString(R.string.playlist_recently_played))) {
            return TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(context);
@@ -243,6 +255,7 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
             return songlist;
         }
     }
+
     private void setName() {
         mTitle.setText(mPlaylist.name);
         List<Song> songs = mAdapter.getData();

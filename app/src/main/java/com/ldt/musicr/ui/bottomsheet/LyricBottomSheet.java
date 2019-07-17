@@ -180,7 +180,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     }
 
     @BindView(R.id.title) TextView mTitle;
-    @BindView(R.id.description) TextView mArtist;
+    @BindView(R.id.description) TextView mDescription;
     @BindView(R.id.image)
     ImageView mImageView;
     private void updateLyric() {
@@ -198,7 +198,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
 
             Log.d(TAG, "updateLyric: "+mLyricString);
             mTitle.setText(mSong.title);
-            mArtist.setText(mSong.artistName);
+            mDescription.setText(mSong.artistName);
             if(getContext() !=null)
                 Glide.with(getContext()).load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
             else Picasso.get().load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
@@ -330,6 +330,11 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     @Override
     public void onMediaStoreChanged() {
         Log.d(TAG, "onMediaStoreChanged");
+    }
+
+    @Override
+    public void onPaletteChanged() {
+
     }
 
     @Override
