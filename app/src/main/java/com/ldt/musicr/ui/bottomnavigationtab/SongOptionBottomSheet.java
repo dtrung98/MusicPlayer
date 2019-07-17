@@ -65,7 +65,6 @@ public void setListener(BottomSheetListener listener) {
 
         View view = inflater.inflate(R.layout.menu_bottom_sheet_layout, container,
                 false);
-
         // get the views and attach the listener
         int[] textViewID = {
                 R.id.popup_song_play,
