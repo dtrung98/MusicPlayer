@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.Group;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,10 +17,12 @@ import android.widget.TextView;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class ArtistPagerFragment extends SupportFragment implements MusicServiceEventListener {
+public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
     public static ArtistPagerFragment newInstance(Artist artist) {
@@ -125,6 +128,12 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
 
     private SongInArtistPagerAdapter mAdapter;
 
+    @Override
+    public void onDestroyView() {
+        mAdapter.destroy();
+        super.onDestroyView();
+    }
+
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
@@ -141,6 +150,7 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
             mArtist = bundle.getParcelable(ARTIST);
         }
         mAdapter = new SongInArtistPagerAdapter(getContext());
+        mAdapter.setName(TAG);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -186,24 +196,23 @@ public class ArtistPagerFragment extends SupportFragment implements MusicService
         refreshData();
     }
 
-    @Override
-    public void onServiceDisconnected() {
-
-    }
-
-    @Override
-    public void onQueueChanged() {
-        refreshData();
-    }
 
     @Override
     public void onPlayingMetaChanged() {
-        mAdapter.notifyOnMediaStateChanged();
+        Log.d(TAG, "onPlayingMetaChanged");
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onPaletteChanged() {
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+        super.onPaletteChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        mAdapter.notifyOnMediaStateChanged();
+        Log.d(TAG, "onPlayStateChanged");
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override

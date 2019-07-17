@@ -41,6 +41,12 @@ public class Tool {
 
     private static Tool tool;
     private Context context;
+
+    public static int ColorOne = getMostCommonColor();
+    public static int ColorTwo = getBaseColor();
+    public static float AlphaOne = 1;
+    public static float AlphaTwo = 1;
+
     public static void init(Context context) {
         if(tool==null) tool = new Tool();
         tool.context = context;

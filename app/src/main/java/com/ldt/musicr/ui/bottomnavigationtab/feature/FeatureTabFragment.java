@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
 import com.ldt.musicr.loader.PlaylistLoader;
 import com.ldt.musicr.loader.SongLoader;
@@ -22,7 +23,7 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeatureTabFragment extends SupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
+public class FeatureTabFragment extends BaseMusicServiceSupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG ="FeatureTabFragment";
 
     @BindView(R.id.status_bar)
@@ -52,9 +53,7 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
 
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
-        }
+
         refreshData();
     }
 
@@ -120,12 +119,4 @@ public class FeatureTabFragment extends SupportFragment implements FeaturePlayli
         refreshData();
     }
 
-    @Override
-    public void onDestroyView() {
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
-        }
-
-        super.onDestroyView();
-    }
 }

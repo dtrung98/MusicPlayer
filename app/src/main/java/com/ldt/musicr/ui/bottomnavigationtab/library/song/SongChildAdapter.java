@@ -54,13 +54,9 @@ public class SongChildAdapter extends AbsSongAdapter
     }
 
     public void destroy() {
-        if(mContext instanceof MainActivity) {
-           SongPreviewController controller  = ((MainActivity)mContext).getSongPreviewController();
-           if(controller!=null) controller.removeAudioPreviewerListener(this);
-        }
-
         removeCallBack();
         removeOrderListener();
+        super.destroy();
     }
 
     public void setSongOptionHelperRes(final int[] res) {

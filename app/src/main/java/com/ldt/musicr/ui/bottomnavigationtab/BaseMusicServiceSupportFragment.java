@@ -9,11 +9,16 @@ import android.view.View;
 
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
-public abstract class BaseMusicServiceFragment extends Fragment implements MusicServiceEventListener {
+public abstract class BaseMusicServiceSupportFragment extends SupportFragment implements MusicServiceEventListener {
     @Override
     public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onPaletteChanged() {
 
     }
 
@@ -58,11 +63,6 @@ public abstract class BaseMusicServiceFragment extends Fragment implements Music
 
     @Override
     public void onPlayingMetaChanged() {
-
-    }
-
-    @Override
-    public void onPaletteChanged() {
 
     }
 }

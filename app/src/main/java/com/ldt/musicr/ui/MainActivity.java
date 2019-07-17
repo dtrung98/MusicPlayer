@@ -228,9 +228,7 @@ public class MainActivity extends BaseActivity {
         return false;
     }
 
-    public void setPlaylistColorPalette(int color1, int color2, float alpha1, float alpha2) {
-        if(mPlayingQueueController !=null) mPlayingQueueController.onColorPaletteReady(color1,color2,alpha1,alpha2);
-    }
+
     public void popUpPlaylistTab() {
         if(mPlayingQueueController !=null) mPlayingQueueController.popUp();
     }

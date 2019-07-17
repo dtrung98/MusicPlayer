@@ -297,7 +297,7 @@
     <string name="playlist_name_empty">Playlist name</string>
     <string name="add_playlist_title">Choose playlist to add</string>
     <string name="action_new_playlist">Create new playlist…</string>
-    <string name="play_preview">Play the preview</string>
+    <string name="play_preview">Play preview</string>
     <string name="see_more_about">See more about</string>
     <string name="rename_playlist_title">Rename playlist</string>
     <string name="delete_playlist_title">Delete playlist</string>

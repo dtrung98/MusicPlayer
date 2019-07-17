@@ -27,11 +27,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.App;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.helper.menu.PlaylistMenuHelper;
 import com.ldt.musicr.loader.LastAddedLoader;
 
 import com.ldt.musicr.loader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.library.song.SongChildAdapter;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
@@ -57,7 +59,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
-public class PlaylistPagerFragment extends SupportFragment implements MusicServiceEventListener, SortOrderBottomSheet.SortOrderChangedListener {
+public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment implements SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG ="PlaylistPagerFragment";
 
     @Override
@@ -147,13 +149,19 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
 
     @Override
     public void onPlayingMetaChanged() {
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onPaletteChanged() {
         setTheme();
-        mAdapter.notifyOnMediaStateChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+        super.onPaletteChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        mAdapter.notifyOnMediaStateChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
@@ -196,9 +204,6 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
     public void onDestroyView() {
         if(mLoadPlaylist!=null) mLoadPlaylist.cancel();
 
-        Activity a = getActivity();
-        if(a instanceof BaseActivity)
-            ((BaseActivity)a).removeMusicServiceEventListener(this);
 
         mAdapter.destroy();
         super.onDestroyView();
@@ -236,9 +241,6 @@ public class PlaylistPagerFragment extends SupportFragment implements MusicServi
         setName();
         mSwipeRefresh.setColorSchemeResources(R.color.FlatOrange);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
-        Activity a = getActivity();
-        if(a instanceof BaseActivity)
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
     }
 
     public static List<Song> getPlaylistWithListId(@NonNull Context context, Playlist list, String sortOrder) {

@@ -2,6 +2,9 @@ package com.ldt.musicr.ui.playingqueue;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
@@ -74,6 +78,9 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.lyric) View mLyricView;
+    @BindView(R.id.save) View mSaveView;
+
     private PlayingQueueAdapter mAdapter;
     @OnTouch({R.id.playlist_title,R.id.down})
     boolean touchDetected(View view, MotionEvent event) {
@@ -90,7 +97,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         }
     }
 
-    public void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
+    private void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
         mPlaylistTitle.setTextColor(Tool.lighter(color1,0.5f));
         mDownIcon.setColorFilter(Tool.lighter(color1,0.5f));
         updateShuffleState();
@@ -111,6 +118,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mPlaylistTitle.setSelected(true);
         mAdapter = new PlayingQueueAdapter(getContext());
+        mAdapter.setName(TAG);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         mRecyclerView.setAdapter(mAdapter);
 
@@ -182,6 +190,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         if(getActivity() instanceof MainActivity)
             ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
         mSet = false;
+        mAdapter.destroy();
         super.onDestroyView();
     }
 
@@ -346,15 +355,28 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         onQueueChanged();
     }
 
+    @Override
+    public void onPaletteChanged() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            ((RippleDrawable)mShuffleButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable)mRepeatButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable)mLyricView.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable)mSaveView.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+        }
+        onColorPaletteReady(Tool.ColorOne,Tool.ColorTwo,Tool.AlphaOne,Tool.AlphaTwo);
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+    }
+
 
     @Override
     public void onPlayingMetaChanged() {
-        mAdapter.notifyOnMediaStateChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
     public void onPlayStateChanged() {
-
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override

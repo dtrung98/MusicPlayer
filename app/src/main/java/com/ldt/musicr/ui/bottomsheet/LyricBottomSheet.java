@@ -333,6 +333,11 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     }
 
     @Override
+    public void onPaletteChanged() {
+
+    }
+
+    @Override
     public void onWritingTagFinish(boolean result) {
         if(getActivity()!=null)
             Util.hideSoftKeyboard(getActivity());

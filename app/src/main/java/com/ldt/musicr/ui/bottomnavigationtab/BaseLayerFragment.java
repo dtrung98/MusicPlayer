@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import com.ldt.musicr.ui.LayerController;
 
 import java.util.ArrayList;
 
-public abstract class BaseLayerFragment extends RuntimeThemeFragment implements LayerController.BaseLayer {
+public abstract class BaseLayerFragment extends Fragment implements LayerController.BaseLayer {
     private static final String TAG ="BaseLayerFragment";
 
     public LayerController getLayerController() {
