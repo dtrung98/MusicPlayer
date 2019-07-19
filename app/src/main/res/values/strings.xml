@@ -305,4 +305,11 @@
     <string name="clear_playlist_title">Clear playlist</string>
     <string name="save_playlist_title">Save as file</string>
     <string name="save_playlists_title">Save as files</string>
+    <string name="english">English</string>
+    <string name="viet_nam">Việt Nam</string>
+    <string name="language">Language</string>
+    <string name="specific_playlist">Specific Playlist</string>
+    <string name="create">Create one now</string>
+    <string name="customization">Customization</string>
+    <string name="artist_image_background">Use Artist image as background</string>
 </resources>

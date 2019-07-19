@@ -1,23 +1,68 @@
 package com.ldt.musicr.ui.bottomnavigationtab.setting;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.LocaleHelper;
+import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.rangeseekbar.RangeSeekBar;
+import com.ldt.musicr.util.Tool;
+import com.squareup.haha.perflib.Main;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
-public class SettingTabFragment extends SupportFragment {
+public class SettingTabFragment extends BaseMusicServiceSupportFragment {
+    private static final String EN = "en";
+    private static final String VI = "vi";
+
+    @BindView(R.id.status_bar)
+    View mStatusBar;
+
+    @BindView(R.id.switch_to_vi)
+    TextView mSwitchToVi;
+
+    @BindView(R.id.switch_to_en)
+    TextView mSwitchToEn;
+
+    @BindView(R.id.seek_bar)
+    RangeSeekBar mSeekBar;
+
+    @BindView(R.id.hide_switch)
+    SwitchCompat mUseArtistImgAsBg;
+
+    @BindView(R.id.create_now) View mCreateNowView;
+
+    @OnCheckedChanged(R.id.hide_switch)
+    void onChangedUseArtistImgAsBg(boolean value) {
+        App.getInstance().getPreferencesUtility().setIsUsingArtistImageAsBackground(value);
+        if(getActivity() instanceof MainActivity) {
+            ((MainActivity)getActivity()).getBackStackController().onUsingArtistImagePreferenceChanged();
+        }
+    }
+
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
@@ -28,16 +73,112 @@ public class SettingTabFragment extends SupportFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        refreshData();
+      onPaletteChanged();
+
     }
 
-    @OnClick(R.id.button)
-    void doSomething() {
+
+    private boolean mIsEnglish = true;
+
+    void refreshData() {
+
+        mSeekBar.setValue(100);
+        mUseArtistImgAsBg.setChecked(App.getInstance().getPreferencesUtility().isUsingArtistImageAsBackground());
+
+        Context context = getContext();
+        if(context!=null) {
+            String lang = LocaleHelper.getLanguage(context);
+            mIsEnglish = lang.equals(EN);
+
+            if(mIsEnglish) {
+                mSwitchToEn.setBackgroundResource(R.drawable.ripple_16dp_solid_left);
+                mSwitchToVi.setBackgroundResource(R.drawable.ripple_16dp_border_right);
+                mSwitchToEn.setTextColor(getResources().getColor(R.color.FlatOrange));
+                mSwitchToVi.setTextColor(getResources().getColor(R.color.FlatWhite));
+            } else {
+                mSwitchToEn.setBackgroundResource(R.drawable.ripple_16dp_border_left);
+                mSwitchToVi.setBackgroundResource(R.drawable.ripple_16dp_solid_right);
+                mSwitchToEn.setTextColor(getResources().getColor(R.color.FlatWhite));
+                mSwitchToVi.setTextColor(getResources().getColor(R.color.FlatOrange));
+
+            }
+        }
+    }
+
+    @OnClick(R.id.switch_to_en)
+    void switchToEN() {
+        if(mIsEnglish) return;
         Activity activity = getActivity();
         if(activity!=null) {
-            Toasty.normal(activity,"Clicked").show();
-            String lang = LocaleHelper.getLanguage(activity);
-            LocaleHelper.setLocale(activity, lang.equals("vi") ?"en" : "vi");
+            LocaleHelper.setLocale(activity,"en");
            activity.recreate();
         }
+    }
+
+    @Override
+    public void onSetStatusBarMargin(int value) {
+        mStatusBar.getLayoutParams().height = value;
+    }
+
+    @OnClick(R.id.switch_to_vi)
+    void switchToVI() {
+        if(mIsEnglish) {
+            Activity activity = getActivity();
+            if (activity != null) {
+                LocaleHelper.setLocale(activity, "vi");
+                activity.recreate();
+            }
+        }
+
+    }
+
+    @Override
+    public void onPaletteChanged() {
+        super.onPaletteChanged();
+
+        int color = Tool.getBaseColor();
+        int alpha_color = Color.argb(0x22,Color.red(color),Color.green(color),Color.blue(color));
+        int[][] states = new int[][] {
+                new int[] {-android.R.attr.state_checked},
+                new int[] {android.R.attr.state_checked},
+        };
+
+        int[] thumbColors = new int[] {
+                0xFF888888,
+                color,
+        };
+
+        int[] trackColors = new int[] {
+                0x22000000,
+                alpha_color,
+        };
+
+        //  checkBox.setSupportButtonTintList(new ColorStateList(states, thumbColors));
+        DrawableCompat.setTintList(DrawableCompat.wrap(mUseArtistImgAsBg.getThumbDrawable()), new ColorStateList(states, thumbColors));
+        DrawableCompat.setTintList(DrawableCompat.wrap(mUseArtistImgAsBg.getTrackDrawable()), new ColorStateList(states, trackColors));
+
+
+        mSeekBar.setProgressColor(color);
+        mSeekBar.requestLayout();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+         /*   ColorStateList colorStateList = new ColorStateList(
+                    new int[][] {new int[] {android.R.attr.state_pressed},new int[] {android.R.attr.state_focused}},
+                    new int[] {color, alpha_color}
+            );*/
+
+                ((RippleDrawable) mSwitchToEn.getBackground()).setColor(ColorStateList.valueOf(color));
+            ((RippleDrawable) mSwitchToVi.getBackground()).setColor(ColorStateList.valueOf(color));
+            ((RippleDrawable) mCreateNowView.getBackground()).setColor(ColorStateList.valueOf(color));
+
+        }
+
+        if(mIsEnglish) {
+            mSwitchToEn.setTextColor(color);
+        }
+        else mSwitchToVi.setTextColor(color);
+
     }
 }

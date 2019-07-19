@@ -86,6 +86,8 @@ public final class PreferenceUtil {
 
     private static final String REMEMBER_SHUFFLE = "remember_shuffle";
 
+    private static final String USE_ARTIST_IMAGE_AS_BACKGROUND = "use_artist_image_as_bg";
+
     private static PreferenceUtil sInstance;
 
     private final SharedPreferences mPreferences;
@@ -432,6 +434,16 @@ public final class PreferenceUtil {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putInt(SONG_CHILD_SORT_ORDER, value);
         editor.apply();
+    }
+
+    public final void setIsUsingArtistImageAsBackground(boolean value) {
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(USE_ARTIST_IMAGE_AS_BACKGROUND,value);
+        editor.apply();;
+    }
+
+    public final boolean isUsingArtistImageAsBackground() {
+        return mPreferences.getBoolean(USE_ARTIST_IMAGE_AS_BACKGROUND,true);
     }
 
     public SharedPreferences getSharePreferences() {

@@ -65,4 +65,9 @@ public abstract class BaseMusicServiceSupportFragment extends SupportFragment im
     public void onPlayingMetaChanged() {
 
     }
+
+    @Override
+    public void onMediaStoreChanged() {
+
+    }
 }
