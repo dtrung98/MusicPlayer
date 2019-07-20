@@ -1,7 +1,7 @@
 package com.ldt.musicr.helper.menu;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
@@ -10,30 +10,36 @@ import android.widget.Toast;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
-import com.ldt.musicr.loader.PlaylistSongLoader;
-import com.ldt.musicr.model.AbsCustomPlaylist;
+import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
+import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeletePlaylistDialog;
+import com.ldt.musicr.ui.dialog.DeleteSongsDialog;
 import com.ldt.musicr.ui.dialog.RenamePlaylistDialog;
 import com.ldt.musicr.ui.widget.WeakContextAsyncTask;
+import com.ldt.musicr.util.MusicUtil;
+import com.ldt.musicr.util.NavigationUtil;
 import com.ldt.musicr.util.PlaylistsUtil;
+import com.ldt.musicr.util.RingtoneManager;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
  * modified by Le Dinh Trung (dtrung98)
  */
-public class PlaylistMenuHelper {
 
+public class MenuHelper {
     @StringRes
     public static final int[] AUTO_PLAYLIST_OPTION = new int[]{
             R.string.play_next,
@@ -52,6 +58,48 @@ public class PlaylistMenuHelper {
             R.string.delete_from_playlist
     };
 
+    @StringRes
+    public static final int[] ARTIST_OPTION = new int[] {
+            R.string.play,
+            R.string.play_preview,
+            R.string.play_next,
+            R.string.add_to_queue,
+            R.string.add_to_playlist
+    };
+
+    public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Artist artist, int string_res_option) {
+        switch (string_res_option) {
+            case R.string.play:
+                MusicPlayerRemote.openAndShuffleQueue(artist.getSongs(),true);
+                return true;
+            case R.string.play_next:
+                MusicPlayerRemote.playNext(artist.getSongs());
+                return true;
+            case R.string.play_preview:
+                if(activity instanceof BaseActivity) {
+                    SongPreviewController preview = ((MainActivity) activity).getSongPreviewController();
+                    if (preview != null) {
+                        if (preview.isPlayingPreview())
+                            preview.cancelPreview();
+                        else {
+
+                            ArrayList<Song> list = new ArrayList<>(artist.getSongs());
+                            Collections.shuffle(list);
+                            preview.previewSongs(list);
+                        }
+                    }
+                }
+                return true;
+            case R.string.add_to_queue:
+                MusicPlayerRemote.enqueue(artist.getSongs());
+                return true;
+            case R.string.add_to_playlist:
+                AddToPlaylistDialog.create(new ArrayList<>(artist.getSongs())).show(activity.getSupportFragmentManager(), "ADD_PLAYLIST");
+                return true;
+        }
+        return false;
+    }
+
     public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Playlist playlist, int string_res_option) {
         switch (string_res_option) {
             case R.string.play_next:
@@ -65,10 +113,9 @@ public class PlaylistMenuHelper {
                             preview.cancelPreview();
                         else {
 
-                                ArrayList<Song> list = new ArrayList<>(PlaylistPagerFragment.getPlaylistWithListId(activity, playlist,""));
-                                Collections.shuffle(list);
-                                preview.previewSongs(list);
-
+                            ArrayList<Song> list = new ArrayList<>(PlaylistPagerFragment.getPlaylistWithListId(activity, playlist,""));
+                            Collections.shuffle(list);
+                            preview.previewSongs(list);
                         }
                     }
                 }
@@ -116,5 +163,15 @@ public class PlaylistMenuHelper {
                 Toast.makeText(context, string, Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Object object, int string_res_option) {
+        if(object instanceof Song) {
+            return SongMenuHelper.handleMenuClick(activity,(Song)object,string_res_option);
+        } else if (object instanceof Playlist)
+            return handleMenuClick(activity,(Playlist) object,string_res_option);
+          else if(object instanceof Artist)
+              return handleMenuClick(activity,(Artist)object,string_res_option);
+        return false;
     }
 }

@@ -97,8 +97,7 @@ public class PlaylistChildAdapter extends RecyclerView.Adapter<PlaylistChildAdap
         // lấy uri của mImage
         Log.d(TAG, "one");
 
-
-        new PlaylistBitmapLoader(this,playlist,itemHolder).execute();
+        new PlaylistBitmapLoader(this,playlist,itemHolder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         itemHolder.mImage.setTag(firstAlbumID);
         itemHolder.mTitle.setText(playlist.name);
@@ -109,7 +108,6 @@ public class PlaylistChildAdapter extends RecyclerView.Adapter<PlaylistChildAdap
     public int getItemCount() {
         return  mPlaylistData.size();
     }
-
 
     public List<Song> getPlaylistWithListId(int position, int id) {
         if(mContext!=null) {

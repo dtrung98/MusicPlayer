@@ -255,5 +255,9 @@
     <string name="rename">Đổi tên</string>
     <string name="grant_permission_order_description">Music ® cần quyền bộ nhớ để có thể truy cập vào thư viện nhạc. Nếu không có quyền này, ứng dụng sẽ không hoạt động đúng.</string>
     <string name="see_more_about">Xem thêm về</string>
+    <string name="specific_playlist">Danh sách phát tùy chỉnh</string>
+    <string name="show_lyric">Hiện lời bài hát</string>
+    <string name="added_title_to_playing_queue">Đã thêm một tiêu đề vào hàng đợi</string>
+    <string name="added_x_titles_to_playing_queue">Đã thêm %1$d tiêu đề vào hàng đợi</string>
 
 </resources>
