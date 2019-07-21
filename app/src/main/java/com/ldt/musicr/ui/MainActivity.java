@@ -1,12 +1,16 @@
 package com.ldt.musicr.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -18,11 +22,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import java.util.ArrayList;
+import com.ldt.musicr.util.NavigationUtil;
 
 import butterknife.BindView;
 
@@ -172,6 +178,13 @@ public class MainActivity extends BaseActivity {
         assign("onResume");
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent: ");
+        mRootEverything.post(() -> handlePlaybackIntent(intent));
+    }
+
     public boolean checkSelfPermission() {
      return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
@@ -204,6 +217,13 @@ public class MainActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    public void onServiceConnected() {
+        super.onServiceConnected();
+        mRootEverything.post(() -> handlePlaybackIntent(getIntent()));
+    }
+
     @Override
     public void onBackPressed()
     {
@@ -228,6 +248,56 @@ public class MainActivity extends BaseActivity {
         return false;
     }
 
+    private void handlePlaybackIntent(@Nullable Intent intent) {
+        if(intent==null) {
+            Log.d(TAG, "handlePlaybackIntent : null intent");
+            return;
+        }
+
+        Uri uri = intent.getData();
+        String mimeType = intent.getType();
+        boolean handled = false;
+
+        // log
+        if(uri!=null)
+            Log.d(TAG, "handlePlaybackIntent: uri_path = " + uri.getPath());
+        else
+            Log.d(TAG, "handlePlaybackIntent: uri_path = null");
+        Log.d(TAG, "handlePlaybackIntent: mimeType = "+mimeType);
+
+        Log.d(TAG, "handlePlaybackIntent: action = "+intent.getAction());
+
+        if(intent.getAction() !=null && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
+            Log.d(TAG, "handlePlaybackIntent: type media play from search");
+            handled = true;
+        }
+
+        if(uri != null && uri.toString().length() > 0) {
+            Log.d(TAG, "handlePlaybackIntent: type play file");
+            MusicPlayerRemote.playFromUri(uri);
+            NavigationUtil.navigateToNowPlayingController(this);
+            handled = true;
+        } else if(MediaStore.Audio.Playlists.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type playlist");
+            handled = true;
+        } else if(MediaStore.Audio.Albums.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type album");
+            handled = true;
+        } else if(MediaStore.Audio.Artists.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type artist");
+            handled = true;
+        } else if(!handled && MusicService.ACTION_ON_CLICK_NOTIFICATION.equals(intent.getAction())) {
+            NavigationUtil.navigateToNowPlayingController(this);
+            handled = true;
+        } else if(!handled) {
+            Log.d(TAG, "handlePlaybackIntent: unhandled: "+intent.getAction());
+        }
+
+        //NavigationUtil.navigateToNowPlayingController(this);
+
+        if(handled)
+        setIntent(new Intent());
+    }
 
     public void popUpPlaylistTab() {
         if(mPlayingQueueController !=null) mPlayingQueueController.popUp();

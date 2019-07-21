@@ -313,4 +313,8 @@
     <string name="customization">Customization</string>
     <string name="artist_image_background">Use Artist image as background</string>
     <string name="show_lyric">Show lyric</string>
+    <string name="in_app_volume">In-App Volume</string>
+    <string name="specific_playlist_note">Playlists with songs do not appear in any other playlists, including playlist All Songs. Create somethings like Blacklist, English Study List, etc.</string>
+    <string name="change_languague_note">Require a quick restart to affect the change, music won\'t be stopped.</string>
+    <string name="more_setting">More Setting</string>
 </resources>

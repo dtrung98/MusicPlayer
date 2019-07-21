@@ -21,9 +21,11 @@ import android.widget.TextView;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.LocaleHelper;
+import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceSupportFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.rangeseekbar.OnRangeChangedListener;
 import com.ldt.musicr.ui.widget.rangeseekbar.RangeSeekBar;
 import com.ldt.musicr.util.Tool;
 import com.squareup.haha.perflib.Main;
@@ -34,7 +36,7 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
-public class SettingTabFragment extends BaseMusicServiceSupportFragment {
+public class SettingTabFragment extends BaseMusicServiceSupportFragment implements OnRangeChangedListener {
     private static final String EN = "en";
     private static final String VI = "vi";
 
@@ -73,17 +75,26 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        mSeekBar.setOnRangeChangedListener(this);
         refreshData();
       onPaletteChanged();
 
     }
 
-
     private boolean mIsEnglish = true;
+    private float mCurrentInAppVolume = -1;
+
+    private void refreshInAppVolume() {
+        mCurrentInAppVolume = MusicPlayerRemote.getInAppVolume();
+        if(mCurrentInAppVolume>=0) {
+            mSeekBar.setValue(100*mCurrentInAppVolume);
+        } else {
+
+        }
+    }
 
     void refreshData() {
-
-        mSeekBar.setValue(100);
+        refreshInAppVolume();
         mUseArtistImgAsBg.setChecked(App.getInstance().getPreferencesUtility().isUsingArtistImageAsBackground());
 
         Context context = getContext();
@@ -172,6 +183,7 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment {
                 ((RippleDrawable) mSwitchToEn.getBackground()).setColor(ColorStateList.valueOf(color));
             ((RippleDrawable) mSwitchToVi.getBackground()).setColor(ColorStateList.valueOf(color));
             ((RippleDrawable) mCreateNowView.getBackground()).setColor(ColorStateList.valueOf(color));
+            ((RippleDrawable) mMoreSettingView.getBackground()).setColor(ColorStateList.valueOf(color));
 
         }
 
@@ -179,6 +191,33 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment {
             mSwitchToEn.setTextColor(color);
         }
         else mSwitchToVi.setTextColor(color);
+
+    }
+    public void setCurrentInAppVolume(float volume) {
+        if(volume<0||volume>1) return;
+        mCurrentInAppVolume = volume;
+        MusicPlayerRemote.setInAppVolume(mCurrentInAppVolume);
+    }
+
+    @Override
+    public void onRangeChanged(RangeSeekBar view, float leftValue, float rightValue, boolean isFromUser) {
+        if(isFromUser) {
+             setCurrentInAppVolume(leftValue/100);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(RangeSeekBar view, boolean isLeft) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
+
+    }
+    @BindView(R.id.more_setting) View mMoreSettingView;
+    @OnClick(R.id.more_setting)
+    void goToMoreSetting() {
 
     }
 }

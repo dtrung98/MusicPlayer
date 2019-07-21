@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="markArray">
-        <item>0</item>
+        <item>10</item>
         <item>25</item>
         <item>50</item>
         <item>75</item>

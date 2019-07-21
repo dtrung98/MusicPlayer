@@ -15,7 +15,6 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
-import android.media.session.MediaSession;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -39,6 +38,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.appwidgets.AppWidgetBig;
 import com.ldt.musicr.appwidgets.AppWidgetCard;
@@ -99,6 +99,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     public static final String REPEAT_MODE_CHANGED = PACKAGE_NAME + ".repeatmodechanged";
     public static final String SHUFFLE_MODE_CHANGED = PACKAGE_NAME + ".shufflemodechanged";
     public static final String MEDIA_STORE_CHANGED = PACKAGE_NAME + ".mediastorechanged";
+    public static final String ACTION_ON_CLICK_NOTIFICATION = PACKAGE_NAME + ".on_click_notification";
+
 
     public static final String SAVED_POSITION = "POSITION";
     public static final String SAVED_POSITION_IN_TRACK = "POSITION_IN_TRACK";
@@ -115,6 +117,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     private static final int DUCK = 7;
     private static final int UNDUCK = 8;
     public static final int RESTORE_QUEUES = 9;
+    public static final int CHANGE_VOLUME = 10;
 
     public static final int SHUFFLE_MODE_NONE = 0;
     public static final int SHUFFLE_MODE_SHUFFLE = 1;
@@ -124,6 +127,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     public static final int REPEAT_MODE_THIS = 2;
 
     public static final int SAVE_QUEUES = 0;
+
+    private float mInAppVolume = 1.0f;
 
     private final IBinder musicBind = new MusicBinder();
 
@@ -193,6 +198,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         playerHandler = new PlaybackHandler(this, musicPlayerHandlerThread.getLooper());
 
         playback = new MultiPlayer(this);
+        notifyVolumePrefChanged();
         playback.setCallbacks(this);
 
         setupMediaSession();
@@ -370,6 +376,18 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     @Override
     public IBinder onBind(Intent intent) {
         return musicBind;
+    }
+
+    public void setInAppVolume(float volume) {
+        if(volume<0) volume = 0;
+        else if(volume>1) volume = 1;
+
+        App.getInstance().getPreferencesUtility().setInAppVolume(volume);
+        notifyVolumePrefChanged();
+    }
+
+    public float getInAppVolume() {
+        return mInAppVolume;
     }
 
     private static final class QueueSaveHandler extends Handler {
@@ -950,6 +968,28 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         }
     }
 
+    public void notifyVolumePrefChanged() {
+        synchronized (this) {
+            float volume = App.getInstance().getPreferencesUtility().getInAppVolume();
+            if(volume<0) volume = 0;
+            else if(volume>1) volume = 1;
+            mInAppVolume = volume;
+        }
+
+        playerHandler.sendEmptyMessage(CHANGE_VOLUME);
+    }
+    private float mCurrentVolume = 1f;
+
+    public void setVolumeUsedByHandler(float volume) {
+        mCurrentVolume = volume;
+        updateVolume();
+    }
+    public void updateVolume() {
+        try {
+            playback.setVolume(mCurrentVolume*mInAppVolume);
+        } catch (Exception ignored) {}
+    }
+
     public void cycleRepeatMode() {
         switch (getRepeatMode()) {
             case REPEAT_MODE_NONE:
@@ -1168,7 +1208,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     } else {
                         currentDuckVolume = 1f;
                     }
-                    service.playback.setVolume(currentDuckVolume);
+                    //service.playback.setVolume(currentDuckVolume);
+                    service.setVolumeUsedByHandler(currentDuckVolume);
                     break;
 
                 case UNDUCK:
@@ -1182,7 +1223,9 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     } else {
                         currentDuckVolume = 1f;
                     }
-                    service.playback.setVolume(currentDuckVolume);
+                   // service.playback.setVolume(currentDuckVolume);
+                    service.setVolumeUsedByHandler(currentDuckVolume);
+
                     break;
 
                 case TRACK_WENT_TO_NEXT:
@@ -1226,6 +1269,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                     service.notifyChange(PLAY_STATE_CHANGED);
                     break;
 
+                case CHANGE_VOLUME:
+                    service.updateVolume();
+                    break;
+
                 case PREPARE_NEXT:
                     service.prepareNextImpl();
                     break;
@@ -1267,6 +1314,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                             break;
                     }
                     break;
+
             }
         }
     }

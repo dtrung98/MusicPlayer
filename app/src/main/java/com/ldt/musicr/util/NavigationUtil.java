@@ -32,6 +32,7 @@ import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
+import com.squareup.haha.perflib.Main;
 
 import es.dmoral.toasty.Toasty;
 
@@ -51,6 +52,33 @@ public class NavigationUtil {
         } else if(nowPlayingAttr.getState()!= LayerController.Attr.MINIMIZED) {
             // only now playing
             nowPlayingAttr.animateToMin();
+        }
+    }
+
+    public static void navigateToNowPlayingController(@NonNull final MainActivity activity) {
+        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
+        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+
+        if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED && nowPlayingAttr.getState() != LayerController.Attr.MINIMIZED) {
+            // 2 layer is maximized
+            playingQueueAttr.animateToMin();
+        } else if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED) {
+            // playing queue is maximize, while now playing is minimize
+            playingQueueAttr.animateToMin();
+            playingQueueAttr.getParent().postDelayed(nowPlayingAttr::animateToMax,550);
+        } else if(nowPlayingAttr.getState()== LayerController.Attr.MINIMIZED) {
+            // both are minimized
+            nowPlayingAttr.animateToMax();
+        }
+    }
+
+    public static void navigateToPlayingQueueController(@NonNull final MainActivity activity) {
+        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
+        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+
+        if (playingQueueAttr.getState() == LayerController.Attr.MINIMIZED) {
+            // playing queue is minimize, while now playing is maximize
+            playingQueueAttr.animateToMax();
         }
     }
 
