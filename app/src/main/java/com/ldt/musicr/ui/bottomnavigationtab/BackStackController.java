@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
@@ -51,6 +52,8 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     @BindView(R.id.dim_view) View mDimView;
     @BindView(R.id.back_image)
     ImageView mBackImageView;
+
+    private boolean mIsUsingAIAsBg = true;
 
     private float mNavigationHeight;
 
@@ -86,8 +89,9 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
        mViewPager.setOffscreenPageLimit(3);
        mViewPager.addOnPageChangeListener(this);
        mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
-       mBackImageView.setVisibility(View.VISIBLE);
-       onPlayingMetaChanged();
+
+       onUsingArtistImagePreferenceChanged();
+
     }
 
     public boolean streamOnTouchEvent(MotionEvent event) {
@@ -366,5 +370,15 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         if(getActivity() instanceof BaseActivity)
             ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
+    }
+
+    public void onUsingArtistImagePreferenceChanged() {
+        mIsUsingAIAsBg = App.getInstance().getPreferencesUtility().isUsingArtistImageAsBackground();
+        if(mIsUsingAIAsBg) {
+            mBackImageView.setVisibility(View.VISIBLE);
+            onPlayingMetaChanged();
+        } else {
+            mBackImageView.setVisibility(View.GONE);
+        }
     }
 }

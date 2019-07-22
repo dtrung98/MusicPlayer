@@ -25,10 +25,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
-import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.model.Media;
-import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.R;
 
@@ -171,7 +169,7 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
         if(view instanceof TextView) {
             int item = mOptionViews.indexOf(view);
             if (item != -1 && getActivity() != null) {
-                 MediaMenuHelper.handleMenuClick((AppCompatActivity) getActivity(), mObject, mOptionStringID[item]);
+                 MenuHelper.handleMenuClick((AppCompatActivity) getActivity(), mObject, mOptionStringID[item]);
                 this.dismiss();
             }
         }

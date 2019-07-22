@@ -51,7 +51,7 @@ import butterknife.OnClick;
 import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
 
 public class LyricBottomSheet extends BottomSheetDialogFragment  implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
-    private static final String TAG = "LyricBottomSheet";
+    public static final String TAG = "LyricBottomSheet";
     private static final String SONG_KEY = "song";
     private static final String SHOULD_AUTO_UPDATE_KEY = "should_auto_update";
     @BindView(R.id.lyric_content)

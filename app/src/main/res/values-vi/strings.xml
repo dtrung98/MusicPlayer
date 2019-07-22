@@ -255,5 +255,16 @@
     <string name="rename">Đổi tên</string>
     <string name="grant_permission_order_description">Music ® cần quyền bộ nhớ để có thể truy cập vào thư viện nhạc. Nếu không có quyền này, ứng dụng sẽ không hoạt động đúng.</string>
     <string name="see_more_about">Xem thêm về</string>
-
+    <string name="specific_playlist">Danh sách phát tùy chỉnh</string>
+    <string name="show_lyric">Hiện lời bài hát</string>
+    <string name="added_title_to_playing_queue">Đã thêm một tiêu đề vào hàng đợi</string>
+    <string name="added_x_titles_to_playing_queue">Đã thêm %1$d tiêu đề vào hàng đợi</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="create">Tạo ngay</string>
+    <string name="customization">Tùy biến giao diện</string>
+    <string name="artist_image_background">Sử dụng ảnh nền là hình nghệ sỹ</string>
+    <string name="in_app_volume">Âm lượng ứng dụng</string>
+    <string name="specific_playlist_note">Những bài hát xuất hiện trong những sách phát này sẽ không xuất hiện trong bất kỳ danh sách phát nào, kể cả Tất cả bài hát. Hãy tạo một vài danh sách để chứa các âm thanh như Danh sách đen, Sách nói…</string>
+    <string name="change_languague_note">Yêu cầu ứng dụng khởi động lại, nhanh thôi. Nhạc đang phát sẽ không bị tắt.</string>
+    <string name="more_setting">Cài đặt khác</string>
 </resources>

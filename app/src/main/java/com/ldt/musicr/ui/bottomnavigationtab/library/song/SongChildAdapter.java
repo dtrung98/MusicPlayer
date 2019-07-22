@@ -17,11 +17,10 @@ import android.widget.TextView;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsBindAbleHolder;
 import com.ldt.musicr.contract.AbsSongAdapter;
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
-import com.ldt.musicr.helper.songpreview.SongPreviewController;
+import com.ldt.musicr.helper.menu.MenuHelper;
 
+import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
@@ -63,7 +62,7 @@ public class SongChildAdapter extends AbsSongAdapter
         mOptionRes = res;
     }
 
-    private int[] mOptionRes = MediaMenuHelper.SONG_OPTION;
+    private int[] mOptionRes = SongMenuHelper.SONG_OPTION;
 
     @Override
     protected void onMenuItemClick(int positionInData) {

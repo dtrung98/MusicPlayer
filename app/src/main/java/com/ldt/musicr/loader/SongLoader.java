@@ -7,7 +7,9 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.provider.BlacklistStore;
 import com.ldt.musicr.util.PreferenceUtil;
@@ -18,7 +20,9 @@ import java.util.ArrayList;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class SongLoader {
-    protected static final String BASE_SELECTION = AudioColumns.IS_MUSIC + "=1" + " AND " + AudioColumns.TITLE + " != ''";
+    private static final String TAG = "SongLoader";
+
+    protected static final String BASE_SELECTION = AudioColumns.IS_MUSIC + "=1" + " AND " + AudioColumns.TITLE + " != ''" ;
     protected static final String[] BASE_PROJECTION = new String[]{
             BaseColumns._ID,// 0
             AudioColumns.TITLE,// 1
@@ -107,10 +111,11 @@ public class SongLoader {
 
     @Nullable
     public static Cursor makeSongCursor(@NonNull final Context context, @Nullable String selection, String[] selectionValues, final String sortOrder) {
+
         if (selection != null && !selection.trim().equals("")) {
-            selection = BASE_SELECTION + " AND " + selection;
+            selection = addMinDurationFilter(BASE_SELECTION)  + " AND " + selection;
         } else {
-            selection = BASE_SELECTION;
+            selection = addMinDurationFilter(BASE_SELECTION);
         }
 
         // Blacklist
@@ -118,6 +123,15 @@ public class SongLoader {
         if (!paths.isEmpty()) {
             selection = generateBlacklistSelection(selection, paths.size());
             selectionValues = addBlacklistSelectionValues(selectionValues, paths);
+
+            Log.d(TAG, "makeSongCursor: selection ["+selection+"]");
+
+            String values = "";
+            for (String value :
+                    selectionValues) {
+                values += "[" + value + "], ";
+            }
+            Log.d(TAG, "makeSongCursor: values = "+ values);
         }
 
         try {
@@ -126,6 +140,10 @@ public class SongLoader {
         } catch (SecurityException e) {
             return null;
         }
+    }
+
+    private static String addMinDurationFilter(String selection) {
+        return selection + " AND "+ AudioColumns.DURATION+" > " + App.getInstance().getPreferencesUtility().getMinDuration();
     }
 
     private static String generateBlacklistSelection(String selection, int pathCount) {

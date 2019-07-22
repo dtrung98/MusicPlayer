@@ -261,14 +261,21 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         }
     }
 
+    private float mVolume = 1f;
+
     @Override
     public boolean setVolume(final float vol) {
         try {
             mCurrentMediaPlayer.setVolume(vol, vol);
+            mVolume = vol;
             return true;
         } catch (IllegalStateException e) {
             return false;
         }
+    }
+
+    public void updateVolume() {
+        setVolume(mVolume);
     }
 
     /**
@@ -304,6 +311,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         mIsInitialized = false;
         mCurrentMediaPlayer.release();
         mCurrentMediaPlayer = new MediaPlayer();
+        updateVolume();
         mCurrentMediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
         if (context != null) {
             Toast.makeText(context, context.getResources().getString(R.string.unplayable_file), Toast.LENGTH_SHORT).show();

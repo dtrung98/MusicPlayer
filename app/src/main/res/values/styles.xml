@@ -1,12 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatYellow</item>
+        <item name="colorAccent">@color/FlatOrange</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/black</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>

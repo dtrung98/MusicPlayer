@@ -2,12 +2,9 @@ package com.ldt.musicr.contract;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
 import com.ldt.musicr.model.Media;
-import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.util.Tool;
 
 /**

@@ -776,6 +776,10 @@ public class LayerController {
             return getMaxPosition() - mCurrentTranslate + mScaleDeltaTranslate;
         }
 
+        public void animateAndGone() {
+
+        }
+
         public void animateOnInit() {
             parent.setTranslationY(getMaxPosition());
             parent.animate().translationYBy(-getMaxPosition()+getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator);

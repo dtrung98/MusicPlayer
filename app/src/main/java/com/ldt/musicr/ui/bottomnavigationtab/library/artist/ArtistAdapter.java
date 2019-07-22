@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,9 +28,11 @@ import com.ldt.musicr.contract.AbsBindAbleHolder;
 import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.loader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.util.PhonographColorUtil;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
@@ -70,9 +73,8 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
     }
 
     @Override
-    protected void onMenuItemClick(int positionInData) {
+    protected void onMenuItemClick(int positionInData) {}
 
-    }
 
     @Override
     protected void onDataSet() {
@@ -119,8 +121,9 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
 
     @Override
     protected boolean onLongPressedItem(AbsBindAbleHolder holder, int position) {
-        if(mListener!=null) mListener.onArtistItemClick(getData().get(position));
-        return super.onLongPressedItem(holder, position);
+        super.onLongPressedItem(holder, position);
+        OptionBottomSheet.newInstance(MenuHelper.ARTIST_OPTION,getData().get(position)).show(((AppCompatActivity)mContext).getSupportFragmentManager(),"artist_option");
+        return true;
     }
 
     public static int lighter(int color, float factor) {
@@ -204,7 +207,7 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
                 if(task==null) {
                     task = new GenreArtistTask(ArtistAdapter.this, artist, getAdapterPosition());
                     mGenreArtistTaskMap.put(artist,task);
-                    task.execute();
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
 
             } else bindGenre(genres);

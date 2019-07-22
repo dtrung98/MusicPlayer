@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsBindAbleHolder;
 import com.ldt.musicr.contract.AbsSongAdapter;
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
+import com.ldt.musicr.helper.menu.MenuHelper;
+import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +24,7 @@ public class PlayingQueueAdapter extends AbsSongAdapter {
     @Override
     protected void onMenuItemClick(int positionInData) {
         OptionBottomSheet
-                .newInstance(MediaMenuHelper.SONG_QUEUE_OPTION,getData().get(positionInData))
+                .newInstance(SongMenuHelper.SONG_QUEUE_OPTION,getData().get(positionInData))
                 .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
     }
 

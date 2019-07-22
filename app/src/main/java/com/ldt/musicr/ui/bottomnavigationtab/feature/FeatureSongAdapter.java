@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
+import com.ldt.musicr.helper.menu.MenuHelper;
+import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.model.Song;
@@ -102,7 +103,7 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
     private void setOnPopupMenuListener(ItemHolder itemHolder, final int position) {
         itemHolder.mMenuButton.setOnClickListener(v -> {
             OptionBottomSheet
-                    .newInstance(MediaMenuHelper.SONG_OPTION,mData.get(position))
+                    .newInstance(SongMenuHelper.SONG_OPTION,mData.get(position))
                     .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
         });
     }
