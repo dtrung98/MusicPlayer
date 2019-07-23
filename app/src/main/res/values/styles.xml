@@ -157,5 +157,7 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.65</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+
     </style>
 </resources>
