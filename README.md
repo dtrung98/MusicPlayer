@@ -3,10 +3,12 @@ A pretty UI&UX Music Player
 
 ## Features
 * Dark Theme Style with wallpaper as background
-* One activity, all fragments with fancy animation
-* Play preview of a song, audio visualizer progress bar
-* Play Controller is able to be opened anywhere
-* Long tap to show shortcut
+* Single activity, all fragments architecture with fancy animation
+* Play the sample/preview of a song, audio visualizer progress bar
+* Play Controller is able to be opened everywhere
+* Large artist image loading, and can be used as background
+* View lyrics, view song details
+* Metadata editor
 * Learn your hobby, automatically create new playlist
 * etc
 
@@ -32,7 +34,7 @@ src="https://user-images.githubusercontent.com/33343210/61610738-2c46aa80-ac84-1
 src="https://user-images.githubusercontent.com/33343210/61610968-c3abfd80-ac84-11e9-9c8a-7ac5c9e257ff.jpg"/>
     </td>
      <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61610594-c3f7c900-ac83-11e9-8ccf-1a6d989631d2.png"/></td>
+src="https://user-images.githubusercontent.com/33343210/61610657-edb0f000-ac83-11e9-8b89-eb205d8ac518.png"/></td>
   </table>
   </div>
 </br>
@@ -49,6 +51,19 @@ src="https://user-images.githubusercontent.com/33343210/61611355-c6f3b900-ac85-1
 </table>
   </div>
 </br>
+<div align="center">
+  <table align="center" border="0" >
+  <tr>
+    <td> <img width="360"
+src="https://user-images.githubusercontent.com/33343210/61610594-c3f7c900-ac83-11e9-8ccf-1a6d989631d2.png"/></td>
+    <td> <img width="360"
+src="https://user-images.githubusercontent.com/33343210/61611516-2d78d700-ac86-11e9-9187-c53e91a2b891.png"/></td>
+     <td> <img width="360"
+src="https://user-images.githubusercontent.com/33343210/61764970-4eb40180-ae05-11e9-9903-241fa144582b.png"/></td>
+  </tr>
+</table>
+  </div>
+</br>
 
 ## Authors
 
@@ -57,7 +72,7 @@ src="https://user-images.githubusercontent.com/33343210/61611355-c6f3b900-ac85-1
 
 ### License
 
-This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](/LICENSE) file for details
+* This project is licensed under The GNU General Public License v3.0 - see the [LICENSE.md](/LICENSE) file for details
 
 ### Acknowledgments
 
