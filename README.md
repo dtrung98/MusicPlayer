@@ -1,5 +1,5 @@
 # RD Music Player - Redefined Music Player
-A pretty UI&UX Music Player
+**A pretty UI&UX Music Player**
 
 ## Features
 * Dark Theme Style with wallpaper as background
