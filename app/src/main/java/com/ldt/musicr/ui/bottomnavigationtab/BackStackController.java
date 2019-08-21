@@ -84,6 +84,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
         oneDP = getResources().getDimension(R.dimen.oneDP);
        mNavigationHeight = getActivity().getResources().getDimension(R.dimen.bottom_navigation_height);
+       //if(true) return;
        mNavigationAdapter = new BottomNavigationPagerAdapter(getActivity(),getChildFragmentManager());
        mViewPager.setAdapter(mNavigationAdapter);
        mViewPager.setOffscreenPageLimit(3);

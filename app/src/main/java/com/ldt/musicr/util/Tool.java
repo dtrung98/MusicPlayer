@@ -424,7 +424,7 @@ public class Tool {
       final Toast toast;
       //toast =  Toasty.warning(context,text,time);
       toast = Toasty.custom(context,text, R.drawable.emoticon_excited,R.color.library_back_color,time,true,true);
-      toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
+     // toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
         toast.show();
     }
     private static boolean drawn = false;

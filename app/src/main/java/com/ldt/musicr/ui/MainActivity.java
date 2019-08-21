@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
@@ -107,11 +108,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+        setTheme(R.style.AppThemeNoWallpaper);
         super.onCreate(savedInstanceState);
         assign(0);
         setContentView(R.layout.basic_activity_layout);
+       // if(true) return;
         bindView();
         assign("set & bind");
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
         assign("set fullscreen");
         mRootEverything.post(new Runnable() {
@@ -147,6 +152,7 @@ public class MainActivity extends BaseActivity {
 
     public void startGUI() {
       //  Toast.makeText(this,"Start GUI",Toast.LENGTH_SHORT).show();
+        //if(true) return;
         if(mIntroController!=null) {
             removePermissionListener();
             mIntroController.getNavigationController().popAllFragments();
@@ -164,6 +170,9 @@ public class MainActivity extends BaseActivity {
 
         assign(7);
         mLayerController.init(mLayerContainer,mBackStackController,mNowPlayingController, mPlayingQueueController);
+        mRootEverything.postDelayed(() ->
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER, WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+                ,2500);
     }
 
     @Override
@@ -221,6 +230,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onServiceConnected() {
         super.onServiceConnected();
+        if(mRootEverything!=null)
         mRootEverything.post(() -> handlePlaybackIntent(getIntent()));
     }
 

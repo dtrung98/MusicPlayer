@@ -53,16 +53,18 @@ public class FeatureTabFragment extends BaseMusicServiceSupportFragment implemen
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
 
-
         refreshData();
     }
 
     private void refreshData() {
+
         if(getActivity()!=null) {
             mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
             mFeatureLinearHolder.setSuggestedSongs(SongLoader.getAllSongs(getActivity()));
         }
+
         mSwipeRefreshLayout.setRefreshing(false);
+
     }
 
     @Override

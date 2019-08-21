@@ -70,4 +70,5 @@
     <color name="rsbColorThumbBorder">#FFD7D7D7</color>
     <color name="colorProgress">#ffffbb33</color>
     <color name="FloatingButtonColor">#FBFFBD</color>
+    <color name="SplashColor">@android:color/black</color>
 </resources>

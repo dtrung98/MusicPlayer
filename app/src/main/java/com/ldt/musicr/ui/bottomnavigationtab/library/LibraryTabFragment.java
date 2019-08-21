@@ -55,6 +55,8 @@ public class LibraryTabFragment extends SupportFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+      //  mSearchView.onActionViewExpanded();
+       // mSearchView.clearFocus();
         mStatusView.getLayoutParams().height = Tool.getStatusHeight(getResources());
         mStatusView.requestLayout();
       //  mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();

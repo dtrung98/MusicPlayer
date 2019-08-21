@@ -180,10 +180,11 @@ public class LayerController {
         mLayerContainer.setVisibility(View.VISIBLE);
         float value = activity.getResources().getDimension(R.dimen.bottom_navigation_height);
 
-        mBottomNavigationParent.setTranslationY(value);
+       /* mBottomNavigationParent.setTranslationY(value);
         mBottomNavigationParent.animate().translationYBy(-value);
+        */
         for (int i = 0; i < mBaseAttrs.size(); i++) {
-            mBaseAttrs.get(i).animateOnInit();
+            mBaseAttrs.get(i).initImmediately();
         }
 
         assign(3);
@@ -786,6 +787,11 @@ public class LayerController {
           //  parent.animate().translationYBy(-getMaxPositionType()+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-getMaxPositionType() + getRealTranslateY()),0,(int)getMaxPositionType())).setInterpolator(Animation.sInterpolator);
             mCurrentTranslate = minPosition;
         }
+
+        public void initImmediately() {
+            parent.setTranslationY(getRealTranslateY());
+        }
+
         public Attr setCurrentTranslate(float current) {
             mCurrentTranslate = current;
             if(mCurrentTranslate>getMaxPosition()) mCurrentTranslate = getMaxPosition();

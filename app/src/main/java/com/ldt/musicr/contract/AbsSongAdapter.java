@@ -59,6 +59,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
 
         if(context instanceof BaseActivity) {
            SongPreviewController controller = ((BaseActivity)context).getSongPreviewController();
+           if(controller!=null)
            controller.addSongPreviewListener(this);
         }
     }
@@ -68,6 +69,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
 
         if(mContext instanceof MainActivity) {
             SongPreviewController controller = ((MainActivity) mContext).getSongPreviewController();
+            if(controller!=null)
             mPreviewSong = controller.getCurrentPreviewSong();
         }
     }
