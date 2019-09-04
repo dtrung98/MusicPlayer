@@ -114,7 +114,8 @@ public class MainActivity extends BaseActivity {
             USE_DYNAMIC_THEME = false;
             App.getInstance().getPreferencesUtility().notFirstTime();
             setTheme(R.style.AppTheme);
-        }
+            Log.d(TAG, "onCreate: not the first time");
+        } else Log.d(TAG, "onCreate: the first time");
         if(USE_DYNAMIC_THEME)
         setTheme(R.style.AppThemeNoWallpaper);
 
@@ -137,11 +138,11 @@ public class MainActivity extends BaseActivity {
                     mIntroController = new IntroController();
 
                     mIntroController.init(MainActivity.this,savedInstanceState);
-                    if(USE_DYNAMIC_THEME)
-                        mRootEverything.postDelayed(() ->
-                                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER, WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-                                ,2500);
                 } else startGUI();
+                if(USE_DYNAMIC_THEME)
+                    mRootEverything.postDelayed(() ->
+                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER, WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+                            ,2500);
             }
         });
 

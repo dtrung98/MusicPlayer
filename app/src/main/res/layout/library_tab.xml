@@ -7,16 +7,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
+    tools:progress="0"
     tools:context="com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment"
-    app:progress="0"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
    >
+    <ImageView
+        android:id="@+id/back_image"
+        android:layout_width="0dp"
+        android:layout_height="220dp"
+        android:scaleType="centerCrop"
+        android:scaleX="1.1"
+        android:scaleY="1.1"
+        android:visibility="gone"
+        android:src="@drawable/photo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
     <View
         android:id="@+id/gradient_back"
         android:layout_width="0dp"
         android:layout_height="220dp"
-        app:layout_constraintTop_toTopOf="@id/back_image"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@drawable/library_back_gradient"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,15 +56,10 @@
     android:textColor="@color/FlatWhite"
     android:textSize="26sp"
     android:paddingStart="25dp"
+    android:paddingEnd="0dp"
     android:textStyle="bold"
     android:gravity="center_vertical"
-    android:paddingLeft="25dp" />
-    <android.support.constraint.Guideline
-        android:id="@+id/guide_line"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.5"
-        android:orientation="vertical"/>
+    />
     <android.support.v7.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
@@ -70,18 +77,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        >
-
-        <ImageView
-            android:id="@+id/back_image"
-            android:layout_width="0dp"
-            android:layout_height="220dp"
-            android:scaleType="centerCrop"
-            android:scaleX="1.1"
-            android:scaleY="1.1"
-            android:visibility="visible" />
-    </android.support.v7.widget.SearchView>
+        android:layout_marginEnd="20dp"/>
     <View
         android:id="@+id/back_color_view"
         android:layout_width="0dp"

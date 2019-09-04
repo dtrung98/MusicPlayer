@@ -4,21 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     >
     <ImageView
         android:id="@+id/back_image"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        app:layout_constraintTop_toTopOf="@id/status_bar_parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/photo"
         android:scaleType="centerCrop"
-        android:visibility="visible"
-
-        />
+        android:visibility="gone"
+        android:contentDescription="@string/back_description" />
     <View
         android:id="@+id/gradient_back"
         android:layout_width="0dp"
@@ -51,18 +49,13 @@
         android:textColor="@color/FlatWhite"
         android:textSize="26sp"
         android:paddingStart="25dp"
+        android:paddingEnd="0dp"
         android:textStyle="bold"
         android:gravity="center_vertical"
         android:scaleX="0.5"
         android:scaleY="0.5"
         android:alpha="0"
-        android:paddingLeft="25dp" />
-    <android.support.constraint.Guideline
-        android:id="@+id/guide_line"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.5"
-        android:orientation="vertical"/>
+        />
     <android.support.v7.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
