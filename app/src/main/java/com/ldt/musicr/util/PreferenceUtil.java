@@ -86,7 +86,21 @@ public final class PreferenceUtil {
 
     private static final String REMEMBER_SHUFFLE = "remember_shuffle";
 
+    private static final String USE_ARTIST_IMAGE_AS_BACKGROUND = "use_artist_image_as_bg";
+    private static final String IN_APP_VOLUME = "in_app_volume";
+    private static final String AUDIO_MIN_DURATION = "audio_min_duration";
+
     private static PreferenceUtil sInstance;
+
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        isFirstTime = firstTime;
+    }
+
+    private boolean isFirstTime = true;
 
     private final SharedPreferences mPreferences;
 
@@ -434,7 +448,44 @@ public final class PreferenceUtil {
         editor.apply();
     }
 
+    public final void setIsUsingArtistImageAsBackground(boolean value) {
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putBoolean(USE_ARTIST_IMAGE_AS_BACKGROUND,value);
+        editor.apply();;
+    }
+
+    public final boolean isUsingArtistImageAsBackground() {
+        return mPreferences.getBoolean(USE_ARTIST_IMAGE_AS_BACKGROUND,true);
+    }
+
+    public final void setInAppVolume(float value) {
+        if(value<0) value = 0;
+        else if(value>1) value = 1;
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putFloat(IN_APP_VOLUME, value);
+        editor.apply();
+    }
+
+    public final float getInAppVolume() {
+        return mPreferences.getFloat(IN_APP_VOLUME,1);
+    }
+
+    public final void setMinDuration(int value) {
+        if(value<0) value = 0;
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putFloat(AUDIO_MIN_DURATION, value);
+        editor.apply();
+    }
+
+    public final int getMinDuration() {
+        return mPreferences.getInt(AUDIO_MIN_DURATION,10000);
+    }
+
     public SharedPreferences getSharePreferences() {
         return mPreferences;
+    }
+
+    public void notFirstTime() {
+        setFirstTime(false);
     }
 }

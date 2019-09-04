@@ -26,6 +26,7 @@ import com.ldt.musicr.util.PreferenceUtil;
 import static com.ldt.musicr.service.MusicService.ACTION_REWIND;
 import static com.ldt.musicr.service.MusicService.ACTION_SKIP;
 import static com.ldt.musicr.service.MusicService.ACTION_TOGGLE_PAUSE;
+import static com.ldt.musicr.service.MusicService.ACTION_ON_CLICK_NOTIFICATION;
 
 
 public class PlayingNotificationImpl24 extends PlayingNotification {
@@ -47,6 +48,7 @@ public class PlayingNotificationImpl24 extends PlayingNotification {
 
         Intent action = new Intent(service, MainActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        action.setAction(ACTION_ON_CLICK_NOTIFICATION);
         final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, 0);
 
         final ComponentName serviceName = new ComponentName(service, MusicService.class);

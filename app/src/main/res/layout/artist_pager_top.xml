@@ -33,7 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/group"
-        app:constraint_referenced_ids="back,title,description,recycler_view,header_gradient,gradient_top_background,play"
+        tools:visibility="gone"
+        app:constraint_referenced_ids="gradient_line, big_behind, back,title,description,recycler_view,header_gradient,gradient_top_background,play, play_background, preview_button"
         />
     <FrameLayout
         android:id="@+id/status_bar_parent"

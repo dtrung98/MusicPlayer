@@ -19,8 +19,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.glide.ArtistGlideRequest;
+import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.model.Artist;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
@@ -37,10 +46,15 @@ import butterknife.ButterKnife;
 
 import static android.content.Context.VIBRATOR_SERVICE;
 
-public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener {
+public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener, MusicServiceEventListener {
     private static final String TAG ="BackStackController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
+    @BindView(R.id.back_image)
+    ImageView mBackImageView;
+
+    private boolean mIsUsingAIAsBg = true;
+
     private float mNavigationHeight;
 
     BottomNavigationPagerAdapter mNavigationAdapter;
@@ -58,18 +72,27 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         return inflater.inflate(R.layout.back_stack_controller,container,false);
     }
 
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+
+        if(getActivity() instanceof BaseActivity)
+            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+
         oneDP = getResources().getDimension(R.dimen.oneDP);
        mNavigationHeight = getActivity().getResources().getDimension(R.dimen.bottom_navigation_height);
+       //if(true) return;
        mNavigationAdapter = new BottomNavigationPagerAdapter(getActivity(),getChildFragmentManager());
        mViewPager.setAdapter(mNavigationAdapter);
        mViewPager.setOffscreenPageLimit(3);
        mViewPager.addOnPageChangeListener(this);
        mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
+
+       onUsingArtistImagePreferenceChanged();
+
     }
 
     public boolean streamOnTouchEvent(MotionEvent event) {
@@ -276,4 +299,87 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
     }
 
+    @Override
+    public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onServiceDisconnected() {
+
+    }
+
+    @Override
+    public void onQueueChanged() {
+
+    }
+
+    @Override
+    public void onPlayingMetaChanged() {
+        if(getContext()!=null) {
+            Artist artist = ArtistLoader.getArtist(getContext(), MusicPlayerRemote.getCurrentSong().artistId);
+            if (mBackImageView.getVisibility() == View.VISIBLE)
+                ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), artist)
+                        .tryToLoadOriginal(true)
+                        .generateBuilder(getContext())
+                        .build()
+                        /*    .error(
+                                    ArtistGlideRequest
+                                            .Builder
+                                            .from(GlideApp.with(getContext()),mArtist)
+                                            .tryToLoadOriginal(false)
+                                            .generateBuilder(getContext())
+                                            .build())*/
+                        .thumbnail(
+                                ArtistGlideRequest
+                                        .Builder
+                                        .from(GlideApp.with(getContext()), artist)
+                                        .tryToLoadOriginal(false)
+                                        .generateBuilder(getContext())
+                                        .build())
+                        .into(mBackImageView);
+        }
+    }
+
+    @Override
+    public void onPlayStateChanged() {
+
+    }
+
+    @Override
+    public void onRepeatModeChanged() {
+
+    }
+
+    @Override
+    public void onShuffleModeChanged() {
+
+    }
+
+    @Override
+    public void onMediaStoreChanged() {
+
+    }
+
+    @Override
+    public void onPaletteChanged() {
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        if(getActivity() instanceof BaseActivity)
+            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
+        super.onDestroyView();
+    }
+
+    public void onUsingArtistImagePreferenceChanged() {
+        mIsUsingAIAsBg = App.getInstance().getPreferencesUtility().isUsingArtistImageAsBackground();
+        if(mIsUsingAIAsBg) {
+            mBackImageView.setVisibility(View.VISIBLE);
+            onPlayingMetaChanged();
+        } else {
+            mBackImageView.setVisibility(View.GONE);
+        }
+    }
 }

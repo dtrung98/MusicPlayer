@@ -41,6 +41,12 @@ public class Tool {
 
     private static Tool tool;
     private Context context;
+
+    public static int ColorOne = getMostCommonColor();
+    public static int ColorTwo = getBaseColor();
+    public static float AlphaOne = 1;
+    public static float AlphaTwo = 1;
+
     public static void init(Context context) {
         if(tool==null) tool = new Tool();
         tool.context = context;
@@ -418,7 +424,7 @@ public class Tool {
       final Toast toast;
       //toast =  Toasty.warning(context,text,time);
       toast = Toasty.custom(context,text, R.drawable.emoticon_excited,R.color.library_back_color,time,true,true);
-      toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
+     // toast.setGravity(Gravity.CENTER_HORIZONTAL|Gravity.CENTER_VERTICAL,0,0);
         toast.show();
     }
     private static boolean drawn = false;

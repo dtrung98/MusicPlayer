@@ -4,7 +4,38 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/black</item>
     </style>
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@color/FlatWhite</item>
+        <item name="colorPrimary">@color/FlatWhite</item>
+        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="colorControlHighlight">#66000000</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+    <style name="AppThemeNoWallpaper" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@color/FlatWhite</item>
+        <item name="colorPrimary">@color/FlatWhite</item>
+        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="colorControlHighlight">#66000000</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
+    </style>
+    <style name="SplashThemeV2" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash</item>
+        <item name="colorPrimaryDark">@color/FlatWhite</item>
+        <item name="colorPrimary">@color/FlatWhite</item>
+        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+        <item name="colorControlHighlight">#66000000</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/black</item>
 
+    </style>
     <style name="TransparentBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/TransparentBottomSheetDialogTheme</item>
         <item name="android:windowNoTitle">true</item>

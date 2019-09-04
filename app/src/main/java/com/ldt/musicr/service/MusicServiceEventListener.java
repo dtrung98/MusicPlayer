@@ -19,4 +19,6 @@ public interface MusicServiceEventListener {
     void onShuffleModeChanged();
 
     void onMediaStoreChanged();
+
+    void onPaletteChanged();
 }

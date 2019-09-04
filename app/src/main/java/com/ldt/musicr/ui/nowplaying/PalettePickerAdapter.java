@@ -1,9 +1,7 @@
 package com.ldt.musicr.ui.nowplaying;
 
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,18 +14,17 @@ import com.ldt.musicr.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.ViewHolder>  {
-    private static final String TAG ="ColorPickerAdapter";
+public class PalettePickerAdapter extends RecyclerView.Adapter<PalettePickerAdapter.ViewHolder>  {
+    private static final String TAG ="PalettePickerAdapter";
     private ArrayList<Integer> mData = new ArrayList<>();
     private int mSelected = -1;
 
-    public ColorPickerAdapter(OnColorChangedListener listener) {
+    public PalettePickerAdapter(OnColorChangedListener listener) {
         this.mListener = listener;
     }
     public interface OnColorChangedListener {
@@ -49,11 +46,14 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
             if(mListener!=null) mListener.onColorChanged(mSelected,mData.get(mSelected));
         }
     }
+
     private int mColor = -1;
+
     public void setSelectedColor(Integer color) {
         mColor = color;
         findSelected();
     }
+
     public void findSelected() {
         int newOne = mData.indexOf(mColor);
         setSelected(newOne);
@@ -61,18 +61,14 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
 
     public void setData(Integer... color) {
         mData.clear();
-        mData.addAll(Arrays.asList(color));
-        mSelected = -1;
-        notifyDataSetChanged();
-        Log.d(TAG, "setData: size = "+color.length +", data size = "+mData.size());
-
+        addData(color);
     }
 
     public void addData(Integer... color) {
         if(color!=null) {
             int posBefore = mData.size();
             for (Integer c : color) {
-                if (!mData.contains(c))
+                if (!mData.contains(c)&&c!=Color.TRANSPARENT)
                     mData.add(c);
             }
             mSelected = mData.indexOf(mColor);
@@ -117,6 +113,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
         }
 
         public void bind(int color) {
+            if(color==0) Log.d(TAG, "bind: Transparent");
             ((ColorCircleDrawable)mIcon.getBackground()).setColor(color);
             if(getAdapterPosition()==mSelected)
                 mIcon.setImageResource(R.drawable.ic_colorpicker_swatch_selected);

@@ -2,12 +2,9 @@ package com.ldt.musicr.contract;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.ldt.musicr.helper.menu.MediaMenuHelper;
 import com.ldt.musicr.model.Media;
-import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.util.Tool;
 
 /**
@@ -20,6 +17,19 @@ public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Me
 
     protected Context mContext;
     protected int mMediaPlayDataItem = -1;
+    protected String mName = TAG;
+
+    public static final String PLAY_STATE_CHANGED = "play_state_changed";
+    public static final String SONG_PREVIEW_CHANGED = "song_preview_changed";
+    public static final String PALETTE_CHANGED = "palette_changed";
+
+    public void setName(String name) {
+        mName = name;
+    }
+
+    public String getName() {
+        return mName;
+    }
 
     public AbsMediaAdapter(Context context) {
         this.mContext = context;
@@ -38,8 +48,12 @@ public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Me
         return true;
     }
 
-    public void notifyOnMediaStateChanged() {
+    public void notifyOnMediaStateChanged(final String whichChanged) {
     }
+
+ /*   public final void notifyOnMediaStateChanged() {
+        notifyOnMediaStateChanged(PLAY_STATE_CHANGED);
+    }*/
 
     boolean isMediaPlayItemAvailable() {
         return -1 < mMediaPlayDataItem && mMediaPlayDataItem < getData().size();

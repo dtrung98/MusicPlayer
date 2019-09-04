@@ -1,12 +1,16 @@
 package com.ldt.musicr.ui;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -15,14 +19,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
 import com.ldt.musicr.ui.bottomnavigationtab.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import java.util.ArrayList;
+import com.ldt.musicr.util.NavigationUtil;
 
 import butterknife.BindView;
 
@@ -98,39 +106,45 @@ public class MainActivity extends BaseActivity {
     }
 
     IntroController mIntroController;
+    private boolean USE_DYNAMIC_THEME = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if(!App.getInstance().getPreferencesUtility().isFirstTime()) {
+            USE_DYNAMIC_THEME = false;
+            App.getInstance().getPreferencesUtility().notFirstTime();
+            setTheme(R.style.AppTheme);
+        }
+        if(USE_DYNAMIC_THEME)
+        setTheme(R.style.AppThemeNoWallpaper);
+
+
+        App.getInstance().getPreferencesUtility().notFirstTime();
+
         super.onCreate(savedInstanceState);
-        assign(0);
         setContentView(R.layout.basic_activity_layout);
+       // if(true) return;
         bindView();
-        assign("set & bind");
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN );
-        assign("set fullscreen");
         mRootEverything.post(new Runnable() {
             @Override
             public void run() {
-                assign(2);
                 boolean isPermissionGranted = checkSelfPermission();
-                assign(3);
                 if(!isPermissionGranted) {
 
                     if(mIntroController ==null)
                     mIntroController = new IntroController();
 
                     mIntroController.init(MainActivity.this,savedInstanceState);
-                    assign(4);
+                    if(USE_DYNAMIC_THEME)
+                        mRootEverything.postDelayed(() ->
+                                        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER, WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+                                ,2500);
                 } else startGUI();
             }
         });
 
-    }
-    private long mStart = System.currentTimeMillis();
-    private void assign(Object mark) {
-        long current = System.currentTimeMillis();
-        Log.d(TAG, "logTime: Time "+ mark+" = "+(current - mStart));
-        mStart = current;
     }
 
     @Override
@@ -141,35 +155,38 @@ public class MainActivity extends BaseActivity {
 
     public void startGUI() {
       //  Toast.makeText(this,"Start GUI",Toast.LENGTH_SHORT).show();
+        //if(true) return;
         if(mIntroController!=null) {
             removePermissionListener();
             mIntroController.getNavigationController().popAllFragments();
         }
 
-        assign(5);
         //runLoading();
         mLayerController = new LayerController(this);
         mBackStackController = new BackStackController();
         mNowPlayingController = new NowPlayingController();
         mPlayingQueueController = new PlayingQueueController();
 
-        assign(6);
         mBackStackController.attachBottomNavigationView(this);
 
-        assign(7);
         mLayerController.init(mLayerContainer,mBackStackController,mNowPlayingController, mPlayingQueueController);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        assign("onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        assign("onResume");
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent: ");
+        mRootEverything.post(() -> handlePlaybackIntent(intent));
     }
 
     public boolean checkSelfPermission() {
@@ -196,14 +213,20 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-               onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onServiceConnected() {
+        super.onServiceConnected();
+        if(mRootEverything!=null)
+        mRootEverything.post(() -> handlePlaybackIntent(getIntent()));
+    }
+
     @Override
     public void onBackPressed()
     {
@@ -228,9 +251,57 @@ public class MainActivity extends BaseActivity {
         return false;
     }
 
-    public void setPlaylistColorPalette(int color1, int color2, float alpha1, float alpha2) {
-        if(mPlayingQueueController !=null) mPlayingQueueController.onColorPaletteReady(color1,color2,alpha1,alpha2);
+    private void handlePlaybackIntent(@Nullable Intent intent) {
+        if(intent==null) {
+            Log.d(TAG, "handlePlaybackIntent : null intent");
+            return;
+        }
+
+        Uri uri = intent.getData();
+        String mimeType = intent.getType();
+        boolean handled = false;
+
+        // log
+        if(uri!=null)
+            Log.d(TAG, "handlePlaybackIntent: uri_path = " + uri.getPath());
+        else
+            Log.d(TAG, "handlePlaybackIntent: uri_path = null");
+        Log.d(TAG, "handlePlaybackIntent: mimeType = "+mimeType);
+
+        Log.d(TAG, "handlePlaybackIntent: action = "+intent.getAction());
+
+        if(intent.getAction() !=null && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
+            Log.d(TAG, "handlePlaybackIntent: type media play from search");
+            handled = true;
+        }
+
+        if(uri != null && uri.toString().length() > 0) {
+            Log.d(TAG, "handlePlaybackIntent: type play file");
+            MusicPlayerRemote.playFromUri(uri);
+            NavigationUtil.navigateToNowPlayingController(this);
+            handled = true;
+        } else if(MediaStore.Audio.Playlists.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type playlist");
+            handled = true;
+        } else if(MediaStore.Audio.Albums.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type album");
+            handled = true;
+        } else if(MediaStore.Audio.Artists.CONTENT_TYPE.equals(mimeType)) {
+            Log.d(TAG, "handlePlaybackIntent: type artist");
+            handled = true;
+        } else if(!handled && MusicService.ACTION_ON_CLICK_NOTIFICATION.equals(intent.getAction())) {
+            NavigationUtil.navigateToNowPlayingController(this);
+            handled = true;
+        } else if(!handled) {
+            Log.d(TAG, "handlePlaybackIntent: unhandled: "+intent.getAction());
+        }
+
+        //NavigationUtil.navigateToNowPlayingController(this);
+
+        if(handled)
+        setIntent(new Intent());
     }
+
     public void popUpPlaylistTab() {
         if(mPlayingQueueController !=null) mPlayingQueueController.popUp();
     }

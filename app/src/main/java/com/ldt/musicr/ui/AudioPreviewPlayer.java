@@ -82,6 +82,11 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
 
     }
 
+    @Override
+    public void onPaletteChanged() {
+
+    }
+
     private void checkingMusicState() {
         if(MusicPlayerRemote.isPlaying())
             forceStop();

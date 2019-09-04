@@ -3,6 +3,7 @@ package com.ldt.musicr.ui.bottomnavigationtab.library.song;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.Group;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceFragment;
@@ -43,11 +46,15 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
 
     @BindView(R.id.image)
     ImageView mImage;
+
     @BindView(R.id.title)
     TextView mTitle;
 
     @BindView(R.id.description)
     TextView mArtist;
+
+    @BindView(R.id.random_group)
+    Group mRandomGroup;
 
     private int mCurrentSortOrder = 0;
     private void initSortOrder() {
@@ -85,9 +92,11 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+
         initSortOrder();
 
         mAdapter = new SongChildAdapter(getActivity());
+        mAdapter.setName(TAG);
         mAdapter.setCallBack(this);
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
@@ -111,10 +120,7 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
     private void showOrHidePreview(boolean show) {
         int v = show ? View.VISIBLE : View.GONE;
 
-            mImage.setVisibility(v);
-            mRefresh.setVisibility(v);
-            mTitle.setVisibility(v);
-            mArtist.setVisibility(v);
+        mRandomGroup.setVisibility(v);
     }
 
     @Override
@@ -122,7 +128,7 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
         mTitle.setText(song.title);
         mArtist.setText(song.artistName);
 
-        Picasso.get()
+        Glide.with(this)
                 .load(Util.getAlbumArtUri(song.albumId))
                 .placeholder(R.drawable.music_style)
                 .error(R.drawable.music_empty)
@@ -132,18 +138,23 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
 
     @Override
     public void onPlayingMetaChanged() {
+        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+    }
+
+    @Override
+    public void onPaletteChanged() {
         if(mRecyclerView instanceof FastScrollRecyclerView) {
             FastScrollRecyclerView recyclerView = ((FastScrollRecyclerView)mRecyclerView);
             recyclerView.setPopupBgColor(Tool.getHeavyColor());
             recyclerView.setThumbColor(Tool.getHeavyColor());
         }
-
-        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged();
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
+        super.onPaletteChanged();
     }
 
     @Override
     public void onPlayStateChanged() {
-        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged();
+        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override

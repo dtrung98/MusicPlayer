@@ -5,7 +5,7 @@
     <color name="backward_color">#DD000000</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/FlatOrange</color>
     <color name = "Gray">#22000000</color>
     <color name="NearlyWhite">#44ffffff</color>
     <color name="FlatRed">#FF3B30</color>
@@ -64,4 +64,11 @@
     <color name="background_artist_header_color">#88080808</color>
     <color name="success_stroke_color">#A5DC86</color>
 
+    <color name="rsbColorSeekBarDefault">#c3c3c3</color>
+    <color name="rsbColorThumbPressed">#FFE7E7E7</color>
+    <color name="rsbColorThumbDefault">#FFFFFF</color>
+    <color name="rsbColorThumbBorder">#FFD7D7D7</color>
+    <color name="colorProgress">#ffffbb33</color>
+    <color name="FloatingButtonColor">#FBFFBD</color>
+    <color name="SplashColor">@android:color/black</color>
 </resources>

@@ -1,31 +1,51 @@
 package com.ldt.musicr.ui;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
+import android.util.Log;
 
 
+import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
+import com.ldt.musicr.loader.PaletteGeneratorTask;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 
 import com.ldt.musicr.R;
 
 import com.ldt.musicr.service.MusicService;
+import com.ldt.musicr.ui.nowplaying.NowPlayingController;
+import com.ldt.musicr.util.BitmapEditor;
+import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Locale;
+
+import static com.ldt.musicr.util.BitmapEditor.updateSat;
 
 /**
  *  Create relationship between Activity and Music Player Service
@@ -80,6 +100,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
 
     @Override
     protected void onDestroy() {
+        if(mPaletteGeneratorTask!=null) mPaletteGeneratorTask.cancel();
+        mPaletteGeneratorTask = null;
 
         if(mSongPreviewController!=null) mSongPreviewController.destroy();
 
@@ -120,6 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
             filter.addAction(MusicService.META_CHANGED);
             filter.addAction(MusicService.QUEUE_CHANGED);
             filter.addAction(MusicService.MEDIA_STORE_CHANGED);
+            filter.addAction(PaletteGeneratorTask.PALETTE_ACTION);
 
             registerReceiver(musicStateReceiver, filter);
 
@@ -147,13 +170,22 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
         }
     }
 
+    PaletteGeneratorTask mPaletteGeneratorTask = null;
+
     @Override
     public void onPlayingMetaChanged() {
+        refreshPalette();
         for (MusicServiceEventListener listener : mMusicServiceEventListeners) {
             if (listener != null) {
                 listener.onPlayingMetaChanged();
             }
         }
+    }
+
+    public void refreshPalette() {
+        if(mPaletteGeneratorTask!=null) mPaletteGeneratorTask.cancel();
+        mPaletteGeneratorTask = new PaletteGeneratorTask(getApplicationContext());
+        mPaletteGeneratorTask.execute();
     }
 
     @Override
@@ -201,6 +233,15 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
         }
     }
 
+    @Override
+    public void onPaletteChanged() {
+        for(MusicServiceEventListener listener : mMusicServiceEventListeners) {
+            if(listener != null) {
+                listener.onPaletteChanged();
+            }
+        }
+    }
+
     private static final class MusicStateReceiver extends BroadcastReceiver {
 
         private final WeakReference<BaseActivity> reference;
@@ -213,7 +254,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
         public void onReceive(final Context context, @NonNull final Intent intent) {
             final String action = intent.getAction();
             BaseActivity activity = reference.get();
-            if (activity != null) {
+            if (activity != null&&action!=null) {
                 switch (action) {
                     case MusicService.META_CHANGED:
                         activity.onPlayingMetaChanged();
@@ -233,6 +274,16 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
                     case MusicService.MEDIA_STORE_CHANGED:
                         activity.onMediaStoreChanged();
                         break;
+                    case PaletteGeneratorTask.PALETTE_ACTION:
+                         if(intent.getBooleanExtra(PaletteGeneratorTask.RESULT,false)) {
+                             Log.d(TAG, "onReceive: PaletteGeneratorTask true");
+                             Tool.ColorOne = intent.getIntExtra(PaletteGeneratorTask.COLOR_ONE,Tool.ColorOne);
+                             Tool.ColorTwo = intent.getIntExtra(PaletteGeneratorTask.COLOR_TWO,Tool.ColorTwo);
+                             Tool.AlphaOne = intent.getFloatExtra(PaletteGeneratorTask.ALPHA_ONE,Tool.AlphaOne);
+                             Tool.AlphaTwo = intent.getFloatExtra(PaletteGeneratorTask.ALPHA_TWO,Tool.AlphaTwo);
+
+                         } else Log.d(TAG, "onReceive: PaletteGeneratorTask false");
+                        activity.onPaletteChanged();
                 }
             }
         }
@@ -247,6 +298,40 @@ public void addMusicServiceEventListener(final MusicServiceEventListener listene
         if (listener != null) {
             mMusicServiceEventListeners.add(0,listener);
         }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(updateBaseContextLocale(base));
+    }
+
+    private Context updateBaseContextLocale(Context context) {
+        String language = LocaleHelper.getLanguage(context); // Helper method to get saved language from SharedPreferences
+        Locale locale = new Locale(language);
+        Locale.setDefault(locale);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return updateResourcesLocale(context, locale);
+        }
+
+        return updateResourcesLocaleLegacy(context, locale);
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    private Context updateResourcesLocale(Context context, Locale locale) {
+        Configuration configuration = context.getResources().getConfiguration();
+        configuration.setLocale(locale);
+        return context.createConfigurationContext(configuration);
+    }
+
+    @SuppressWarnings("deprecation")
+    private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
+        Resources resources = context.getResources();
+        Configuration configuration = resources.getConfiguration();
+        configuration.locale = locale;
+        resources.updateConfiguration(configuration, resources.getDisplayMetrics());
+        return context;
     }
 
 }

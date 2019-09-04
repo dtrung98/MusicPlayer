@@ -297,7 +297,7 @@
     <string name="playlist_name_empty">Playlist name</string>
     <string name="add_playlist_title">Choose playlist to add</string>
     <string name="action_new_playlist">Create new playlist…</string>
-    <string name="play_preview">Play the preview</string>
+    <string name="play_preview">Play preview</string>
     <string name="see_more_about">See more about</string>
     <string name="rename_playlist_title">Rename playlist</string>
     <string name="delete_playlist_title">Delete playlist</string>
@@ -305,4 +305,16 @@
     <string name="clear_playlist_title">Clear playlist</string>
     <string name="save_playlist_title">Save as file</string>
     <string name="save_playlists_title">Save as files</string>
+    <string name="english">English</string>
+    <string name="viet_nam" translatable="false">Việt Nam</string>
+    <string name="language">Language</string>
+    <string name="specific_playlist">Specific Playlist</string>
+    <string name="create">Create one now</string>
+    <string name="customization">Customization</string>
+    <string name="artist_image_background">Use Artist image as background</string>
+    <string name="show_lyric">Show lyric</string>
+    <string name="in_app_volume">In-App Volume</string>
+    <string name="specific_playlist_note">Playlists with songs do not appear in any other playlists, including playlist All Songs. Create somethings like Blacklist, English Study List, etc.</string>
+    <string name="change_languague_note">Require a quick restart to affect the change, music won\'t be stopped.</string>
+    <string name="more_setting">More Setting</string>
 </resources>

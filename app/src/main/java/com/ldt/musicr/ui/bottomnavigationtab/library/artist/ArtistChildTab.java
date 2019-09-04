@@ -15,11 +15,13 @@ import android.view.ViewGroup;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.loader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.bottomnavigationtab.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 
@@ -31,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClickListener, MusicServiceEventListener {
+public class ArtistChildTab extends BaseMusicServiceFragment implements ArtistAdapter.ArtistClickListener {
     public static final String TAG ="ArtistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -42,7 +44,7 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     ArtistAdapter mAdapter;
-    Unbinder mUnbinder;
+    Unbinder mUnBinder;
 
     @Nullable
     @Override
@@ -53,28 +55,28 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnbinder = ButterKnife.bind(this,view);
+        mUnBinder = ButterKnife.bind(this,view);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ArtistAdapter(getActivity());
+        mAdapter.setName(TAG);
         mAdapter.setArtistClickListener(this);
         mRecyclerView.setAdapter(mAdapter);
         if(mSwipeRefreshLayout!=null)
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
-        if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).addMusicServiceEventListener(this);
         refresh();
 
     }
 
     @Override
     public void onDestroyView() {
-        if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
 
-        if(mUnbinder!=null)
-            mUnbinder.unbind();
+        if(mLoadArtist!=null) mLoadArtist.cancel(true);
+        mAdapter.destroy();
+        if(mUnBinder !=null)
+            mUnBinder.unbind();
+
         super.onDestroyView();
     }
     private LoadArtistAsyncTask mLoadArtist;
@@ -85,12 +87,6 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
         mLoadArtist= new LoadArtistAsyncTask(this);
         mLoadArtist.execute();
 
-    }
-
-    @Override
-    public void onDestroy() {
-        if(mLoadArtist!=null) mLoadArtist.cancel(true);
-        super.onDestroy();
     }
 
     @Override
@@ -119,12 +115,12 @@ public class ArtistChildTab extends Fragment implements ArtistAdapter.ArtistClic
 
     @Override
     public void onPlayingMetaChanged() {
-
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
     public void onPlayStateChanged() {
-
+        mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override

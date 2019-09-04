@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,11 +53,13 @@ import butterknife.OnClick;
 public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Song> implements SongPreviewListener {
    private static final String TAG = "AbsSongAdapter";
 
+
     public AbsSongAdapter(Context context) {
         super(context);
 
         if(context instanceof BaseActivity) {
            SongPreviewController controller = ((BaseActivity)context).getSongPreviewController();
+           if(controller!=null)
            controller.addSongPreviewListener(this);
         }
     }
@@ -65,6 +69,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
 
         if(mContext instanceof MainActivity) {
             SongPreviewController controller = ((MainActivity) mContext).getSongPreviewController();
+            if(controller!=null)
             mPreviewSong = controller.getCurrentPreviewSong();
         }
     }
@@ -74,6 +79,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
            SongPreviewController controller  = ((MainActivity)mContext).getSongPreviewController();
            if(controller!=null) controller.removeAudioPreviewerListener(this);
         }
+        super.destroy();
     }
 
     public  void previewAll(boolean shuffle) {
@@ -124,7 +130,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         Log.d(TAG, "onSongPreviewStart: position = "+ position);
         if (position != -1) {
             mPreviewSong = song;
-            notifyItemChanged(getMediaHolderPosition(position));
+            notifyItemChanged(getMediaHolderPosition(position),SONG_PREVIEW_CHANGED);
         }
     }
 
@@ -135,7 +141,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         Log.d(TAG, "onSongPreviewFinish: position = "+ position);
 
         if(position!=-1)
-            notifyItemChanged(getMediaHolderPosition(position));
+            notifyItemChanged(getMediaHolderPosition(position), SONG_PREVIEW_CHANGED);
     }
 
     public void playAll(int startPosition, boolean startPlaying) {
@@ -145,8 +151,8 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
                 MusicPlayerRemote.openQueue(getData(),startPosition,startPlaying);
                 Handler handler1 = new Handler();
                 handler1.postDelayed(() -> {
-                    notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem));
-                    notifyItemChanged(getMediaHolderPosition(startPosition));
+                    notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem), PLAY_STATE_CHANGED);
+                    notifyItemChanged(getMediaHolderPosition(startPosition), PLAY_STATE_CHANGED);
                     mMediaPlayDataItem = startPosition;
                 }, 50);
             }, 100);
@@ -154,22 +160,60 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
     }
 
     @Override
-    public void notifyOnMediaStateChanged() {
-        // highlight the playing song
-        Song currentPlayingSong = MusicPlayerRemote.getCurrentSong();
-        if (currentPlayingSong != null && currentPlayingSong.id != -1) {
+    public void onBindViewHolder(@NonNull AbsBindAbleHolder holder, int position, @NonNull List<Object> payloads) {
+        if(holder instanceof SongHolder && !payloads.isEmpty())
+        for (Object object : payloads) {
+            Log.d(TAG, "onBindViewHolder: object "+ object);
+            if (object instanceof String) {
+                switch ((String)object) {
+                    case PLAY_STATE_CHANGED:
+                        Log.d(TAG, mName +" onBindViewHolder: "+PLAY_STATE_CHANGED);
+                        ((SongHolder)holder).bindMediaPlayState();
+                        ((SongHolder)holder).bindTheme();
+                        break;
+                    case SONG_PREVIEW_CHANGED:
+                        Log.d(TAG, mName +" onBindViewHolder: "+SONG_PREVIEW_CHANGED);
+                        ((SongHolder)holder).bindPreviewButton(getDataItem(getDataPosition(position)));
+                        break;
+                    case PALETTE_CHANGED:
+                        Log.d(TAG, mName + " onBindViewHolder: "+ PALETTE_CHANGED);
+                        ((SongHolder)holder).bindTheme();
+                        break;
+                    default: super.onBindViewHolder(holder, position, payloads);
+                }
+            } else super.onBindViewHolder(holder, position, payloads);
+        }
+        else {
+            Log.d(TAG, mName + " onBindViewHolder: "+position+", "+ payloads);
+            super.onBindViewHolder(holder, position, payloads);
+        }
+    }
 
-            if (isMediaPlayItemAvailable()) {
+    @Override
+    public void onBindViewHolder(@NonNull AbsBindAbleHolder absBindAbleHolder, int i) {
+        Log.d(TAG, "onBindViewHolder without payload "+ i);
+    }
 
-                notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem));
+    @Override
+    public void notifyOnMediaStateChanged(final String whichChanged) {
+        if(whichChanged.equals(PLAY_STATE_CHANGED)) {
+            Song currentPlayingSong = MusicPlayerRemote.getCurrentSong();
+            if (currentPlayingSong != null && currentPlayingSong.id != -1) {
 
-                boolean isStillOldPos = getData().get(mMediaPlayDataItem).equals(currentPlayingSong);
-                if (!isStillOldPos) {
-                    mMediaPlayDataItem = getData().indexOf(currentPlayingSong);
-                    if (mMediaPlayDataItem != -1)
-                        notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem));
+                if (isMediaPlayItemAvailable()) {
+
+                    notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem), PLAY_STATE_CHANGED);
+
+                    boolean isStillOldPos = getData().get(mMediaPlayDataItem).equals(currentPlayingSong);
+                    if (!isStillOldPos) {
+                        mMediaPlayDataItem = getData().indexOf(currentPlayingSong);
+                        if (mMediaPlayDataItem != -1)
+                            notifyItemChanged(getMediaHolderPosition(mMediaPlayDataItem), PLAY_STATE_CHANGED);
+                    }
                 }
             }
+        } else if(whichChanged.equals(PALETTE_CHANGED)) {
+            notifyItemRangeChanged(0,getItemCount(),PALETTE_CHANGED);
         }
     }
 
@@ -209,6 +253,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         @SuppressLint("SetTextI18n")
         @Override
         public void bind(Song song) {
+            Log.d(TAG, "bind");
             mNumber.setText(""+(getDataPosition(getAdapterPosition())+1));
             mTitle.setText(song.title);
             mDescription.setText(song.artistName);
@@ -231,18 +276,18 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
                     })
                    .into(mImage);
 
-          bindTheme();
+            bindTheme();
 
-            bindMediaPlayState();
             bindPreviewButton(song);
         }
 
-        protected void bindTheme() {
+        void bindTheme() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ((RippleDrawable) mPanel.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
                 ((RippleDrawable) mMenuButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
                 ((RippleDrawable) mPreviewButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
             }
+            bindMediaPlayState();
         }
 
         private void bindPreviewButton(Song song) {
