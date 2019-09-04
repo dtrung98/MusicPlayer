@@ -92,6 +92,16 @@ public final class PreferenceUtil {
 
     private static PreferenceUtil sInstance;
 
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        isFirstTime = firstTime;
+    }
+
+    private boolean isFirstTime = true;
+
     private final SharedPreferences mPreferences;
 
     private PreferenceUtil(@NonNull final Context context) {
@@ -473,5 +483,9 @@ public final class PreferenceUtil {
 
     public SharedPreferences getSharePreferences() {
         return mPreferences;
+    }
+
+    public void notFirstTime() {
+        setFirstTime(false);
     }
 }
