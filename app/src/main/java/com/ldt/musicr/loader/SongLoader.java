@@ -1,5 +1,6 @@
 package com.ldt.musicr.loader;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
@@ -8,12 +9,26 @@ import android.provider.MediaStore.Audio.AudioColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.ldt.musicr.App;
+import com.ldt.musicr.model.Media;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.provider.BlacklistStore;
 import com.ldt.musicr.util.PreferenceUtil;
 
+import org.jaudiotagger.audio.AudioFile;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
+import org.jaudiotagger.audio.mp3.MP3File;
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +37,9 @@ import java.util.ArrayList;
 public class SongLoader {
     private static final String TAG = "SongLoader";
 
-    protected static final String BASE_SELECTION = AudioColumns.IS_MUSIC + "=1" + " AND " + AudioColumns.TITLE + " != ''" ;
+    protected static final String NO_MEDIA_TAG = ".nomedia";
+
+    protected static final String BASE_SELECTION = AudioColumns.IS_MUSIC + "=1" + " AND " + AudioColumns.TITLE + " != ''";
     protected static final String[] BASE_PROJECTION = new String[]{
             BaseColumns._ID,// 0
             AudioColumns.TITLE,// 1
@@ -37,11 +54,72 @@ public class SongLoader {
             AudioColumns.ARTIST,// 10
     };
 
+    public static ArrayList<Song> getAllSongsIncludeHidden(@NonNull Context context) {
+        ArrayList<Song> list = getAllSongs(context);
+        list.addAll(getHiddenSongs(context));
+        return list;
+    }
+
+    public static ArrayList<Song> getHiddenSongs(@NonNull Context context) {
+        ArrayList<Song> list = new ArrayList<>();
+
+        doSomething(context);
+
+        return list;
+    }
+
+    public static void doSomething(@NonNull Context context) {
+
+        String where = MediaStore.Files.FileColumns.MIME_TYPE  +" = 'audio/mpeg'" +// MediaStore.Files.FileColumns.MEDIA_TYPE_NONE + " AND " +
+               // MediaStore.Files.FileColumns.TITLE + " LIKE %"+"50MB"+"%";
+               // MediaStore.Files.FileColumns.
+                " AND " +MediaStore.Files.FileColumns.MEDIA_TYPE +" != " +MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO +
+                "";
+
+        Log.d(TAG, "find where ["+where+"]");
+        ContentResolver resolver = context.getContentResolver();
+        if(resolver!=null) {
+            Cursor cursor = context.getContentResolver().query(MediaStore.Files.getContentUri("external"),
+                    new String[]{MediaStore.Files.FileColumns.DATA}, where, null, null);
+
+            if(cursor!=null) Log.d(TAG, "find "+cursor.getCount()+" hidden folders");
+            if (cursor != null && cursor.moveToFirst()) {
+                String path;
+                File file;
+                do {
+                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA));
+                  //  Log.d(TAG, "find hidden folder: \""+path+"\"");
+                    file = new File(path);
+                    if(file.exists()) {
+                        AudioFile audioFile = null;
+
+                        try {
+                            audioFile = AudioFileIO.read(file);
+                        } catch (Exception ignored) {};
+
+                        if(audioFile!=null) {
+                            Tag tag = audioFile.getTag();
+                            if(tag!=null) {
+                              String artist =  tag.getFirst(FieldKey.ARTIST);
+                              String title = tag.getFirst(FieldKey.TITLE);
+                              String album = tag.getFirst(FieldKey.ALBUM);
+                              String genre = tag.getFirst(FieldKey.GENRE);
+                                Log.d(TAG, "find hidden song: title = "+title+", artist = "+artist+", album = "+album+", genre = "+genre);
+                            }
+                        }
+                    }
+                } while (cursor.moveToNext());
+                cursor.close();
+            }
+        }
+    }
+
     @NonNull
     public static ArrayList<Song> getAllSongs(@NonNull Context context) {
         Cursor cursor = makeSongCursor(context, null, null);
         return getSongs(cursor);
     }
+
     public static ArrayList<Song> getAllSongs(Context context, String sortOrder) {
         Cursor  cursor = makeSongCursor(context, null, null,sortOrder);
         return getSongs(cursor);

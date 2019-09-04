@@ -5,7 +5,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
+import com.ldt.musicr.ui.navigationpage.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
 
 public class SwipeDetectorGestureListener extends GestureDetector.SimpleOnGestureListener {

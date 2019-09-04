@@ -27,7 +27,7 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
+import com.ldt.musicr.ui.navigationpage.BaseLayerFragment;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.util.Tool;

@@ -29,7 +29,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.library.artist.ArtistAdapter;
+import com.ldt.musicr.ui.navigationpage.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.makeramen.roundedimageview.RoundedImageView;

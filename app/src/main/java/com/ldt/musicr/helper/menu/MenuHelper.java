@@ -1,7 +1,6 @@
 package com.ldt.musicr.helper.menu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
@@ -10,25 +9,18 @@ import android.widget.Toast;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
-import com.ldt.musicr.loader.ArtistLoader;
-import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
-import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
+import com.ldt.musicr.ui.navigationpage.pager.PlaylistPagerFragment;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeletePlaylistDialog;
-import com.ldt.musicr.ui.dialog.DeleteSongsDialog;
 import com.ldt.musicr.ui.dialog.RenamePlaylistDialog;
 import com.ldt.musicr.ui.widget.WeakContextAsyncTask;
-import com.ldt.musicr.util.MusicUtil;
-import com.ldt.musicr.util.NavigationUtil;
 import com.ldt.musicr.util.PlaylistsUtil;
-import com.ldt.musicr.util.RingtoneManager;
 
 import java.io.IOException;
 import java.util.ArrayList;

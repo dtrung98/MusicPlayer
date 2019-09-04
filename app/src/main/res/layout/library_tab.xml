@@ -8,7 +8,7 @@
     app:layoutDescription="@xml/library_tab_animation"
     android:id="@+id/root"
     tools:progress="0"
-    tools:context="com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment"
+    tools:context="com.ldt.musicr.ui.navigationpage.library.LibraryTabFragment"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
    >

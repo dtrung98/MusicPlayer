@@ -28,11 +28,9 @@ import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.LayerController;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.bottomnavigationtab.library.LibraryTabFragment;
-import com.ldt.musicr.ui.bottomnavigationtab.pager.ArtistPagerFragment;
-import com.ldt.musicr.ui.bottomnavigationtab.pager.PlaylistPagerFragment;
-import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import com.squareup.haha.perflib.Main;
+import com.ldt.musicr.ui.navigationpage.library.LibraryTabFragment;
+import com.ldt.musicr.ui.navigationpage.pager.ArtistPagerFragment;
+import com.ldt.musicr.ui.navigationpage.pager.PlaylistPagerFragment;
 
 import es.dmoral.toasty.Toasty;
 

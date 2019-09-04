@@ -24,12 +24,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.bottomnavigationtab.BaseLayerFragment;
+import com.ldt.musicr.ui.navigationpage.BaseLayerFragment;
 
 import com.ldt.musicr.model.Song;
 

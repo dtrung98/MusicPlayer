@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="#444"
-    tools:context=".ui.bottomnavigationtab.library.song.SongChildTab">
+    tools:context=".ui.navigationpage.library.song.SongChildTab">
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
