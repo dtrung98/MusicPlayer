@@ -15,7 +15,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.navigationpage.pager.PlaylistPagerFragment;
+import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeletePlaylistDialog;
 import com.ldt.musicr.ui.dialog.RenamePlaylistDialog;

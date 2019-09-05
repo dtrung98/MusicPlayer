@@ -31,7 +31,9 @@ public interface Playback {
 
     int seek(int whereto);
 
-    boolean setVolume(float vol);
+/*    boolean setVolume(float vol);*/
+
+    boolean setVolume(float l, float r);
 
     boolean setAudioSessionId(int sessionId);
 

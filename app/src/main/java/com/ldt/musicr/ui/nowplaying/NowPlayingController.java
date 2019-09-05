@@ -28,7 +28,7 @@ import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.loader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.navigationpage.BaseLayerFragment;
+import com.ldt.musicr.ui.page.BaseLayerFragment;
 
 import com.ldt.musicr.model.Song;
 

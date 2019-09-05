@@ -261,13 +261,15 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         }
     }
 
-    private float mVolume = 1f;
+    private float mLeftVolume = 1f;
+    private float mRightVolume = 1f;
 
     @Override
-    public boolean setVolume(final float vol) {
+    public boolean setVolume(final float l, final float r) {
         try {
-            mCurrentMediaPlayer.setVolume(vol, vol);
-            mVolume = vol;
+            mCurrentMediaPlayer.setVolume(l, r);
+            mLeftVolume = l;
+            mRightVolume = r;
             return true;
         } catch (IllegalStateException e) {
             return false;
@@ -275,7 +277,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
     }
 
     public void updateVolume() {
-        setVolume(mVolume);
+        setVolume(mLeftVolume, mRightVolume);
     }
 
     /**

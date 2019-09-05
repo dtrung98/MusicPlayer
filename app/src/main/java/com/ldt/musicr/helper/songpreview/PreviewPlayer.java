@@ -1,8 +1,11 @@
 package com.ldt.musicr.helper.songpreview;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.util.PreferenceUtil;
 
 import java.util.ArrayList;
 /**
@@ -10,8 +13,15 @@ import java.util.ArrayList;
  * <br>Fade in/ Fade out audio when prepare to play new song
  *
  */
-public class PreviewPlayer implements PreviewSong.OnPreviewSongStateChangedListener {
+public class PreviewPlayer implements PreviewSong.OnPreviewSongStateChangedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String TAG = "PreviewPlayer";
+
+    public PreviewPlayer() {
+        App.getInstance().getPreferencesUtility().registerOnSharedPreferenceChangedListener(this);
+        notifyVolumePrefChanged();
+        notifyBalanceChanged();
+    }
 
     private ArrayList<PreviewSong> mPreviewSongs = new ArrayList<>();
 
@@ -92,6 +102,21 @@ public class PreviewPlayer implements PreviewSong.OnPreviewSongStateChangedListe
         }*/
     }
 
+    @Override
+    public float getInAppVolume() {
+        return mInAppVolume;
+    }
+
+    @Override
+    public float getLeftBalanceValue() {
+        return mLeftBalanceValue;
+    }
+
+    @Override
+    public float getRightBalanceValue() {
+        return mRightBalanceValue;
+    }
+
     public boolean isPlayingPreview() {
         return (!mPreviewSongs.isEmpty()&&mPreviewSongs.get(0).isPlaying());
     }
@@ -105,5 +130,62 @@ public class PreviewPlayer implements PreviewSong.OnPreviewSongStateChangedListe
     public void shouldPlayingMusicServiceOnFinish(boolean b) {
         Log.d(TAG, "shouldPlayingMusicServiceOnFinish = "+ b);
         mShouldPlayingMusicServiceOnFinish = b;
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch (key) {
+            case PreferenceUtil.IN_APP_VOLUME:
+                notifyVolumePrefChanged();
+                break;
+            case PreferenceUtil.BALANCE_VALUE:
+                notifyBalanceChanged();
+                break;
+        }
+    }
+
+    private float mInAppVolume = 1.0f;
+    private float mLeftBalanceValue = 0.5f;
+    private float mRightBalanceValue = 0.5f;
+
+    private void notifyVolumePrefChanged() {
+        synchronized (this) {
+            float volume = App.getInstance().getPreferencesUtility().getInAppVolume();
+            if(volume<0) volume = 0;
+            else if(volume>1) volume = 1;
+            mInAppVolume = volume;
+        }
+
+        try {
+            PreviewSong song = getCurrentPreviewSong();
+            if(song!=null) song.notifyVolumeChanged();
+        } catch (Exception ignored) {}
+    }
+
+    public void notifyBalanceChanged() {
+        synchronized (this) {
+            float balance = App.getInstance().getPreferencesUtility().getBalanceValue();
+            if(balance<0) balance = 0;
+            else if(balance>1) balance = 1;
+            if(balance<0.5f) {
+                mRightBalanceValue =2*balance;
+                mLeftBalanceValue = 1;
+            } else {
+                mLeftBalanceValue = 2 - 2*balance;
+                mRightBalanceValue = 1;
+            }
+        }
+
+        try {
+            PreviewSong song = getCurrentPreviewSong();
+            if(song!=null) song.notifyVolumeChanged();
+        } catch (Exception ignored) {}
+
+    }
+
+    public void destroy() {
+       App.getInstance().getPreferencesUtility().unregisterOnSharedPreferenceChangedListener(this);
+       stopSession();
+       removeSongPreviewListener();
     }
 }

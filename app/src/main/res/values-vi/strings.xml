@@ -267,4 +267,6 @@
     <string name="specific_playlist_note">Những bài hát xuất hiện trong những sách phát này sẽ không xuất hiện trong bất kỳ danh sách phát nào, kể cả Tất cả bài hát. Hãy tạo một vài danh sách để chứa các âm thanh như Danh sách đen, Sách nói…</string>
     <string name="change_languague_note">Yêu cầu ứng dụng khởi động lại, nhanh thôi. Nhạc đang phát sẽ không bị tắt.</string>
     <string name="more_setting">Cài đặt khác</string>
+    <string name="back_description">Trở về trang trước</string>
+    <string name="left_right_audio_balance">Cân bằng âm trái phải</string>
 </resources>

@@ -87,8 +87,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
         if(mSoundFilesTask!=null) mSoundFilesTask.cancel();
         mSoundFilesTask = null;
-        mPreviewPlayer.stopSession();
-        mPreviewPlayer.removeSongPreviewListener();
+        mPreviewPlayer.destroy();
         mPreviewPlayer = null;
         mListeners.clear();
 

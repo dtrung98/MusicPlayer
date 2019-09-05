@@ -129,6 +129,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     public static final int SAVE_QUEUES = 0;
 
     private float mInAppVolume = 1.0f;
+    private float mLeftBalanceValue = 0.5f;
+    private float mRightBalanceValue = 0.5f;
 
     private final IBinder musicBind = new MusicBinder();
 
@@ -376,14 +378,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
     @Override
     public IBinder onBind(Intent intent) {
         return musicBind;
-    }
-
-    public void setInAppVolume(float volume) {
-        if(volume<0) volume = 0;
-        else if(volume>1) volume = 1;
-
-        App.getInstance().getPreferencesUtility().setInAppVolume(volume);
-        notifyVolumePrefChanged();
     }
 
     public float getInAppVolume() {
@@ -978,15 +972,33 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
         playerHandler.sendEmptyMessage(CHANGE_VOLUME);
     }
+
+    public void notifyBalanceChanged() {
+        synchronized (this) {
+            float balance = App.getInstance().getPreferencesUtility().getBalanceValue();
+            if(balance<0) balance = 0;
+            else if(balance>1) balance = 1;
+            if(balance<0.5f) {
+                mRightBalanceValue =2*balance;
+                mLeftBalanceValue = 1;
+            } else {
+                mLeftBalanceValue = 2 - 2*balance;
+                mRightBalanceValue = 1;
+            }
+        }
+
+        playerHandler.sendEmptyMessage(CHANGE_VOLUME);
+    }
+
     private float mCurrentVolume = 1f;
 
-    public void setVolumeUsedByHandler(float volume) {
+    public void setVolumeCallingByHandler(float volume) {
         mCurrentVolume = volume;
         updateVolume();
     }
     public void updateVolume() {
         try {
-            playback.setVolume(mCurrentVolume*mInAppVolume);
+            playback.setVolume(mCurrentVolume*mInAppVolume*mLeftBalanceValue,mCurrentVolume*mInAppVolume*mRightBalanceValue);
         } catch (Exception ignored) {}
     }
 
@@ -1164,6 +1176,11 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
             case PreferenceUtil.CLASSIC_NOTIFICATION:
                 initNotification();
                 updateNotification();
+            case PreferenceUtil.IN_APP_VOLUME:
+                notifyVolumePrefChanged();
+                break;
+            case PreferenceUtil.BALANCE_VALUE:
+                notifyBalanceChanged();
                 break;
         }
     }
@@ -1209,7 +1226,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         currentDuckVolume = 1f;
                     }
                     //service.playback.setVolume(currentDuckVolume);
-                    service.setVolumeUsedByHandler(currentDuckVolume);
+                    service.setVolumeCallingByHandler(currentDuckVolume);
                     break;
 
                 case UNDUCK:
@@ -1224,7 +1241,7 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                         currentDuckVolume = 1f;
                     }
                    // service.playback.setVolume(currentDuckVolume);
-                    service.setVolumeUsedByHandler(currentDuckVolume);
+                    service.setVolumeCallingByHandler(currentDuckVolume);
 
                     break;
 

@@ -140,12 +140,6 @@ public class MusicPlayerRemote {
         }
     }
 
-    public static void setInAppVolume(float volume) {
-        if(musicService!=null) {
-            musicService.setInAppVolume(volume);
-        }
-    }
-
     public static float getInAppVolume() {
         if(musicService!=null) {
             return musicService.getInAppVolume();

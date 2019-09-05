@@ -7,6 +7,13 @@
         <item>75</item>
         <item>100</item>
     </string-array>
+    <string-array name="balanceArray">
+        <item>-50</item>
+        <item>-25</item>
+        <item>0</item>
+        <item>25</item>
+        <item>50</item>
+    </string-array>
     <string-array name="cornerArray">
         <item>5</item>
         <item>10</item>

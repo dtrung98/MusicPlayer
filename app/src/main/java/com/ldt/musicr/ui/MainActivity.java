@@ -28,7 +28,7 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.intro.IntroController;
 import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
-import com.ldt.musicr.ui.navigationpage.BackStackController;
+import com.ldt.musicr.ui.page.BackStackController;
 import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 import com.ldt.musicr.util.NavigationUtil;
 

@@ -87,8 +87,9 @@ public final class PreferenceUtil {
     private static final String REMEMBER_SHUFFLE = "remember_shuffle";
 
     private static final String USE_ARTIST_IMAGE_AS_BACKGROUND = "use_artist_image_as_bg";
-    private static final String IN_APP_VOLUME = "in_app_volume";
+    public static final String IN_APP_VOLUME = "in_app_volume";
     private static final String AUDIO_MIN_DURATION = "audio_min_duration";
+    public static final String BALANCE_VALUE = "balance_value";
 
     private static PreferenceUtil sInstance;
 
@@ -487,5 +488,17 @@ public final class PreferenceUtil {
 
     public void notFirstTime() {
         setFirstTime(false);
+    }
+
+    public float getBalanceValue() {
+        return mPreferences.getFloat(BALANCE_VALUE,0.5f);
+    }
+
+    public final void setBalanceValue(float value) {
+        if(value<0) value = 0;
+        else if(value>1) value = 1;
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putFloat(BALANCE_VALUE, value);
+        editor.apply();
     }
 }

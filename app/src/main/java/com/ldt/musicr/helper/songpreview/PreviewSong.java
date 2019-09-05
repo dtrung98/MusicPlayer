@@ -1,28 +1,27 @@
 package com.ldt.musicr.helper.songpreview;
 
-import android.media.AudioAttributes;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.util.Log;
 
 import com.ldt.musicr.model.Song;
 
-import java.io.File;
-import java.sql.SQLSyntaxErrorException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PreviewSong {
     private static final String TAG = "PreviewSong";
 
-    public static final int NOT_PLAY = 0;
+    public static final int NO_PLAY = 0;
     public static final int PREPARE_TO_PLAY = 1;
     public static final int PLAYING = 2;
     public static final int PREPARE_TO_FINISH = 3;
     public static final int FINISHED = 4;
     public static final int FAILURE = -1;
+
+    private static final int ACTION_SET_VOLUME = 1;
+    private static final int ACTION_FADE_OUT = 2;
+    private static final int ACTION_FADE_IN = 3;
 
     @Override
     public boolean equals(Object obj) {
@@ -62,8 +61,16 @@ public class PreviewSong {
         return -1;
     }
 
+
+    public void notifyVolumeChanged() {
+        if(mListener!=null) updateVolume(ACTION_SET_VOLUME);
+    }
+
     public interface OnPreviewSongStateChangedListener {
         void onPreviewSongStateChanged(PreviewSong song, int newState);
+        float getInAppVolume();
+        float getLeftBalanceValue();
+        float getRightBalanceValue();
     }
 
     private OnPreviewSongStateChangedListener mListener;
@@ -88,7 +95,7 @@ public class PreviewSong {
         return this;
     }
 
-    private int mState = NOT_PLAY;
+    private int mState = NO_PLAY;
     private final int mStart;
     private final int mFinish;
     private MediaPlayer mMediaPlayer;
@@ -238,7 +245,7 @@ public class PreviewSong {
         @Override
         public void run() {
             if(!onIntervalUpdate()) {
-                if(mFadeState==FADE_OUT) onAudioFinishFadeOut();
+                if(mFadeState== ACTION_FADE_OUT) onAudioFinishFadeOut();
 
                 mFadeState = NOT_FADE;
                 if(mTimer!=null) {
@@ -259,20 +266,20 @@ public class PreviewSong {
                 if(mCurrentVolume>=DEFAULT_PLAY_VOLUME)
                     mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
-                updateVolume("Fade In");
+                updateVolume(ACTION_FADE_IN);
 
                 if(mCurrentVolume==DEFAULT_PLAY_VOLUME)
                     return false;
                 return true;
 
-            case FADE_OUT:
+            case ACTION_FADE_OUT:
                 if(mCurrentVolume > DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
 
                 mCurrentVolume -= DELTA_OUT_VOLUME;
 
                 if(mCurrentVolume<DEFAULT_OUT_VOLUME) mCurrentVolume = DEFAULT_OUT_VOLUME;
 
-                updateVolume("Fade Out");
+                updateVolume(ACTION_FADE_OUT);
 
                 if(mCurrentVolume==DEFAULT_OUT_VOLUME)
                     return false;
@@ -283,14 +290,29 @@ public class PreviewSong {
     }
     private void setVolume(float newVolume) {
         mCurrentVolume  = newVolume;
-        updateVolume("Set");
+        updateVolume(ACTION_SET_VOLUME);
     }
+    private float getInAppVolume() {
+        if(mListener!=null) return mListener.getInAppVolume();
+        return 1.0f;
+    }
+
+    private float getLeftBalanceValue() {
+        if(mListener==null) return 0.5f;
+        return mListener.getLeftBalanceValue();
+    }
+
+    private float getRightBalanceValue() {
+        if(mListener==null) return 0.5f;
+        return mListener.getRightBalanceValue();
+    }
+
     private long startFadeOut = -1;
-    private void updateVolume(String why) {
-        if(why.equals("Fade Out")&&startFadeOut==-1) startFadeOut = System.currentTimeMillis();
+    private void updateVolume(final int why) {
+        if(why== ACTION_FADE_OUT &&startFadeOut==-1) startFadeOut = System.currentTimeMillis();
 
         try {
-            mMediaPlayer.setVolume(mCurrentVolume, mCurrentVolume);
+            mMediaPlayer.setVolume(mCurrentVolume*getInAppVolume()*getLeftBalanceValue(), mCurrentVolume*getInAppVolume()*getRightBalanceValue());
             if(startFadeOut!=-1)
                 Log.d(TAG, why+" : song "+mSong.title +", update new volume = "+ mCurrentVolume+", thread id "+Thread.currentThread().getId() +", time fade out = "+(System.currentTimeMillis() - startFadeOut));
             else
@@ -316,7 +338,7 @@ public class PreviewSong {
             public void run() {
                 if(!onIntervalUpdate()) {
 
-                    if(mFadeState==FADE_OUT) onAudioFinishFadeOut();
+                    if(mFadeState== ACTION_FADE_OUT) onAudioFinishFadeOut();
 
                     mFadeState = NOT_FADE;
                     if(mTimer!=null) {
@@ -332,7 +354,7 @@ public class PreviewSong {
     }
 
     private void fadeOut() {
-        mFadeState = FADE_OUT;
+        mFadeState = ACTION_FADE_OUT;
         update();
     }
 
