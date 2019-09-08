@@ -21,7 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 
 import java.io.File;

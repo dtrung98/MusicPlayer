@@ -48,7 +48,7 @@ import com.ldt.musicr.glide.BlurTransformation;
 import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.helper.ShuffleHelper;
 import com.ldt.musicr.helper.StopWatch;
-import com.ldt.musicr.loader.PlaylistSongLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
 import com.ldt.musicr.model.AbsCustomPlaylist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;

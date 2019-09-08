@@ -19,8 +19,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.PlaylistLoader;
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Album;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;

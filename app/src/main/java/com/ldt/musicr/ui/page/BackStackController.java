@@ -21,7 +21,7 @@ import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
-import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;

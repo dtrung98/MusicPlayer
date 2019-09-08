@@ -26,7 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 
 import java.util.ArrayList;

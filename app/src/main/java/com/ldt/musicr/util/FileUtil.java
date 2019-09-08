@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.webkit.MimeTypeMap;
 
-import com.ldt.musicr.loader.SongLoader;
-import com.ldt.musicr.loader.SortedCursor;
+import com.ldt.musicr.loader.medialoader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SortedCursor;
 import com.ldt.musicr.model.Song;
 
 import java.io.BufferedReader;

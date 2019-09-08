@@ -28,7 +28,7 @@ import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.helper.menu.MenuHelper;
-import com.ldt.musicr.loader.GenreLoader;
+import com.ldt.musicr.loader.medialoader.GenreLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;

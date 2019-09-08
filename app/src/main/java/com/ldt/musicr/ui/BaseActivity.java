@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -10,42 +9,28 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.util.Log;
 
 
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
-import com.ldt.musicr.loader.PaletteGeneratorTask;
+import com.ldt.musicr.loader.medialoader.PaletteGeneratorTask;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 
-import com.ldt.musicr.R;
-
 import com.ldt.musicr.service.MusicService;
-import com.ldt.musicr.ui.nowplaying.NowPlayingController;
-import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
-import com.ldt.musicr.util.Util;
-import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import static com.ldt.musicr.util.BitmapEditor.updateSat;
 
 /**
  *  Create relationship between Activity and Music Player Service

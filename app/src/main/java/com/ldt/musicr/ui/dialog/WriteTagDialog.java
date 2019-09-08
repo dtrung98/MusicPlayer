@@ -7,7 +7,6 @@ import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -15,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.ui.widget.UpdateToastMediaScannerCompletionListener;
 import com.ldt.musicr.ui.widget.dialog.LoadingScreenDialog;
 import com.ldt.musicr.util.MusicUtil;

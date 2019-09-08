@@ -143,7 +143,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
 
          /*     Response<String> photoPage = null;
                 try {
-                    photoPage = mLastFmClient.getApiService().getPhotoPage(lastFmArtist.getArtist().getUrl()+"/+images",null,mSkipOkHttpCache ? "no-cache" : null).execute();
+                    photoPage = mLastFmClient.getApiService().getPhotoPage(lastFmArtist.getArtist().getUrl()+"/+images",null,mSkipOkHttpCache ? "no-cache" : null).onRunning();
                 } catch (IOException e) {
                     e.printStackTrace();
                     return e;

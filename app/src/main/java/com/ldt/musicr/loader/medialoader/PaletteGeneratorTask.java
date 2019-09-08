@@ -1,4 +1,4 @@
-package com.ldt.musicr.loader;
+package com.ldt.musicr.loader.medialoader;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +24,7 @@ import static com.ldt.musicr.util.BitmapEditor.updateSat;
 
 public class PaletteGeneratorTask extends AsyncTask<Void,Void,Boolean> {
     private static final String TAG = "PaletteGeneratorTask";
-    public static final String PALETTE_ACTION = "com.ldt.musicr.loader.PaletteGeneratorTask";
+    public static final String PALETTE_ACTION = "com.ldt.musicr.loader.medialoader.PaletteGeneratorTask";
     public static final String COLOR_ONE = "color_1";
     public static final String COLOR_TWO = "color_2";
     public static final String ALPHA_ONE = "alpha_1";

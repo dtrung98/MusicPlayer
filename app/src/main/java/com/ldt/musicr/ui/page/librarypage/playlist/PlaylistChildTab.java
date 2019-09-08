@@ -15,7 +15,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
-import com.ldt.musicr.loader.PlaylistLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.page.featurepage.FeaturePlaylistAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;

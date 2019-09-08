@@ -16,7 +16,7 @@ import com.bumptech.glide.Glide;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;

@@ -90,6 +90,7 @@ public final class PreferenceUtil {
     public static final String IN_APP_VOLUME = "in_app_volume";
     private static final String AUDIO_MIN_DURATION = "audio_min_duration";
     public static final String BALANCE_VALUE = "balance_value";
+    public static final String THREAD_NUMBER = "thread_number";
 
     private static PreferenceUtil sInstance;
 
@@ -500,5 +501,16 @@ public final class PreferenceUtil {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putFloat(BALANCE_VALUE, value);
         editor.apply();
+    }
+
+    public final void setThreadNumber(int value) {
+        if(value<=0) return;
+        final SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putFloat(THREAD_NUMBER,value);
+        editor.apply();
+    }
+
+    public final int getThreadNumber() {
+        return mPreferences.getInt(THREAD_NUMBER,6);
     }
 }

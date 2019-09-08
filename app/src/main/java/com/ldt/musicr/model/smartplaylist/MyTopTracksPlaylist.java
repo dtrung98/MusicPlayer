@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
 
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.TopAndRecentlyPlayedTracksLoader;
+import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.provider.SongPlayCountStore;
 

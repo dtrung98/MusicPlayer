@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.SongLoader;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 

@@ -1,4 +1,4 @@
-package com.ldt.musicr.loader;
+package com.ldt.musicr.loader.medialoader;
 
 import android.content.ContentResolver;
 import android.content.Context;

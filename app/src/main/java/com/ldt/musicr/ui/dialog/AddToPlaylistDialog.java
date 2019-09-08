@@ -8,7 +8,7 @@ import android.support.v4.app.DialogFragment;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.PlaylistLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.PlaylistsUtil;

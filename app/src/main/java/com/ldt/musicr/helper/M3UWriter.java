@@ -2,7 +2,7 @@ package com.ldt.musicr.helper;
 
 import android.content.Context;
 
-import com.ldt.musicr.loader.PlaylistSongLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
 import com.ldt.musicr.model.AbsCustomPlaylist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;

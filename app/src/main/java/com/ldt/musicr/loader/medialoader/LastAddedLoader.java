@@ -1,4 +1,4 @@
-package com.ldt.musicr.loader;
+package com.ldt.musicr.loader.medialoader;
 
 import android.content.Context;
 import android.database.Cursor;

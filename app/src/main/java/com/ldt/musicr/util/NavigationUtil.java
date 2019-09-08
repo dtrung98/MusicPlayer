@@ -22,7 +22,7 @@ import android.media.audiofx.AudioEffect;
 import android.support.annotation.NonNull;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.ArtistLoader;
+import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.LastAddedLoader;
+import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.PreferenceUtil;

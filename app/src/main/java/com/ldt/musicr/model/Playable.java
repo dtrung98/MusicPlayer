@@ -1,11 +1,10 @@
 package com.ldt.musicr.model;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.ldt.musicr.R;
 
-public class PlayableProperty {
+public class Playable {
     public static final int UNDEFINED = 0;
     public static final int PLAYLIST = 1;
     public static final int ALBUM = 2;
@@ -27,7 +26,7 @@ public class PlayableProperty {
         }
     }
 
-    public PlayableProperty setTitle(String title) {
+    public Playable setTitle(String title) {
         if(title!=null)  mTitle = title;
         else mTitle = "";
         return this;
