@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.support.v7.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import java.util.Locale;
 

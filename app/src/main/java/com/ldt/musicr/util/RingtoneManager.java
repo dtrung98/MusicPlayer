@@ -10,7 +10,7 @@ import android.os.Build;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.Toast;
 
 

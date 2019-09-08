@@ -7,7 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;

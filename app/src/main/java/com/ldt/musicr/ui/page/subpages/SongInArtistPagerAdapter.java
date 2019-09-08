@@ -1,7 +1,7 @@
 package com.ldt.musicr.ui.page.subpages;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.menu.SongMenuHelper;

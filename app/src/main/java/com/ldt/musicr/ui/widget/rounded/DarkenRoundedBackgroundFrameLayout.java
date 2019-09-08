@@ -5,9 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.graphics.ColorUtils;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 

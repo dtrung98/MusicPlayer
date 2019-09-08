@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,18 +7,18 @@
     android:layout_height="match_parent"
     android:background="@color/backward_color"
     tools:context="com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment">
-<android.support.design.widget.AppBarLayout
+<com.google.android.material.appbar.AppBarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:elevation="0dp">
-<android.support.design.widget.CollapsingToolbarLayout
+<com.google.android.material.appbar.CollapsingToolbarLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
    android:id="@+id/playlist_pager_collapsing_toolbar"
     app:layout_scrollFlags="scroll|exitUntilCollapsed"
     app:titleEnabled="false">
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -37,7 +37,7 @@
             android:tint="@color/FlatWhite"
             android:padding="18dp"
             android:layout_gravity="end"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
     <RelativeLayout
         app:layout_collapseMode="pin"
         android:layout_width="match_parent"
@@ -172,14 +172,14 @@
 
     </RelativeLayout>
 
-</android.support.design.widget.CollapsingToolbarLayout>
+</com.google.android.material.appbar.CollapsingToolbarLayout>
 
-</android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.SwipeRefreshLayout
+</com.google.android.material.appbar.AppBarLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
     <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
         android:id="@+id/playlist_big_rv"
         android:layout_width="match_parent"
@@ -195,5 +195,5 @@
         app:fastScrollPopupTextSize="46sp"
         app:fastScrollThumbColor="@color/FlatOrange"
        />
-    </android.support.v4.widget.SwipeRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

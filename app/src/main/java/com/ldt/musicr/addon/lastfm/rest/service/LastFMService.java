@@ -1,12 +1,11 @@
 package com.ldt.musicr.addon.lastfm.rest.service;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmAlbum;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

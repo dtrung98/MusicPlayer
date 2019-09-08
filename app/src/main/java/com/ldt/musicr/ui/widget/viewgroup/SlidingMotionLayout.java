@@ -1,8 +1,8 @@
 package com.ldt.musicr.ui.widget.viewgroup;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.motion.MotionLayout;
+
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;

@@ -1,6 +1,6 @@
 package com.ldt.musicr.ui.widget.slidercontainer;
 
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 
 public class SliderTransformer implements ViewPager.PageTransformer {

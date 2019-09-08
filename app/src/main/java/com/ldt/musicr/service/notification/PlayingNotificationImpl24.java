@@ -8,8 +8,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.media.app.NotificationCompat.MediaStyle;
+import androidx.core.app.NotificationCompat;
+import androidx.media.app.NotificationCompat.MediaStyle;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;

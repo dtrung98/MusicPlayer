@@ -1,6 +1,6 @@
 package com.ldt.musicr.helper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ldt.musicr.model.Song;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.motion.MotionLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -56,7 +56,7 @@
         android:scaleY="0.5"
         android:alpha="0"
         />
-    <android.support.v7.widget.SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="45dp"
@@ -85,7 +85,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         app:tabTextColor="#88F5F5F5"
         android:overScrollMode="never"/>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -119,4 +119,4 @@
         app:layout_constraintTop_toBottomOf="@id/tab_layout"
         android:background="@drawable/gradient_shadow"
         android:alpha="1"/>
-</android.support.constraint.motion.MotionLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

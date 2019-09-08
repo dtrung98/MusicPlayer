@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.motion.MotionLayout
+<androidx.constraintlayout.motion.widget.MotionLayout
     android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -31,7 +31,7 @@
         android:background="#44444444"
         android:alpha="0"
         />
-    <android.support.constraint.Group
+    <androidx.constraintlayout.widget.Group
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/group"
@@ -169,7 +169,7 @@
         app:layout_constraintBottom_toBottomOf="@id/description"
         android:src="@drawable/play_round"
         android:tint="#F5F5F5" />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -189,4 +189,4 @@
         app:layout_constraintTop_toTopOf="@id/recycler_view"
         android:background="@drawable/gradient_shadow"
         android:alpha="0"/>
-</android.support.constraint.motion.MotionLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

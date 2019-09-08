@@ -1,8 +1,8 @@
 package com.ldt.musicr.glide.artistimage;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
 import com.bumptech.glide.load.Options;
@@ -10,10 +10,8 @@ import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.ModelLoader;
 import com.bumptech.glide.load.model.ModelLoaderFactory;
 import com.bumptech.glide.load.model.MultiModelLoaderFactory;
-import com.bumptech.glide.signature.ObjectKey;
 import com.ldt.musicr.App;
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
-import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.util.ArtistSignatureUtil;
 
 import java.io.InputStream;

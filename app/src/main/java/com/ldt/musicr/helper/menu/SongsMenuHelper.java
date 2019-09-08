@@ -1,13 +1,6 @@
 package com.ldt.musicr.helper.menu;
 
-import android.app.Activity;
-import android.support.annotation.NonNull;
-
-import com.ldt.musicr.R;
-import com.ldt.musicr.model.Song;
-import com.ldt.musicr.service.MusicPlayerRemote;
-
-import java.util.List;
+import androidx.annotation.NonNull;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)

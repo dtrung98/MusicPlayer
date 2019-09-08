@@ -8,7 +8,7 @@ import android.graphics.NinePatch;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * ================================================

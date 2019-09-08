@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import com.ldt.musicr.R;

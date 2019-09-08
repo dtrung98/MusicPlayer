@@ -1,9 +1,9 @@
 package com.ldt.musicr.helper.menu;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.ldt.musicr.App;

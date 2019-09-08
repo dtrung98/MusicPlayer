@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.motion.MotionLayout android:id="@+id/constraint_root"
+<androidx.constraintlayout.motion.widget.MotionLayout android:id="@+id/constraint_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -133,4 +133,4 @@
         android:textStyle="bold"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"/>
-</android.support.constraint.motion.MotionLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

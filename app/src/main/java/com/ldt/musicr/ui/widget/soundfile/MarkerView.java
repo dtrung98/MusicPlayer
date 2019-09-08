@@ -23,7 +23,6 @@ package com.ldt.musicr.ui.widget.soundfile;
         import android.util.AttributeSet;
         import android.view.KeyEvent;
         import android.view.MotionEvent;
-        import android.widget.ImageView;
 
 /**
  * Represents a draggable start or end marker.
@@ -37,7 +36,7 @@ package com.ldt.musicr.ui.widget.soundfile;
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>
  */
-public class MarkerView extends android.support.v7.widget.AppCompatImageView {
+public class MarkerView extends androidx.appcompat.widget.AppCompatImageView {
 
     public interface MarkerListener {
         public void markerTouchStart(MarkerView marker, float pos);

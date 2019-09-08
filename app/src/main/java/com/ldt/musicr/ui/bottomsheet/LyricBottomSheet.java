@@ -4,12 +4,12 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.widget.NestedScrollView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.core.widget.NestedScrollView;
 import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
@@ -48,7 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
+import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
 public class LyricBottomSheet extends BottomSheetDialogFragment  implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";
@@ -141,7 +141,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
             if(window!=null)
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-            FrameLayout bottomSheet = dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+            FrameLayout bottomSheet = dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
             BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
             behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             behavior.setPeekHeight(-Tool.getNavigationHeight(requireActivity()));

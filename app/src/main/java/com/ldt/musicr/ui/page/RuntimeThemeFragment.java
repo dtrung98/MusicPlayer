@@ -4,7 +4,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.view.View;
 
 import java.util.ArrayList;

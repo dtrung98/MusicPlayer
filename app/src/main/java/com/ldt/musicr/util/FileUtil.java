@@ -3,8 +3,8 @@ package com.ldt.musicr.util;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.webkit.MimeTypeMap;
 
 import com.ldt.musicr.loader.medialoader.SongLoader;

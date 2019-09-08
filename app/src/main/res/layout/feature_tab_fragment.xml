@@ -1,4 +1,4 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/UILayer"
@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#DD1C1A21"
     tools:context="com.ldt.musicr.ui.page.featurepage.FeatureTabFragment">
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -14,12 +14,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"/>
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <View
         android:id="@+id/back_ground_toolbar"
         android:layout_width="match_parent"
@@ -102,4 +102,4 @@
         app:layout_constraintTop_toBottomOf="@id/menu"
         android:background="@drawable/gradient_shadow"
         android:alpha="0"/>
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

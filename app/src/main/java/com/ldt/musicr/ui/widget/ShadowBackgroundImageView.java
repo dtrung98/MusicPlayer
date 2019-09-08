@@ -4,12 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.ldt.musicr.util.Tool;
 
-public class ShadowBackgroundImageView extends android.support.v7.widget.AppCompatImageView {
+public class ShadowBackgroundImageView extends androidx.appcompat.widget.AppCompatImageView {
     public ShadowBackgroundImageView(Context context) {
         super(context);
     }

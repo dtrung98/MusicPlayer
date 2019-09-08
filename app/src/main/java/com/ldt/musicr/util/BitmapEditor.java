@@ -20,7 +20,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
-import android.support.v8.renderscript.*;
+import androidx.renderscript.*;
 
 /**
  * Created by trung on 7/11/2017.

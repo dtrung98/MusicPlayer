@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.viewpager.widget.PagerAdapter;
+
 import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
@@ -17,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderAdapter extends android.support.v4.view.PagerAdapter {
+public class SliderAdapter extends PagerAdapter {
     private static final String TAG ="SliderAdapter";
 
     private Context mContext;

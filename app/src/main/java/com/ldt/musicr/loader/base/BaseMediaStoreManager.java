@@ -2,7 +2,7 @@ package com.ldt.musicr.loader.base;
 
 import android.os.Process;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.ldt.musicr.loader.manager.PriorityThreadFactory;
 import com.ldt.musicr.util.PreferenceUtil;

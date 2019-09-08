@@ -7,8 +7,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.graphics.Palette;
+import androidx.annotation.NonNull;
+import androidx.palette.graphics.Palette;
 import android.util.Log;
 
 import com.ldt.musicr.R;

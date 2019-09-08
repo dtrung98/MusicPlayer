@@ -8,12 +8,12 @@ import android.graphics.Typeface;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static android.support.design.widget.BottomSheetBehavior.STATE_COLLAPSED;
+import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
 public class OptionBottomSheet extends BottomSheetDialogFragment implements View.OnClickListener{
     public final static String OPTION_RES_ARRAY = "option_res_array";
@@ -215,7 +215,7 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
             public void onGlobalLayout() {
                 BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
                 FrameLayout bottomSheet = (FrameLayout)
-                        dialog.findViewById(android.support.design.R.id.design_bottom_sheet);
+                        dialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
               behavior.setPeekHeight(-Tool.getNavigationHeight(requireActivity()));

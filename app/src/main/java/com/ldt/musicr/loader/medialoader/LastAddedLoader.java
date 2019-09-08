@@ -3,7 +3,7 @@ package com.ldt.musicr.loader.medialoader;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 
 import com.ldt.musicr.model.Song;

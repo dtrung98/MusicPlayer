@@ -5,21 +5,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/tools"
     android:background="@android:color/transparent">
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
    >
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
            >
 
-            <android.support.design.widget.CollapsingToolbarLayout
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
@@ -122,15 +122,15 @@
                 android:padding="12dp"
                 android:background="@drawable/count_round_drawable"/>
 
-        </android.support.constraint.ConstraintLayout>
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-        <android.support.v7.widget.RecyclerView
+        </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:paddingBottom="50dp"/>
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout>

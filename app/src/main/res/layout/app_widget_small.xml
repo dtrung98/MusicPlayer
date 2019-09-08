@@ -62,7 +62,7 @@
         android:layout_height="1dp"
         android:layout_columnSpan="2"
         android:layout_gravity="fill_horizontal"
-        android:background="@color/md_divider_white"
+        android:background="@android:color/black"
         tools:ignore="Orientation" />
 
     <LinearLayout
@@ -82,7 +82,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textColor="@color/ate_primary_text_light"
+            android:textColor="@android:color/black"
             tools:text="Title" />
 
         <TextView
@@ -94,7 +94,7 @@
             android:paddingRight="4dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/ate_secondary_text_light"
+            android:textColor="@android:color/black"
             tools:ignore="HardcodedText"
             tools:text="•" />
 
@@ -105,7 +105,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/ate_secondary_text_light"
+            android:textColor="@android:color/black"
             tools:text="Text" />
 
     </LinearLayout>

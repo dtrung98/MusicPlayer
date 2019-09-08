@@ -57,8 +57,8 @@
     <color name="twenty_percent_black_overlay">#34000000</color>
     <color name="fifty_percent_black_overlay">#88000000</color>
 
-    <color name="app_shortcut_default_foreground">@color/md_blue_grey_500</color>
-    <color name="app_shortcut_default_background">@color/md_grey_50</color>
+    <color name="app_shortcut_default_foreground">@color/FlatBlue</color>
+    <color name="app_shortcut_default_background">@color/FlatTealBlue</color>
     <color name="lyric_end_color">#DD080808</color>
     <color name="lyric_center_color">#66080808</color>
     <color name="background_artist_header_color">#88080808</color>

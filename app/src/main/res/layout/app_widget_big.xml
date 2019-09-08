@@ -79,7 +79,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/ate_primary_text_dark"
+            android:textColor="@android:color/black"
             tools:text="Title" />
 
         <TextView
@@ -90,7 +90,7 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-            android:textColor="@color/ate_secondary_text_dark"
+            android:textColor="@android:color/black"
             tools:text="Text" />
 
     </LinearLayout>

@@ -3,7 +3,7 @@ package com.ldt.musicr.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.bumptech.glide.signature.ObjectKey;

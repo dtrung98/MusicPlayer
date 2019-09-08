@@ -3,8 +3,7 @@ package com.ldt.musicr.ui.widget;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import com.ldt.musicr.R;
-import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+import com.ldt.musicr.addon.fastscrollrecyclerview.FastScrollRecyclerView;
 
 public class FixedFastScrollRecyclerView extends FastScrollRecyclerView {
     public FixedFastScrollRecyclerView(Context context) {

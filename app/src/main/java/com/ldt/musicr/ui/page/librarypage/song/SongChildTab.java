@@ -1,11 +1,11 @@
 package com.ldt.musicr.ui.page.librarypage.song;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.Group;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,9 +111,9 @@ public class SongChildTab extends BaseMusicServiceFragment implements SortOrderB
     }
 
     private void refreshData() {
-        if(getContext() != null)
+    /*    if(getContext() != null)
         SongLoader.doSomething(getContext());
-
+*/
         ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(),SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
         mAdapter.setData(songs);
         showOrHidePreview(!songs.isEmpty());

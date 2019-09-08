@@ -1,4 +1,4 @@
-<android.support.constraint.motion.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/UILayer"
@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/backward_color"
     app:layoutDescription="@xml/main_screen_animation">
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -34,7 +34,7 @@
             <include layout = "@layout/main_screen_album_piece"/>
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
     <View
         android:id="@+id/back_ground_toolbar"
         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         />
-    <android.support.v7.widget.AppCompatSpinner
+    <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
@@ -124,4 +124,4 @@
         app:layout_constraintTop_toBottomOf="@id/menu"
         android:background="@drawable/gradient_shadow"
         android:alpha="0"/>
-    </android.support.constraint.motion.MotionLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>

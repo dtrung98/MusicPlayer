@@ -2,29 +2,24 @@ package com.ldt.musicr.glide;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 
 import com.bumptech.glide.GenericTransitionOptions;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
 import com.ldt.musicr.glide.artistimage.ArtistImage;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.util.ArtistSignatureUtil;
 import com.ldt.musicr.util.CustomArtistImageUtil;
-import com.ldt.musicr.util.PhonographColorUtil;
 
 
 public class ArtistGlideRequest {
