@@ -24,6 +24,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 import retrofit2.Response;
 
@@ -41,6 +42,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
     private DataFetcher<InputStream> urlFetcher;
     private final Options mOption;
     private final  boolean mLoadOriginal;
+    private final int mImageNumber;
 
     public ArtistImageFetcher(LastFMRestClient lastFMRestClient, ArtistImage model, ModelLoader<GlideUrl, InputStream> urlLoader, int width, int height, Options options) {
         this.lastFMRestClient = lastFMRestClient;
@@ -50,67 +52,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
         this.height = height;
         mOption = options;
         mLoadOriginal = model.mLoadOriginal;
-    }
-    private Exception loadThisArtist(String artistName, @NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
-        Response<LastFmArtist> response;
-        try {
-            response = lastFMRestClient.getApiService().getArtistInfo(artistName, null, model.mSkipOkHttpCache ? "no-cache" : null).execute();
-            Log.d(TAG, "loadData: artistName = ["+artistName+"] : succeed");
-        } catch (Exception e) {
-            Log.d(TAG, "loadData: artistName = ["+artistName+"] : exception");
-            return e;
-        }
-
-        if(!response.isSuccessful())
-            return new IOException("Request failed with code: " + response.code());
-        else {
-            LastFmArtist lastFmArtist = response.body();
-            Log.d(TAG, "loadData: "+lastFmArtist);
-
-            if (isCancelled) {
-                return new Exception("Cancelled");
-            }
-
-            if (lastFmArtist == null || lastFmArtist.getArtist() == null) {
-                return new NullPointerException("Artist is null");
-            }
-
-            String largestArtistImageUrl = LastFMUtil.getLargestArtistImageUrl(lastFmArtist.getArtist().getImage());
-            if(largestArtistImageUrl!=null&&!largestArtistImageUrl.isEmpty()) {
-
-                if(mLoadOriginal) largestArtistImageUrl = findAndReplaceToGetOriginal(largestArtistImageUrl);
-                Log.d(TAG, "loadThisArtist: url = ["+largestArtistImageUrl+"]");
-                GlideUrl url = new GlideUrl(largestArtistImageUrl);
-
-                ModelLoader.LoadData<InputStream> loadData = urlLoader.buildLoadData(url, width, height, mOption);
-                if (loadData == null)
-                    return  new IOException("Load data fails");
-                else {
-                    try {
-                        urlFetcher = loadData.fetcher;
-                        DataCallback<? super InputStream> innerCallback = new DataCallback<InputStream>() {
-                            @Override
-                            public void onDataReady(@Nullable InputStream data) {
-                                Log.d(TAG, "onDataReady");
-                                callback.onDataReady(data);
-                            }
-
-                            @Override
-                            public void onLoadFailed(@NonNull Exception e) {
-                                Log.d(TAG, "onLoadFailed: e = "+e.getClass()+" | "+e.getMessage());
-                                callback.onLoadFailed(e);
-                            }
-                        };
-                        Log.d(TAG, "loadThisArtist: start");
-                        urlFetcher.loadData(priority, innerCallback);
-                        Log.d(TAG, "loadThisArtist: end");
-                    } catch (Exception e) {
-                        return e;
-                    }
-                }
-            } else return new Exception("No Artist Image is available : \n"+lastFmArtist.toString());
-        }
-        return null;
+        mImageNumber = model.mImageNumber;
     }
 
     private Exception loadThisArtistWithJSoup(String artistName, @NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
@@ -170,7 +112,21 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                                 }
                             }
                             if(result.isEmpty()) return new Exception("Empty Array List");
-                            String urlString = result.get(0);
+
+                            String urlString;
+                            switch (mImageNumber) {
+                                case ArtistImage.RANDOM:
+                                    Random random = new Random();
+                                    urlString = result.get(random.nextInt(result.size()));
+                                    break;
+                                 case ArtistImage.FIRST:
+                                     urlString = result.get(0);
+                                     break;
+                                  default:
+                                      if(mImageNumber>result.size()-1) urlString = result.get(result.size()-1);
+                                      else urlString = result.get(mImageNumber);
+                            }
+
                             if(mLoadOriginal) urlString = findAndReplaceToGetOriginal(urlString);
                             Log.d(TAG, "loadThisArtist: url = ["+urlString+"]");
                             GlideUrl url = new GlideUrl(urlString);
@@ -221,6 +177,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
     @Override
     public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
         long start = System.currentTimeMillis();
+
         if (!MusicUtil.isArtistNameUnknown(model.mArtistName)/* && PreferenceUtil.isAllowedToDownloadMetadata(context)*/) {
            // Try to get the group image
             String artistNames = model.getArtistName();
