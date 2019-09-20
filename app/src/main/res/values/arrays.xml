@@ -46,4 +46,70 @@
         <item>Lv4</item>
         <item>Lv5</item>
     </string-array>
+
+
+    <string-array name="countries">
+        <item>12-bar blues"</item>
+        <item>2 tone</item>
+        <item>2-step garage</item>
+        <item>4-beat</item>
+        <item>50s progression</item>
+        <item>acid breaks</item>
+        <item>acid house</item>
+        <item>acid jazz</item>
+        <item>acid rock</item>
+        <item>acid techno</item>
+        <item>acid trance</item>
+        <item>acoustic</item>
+        <item>african</item>
+        <item>african blues</item>
+        <item>african heavy metal</item>
+        <item>african hip hop</item>
+        <item>african-american</item>
+        <item>afro cosmic disco</item>
+        <item>afro-cuban jazz</item>
+        <item>afropop</item>
+        <item>algerian</item>
+        <item>alternative</item>
+        <item>alternative country</item>
+        <item>alternative dance</item>
+        <item>alternative hip hop</item>
+        <item>alternative metal</item>
+        <item>alternative r&amp;b</item>
+        <item>alternative rock</item>
+        <item>ambient</item>
+        <item>ambient dub</item>
+        <item>ambient house</item>
+        <item>ambient music</item>
+        <item>americana</item>
+        <item>anatolian rock</item>
+        <item>ancient</item>
+        <item>anime</item>
+        <item>anti-folk</item>
+        <item>apala</item>
+        <item>arab pop</item>
+        <item>arabic pop</item>
+        <item>argentine rock</item>
+        <item>ars antiqua</item>
+        <item>ars nova</item>
+        <item>ars subtilior</item>
+        <item>art pop</item>
+        <item>art punk</item>
+        <item>art rock</item>
+        <item>ashik</item>
+        <item>asian</item>
+        <item>asian underground</item>
+
+    </string-array>
+
+    <integer-array name="colors">
+        <item>@color/roseStart</item>
+        <item>@color/roseEnd</item>
+        <item>@color/blueStart</item>
+        <item>@color/blueEnd</item>
+        <item>@color/greenStart</item>
+        <item>@color/greenEnd</item>
+        <item>@color/purpleStart</item>
+        <item>@color/purpleEnd</item>
+    </integer-array>
 </resources>
