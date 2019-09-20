@@ -166,27 +166,29 @@ public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
         if(!bio.isEmpty()) bio = ' '+getResources().getString(R.string.middle_dot)+' '+bio;
         mWiki.setText(mArtist.getSongCount() +" "+getResources().getString(R.string.songs)+bio);
 
-        ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), mArtist)
-                .tryToLoadOriginal(true)
-                .generateBuilder(getContext())
-                .build()
-            /*    .error(
-                        ArtistGlideRequest
-                                .Builder
-                                .from(GlideApp.with(getContext()),mArtist)
-                                .tryToLoadOriginal(false)
-                                .generateBuilder(getContext())
-                                .build())*/
-                .thumbnail(
-                        ArtistGlideRequest
-                                .Builder
-                                .from(GlideApp.with(getContext()),mArtist)
-                                .tryToLoadOriginal(false)
-                                .generateBuilder(getContext())
-                                .build())
-                .into(mBigImage);
+        if(getContext() !=null) {
+            ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), mArtist)
+                    .tryToLoadOriginal(true)
+                    .generateBuilder(getContext())
+                    .build()
+                    /*    .error(
+                                ArtistGlideRequest
+                                        .Builder
+                                        .from(GlideApp.with(getContext()),mArtist)
+                                        .tryToLoadOriginal(false)
+                                        .generateBuilder(getContext())
+                                        .build())*/
+                    .thumbnail(
+                            ArtistGlideRequest
+                                    .Builder
+                                    .from(GlideApp.with(getContext()), mArtist)
+                                    .tryToLoadOriginal(false)
+                                    .generateBuilder(getContext())
+                                    .build())
+                    .into(mBigImage);
+        }
+            updateSongs();
 
-                updateSongs();
     }
 
     @Override

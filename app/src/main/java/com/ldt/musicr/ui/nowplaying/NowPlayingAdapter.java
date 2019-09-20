@@ -9,8 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.ldt.musicr.R;
+import com.ldt.musicr.glide.ArtistGlideRequest;
+import com.ldt.musicr.glide.GlideApp;
+import com.ldt.musicr.glide.artistimage.ArtistImage;
+import com.ldt.musicr.loader.medialoader.ArtistLoader;
+import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -77,13 +85,47 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
             ButterKnife.bind(this,itemView);
         }
         private void bind(Song song) {
-            Picasso.get().load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.speaker2).placeholder(R.drawable.music_style).stableKey("album_id="+song.albumId+"_"+song.dateModified).into(mImage,NowPlayingAdapter.this);
-         /*   SongGlideRequest.Builder.from(GlideApp.with(mContext), song)
-                    .ignoreMediaStore(false)
-                    .build().into(mImage);*/
+ /*           Picasso.get().load(Util.getAlbumArtUri(song.albumId))
+                    .error(R.drawable.speaker2)
+                    .placeholder(R.drawable.music_style)
+                    .stableKey("album_id="+song.albumId+"_"+song.dateModified)
+                    .into(mImage,NowPlayingAdapter.this);*/
 
-      /*   RequestOptions options = RequestOptions.overrideOf(Tool.getScreenSize(mContext)[0],Tool.getScreenSize(mContext)[1]).skipMemoryCache(true);
+            Artist artist = ArtistLoader.getArtist(mContext,song.artistId);
+            int[] screen = Tool.getScreenSize(mContext);
+
+            Glide.with(mContext)
+                    .load(Util.getAlbumArtUri(song.albumId))
+                    .override(screen[1])
+                    .placeholder(R.drawable.speaker2)
+                    .error(
+                            ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist).tryToLoadOriginal(true).whichImage(1).generateBuilder(mContext).buildRequestDrawable()
+                                    .error(ArtistGlideRequest.Builder.from(GlideApp.with(mContext),artist).tryToLoadOriginal(false).whichImage(1).generateBuilder(mContext).buildRequestDrawable().error(R.drawable.speaker2)
+                    ))
+                    .into(mImage);
+     /*       ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), mArtist)
+                    .tryToLoadOriginal(true)
+                    .generateBuilder(getContext())
+                    .build()
+                    .error(
+                                ArtistGlideRequest
+                                        .Builder
+                                        .from(GlideApp.with(getContext()),mArtist)
+                                        .tryToLoadOriginal(false)
+                                        .generateBuilder(getContext())
+                                        .build())
+                    .thumbnail(
+                            ArtistGlideRequest
+                                    .Builder
+                                    .from(GlideApp.with(getContext()), mArtist)
+                                    .tryToLoadOriginal(false)
+                                    .generateBuilder(getContext())
+                                    .build())
+                    .into(mBigImage);
+
             Glide.with(mContext).load(Util.getAlbumArtUri(song.albumId)).apply(options).error(R.drawable.speaker2).placeholder(R.drawable.speaker2).into(mImage);*/
+
+
         }
     }
 }

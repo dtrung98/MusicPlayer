@@ -2,9 +2,9 @@ package com.ldt.musicr.glide;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -21,6 +21,8 @@ import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.util.ArtistSignatureUtil;
 import com.ldt.musicr.util.CustomArtistImageUtil;
 
+import static com.ldt.musicr.glide.artistimage.ArtistImage.FIRST;
+
 
 public class ArtistGlideRequest {
 
@@ -33,6 +35,7 @@ public class ArtistGlideRequest {
         boolean noCustomImage = false;
         boolean forceDownload;
         boolean mLoadOriginalImage = false;
+        int mImageNumber = FIRST;
 
         public static Builder from(@NonNull RequestManager requestManager, Artist artist) {
             return new Builder(requestManager, artist);
@@ -65,14 +68,19 @@ public class ArtistGlideRequest {
             return this;
         }
 
+        public Builder whichImage(final  int whichImage) {
+            this.mImageNumber = whichImage;
+            return this;
+        }
+
         public RequestBuilder<Bitmap> build() {
-            return createBaseRequest(requestManager, artist, noCustomImage, forceDownload, mLoadOriginalImage)
+            return createBaseRequest(requestManager, artist, noCustomImage, forceDownload, mLoadOriginalImage, mImageNumber)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
 
                     .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .priority(Priority.LOW)
                     //.override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .signature(createSignature(artist,mLoadOriginalImage));
+                    .signature(createSignature(artist,mLoadOriginalImage, mImageNumber));
         }
     }
 
@@ -85,12 +93,21 @@ public class ArtistGlideRequest {
 
         public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage)
+            return createBaseRequest(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage, builder.mImageNumber)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .priority(Priority.LOW)
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage));
+                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage, builder.mImageNumber));
         }
+        public RequestBuilder<Drawable> buildRequestDrawable() {
+            //noinspection unchecked
+            return createBaseRequestForDrawable(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage, builder.mImageNumber)
+                    .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
+                    .priority(Priority.LOW)
+                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage, builder.mImageNumber));
+        }
+
     }
 
     public static class PaletteBuilder {
@@ -104,30 +121,50 @@ public class ArtistGlideRequest {
 
         public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
-            return createBaseRequest(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage)
+            return createBaseRequest(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage, builder.mImageNumber)
                     //.transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
 
                     .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .priority(Priority.LOW)
                     .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage));
+                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage, builder.mImageNumber));
+        }
+
+        public RequestBuilder<Drawable> buildRequestDrawable() {
+            //noinspection unchecked
+            return createBaseRequestForDrawable(builder.requestManager, builder.artist, builder.noCustomImage, builder.forceDownload, builder.mLoadOriginalImage, builder.mImageNumber)
+                    .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
+                    .priority(Priority.LOW)
+                    .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                    .signature(createSignature(builder.artist,builder.mLoadOriginalImage, builder.mImageNumber));
         }
 
     }
 
-    public static RequestBuilder<Bitmap> createBaseRequest( RequestManager requestManager, Artist artist, boolean noCustomImage, boolean forceDownload, boolean loadOriginal) {
+    public static RequestBuilder<Drawable> createBaseRequestForDrawable( RequestManager requestManager, Artist artist, boolean noCustomImage, boolean forceDownload, boolean loadOriginal, int imageNumber) {
+        RequestBuilder<Drawable> builder;
+        boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
+        if (noCustomImage || !hasCustomImage) {
+            builder = requestManager.load(new ArtistImage(artist.getName(), forceDownload, loadOriginal, imageNumber));
+        } else {
+            builder =  requestManager.load(CustomArtistImageUtil.getFile(artist));
+        }
+        return builder;
+    }
+
+    public static RequestBuilder<Bitmap> createBaseRequest( RequestManager requestManager, Artist artist, boolean noCustomImage, boolean forceDownload, boolean loadOriginal, int imageNumber) {
          RequestBuilder<Bitmap> builder;
         boolean hasCustomImage = CustomArtistImageUtil.getInstance(App.getInstance()).hasCustomArtistImage(artist);
         if (noCustomImage || !hasCustomImage) {
-            builder = requestManager.asBitmap().load(new ArtistImage(artist.getName(), forceDownload, loadOriginal));
+            builder = requestManager.asBitmap().load(new ArtistImage(artist.getName(), forceDownload, loadOriginal, imageNumber));
         } else {
             builder =  requestManager.asBitmap().load(CustomArtistImageUtil.getFile(artist));
         }
         return builder;
     }
 
-    public static Key createSignature(Artist artist, boolean isLoadOriginal) {
-        return ArtistSignatureUtil.getInstance(App.getInstance()).getArtistSignature(artist.getName(), isLoadOriginal);
+    public static Key createSignature(Artist artist, boolean isLoadOriginal, int whichImage) {
+        return ArtistSignatureUtil.getInstance(App.getInstance()).getArtistSignature(artist.getName(), isLoadOriginal, whichImage);
     }
 }
