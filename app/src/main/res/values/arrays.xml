@@ -46,4 +46,33 @@
         <item>Lv4</item>
         <item>Lv5</item>
     </string-array>
+    <string-array name="countries">
+        <item>Argentina</item>
+        <item>Bolivia</item>
+        <item>Brazil</item>
+        <item>Chile</item>
+        <item>Costa Rica</item>
+        <item>Dominican Republic</item>
+        <item>Mexico</item>
+        <item>Nicaragua</item>
+        <item>Peru</item>
+        <item>Venezuela</item>
+        <item>Cuba</item>
+        <item>Ecuador</item>
+        <item>El Salvador</item>
+        <item>Haiti</item>
+        <item>Panama</item>
+        <item>Paraguay</item>
+    </string-array>
+
+    <integer-array name="colors">
+        <item>@color/roseStart</item>
+        <item>@color/roseEnd</item>
+        <item>@color/blueStart</item>
+        <item>@color/blueEnd</item>
+        <item>@color/greenStart</item>
+        <item>@color/greenEnd</item>
+        <item>@color/purpleStart</item>
+        <item>@color/purpleEnd</item>
+    </integer-array>
 </resources>

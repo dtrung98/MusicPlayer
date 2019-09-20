@@ -152,7 +152,7 @@ public abstract class WaveformFragment extends Fragment implements MarkerView.Ma
 
     /**
      * Every time we get a message that our waveform drew, see if we need to
-     * animate and trigger another redraw.
+     * animate and trigger another doDraw.
      */
     public void waveformDraw() {
         mWidth = mWaveformView.getMeasuredWidth();

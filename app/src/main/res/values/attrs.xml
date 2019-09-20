@@ -164,4 +164,13 @@
     <attr name="rsb_thumb_size" format="dimension"/>
     <attr name="rsb_thumb_scale_ratio" format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="BubblePickerX">
+        <attr name="ballNumber" format="integer"/>
+        <attr name="ballColor" format="color"/>
+        <attr name="minBallSize" format="dimension"/>
+        <attr name="maxBallSize" format="dimension"/>
+        <attr name="ballDistance" format="dimension"/>
+        <attr name="gravityPosition" format="float"/>
+    </declare-styleable>
 </resources>

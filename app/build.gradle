@@ -140,6 +140,10 @@ dependencies {
 
     // App Them Helper
     implementation 'com.github.kabouzeid:app-theme-helper:1.3.10'
+
+    // Bubble Picker
+    //implementation 'com.github.hantrungkien:Bubble-Picker:v1.0.5.2'
+    implementation 'com.github.tdh7:Bubble-Picker:1.1.1'
 }
 
 apply plugin: 'kotlin-android-extensions'

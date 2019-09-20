@@ -71,4 +71,14 @@
     <color name="colorProgress">#ffffbb33</color>
     <color name="FloatingButtonColor">#FBFFBD</color>
     <color name="SplashColor">@android:color/black</color>
+    <color name="genreBackColor">#66232335</color>
+
+    <color name="blueStart">#4EFFF3</color>
+    <color name="blueEnd">#0ca6f9</color>
+    <color name="purpleStart">#a369ff</color>
+    <color name="purpleEnd">#0e56ff</color>
+    <color name="roseStart">#FF6A00</color>
+    <color name="roseEnd">#ef0276</color>
+    <color name="greenStart">#a7f56e</color>
+    <color name="greenEnd">#11c612</color>
 </resources>
