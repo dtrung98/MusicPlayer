@@ -89,7 +89,7 @@ public class BubblePickerX extends TextureView implements TextureView.SurfaceTex
 
         mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG );
         mStrokePaint.setStyle(Paint.Style.STROKE);
-        mStrokePaint.setColor(getResources().getColor(R.color.FlatPurple));
+        mStrokePaint.setColor(getResources().getColor(R.color.flatPurple));
 
         mBallRadius = getResources().getDimension(R.dimen.dp_24);
 

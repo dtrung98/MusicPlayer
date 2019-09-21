@@ -34,9 +34,9 @@
     </style>
 
     <style name="FlatRedTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatRed</item>
-        <item name="colorPrimaryDark">@color/FlatRed</item>
-        <item name="colorAccent">@color/FlatRed</item>
+        <item name="colorPrimary">@color/flatRed</item>
+        <item name="colorPrimaryDark">@color/flatRed</item>
+        <item name="colorAccent">@color/flatRed</item>
     </style>
 
     <style name="Flat_OrangeTheme" parent="Theme.AppCompat.NoActionBar">
@@ -64,15 +64,15 @@
     </style>
 
     <style name="Flat_BlueTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatBlue</item>
-        <item name="colorPrimaryDark">@color/FlatBlue</item>
-        <item name="colorAccent">@color/FlatBlue</item>
+        <item name="colorPrimary">@color/flatBlue</item>
+        <item name="colorPrimaryDark">@color/flatBlue</item>
+        <item name="colorAccent">@color/flatBlue</item>
     </style>
 
     <style name="Flat_PurpleTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatPurple</item>
-        <item name="colorPrimaryDark">@color/FlatPurple</item>
-        <item name="colorAccent">@color/FlatPurple</item>
+        <item name="colorPrimary">@color/flatPurple</item>
+        <item name="colorPrimaryDark">@color/flatPurple</item>
+        <item name="colorAccent">@color/flatPurple</item>
     </style>
 
     <style name="Flat_PinkTheme" parent="Theme.AppCompat.NoActionBar">

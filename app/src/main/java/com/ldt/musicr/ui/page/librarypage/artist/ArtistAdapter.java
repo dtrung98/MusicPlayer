@@ -237,8 +237,8 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                             int color;
                             if(resource!=null)
-                            color  = PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(resource), mContext.getResources().getColor(R.color.FlatBlue));
-                            else color =  mContext.getResources().getColor(R.color.FlatBlue);
+                            color  = PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(resource), mContext.getResources().getColor(R.color.flatBlue));
+                            else color =  mContext.getResources().getColor(R.color.flatBlue);
                             int fixedColor = lighter(color,0.55f,0x90);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                                 mPanelColor.getBackground().setTint(fixedColor);

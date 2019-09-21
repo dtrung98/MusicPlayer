@@ -18,11 +18,11 @@
         app:fastScrollAutoHide="true"
         app:fastScrollAutoHideDelay="1500"
         app:fastScrollPopupBackgroundSize="88dp"
-        app:fastScrollPopupBgColor="@color/FlatBlue"
+        app:fastScrollPopupBgColor="@color/flatBlue"
         app:fastScrollPopupPosition="adjacent"
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
         app:fastScrollPopupTextSize="46sp"
-        app:fastScrollThumbColor="@color/FlatBlue"
+        app:fastScrollThumbColor="@color/flatBlue"
 
         />
 <!--/android.support.v4.widget.SwipeRefreshLayout-->

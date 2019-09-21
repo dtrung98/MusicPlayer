@@ -138,7 +138,7 @@
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
         android:text="@string/delete_from_device"
-        android:textColor="@color/FlatRed"
+        android:textColor="@color/flatRed"
         android:textSize="16sp" />
 
 </LinearLayout>

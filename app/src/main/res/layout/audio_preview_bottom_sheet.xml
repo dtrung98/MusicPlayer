@@ -22,5 +22,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="60dp"
-        app:indicatorColor="@color/FlatBlue"/>
+        app:indicatorColor="@color/flatBlue"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

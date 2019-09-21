@@ -43,7 +43,7 @@ public class IntroStepOneFragment extends SupportFragment implements MainActivit
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
-        mSwipeRefresh.setColorSchemeResources(R.color.FlatBlue);
+        mSwipeRefresh.setColorSchemeResources(R.color.flatBlue);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
     }
 

@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#66232335">
+    xmlns:tools="http://schemas.android.com/tools">
     <com.ldt.bubblepicker.rendering.java.gltexture.TextureBubblePicker
         android:id="@+id/bubble_picker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:backgroundColor="#FB181818"/>
+        app:backgroundColor="@color/library_back_color"
+        android:layout_marginBottom="@dimen/minimum_bottom_back_stack_margin"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

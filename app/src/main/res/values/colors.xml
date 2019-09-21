@@ -8,14 +8,14 @@
     <color name="colorAccent">@color/FlatOrange</color>
     <color name = "Gray">#22000000</color>
     <color name="NearlyWhite">#44ffffff</color>
-    <color name="FlatRed">#FF3B30</color>
+    <color name="flatRed">#FF3B30</color>
     <color name="FlatGreen">#4CD964</color>
     <color name="FlatOrange">#FF9500</color>
     <color name="FlatYellow">#FFCC00</color>
     <color name="FlatTealBlue">#5AC8FA</color>
-    <color name="FlatPurple">#5856D6</color>
+    <color name="flatPurple">#5856D6</color>
     <color name="FlatPink">#FF2D55</color>
-    <color name="FlatBlue">#007AFF</color>
+    <color name="flatBlue">#007AFF</color>
 
     <color name="HeavyOrange">#AF8700</color>
     <color name="HeavyRed">#770000</color>
@@ -57,7 +57,7 @@
     <color name="twenty_percent_black_overlay">#34000000</color>
     <color name="fifty_percent_black_overlay">#88000000</color>
 
-    <color name="app_shortcut_default_foreground">@color/FlatBlue</color>
+    <color name="app_shortcut_default_foreground">@color/flatBlue</color>
     <color name="app_shortcut_default_background">@color/FlatTealBlue</color>
     <color name="lyric_end_color">#DD080808</color>
     <color name="lyric_center_color">#66080808</color>
@@ -72,6 +72,13 @@
     <color name="FloatingButtonColor">#FBFFBD</color>
     <color name="SplashColor">@android:color/black</color>
 
+    <color name="Tomato">#ff6347</color>
+    <color name="lightOrange">#ffaa00</color>
+    <color name="lightGreen">#3dcc3d</color>
+    <color name="lightBlue">#00aaff</color>
+    <color name="lightTealBlue">#2bd9d9</color>
+    <color name="LightYellow">#ffd426</color>
+
     <color name="blueStart">#4EFFF3</color>
     <color name="blueEnd">#0ca6f9</color>
     <color name="purpleStart">#a369ff</color>
@@ -80,4 +87,5 @@
     <color name="roseEnd">#ef0276</color>
     <color name="greenStart">#a7f56e</color>
     <color name="greenEnd">#11c612</color>
+    <color name="flatGreenEnd">#00BF84</color>
 </resources>

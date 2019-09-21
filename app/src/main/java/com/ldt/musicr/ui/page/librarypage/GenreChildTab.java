@@ -101,8 +101,8 @@ public class GenreChildTab extends Fragment {
 
         TypedArray colors = getResources().obtainTypedArray(R.array.colors);
 
-        mBubblePicker.setBubbleSize(18);
-        Item.Companion.setBitmapSize(128f);
+        mBubblePicker.setBubbleSize(24);
+        Item.Companion.setBitmapSize(144f);
         Item.Companion.setTextSizeRatio(40f/280);
 
         mAdapter = new BubblePickerAdapter() {
@@ -117,8 +117,8 @@ public class GenreChildTab extends Fragment {
             public PickerItem getItem(int position) {
                 PickerItem item = new PickerItem();
                 item.setTitle(mGenres.get(position).name);
-                item.setGradient( new BubbleGradient(colors.getColor((position * 2) % 8, 0),
-                            colors.getColor((position * 2) % 8 + 1, 0), BubbleGradient.VERTICAL));
+                item.setGradient( new BubbleGradient(colors.getColor((position * 2) % 10, 0),
+                            colors.getColor((position * 2) % 10 + 1, 0), BubbleGradient.VERTICAL));
                 item.setTypeface(mMediumTypeface);
 
                  item.setTextColor(ContextCompat.getColor(mBubblePicker.getContext(), android.R.color.white));

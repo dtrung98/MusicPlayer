@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
-        android:tint="@color/FlatBlue"
+        android:tint="@color/flatBlue"
         android:layout_marginTop="2dp"
         />
 
@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/down"
         app:layout_constraintHorizontal_chainStyle="packed"
-        android:textColor="@color/FlatBlue"
+        android:textColor="@color/flatBlue"
         android:textSize="14sp"
         android:textStyle="bold"
         android:text="All Songs"

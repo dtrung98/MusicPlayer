@@ -118,7 +118,7 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
             if(options[i]==R.string.delete_from_playlist)
                 view.setTextColor(context.getResources().getColor(R.color.FlatOrange));
             else if(options[i]==R.string.delete_from_device)
-                view.setTextColor(context.getResources().getColor(R.color.FlatRed));
+                view.setTextColor(context.getResources().getColor(R.color.flatRed));
             else
             view.setTextColor(context.getResources().getColor(R.color.md_bottom_sheet_text_color));
 
