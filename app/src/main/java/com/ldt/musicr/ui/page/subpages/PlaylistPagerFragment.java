@@ -235,7 +235,7 @@ public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment imple
             mPreviewBitmap = null;
         }
         setName();
-        mSwipeRefresh.setColorSchemeResources(R.color.FlatOrange);
+        mSwipeRefresh.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
     }
 

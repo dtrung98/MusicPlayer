@@ -46,7 +46,7 @@ public class FeatureTabFragment extends BaseMusicServiceSupportFragment implemen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.FlatOrange);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
 
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);

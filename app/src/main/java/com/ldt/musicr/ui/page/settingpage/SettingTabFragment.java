@@ -112,13 +112,13 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment implemen
             if(mIsEnglish) {
                 mSwitchToEn.setBackgroundResource(R.drawable.ripple_16dp_solid_left);
                 mSwitchToVi.setBackgroundResource(R.drawable.ripple_16dp_border_right);
-                mSwitchToEn.setTextColor(getResources().getColor(R.color.FlatOrange));
+                mSwitchToEn.setTextColor(getResources().getColor(R.color.flatOrange));
                 mSwitchToVi.setTextColor(getResources().getColor(R.color.FlatWhite));
             } else {
                 mSwitchToEn.setBackgroundResource(R.drawable.ripple_16dp_border_left);
                 mSwitchToVi.setBackgroundResource(R.drawable.ripple_16dp_solid_right);
                 mSwitchToEn.setTextColor(getResources().getColor(R.color.FlatWhite));
-                mSwitchToVi.setTextColor(getResources().getColor(R.color.FlatOrange));
+                mSwitchToVi.setTextColor(getResources().getColor(R.color.flatOrange));
 
             }
         }

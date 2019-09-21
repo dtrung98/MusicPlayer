@@ -77,7 +77,7 @@
                 android:layout_marginEnd="?attr/actionBarSize"
                 android:minHeight="30dp"
                 android:text="@string/songs"
-                android:textColor="@color/FlatOrange"
+                android:textColor="@color/flatOrange"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:maxLines="2"
@@ -189,11 +189,11 @@
         app:fastScrollAutoHide="true"
         app:fastScrollAutoHideDelay="1500"
         app:fastScrollPopupBackgroundSize="88dp"
-        app:fastScrollPopupBgColor="@color/FlatOrange"
+        app:fastScrollPopupBgColor="@color/flatOrange"
         app:fastScrollPopupPosition="adjacent"
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
         app:fastScrollPopupTextSize="46sp"
-        app:fastScrollThumbColor="@color/FlatOrange"
+        app:fastScrollThumbColor="@color/flatOrange"
        />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

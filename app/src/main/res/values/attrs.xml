@@ -165,12 +165,21 @@
     <attr name="rsb_thumb_scale_ratio" format="float"/>
     </declare-styleable>
 
-    <declare-styleable name="BubblePickerX">
+    <declare-styleable name="BubblePicker">
+        <attr name="maxSelectedCount" format="integer" />
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="JBubblePicker">
         <attr name="ballNumber" format="integer"/>
         <attr name="ballColor" format="color"/>
         <attr name="minBallSize" format="dimension"/>
         <attr name="maxBallSize" format="dimension"/>
         <attr name="ballDistance" format="dimension"/>
         <attr name="gravityPosition" format="float"/>
+        <attr name="mode" format="enum">
+            <enum name="click" value="0"/>
+            <enum name="select" value="1"/>
+            <enum name="selectCount" value="2"/>
+        </attr>
     </declare-styleable>
 </resources>

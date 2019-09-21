@@ -44,7 +44,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:gravity="center"
-        android:textColor="@color/FlatOrange"
+        android:textColor="@color/flatOrange"
         android:background="@drawable/count_round_drawable"/>
     <View
         android:id="@+id/refresh_front"

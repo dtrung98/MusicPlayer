@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <com.ldt.bubblepicker.rendering.java.gltexture.TextureBubblePicker
+    <com.ldt.musicr.ui.widget.bubblepicker.rendering.java.gltexture.TextureBubblePicker
         android:id="@+id/bubble_picker"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:backgroundColor="@color/library_back_color"

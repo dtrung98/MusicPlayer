@@ -4,7 +4,7 @@
         <item name="android:windowBackground">@color/SplashColor</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
     </style>
@@ -12,7 +12,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
     </style>
@@ -20,7 +20,7 @@
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
     </style>
@@ -40,9 +40,9 @@
     </style>
 
     <style name="Flat_OrangeTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatOrange</item>
-        <item name="colorPrimaryDark">@color/FlatOrange</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorPrimary">@color/flatOrange</item>
+        <item name="colorPrimaryDark">@color/flatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
     </style>
 
     <style name="Flat_YellowTheme" parent="Theme.AppCompat.NoActionBar">

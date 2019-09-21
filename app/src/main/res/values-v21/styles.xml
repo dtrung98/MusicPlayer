@@ -9,7 +9,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -19,7 +19,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -29,7 +29,7 @@
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/FlatOrange</item>
+        <item name="colorAccent">@color/flatOrange</item>
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

@@ -16,20 +16,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.ldt.bubblepicker.BubblePickerListener;
-import com.ldt.bubblepicker.adapter.BubblePickerAdapter;
-import com.ldt.bubblepicker.model.BubbleGradient;
-import com.ldt.bubblepicker.model.PickerItem;
-import com.ldt.bubblepicker.rendering.BubblePicker;
-import com.ldt.bubblepicker.rendering.Item;
-import com.ldt.bubblepicker.rendering.java.gltexture.TextureBubblePicker;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.medialoader.GenreLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener;
+import com.ldt.musicr.ui.widget.bubblepicker.adapter.BubblePickerAdapter;
+import com.ldt.musicr.ui.widget.bubblepicker.model.BubbleGradient;
+import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item;
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.java.gltexture.TextureBubblePicker;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -144,5 +142,16 @@ public class GenreChildTab extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mBubblePicker.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mBubblePicker.onPause();
+        super.onPause();
+    }
 }
 

@@ -76,7 +76,7 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
         if(context ==null) throw new NullPointerException();
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        float dp_8 = context.getResources().getDimension(R.dimen.dp_8);
+        float dp_8 = context.getResources().getDimension(R.dimen._8dp);
         float dp = context.getResources().getDimension(R.dimen.oneDP);
         root.setPadding((int)(dp*3),(int)(dp_8),(int)(dp*3),(int)(dp_8));
         root.setOrientation(LinearLayout.VERTICAL);
@@ -116,7 +116,7 @@ public class OptionBottomSheet extends BottomSheetDialogFragment implements View
             view.setTypeface(Typeface.DEFAULT_BOLD);
 
             if(options[i]==R.string.delete_from_playlist)
-                view.setTextColor(context.getResources().getColor(R.color.FlatOrange));
+                view.setTextColor(context.getResources().getColor(R.color.flatOrange));
             else if(options[i]==R.string.delete_from_device)
                 view.setTextColor(context.getResources().getColor(R.color.flatRed));
             else

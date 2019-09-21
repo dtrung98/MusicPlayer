@@ -5,12 +5,12 @@
     <color name="backward_color">#DD000000</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">@color/FlatOrange</color>
+    <color name="colorAccent">@color/flatOrange</color>
     <color name = "Gray">#22000000</color>
     <color name="NearlyWhite">#44ffffff</color>
     <color name="flatRed">#FF3B30</color>
     <color name="FlatGreen">#4CD964</color>
-    <color name="FlatOrange">#FF9500</color>
+    <color name="flatOrange">#FF9500</color>
     <color name="FlatYellow">#FFCC00</color>
     <color name="FlatTealBlue">#5AC8FA</color>
     <color name="flatPurple">#5856D6</color>
