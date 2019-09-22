@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.page.librarypage.artist.ArtistChildTab;
+import com.ldt.musicr.ui.page.librarypage.genre.GenreChildTab;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildTab;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
@@ -33,9 +34,19 @@ public class LibraryTabFragment extends SupportFragment {
     SearchView mSearchView;
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
+
+    public ViewPager getViewPager() {
+        return mViewPager;
+    }
+
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
-    LibraryPagerAdapter mPagerAdapter;
+
+    public LibraryPagerAdapter getPagerAdapter() {
+        return mPagerAdapter;
+    }
+
+    private LibraryPagerAdapter mPagerAdapter;
     @BindView(R.id.status_bar) View mStatusView;
     @BindView(R.id.root)
     MotionLayout mMotionLayout;

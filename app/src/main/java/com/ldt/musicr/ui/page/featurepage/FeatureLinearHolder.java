@@ -88,7 +88,7 @@ public class FeatureLinearHolder {
             if(mContext instanceof MainActivity) {
                 BackStackController controller = ((MainActivity) mContext).getBackStackController();
                 if (controller != null) {
-                    LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab();
+                    LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
                     if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(PlaylistChildTab.TAG);
                 }
             }
@@ -137,7 +137,7 @@ public class FeatureLinearHolder {
             if(mContext instanceof MainActivity) {
                 BackStackController controller = ((MainActivity) mContext).getBackStackController();
                 if (controller != null) {
-                  LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab();
+                  LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
                           if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(SongChildTab.TAG);
                 }
             }

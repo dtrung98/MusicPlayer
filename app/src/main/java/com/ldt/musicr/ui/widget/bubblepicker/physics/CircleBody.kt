@@ -61,7 +61,8 @@ class CircleBody(val world: World, var position: Vec2, var radius: Float, var in
     }
 
     private fun initializeBody() {
-        physicalBody = world.createBody(bodyDef).apply {
+        physicalBody = world.createBody(bodyDef)
+                physicalBody.apply {
             createFixture(fixture)
             linearDamping = damping
         }

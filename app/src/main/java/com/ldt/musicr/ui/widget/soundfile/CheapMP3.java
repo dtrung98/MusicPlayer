@@ -214,7 +214,7 @@ public class CheapMP3 extends CheapSoundFile {
                 // doubling the array each time, we estimate the exact
                 // number of frames we need and add 10% padding.  In
                 // practice this seems to work quite well, only one
-                // resize is ever needed, however to avoid pathological
+                // onTap is ever needed, however to avoid pathological
                 // cases we make sure to always double the size at a minimum.
 
                 mAvgBitRate = mBitrateSum / mNumFrames;

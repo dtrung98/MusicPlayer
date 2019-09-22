@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.page.librarypage.artist.ArtistChildTab;
+import com.ldt.musicr.ui.page.librarypage.genre.GenreChildTab;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildTab;
 
@@ -14,6 +15,11 @@ import java.util.ArrayList;
 
 public class LibraryPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
+
+    public ArrayList<Fragment> getData() {
+        return mData;
+    }
+
     private ArrayList<Fragment> mData = new ArrayList<>();
     private void initData() {
         mData.add(new SongChildTab());

@@ -84,12 +84,20 @@ public class NavigationUtil {
         if (activity instanceof MainActivity) {
             final MainActivity mainActivity = (MainActivity) activity;
 
-            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab();
+            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
 
             navigateToBackStackController(mainActivity);
         }
+    }
+
+    public static LibraryTabFragment getLibraryTab( Activity activity) {
+        if(activity instanceof  MainActivity) {
+            final  MainActivity mainActivity = (MainActivity) activity;
+            return mainActivity.getBackStackController().navigateToLibraryTab(false);
+        }
+        return null;
     }
 
     public static void navigateToAlbum(@NonNull final Activity activity, final int albumId) {
@@ -104,7 +112,7 @@ public class NavigationUtil {
         if (activity instanceof MainActivity) {
             final MainActivity mainActivity = (MainActivity) activity;
 
-            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab();
+            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(PlaylistPagerFragment.newInstance(activity,playlist,null));
             navigateToBackStackController(mainActivity);

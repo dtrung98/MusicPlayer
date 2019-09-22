@@ -190,15 +190,16 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         return this;
     }
 
-    public LibraryTabFragment navigateToLibraryTab() {
-       Fragment fragment = navigateToTab(1);
+    public LibraryTabFragment navigateToLibraryTab(boolean go) {
+       Fragment fragment = navigateToTab(1,go);
        if(fragment instanceof LibraryTabFragment) {
            return (LibraryTabFragment)fragment;
        }
        return null;
     }
 
-    public Fragment navigateToTab(int item) {
+    public Fragment navigateToTab(int item, boolean go) {
+        if(go)
         mViewPager.setCurrentItem(item);
         Fragment fragment = mNavigationAdapter.getItem(1);
         if(fragment instanceof NavigateFragment) {

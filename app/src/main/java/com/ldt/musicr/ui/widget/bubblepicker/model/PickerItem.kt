@@ -10,6 +10,7 @@ import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item
  */
 data class PickerItem @JvmOverloads constructor(var title: String? = null,
                                                 var icon: Drawable? = null,
+                                                var iconSizeUnit: Float = 1f,
                                                 var iconOnTop: Boolean = true,
                                                 @ColorInt var color: Int? = null,
                                                 var gradient: BubbleGradient? = null,
@@ -19,4 +20,8 @@ data class PickerItem @JvmOverloads constructor(var title: String? = null,
                                                 var textSize: Float = Item.textSize,
                                                 var backgroundImage: Drawable? = null,
                                                 var isSelected: Boolean = false,
-                                                var customData: Any? = null)
+                                                var customData: Any? = null) {
+    companion object {
+        const val SIZE_RANDOM = -1f
+    }
+}

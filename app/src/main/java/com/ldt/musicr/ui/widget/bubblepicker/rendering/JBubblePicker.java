@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.widget.bubblepicker.rendering.java;
+package com.ldt.musicr.ui.widget.bubblepicker.rendering;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,7 +13,6 @@ import android.view.TextureView;
 
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.widget.bubblepicker.adapter.BubblePickerAdapter;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
 
 import java.util.ArrayList;
@@ -192,17 +191,17 @@ public class JBubblePicker extends TextureView implements TextureView.SurfaceTex
     private PointF mGravityPoint = new PointF(0,0);
     private ArrayList<PickerItem> mItems = new ArrayList<>();
 
-    public BubblePickerAdapter getAdapter() {
+    public Adapter getAdapter() {
         return mAdapter;
     }
 
-    public void setAdapter(BubblePickerAdapter adapter) {
+    public void setAdapter(Adapter adapter) {
         mAdapter = adapter;
     }
 
     private int mMaxSelectedCount;
 
-    private BubblePickerAdapter mAdapter;
+    private Adapter mAdapter;
 
     private boolean mIsResuming = true;
 

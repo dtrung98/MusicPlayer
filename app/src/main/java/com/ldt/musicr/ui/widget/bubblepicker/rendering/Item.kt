@@ -43,9 +43,6 @@ data class Item(val pickerItem: PickerItem, val circleBody: CircleBody) {
         get() = if (circleBody.increased || circleBody.isIncreasing) imageTexture else texture
     public companion object {
         var bitmapSize = 64f
-            set(value) {
-                field = value
-            }
 
         var textSizeRatio = 40f/256
         set(value) {
@@ -177,7 +174,7 @@ data class Item(val pickerItem: PickerItem, val circleBody: CircleBody) {
 
     private fun bindTexture(textureIds: IntArray, index: Int, withImage: Boolean): Int {
         glGenTextures(1, textureIds, index)
-        createBitmap(withImage).toTexture(textureIds[index])
+        createBitmap(withImage||true).toTexture(textureIds[index])
         return textureIds[index]
     }
 

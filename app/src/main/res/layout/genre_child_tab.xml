@@ -4,11 +4,22 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <com.ldt.musicr.ui.widget.bubblepicker.rendering.java.gltexture.TextureBubblePicker
+    <com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker
         android:id="@+id/bubble_picker"
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:backgroundColor="@color/library_back_color"
-        android:layout_marginBottom="@dimen/minimum_bottom_back_stack_margin"/>
+        />
+    <ImageView
+        android:id="@+id/refresh"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/refresh"
+        android:tint="@color/flatOrange"
+        android:padding="10dp"
+        android:background="@drawable/background_item_song_in_artist"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

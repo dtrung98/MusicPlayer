@@ -1,21 +1,19 @@
 package com.ldt.musicr.ui.widget.bubblepicker.rendering
 
 import android.content.Context
-import android.graphics.PixelFormat
-import android.opengl.GLSurfaceView
 import androidx.annotation.ColorInt
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.ldt.musicr.R
+import com.ldt.musicr.ui.widget.GLTextureView
 import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener
-import com.ldt.musicr.ui.widget.bubblepicker.adapter.BubblePickerAdapter
 import com.ldt.musicr.ui.widget.bubblepicker.model.Color
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem
 
 /**
  * Created by irinagalata on 1/19/17.
  */
-class BubblePicker : GLSurfaceView {
+class BubblePicker : GLTextureView {
 
     // Background variable
     @ColorInt var background: Int = 0
@@ -26,20 +24,18 @@ class BubblePicker : GLSurfaceView {
 
     //
     @Deprecated(level = DeprecationLevel.WARNING,
-            message = "Use BubblePickerAdapter for the view setup instead")
+            message = "Use Adapter for the view setup instead")
     var items: ArrayList<PickerItem>? = null
         set(value) {
             field = value
             renderer.items = value ?: ArrayList()
         }
 
-    var adapter: BubblePickerAdapter? = null
+    var adapter: Adapter? = null
         set(value) {
             field = value
-            if (value != null) {
-                renderer.items = ArrayList((0..value.totalCount - 1)
-                        .map { value.getItem(it) }.toList())
-            }
+            renderer.adapter = value
+            value?.attach(this)
         }
 
     var maxSelectedCount: Int? = null
@@ -58,8 +54,8 @@ class BubblePicker : GLSurfaceView {
         set(value) {
             if (value in 1..100) {
                 renderer.bubbleSize = value
-                field = value
             }
+            field = value
         }
 
     val selectedItems: List<PickerItem?>
@@ -71,7 +67,7 @@ class BubblePicker : GLSurfaceView {
             renderer.centerImmediately = value
         }
 
-    private val renderer = PickerRenderer(this)
+    val renderer = TexturePickerRenderer(this)
     private var startX = 0f
     private var startY = 0f
     private var previousX = 0f
@@ -79,13 +75,13 @@ class BubblePicker : GLSurfaceView {
 
     constructor(context: Context?) : this(context, null)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        setZOrderOnTop(true)
+        //setZOrderOnTop(true)
         setEGLContextClientVersion(2)
         setEGLConfigChooser(8, 8, 8, 8, 16, 0)
-        holder.setFormat(PixelFormat.RGBA_8888)
+        //holder.setFormat(PixelFormat.RGBA_8888)
         setRenderer(renderer)
         renderMode = RENDERMODE_CONTINUOUSLY
-        attrs?.let { retrieveAttrubutes(attrs) }
+        attrs?.let { retrieveAttributes(attrs) }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -97,7 +93,7 @@ class BubblePicker : GLSurfaceView {
                 previousY = event.y
             }
             MotionEvent.ACTION_UP -> {
-                if (isClick(event)) renderer.resize(event.x, event.y)
+                if (isClick(event)) renderer.onTap(event.x, event.y)
                 renderer.release()
             }
             MotionEvent.ACTION_MOVE -> {
@@ -121,7 +117,7 @@ class BubblePicker : GLSurfaceView {
 
     private fun isSwipe(event: MotionEvent) = Math.abs(event.x - previousX) > 20 && Math.abs(event.y - previousY) > 20
 
-    private fun retrieveAttrubutes(attrs: AttributeSet) {
+    private fun retrieveAttributes(attrs: AttributeSet) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.BubblePicker)
 
         if (array.hasValue(R.styleable.BubblePicker_maxSelectedCount)) {

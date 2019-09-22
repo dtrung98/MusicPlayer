@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.widget.bubblepicker.rendering.java.gltexture;
+package com.ldt.musicr.ui.widget;
 
 import java.io.Writer;
 import java.lang.ref.WeakReference;
@@ -1557,7 +1557,7 @@ public class GLTextureView
                 mRenderComplete = false;
                 sGLThreadManager.notifyAll();
 
-                // Wait for thread to react to resize and render a frame
+                // Wait for thread to react to onTap and render a frame
                 while (! mExited && !mPaused && !mRenderComplete
                         && ableToDraw()) {
                     if (LOG_SURFACE) {
