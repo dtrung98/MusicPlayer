@@ -18,7 +18,7 @@ import org.jbox2d.common.Vec2
 /**
  * Created by irinagalata on 1/19/17.
  */
-data class Item(val pickerItem: PickerItem, val circleBody: CircleBody) {
+data class CircleRenderItem(val pickerItem: PickerItem, val circleBody: CircleBody) {
 
     val x: Float
         get() = circleBody.physicalBody.position.x

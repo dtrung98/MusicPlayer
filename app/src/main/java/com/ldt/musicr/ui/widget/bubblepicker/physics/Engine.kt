@@ -1,7 +1,7 @@
 package com.ldt.musicr.ui.widget.bubblepicker.physics
 
 import android.util.Log
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem
 import com.ldt.musicr.ui.widget.bubblepicker.sqr
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
@@ -39,7 +39,7 @@ object Engine {
     private var gravityCenter = Vec2(0f, 0f)
     private val currentGravity: Float
         get() = if (touch) increasedGravity else gravity
-    private val toBeResized = ArrayList<Item>()
+    private val toBeResized = ArrayList<CircleRenderItem>()
     private val startX
         get() = if (centerImmediately) 0.5f else 2.2f
     private var stepsCount = 0
@@ -123,7 +123,7 @@ object Engine {
         bodies.clear()
     }
 
-    fun resize(item: Item): Boolean {
+    fun resize(item: CircleRenderItem): Boolean {
         if (selectedBodies.size >= maxSelectedCount ?: bodies.size && !item.circleBody.increased) return false
 
         if (item.circleBody.isBusy) return false

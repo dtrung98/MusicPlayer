@@ -1,29 +1,15 @@
 package com.ldt.musicr.ui.page.subpages;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
-import com.github.chrisbanes.photoview.PhotoView;
 import com.ldt.musicr.R;
-import com.ldt.musicr.contract.AbsMediaAdapter;
-import com.ldt.musicr.glide.ArtistGlideRequest;
-import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.loader.medialoader.GenreLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
@@ -31,27 +17,22 @@ import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
-import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.librarypage.genre.ArtistPickerAdapter;
-import com.ldt.musicr.ui.page.librarypage.genre.GenreChildTab;
 import com.ldt.musicr.ui.page.librarypage.genre.GenrePickerAdapter;
 import com.ldt.musicr.ui.page.librarypage.genre.SongPickerAdapter;
 import com.ldt.musicr.ui.widget.bubblepicker.SampleAdapter;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item;
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
-import com.ldt.musicr.util.NavigationUtil;
 
-import java.lang.ref.WeakReference;
 import java.util.Arrays;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class BubblePickerFragment extends BaseMusicServiceSupportFragment  implements PickerAdapter.PickerListener {
     public static final String TAG="GenreChildTab";
@@ -117,8 +98,8 @@ public class BubblePickerFragment extends BaseMusicServiceSupportFragment  imple
     public void initBubblePicker() {
 
         mBubblePicker.setBubbleSize(10);
-        Item.Companion.setBitmapSize(144f);
-        Item.Companion.setTextSizeRatio(40f/280);
+        CircleRenderItem.Companion.setBitmapSize(144f);
+        CircleRenderItem.Companion.setTextSizeRatio(40f/280);
 
         mAdapter = new SampleAdapter(getContext());
         mAdapter.setListener(this);

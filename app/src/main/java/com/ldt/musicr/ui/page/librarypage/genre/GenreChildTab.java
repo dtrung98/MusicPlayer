@@ -20,10 +20,9 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.page.subpages.BubblePickerFragment;
 import com.ldt.musicr.ui.widget.bubblepicker.SampleAdapter;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item;
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
@@ -149,8 +148,8 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
     public void initBubblePicker() {
 
         mBubblePicker.setBubbleSize(10);
-        Item.Companion.setBitmapSize(144f);
-        Item.Companion.setTextSizeRatio(40f/280);
+        CircleRenderItem.Companion.setBitmapSize(144f);
+        CircleRenderItem.Companion.setTextSizeRatio(40f/280);
 
         mAdapter = new SampleAdapter(getContext());
         mAdapter.setListener(this);

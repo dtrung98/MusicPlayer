@@ -44,7 +44,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     var listener: BubblePickerListener? = null
     var items: ArrayList<PickerItem> = ArrayList()
     val selectedItems: List<PickerItem?>
-        get() = Engine.selectedBodies.map { circles.firstOrNull { circle -> circle.circleBody == it }?.pickerItem }
+        get() = Engine.selectedBodies.map { renderCircles.firstOrNull { circle -> circle.circleBody == it }?.pickerItem }
     var centerImmediately = false
         set(value) {
             field = value
@@ -97,7 +97,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         // if scaleY is w/h if h > w, else 1
     private val scaleY: Float
         get() = if (glView.width < glView.height) 1f else glView.width.toFloat() / glView.height.toFloat()
-    private val circles = ArrayList<Item>()
+    private val renderCircles = ArrayList<CircleRenderItem>()
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(backgroundColor?.red ?: 1f, backgroundColor?.green ?: 1f,
@@ -113,6 +113,12 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         //  destroy everything ?
     }
 
+    private fun recreate() {
+        synchronized(renderCircles) {
+
+        }
+    }
+
     override fun onDrawFrame(gl: GL10?) {
         calculateVertices()
         Engine.move()
@@ -122,39 +128,40 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     private fun initialize() {
 
         Engine.centerImmediately = centerImmediately
-        synchronized(circles) {
-            Engine.build(items.size, scaleX, scaleY).forEachIndexed { index, body ->
-                circles.add(Item(items[index], body))
+        synchronized(renderCircles) {
+            val list = Engine.build(items.size, scaleX, scaleY)
+            list.forEachIndexed { index, item ->
+                renderCircles.add(CircleRenderItem(items[index], item))
             }
         }
 
         if(items.isNotEmpty()) {
-            items.forEach { if (it.isSelected) Engine.resize(circles.first { circle -> circle.pickerItem == it }) }
-            if (textureIds == null) textureIds = IntArray(circles.size * 2)
+            items.forEach { if (it.isSelected) Engine.resize(renderCircles.first { circle -> circle.pickerItem == it }) }
+            if (textureIds == null) textureIds = IntArray(renderCircles.size * 2)
             initializeArrays()
         }
     }
 
     private fun initializeArrays() {
-        vertices = FloatArray(circles.size * 8)
-        textureVertices = FloatArray(circles.size * 8)
-        circles.forEachIndexed { i, item -> initializeItem(item, i) }
+        vertices = FloatArray(renderCircles.size * 8)
+        textureVertices = FloatArray(renderCircles.size * 8)
+        renderCircles.forEachIndexed { i, item -> initializeItem(item, i) }
         verticesBuffer = vertices?.toFloatBuffer()
         uvBuffer = textureVertices?.toFloatBuffer()
     }
 
-    private fun initializeItem(item: Item, index: Int) {
+    private fun initializeItem(item: CircleRenderItem, index: Int) {
         initializeVertices(item, index)
         textureVertices?.passTextureVertices(index)
         item.bindTextures(textureIds ?: IntArray(0), index)
     }
 
     private fun calculateVertices() {
-        circles.forEachIndexed { i, item -> initializeVertices(item, i) }
+        renderCircles.forEachIndexed { i, item -> initializeVertices(item, i) }
         vertices?.forEachIndexed { i, float -> verticesBuffer?.put(i, float) }
     }
 
-    private fun initializeVertices(body: Item, index: Int) {
+    private fun initializeVertices(body: CircleRenderItem, index: Int) {
         val radius = body.radius
         val radiusX = radius * scaleX
         val radiusY = radius * scaleY
@@ -172,8 +179,8 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         verticesBuffer?.passToShader(programId, A_POSITION)
         uvBuffer?.passToShader(programId, A_UV)
 
-        synchronized(circles) {
-            circles.forEachIndexed { i, circle ->
+        synchronized(renderCircles) {
+            renderCircles.forEachIndexed { i, circle ->
                 circle.drawItself(programId, i, scaleX, scaleY)
             }
         }
@@ -209,19 +216,19 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     private fun getItemPos(position: Vec2) = position.let {
         val x = it.x.convertPoint(glView.width, scaleX)
         val y = it.y.convertPoint(glView.height, scaleY)
-        circles.indexOfFirst { sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
+        renderCircles.indexOfFirst { sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
        // circles.find { Math.sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
     }
 
     private fun getItem(position: Vec2) = position.let {
         val x = it.x.convertPoint(glView.width, scaleX)
         val y = it.y.convertPoint(glView.height, scaleY)
-         circles.find { Math.sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
+         renderCircles.find { Math.sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
     }
 
     fun onTap(x: Float, y: Float) = getItemPos(Vec2(x, glView.height - y)).apply {
         if (this >= 0) {
-            val item = circles[this]
+            val item = renderCircles[this]
             if (Engine.resize(item)) {
                 listener?.let {
                     if (item.circleBody.increased) it.onBubbleDeselected(item.pickerItem, this) else it.onBubbleSelected(item.pickerItem, this)
@@ -232,8 +239,8 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
 
     private fun clear() {
 
-        synchronized(circles) {
-            circles.clear()
+        synchronized(renderCircles) {
+            renderCircles.clear()
         }
 
         synchronized(Engine) {
