@@ -4,9 +4,6 @@ import org.jbox2d.collision.shapes.PolygonShape
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.*
 
-/**
- * Created by irinagalata on 1/27/17.
- */
 class Border(world: World, var position: Vec2, var view: Int) {
 
     companion object {
@@ -16,7 +13,7 @@ class Border(world: World, var position: Vec2, var view: Int) {
 
     var itemBody: Body
 
-    private val shape: PolygonShape
+    private val shape : PolygonShape
         get() {
             return PolygonShape().apply {
                 if (view == HORIZONTAL) {

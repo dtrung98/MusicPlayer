@@ -48,6 +48,11 @@ public class LibraryTabFragment extends SupportFragment {
 
     private LibraryPagerAdapter mPagerAdapter;
     @BindView(R.id.status_bar) View mStatusView;
+
+    public MotionLayout getMotionLayout() {
+        return mMotionLayout;
+    }
+
     @BindView(R.id.root)
     MotionLayout mMotionLayout;
 

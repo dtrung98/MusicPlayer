@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.widget.bubblepicker.physics
 
+import android.util.Log
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item
 import com.ldt.musicr.ui.widget.bubblepicker.sqr
 import org.jbox2d.common.Vec2
@@ -23,10 +24,10 @@ object Engine {
         }
     var centerImmediately = false
     private var standardIncreasedGravity = interpolate(500f, 800f, 0.5f)
-    private var bubbleRadius = 0.17f
+    private var bubbleRadius = 0.17f // 0.166666 = 1/60
 
     private val world = World(Vec2(0f, 0f), false)
-    private val step = 0.0005f
+    private val step = 0.0005f // = 5ms for a loop
     private val bodies: ArrayList<CircleBody> = ArrayList()
     private var borders: ArrayList<Border> = ArrayList()
     private val resizeStep = 0.005f
@@ -49,10 +50,11 @@ object Engine {
         for (i in 0..bodiesCount - 1) {
             val x = if (rnd.nextBoolean()) -startX else startX
             val y = if (rnd.nextBoolean()) -0.5f / scaleY else 0.5f / scaleY
-            val randomSize =  rnd.nextInt(100)/100f
-            val size = bubbleRadius * interpolate(0.5f,1.5f,randomSize)
+            var randomSize =  rnd.nextInt(100)/100f
+            val size = 1f//bubbleRadius * interpolate(0.5f,1.5f,randomSize)
             bodies.add(CircleBody(world, Vec2(x, y), size* scaleX, (size * scaleX) * 1.3f, density))
         }
+
         this.scaleX = scaleX
         this.scaleY = scaleY
         createBorders()
@@ -60,9 +62,39 @@ object Engine {
         return bodies
     }
 
+    private var firstTime = true
+    private var mStartTime: Long = 0
+    private var mDeltaInMilli: Long = 0
+    private var mDeltaInSecond: Float = 0f
+    private var mTotalRunningTime: Long = 0
+    private var mFrames: Long = 0
+    private val FRAME_INTERVAL = 1000f / 60
+
+    private fun recordValue() {
+        if(firstTime) {
+            mFrames = 0
+            mDeltaInMilli = 0
+            mTotalRunningTime = 0
+            mStartTime = System.currentTimeMillis()
+            firstTime = false
+        } else {
+            val current = System.currentTimeMillis()
+            mDeltaInMilli = current - mStartTime - mTotalRunningTime
+
+            mTotalRunningTime += mDeltaInMilli
+            mFrames++
+        }
+        mDeltaInSecond = mDeltaInMilli/1000f
+        Log.i("Engine","delta = "+ mDeltaInMilli)
+    }
+
     fun move() {
+        recordValue()
         toBeResized.forEach { it.circleBody.resize(resizeStep) }
-        world.step(if (centerImmediately) 0.035f else step, 11, 11)
+        // if centerImmediately, everything renders 7x faster than normal
+        // why and how ???
+        mDeltaInSecond = step
+        world.step(if (centerImmediately) mDeltaInSecond*7 else mDeltaInSecond, 11, 11)
         bodies.forEach { move(it) }
         toBeResized.removeAll(toBeResized.filter { it.circleBody.finished })
         stepsCount++
@@ -105,8 +137,8 @@ object Engine {
 
     private fun createBorders() {
         borders = arrayListOf(
-                Border(world, Vec2(0f, 0.5f / scaleY), Border.HORIZONTAL),
-                Border(world, Vec2(0f, -0.5f / scaleY), Border.HORIZONTAL)
+                Border(world, Vec2(0f, 2.5f / scaleY), Border.HORIZONTAL),
+                Border(world, Vec2(0f, -2.5f / scaleY), Border.HORIZONTAL)
         )
     }
 

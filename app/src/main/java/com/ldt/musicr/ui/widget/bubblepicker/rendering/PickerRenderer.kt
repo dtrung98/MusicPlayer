@@ -19,10 +19,8 @@ import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 import kotlin.collections.ArrayList
+import kotlin.math.sqrt
 
-/**
- * Created by irinagalata on 1/19/17.
- */
 inline val <reified T> T.TAG: String
     get() = T::class.java.simpleName
 
@@ -36,11 +34,13 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
             Engine.maxSelectedCount = value
             field = value
         }
+
     var bubbleSize = 50
         set(value) {
             Engine.radius = value
             field = value
         }
+
     var listener: BubblePickerListener? = null
     var items: ArrayList<PickerItem> = ArrayList()
     val selectedItems: List<PickerItem?>
@@ -91,7 +91,10 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     private var textureIds: IntArray? = null
 
     private val scaleX: Float
+        // if scaleX is h/w if w < h (this means scaleX > 1), else 1
         get() = if (glView.width < glView.height) glView.height.toFloat() / glView.width.toFloat() else 1f
+
+        // if scaleY is w/h if h > w, else 1
     private val scaleY: Float
         get() = if (glView.width < glView.height) 1f else glView.width.toFloat() / glView.height.toFloat()
     private val circles = ArrayList<Item>()
@@ -106,6 +109,8 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         glViewport(0, 0, width, height)
         clear()
         initialize()
+        // what happen when surface changed ?
+        //  destroy everything ?
     }
 
     override fun onDrawFrame(gl: GL10?) {
@@ -122,7 +127,8 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
                 circles.add(Item(items[index], body))
             }
         }
-        if(!items.isEmpty()) {
+
+        if(items.isNotEmpty()) {
             items.forEach { if (it.isSelected) Engine.resize(circles.first { circle -> circle.pickerItem == it }) }
             if (textureIds == null) textureIds = IntArray(circles.size * 2)
             initializeArrays()
@@ -159,8 +165,6 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         }
     }
 
-    private var tick : Long  = System.currentTimeMillis()
-
     private fun drawFrame() {
 
         glClear(GL_COLOR_BUFFER_BIT)
@@ -173,10 +177,6 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
                 circle.drawItself(programId, i, scaleX, scaleY)
             }
         }
-        val current = System.currentTimeMillis()
-        val fps =  (current - tick+0f)
-        //Log.d(TAG, "fps: $fps")
-        tick = current
     }
 
     private fun enableTransparency() {
@@ -209,7 +209,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     private fun getItemPos(position: Vec2) = position.let {
         val x = it.x.convertPoint(glView.width, scaleX)
         val y = it.y.convertPoint(glView.height, scaleY)
-        circles.indexOfFirst { Math.sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
+        circles.indexOfFirst { sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
        // circles.find { Math.sqrt(((x - it.x).sqr() + (y - it.y).sqr()).toDouble()) <= it.radius }
     }
 

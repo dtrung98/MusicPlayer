@@ -48,7 +48,7 @@
     </string-array>
 
 
-    <string-array name="countries">
+    <string-array name="genres">
         <item>12-bar blues"</item>
         <item>2 tone</item>
         <item>2-step garage</item>

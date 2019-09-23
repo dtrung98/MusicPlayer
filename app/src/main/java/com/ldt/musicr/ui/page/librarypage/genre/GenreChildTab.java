@@ -3,6 +3,7 @@ package com.ldt.musicr.ui.page.librarypage.genre;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -19,17 +20,23 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
+import com.ldt.musicr.ui.page.subpages.BubblePickerFragment;
+import com.ldt.musicr.ui.widget.bubblepicker.SampleAdapter;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.Item;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import com.ldt.musicr.util.NavigationUtil;
 
+import java.util.Arrays;
+
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class GenreChildTab extends BaseMusicServiceFragment implements PickerAdapter.PickerListener {
+public class GenreChildTab extends BaseMusicServiceFragment implements PickerAdapter.PickerListener, View.OnLayoutChangeListener {
     public static final String TAG="GenreChildTab";
 
     @BindView(R.id.bubble_picker)
@@ -45,17 +52,31 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
         return inflater.inflate(R.layout.genre_child_tab,container,false);
     }
 
+    @BindView(R.id.root)
+    View mRoot;
+
+    @BindDimen(R.dimen.minimum_bottom_back_stack_margin)
+    float mMinBottomPadding;
+
+    @BindDimen(R.dimen._16dp)
+    float m16Dp;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        mRoot.addOnLayoutChangeListener(this);
         addPageChangedListener();
         initBubblePicker();
     }
 
+    private MotionLayout mLibraryMotionLayout;
+
     private void addPageChangedListener() {
+
         LibraryTabFragment libraryTab = NavigationUtil.getLibraryTab(getActivity());
         if(libraryTab!=null) {
+            mLibraryMotionLayout = libraryTab.getMotionLayout();
            ViewPager  parentViewPager =  libraryTab.getViewPager();
            if(parentViewPager!=null) {
                parentViewPager.addOnPageChangeListener(mPagerChangeListener);
@@ -104,6 +125,9 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
 
     private PickerAdapter mAdapter;
 
+    @BindView(R.id.refresh)
+    public View mRefreshButton;
+
     @OnClick(R.id.refresh)
     public void refreshData() {
         if(getContext()!=null) {
@@ -113,6 +137,12 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
                 ((SongPickerAdapter) mAdapter).setData(SongLoader.getAllSongs(getContext()));
             else if (mAdapter instanceof ArtistPickerAdapter)
                 ((ArtistPickerAdapter) mAdapter).setData(ArtistLoader.getAllArtists(getContext()));
+            else if(mAdapter instanceof SampleAdapter) {
+               String[] list = getResources().getStringArray(R.array.genres);
+               if(list.length>=30)
+               list = Arrays.copyOf(list,1);
+                ((SampleAdapter) mAdapter).setData(Arrays.asList(list));
+            }
         }
     }
 
@@ -122,7 +152,7 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
         Item.Companion.setBitmapSize(144f);
         Item.Companion.setTextSizeRatio(40f/280);
 
-        mAdapter = new ArtistPickerAdapter(getContext());
+        mAdapter = new SampleAdapter(getContext());
         mAdapter.setListener(this);
         mBubblePicker.setAdapter(mAdapter);
         refreshData();
@@ -144,6 +174,7 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
 
     @Override
     public void onDestroyView() {
+        mRoot.removeOnLayoutChangeListener(this);
         removePageChangedListener();
         mAdapter.destroy();
         mAdapter = null;
@@ -170,9 +201,29 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
         }
     }
 
+    @OnClick(R.id.see_in_new_tab)
+    void seeInNewTab() {
+      /*  SupportFragment sf = BubblePickerFragment.newInstance();
+        *//*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*//*
+        Fragment parentFragment = getParentFragment();
+        if(parentFragment instanceof SupportFragment)
+            ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);*/
+    }
+
     @Override
     public void onPickerDeselected(PickerItem item, int position, Object o) {
 
+    }
+
+    @Override
+    public void onLayoutChange(View v, int left, int top, int right, int bottom,
+                               int oldLeft, int oldTop, int oldRight, int oldBottom) {
+        if(mLibraryMotionLayout!=null) {
+           float progress =  mLibraryMotionLayout.getProgress();
+           float bottomMargin = (int) ((1-progress) * mMinBottomPadding);
+            ((ViewGroup.MarginLayoutParams)mBubblePicker.getLayoutParams()).bottomMargin = (int) bottomMargin;
+            mBubblePicker.requestLayout();
+        }
     }
 }
 
