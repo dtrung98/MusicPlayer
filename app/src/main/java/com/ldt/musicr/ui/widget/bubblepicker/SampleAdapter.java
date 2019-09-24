@@ -16,7 +16,7 @@ public class SampleAdapter extends PickerAdapter<String> {
         super.onBindItem(item,create,i);
         String name = mData.get(i);
         item.setTitle(name);
-        item.setIconSizeUnit(PickerItem.SIZE_RANDOM);
+        item.setRadiusUnit(PickerItem.SIZE_RANDOM);
 
         return true;
     }

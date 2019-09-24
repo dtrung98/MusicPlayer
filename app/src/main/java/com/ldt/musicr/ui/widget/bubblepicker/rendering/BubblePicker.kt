@@ -28,7 +28,7 @@ class BubblePicker : GLTextureView {
     var items: ArrayList<PickerItem>? = null
         set(value) {
             field = value
-            renderer.items = value ?: ArrayList()
+            renderer.pickerItems = value ?: ArrayList()
         }
 
     var adapter: Adapter? = null
@@ -36,6 +36,12 @@ class BubblePicker : GLTextureView {
             field = value
             renderer.adapter = value
             value?.attach(this)
+        }
+
+    var decorator: Decorator? = null
+        set(value) {
+            field = value
+            renderer.decorator = value
         }
 
     var maxSelectedCount: Int? = null
@@ -59,7 +65,7 @@ class BubblePicker : GLTextureView {
         }
 
     val selectedItems: List<PickerItem?>
-        get() = renderer.selectedItems
+        get() = renderer.selectedPickerItemItems
 
     var centerImmediately = false
         set(value) {
@@ -67,7 +73,7 @@ class BubblePicker : GLTextureView {
             renderer.centerImmediately = value
         }
 
-    val renderer = TexturePickerRenderer(this)
+    val renderer = PickerRenderer(this)
     private var startX = 0f
     private var startY = 0f
     private var previousX = 0f

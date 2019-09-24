@@ -9,6 +9,10 @@ public abstract class Adapter {
 
     private BubblePicker mBubblePicker;
 
+    final void attachRenderer(PickerRenderer renderer) {
+
+    }
+
     final void attach(BubblePicker bubblePicker) {
         mBubblePicker = bubblePicker;
         onAttach(bubblePicker);

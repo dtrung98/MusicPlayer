@@ -19,7 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PickerAdapter<T> extends Adapter implements BubblePickerListener {
+public abstract class PickerAdapter<T> extends Adapter implements BubblePickerListener, Decorator {
+    @Override
+    public float getCircleRadiusUnit(float width, float height) {
+        return 1f;
+    }
+
     protected Context mContext;
     private float oneDp = 1;
     private float unitSize = 45f; // 45dp for minimum size

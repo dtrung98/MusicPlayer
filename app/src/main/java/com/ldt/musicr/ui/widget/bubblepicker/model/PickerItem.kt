@@ -10,7 +10,7 @@ import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem
  */
 data class PickerItem @JvmOverloads constructor(var title: String? = null,
                                                 var icon: Drawable? = null,
-                                                var iconSizeUnit: Float = 1f,
+                                                var radiusUnit: Float = 1f,
                                                 var iconOnTop: Boolean = true,
                                                 @ColorInt var color: Int? = null,
                                                 var gradient: BubbleGradient? = null,

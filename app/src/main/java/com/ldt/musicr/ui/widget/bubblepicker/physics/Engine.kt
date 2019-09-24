@@ -2,6 +2,7 @@ package com.ldt.musicr.ui.widget.bubblepicker.physics
 
 import android.util.Log
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem
+import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerRenderer
 import com.ldt.musicr.ui.widget.bubblepicker.sqr
 import org.jbox2d.common.Vec2
 import org.jbox2d.dynamics.World
@@ -123,12 +124,10 @@ object Engine {
         bodies.clear()
     }
 
-    fun resize(item: CircleRenderItem): Boolean {
+    fun onTap(item: CircleRenderItem): Boolean {
         if (selectedBodies.size >= maxSelectedCount ?: bodies.size && !item.circleBody.increased) return false
 
         if (item.circleBody.isBusy) return false
-
-        item.circleBody.defineState()
 
         toBeResized.add(item)
 

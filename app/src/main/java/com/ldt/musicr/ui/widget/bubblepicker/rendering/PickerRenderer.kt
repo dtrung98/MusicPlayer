@@ -8,7 +8,7 @@ import com.ldt.musicr.ui.widget.GLTextureView
 import com.ldt.musicr.ui.widget.bubblepicker.*
 import com.ldt.musicr.ui.widget.bubblepicker.model.Color
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem
-import com.ldt.musicr.ui.widget.bubblepicker.physics.Engine
+import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.A_POSITION
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.A_UV
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.U_BACKGROUND
@@ -24,31 +24,25 @@ import kotlin.math.sqrt
 inline val <reified T> T.TAG: String
     get() = T::class.java.simpleName
 
-class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
+public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
     override fun onSurfaceDestroyed(gl: GL10?) {
     }
 
     var backgroundColor: Color? = null
     var maxSelectedCount: Int? = null
         set(value) {
-            Engine.maxSelectedCount = value
-            field = value
-        }
-
-    var bubbleSize = 50
-        set(value) {
-            Engine.radius = value
+            PhysicsEngine.maxSelectedCount = value
             field = value
         }
 
     var listener: BubblePickerListener? = null
-    var items: ArrayList<PickerItem> = ArrayList()
-    val selectedItems: List<PickerItem?>
-        get() = Engine.selectedBodies.map { renderCircles.firstOrNull { circle -> circle.circleBody == it }?.pickerItem }
+    var pickerItems: ArrayList<PickerItem> = ArrayList()
+    val selectedPickerItemItems: List<PickerItem?>
+        get() = PhysicsEngine.selectedCircleBodies.map { renderCircles.firstOrNull { circle -> circle.circleBody == it }?.pickerItem }
     var centerImmediately = false
         set(value) {
             field = value
-            Engine.centerImmediately = value
+            PhysicsEngine.centerImmediately = value
         }
 
     var adapter: Adapter? = null
@@ -59,12 +53,26 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
             }
         }
 
+    var decorator: Decorator? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                updateAllItems()
+            }
+        }
+    private fun removeItem(position : Int) {
+        PhysicsEngine.removeCircle(position)
+    }
+    private fun removeAllItems() {
+        PhysicsEngine.removeAllCircles()
+    }
+
     private fun updateAllItems() {
         Log.d(TAG,"prepare to clear")
         clear()
         Log.d(TAG,"cleared")
-        synchronized(items) {
-            items.clear()
+        synchronized(pickerItems) {
+            pickerItems.clear()
             Log.d(TAG, "cleared items")
             if (adapter != null) {
                 val count = (adapter as Adapter).itemCount;
@@ -73,7 +81,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
                         val pick = PickerItem()
                         (adapter as Adapter).onBindItem(pick, true, item)
                         Log.d(TAG, "adding item $item")
-                        items.add(pick)
+                        pickerItems.add(pick)
                         Log.d(TAG, "added")
                     }
                 }
@@ -106,11 +114,13 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        glViewport(0, 0, width, height)
-        clear()
-        initialize()
-        // what happen when surface changed ?
-        //  destroy everything ?
+        // set Viewport
+        glViewport(0,0, width, height)
+
+        val w = width.toFloat()
+        val h = height.toFloat()
+        PhysicsEngine.onViewPortSizeChanged(w, h, decorator?.getCircleRadiusUnit(w,h) ?: 0f)
+
     }
 
     private fun recreate() {
@@ -121,22 +131,22 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
 
     override fun onDrawFrame(gl: GL10?) {
         calculateVertices()
-        Engine.move()
+        PhysicsEngine.onFrameUpdated()
         drawFrame()
     }
 
     private fun initialize() {
 
-        Engine.centerImmediately = centerImmediately
+        PhysicsEngine.centerImmediately = centerImmediately
         synchronized(renderCircles) {
-            val list = Engine.build(items.size, scaleX, scaleY)
+            val list = Engine.build(pickerItems.size, scaleX, scaleY)
             list.forEachIndexed { index, item ->
-                renderCircles.add(CircleRenderItem(items[index], item))
+                renderCircles.add(CircleRenderItem(pickerItems[index], item))
             }
         }
 
-        if(items.isNotEmpty()) {
-            items.forEach { if (it.isSelected) Engine.resize(renderCircles.first { circle -> circle.pickerItem == it }) }
+        if(pickerItems.isNotEmpty()) {
+            pickerItems.forEach { if (it.isSelected) Engine.onTap(renderCircles.first { circle -> circle.pickerItem == it }) }
             if (textureIds == null) textureIds = IntArray(renderCircles.size * 2)
             initializeArrays()
         }
@@ -229,7 +239,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     fun onTap(x: Float, y: Float) = getItemPos(Vec2(x, glView.height - y)).apply {
         if (this >= 0) {
             val item = renderCircles[this]
-            if (Engine.resize(item)) {
+            if (Engine.onTap(item)) {
                 listener?.let {
                     if (item.circleBody.increased) it.onBubbleDeselected(item.pickerItem, this) else it.onBubbleSelected(item.pickerItem, this)
                 }
@@ -237,18 +247,11 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
         }
     }
 
-    private fun clear() {
+    fun notifyItemRemoved(i: Int) {
 
-        synchronized(renderCircles) {
-            renderCircles.clear()
-        }
-
-        synchronized(Engine) {
-            Engine.clear()
-        }
     }
 
-    fun notifyItemRemoved(i: Int) {
+    fun notifyAllItemRemove() {
 
     }
 
@@ -257,7 +260,7 @@ class TexturePickerRenderer(val glView: View) : GLTextureView.Renderer {
     }
 
     fun notifyDataSetChanged() {
-        updateAllItems()
+        removeAllItems()
     }
 
     fun notifyItemChanged(i: Int) {

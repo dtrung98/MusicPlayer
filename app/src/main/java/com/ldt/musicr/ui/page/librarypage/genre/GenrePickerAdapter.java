@@ -1,21 +1,16 @@
 package com.ldt.musicr.ui.page.librarypage.genre;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Typeface;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.ldt.musicr.R;
 import com.ldt.musicr.loader.medialoader.GenreLoader;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.ui.widget.bubblepicker.model.BubbleGradient;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
 import com.ldt.musicr.util.MusicUtil;
@@ -35,7 +30,7 @@ public class GenrePickerAdapter extends PickerAdapter<Genre> {
         super.onBindItem(item,create,i);
         Genre genre = mData.get(i);
         item.setTitle(genre.name);
-        item.setIconSizeUnit(genre.songCount);
+        item.setRadiusUnit(genre.songCount);
         // Glide
         ArrayList<Song> songs = GenreLoader.getSongs(mContext,genre.id);
         Glide.with(mContext).load(MusicUtil.getMediaStoreAlbumCoverUri(songs.get(0).albumId)).into(new SimpleTarget<Drawable>() {
