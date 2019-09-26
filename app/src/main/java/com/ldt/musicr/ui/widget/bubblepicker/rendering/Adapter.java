@@ -2,7 +2,7 @@ package com.ldt.musicr.ui.widget.bubblepicker.rendering;
 
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
 
-public abstract class Adapter {
+public abstract class Adapter implements Decorator  {
     public BubblePicker getBubblePicker() {
         return mBubblePicker;
     }
@@ -40,6 +40,10 @@ public abstract class Adapter {
         if(mBubblePicker!=null) mBubblePicker.getRenderer().notifyDataSetChanged();
         // remove all items (play animation)
         // add new items (play animation)
+    }
+
+    public final void notifyAllItemRemoved() {
+        if(mBubblePicker!=null) mBubblePicker.getRenderer().notifyAllItemRemove();
     }
 
     public final void notifyItemInserted(int i) {

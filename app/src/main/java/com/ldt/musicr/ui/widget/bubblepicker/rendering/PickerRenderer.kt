@@ -9,12 +9,15 @@ import com.ldt.musicr.ui.widget.bubblepicker.*
 import com.ldt.musicr.ui.widget.bubblepicker.model.Color
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem
 import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine
+import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine.scaleX
+import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine.scaleY
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.A_POSITION
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.A_UV
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.U_BACKGROUND
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.fragmentShader
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubbleShader.vertexShader
 import org.jbox2d.common.Vec2
+import java.lang.Exception
 import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -36,9 +39,10 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
         }
 
     var listener: BubblePickerListener? = null
-    var pickerItems: ArrayList<PickerItem> = ArrayList()
-    val selectedPickerItemItems: List<PickerItem?>
+    val selectedPickerItems: List<PickerItem?>
         get() = PhysicsEngine.selectedCircleBodies.map { renderCircles.firstOrNull { circle -> circle.circleBody == it }?.pickerItem }
+
+    private val renderCircles = ArrayList<CircleRenderItem>()
     var centerImmediately = false
         set(value) {
             field = value
@@ -49,46 +53,34 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
         set(value) {
             field = value
             if (value != null) {
-              updateAllItems()
+              notifyDataSetChanged()
             }
         }
 
-    var decorator: Decorator? = null
-        set(value) {
-            field = value
-            if (value != null) {
-                updateAllItems()
-            }
-        }
     private fun removeItem(position : Int) {
         PhysicsEngine.removeCircle(position)
     }
-    private fun removeAllItems() {
-        PhysicsEngine.removeAllCircles()
+
+    @Synchronized
+    private  fun orderToRemoveAllItem() {
+        PhysicsEngine.orderToRemoveAllCircles()
     }
 
-    private fun updateAllItems() {
-        Log.d(TAG,"prepare to clear")
-        clear()
-        Log.d(TAG,"cleared")
-        synchronized(pickerItems) {
-            pickerItems.clear()
-            Log.d(TAG, "cleared items")
-            if (adapter != null) {
-                val count = (adapter as Adapter).itemCount;
-                if (count != 0) {
-                    for (item in 0 until count) {
-                        val pick = PickerItem()
-                        (adapter as Adapter).onBindItem(pick, true, item)
-                        Log.d(TAG, "adding item $item")
-                        pickerItems.add(pick)
-                        Log.d(TAG, "added")
+    @Synchronized
+    private fun addAllItems() {
+        if(adapter!=null) {
+            val count = (adapter as Adapter).itemCount
+            if (count != 0) {
+                synchronized(renderCircles) {
+                    for (i in 0 until count) {
+                        val picker = PickerItem()
+                        adapter?.onBindItem(picker, true, i)
+                        renderCircles.add(CircleRenderItem(picker,PhysicsEngine.createCircle(picker)))
                     }
                 }
+                renderCircles.forEachIndexed { index, circleRenderItem -> PhysicsEngine.addCircle(circleRenderItem.circleBody) }
             }
         }
-        Log.d(TAG,"prepare to initialize")
-        initialize()
     }
 
     private var programId = 0
@@ -98,77 +90,91 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
     private var textureVertices: FloatArray? = null
     private var textureIds: IntArray? = null
 
-    private val scaleX: Float
-        // if scaleX is h/w if w < h (this means scaleX > 1), else 1
-        get() = if (glView.width < glView.height) glView.height.toFloat() / glView.width.toFloat() else 1f
-
-        // if scaleY is w/h if h > w, else 1
-    private val scaleY: Float
-        get() = if (glView.width < glView.height) 1f else glView.width.toFloat() / glView.height.toFloat()
-    private val renderCircles = ArrayList<CircleRenderItem>()
-
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         glClearColor(backgroundColor?.red ?: 1f, backgroundColor?.green ?: 1f,
                 backgroundColor?.blue ?: 1f, backgroundColor?.alpha ?: 0f)
         enableTransparency()
     }
+    var width: Float = 1f
+    var height: Float = 1f
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
         // set Viewport
         glViewport(0,0, width, height)
 
-        val w = width.toFloat()
-        val h = height.toFloat()
-        PhysicsEngine.onViewPortSizeChanged(w, h, decorator?.getCircleRadiusUnit(w,h) ?: 0f)
-
+       this.width = width.toFloat()
+        this.height = height.toFloat()
+        PhysicsEngine.onViewPortSizeChanged(this.width, this.height, adapter?.getCircleRadiusUnit(this.width,this.height) ?: 0.125f)
+        recreateTextures()
     }
 
-    private fun recreate() {
-        synchronized(renderCircles) {
-
-        }
-    }
-
+    @Synchronized
     override fun onDrawFrame(gl: GL10?) {
-        calculateVertices()
-        PhysicsEngine.onFrameUpdated()
-        drawFrame()
-    }
-
-    private fun initialize() {
-
-        PhysicsEngine.centerImmediately = centerImmediately
-        synchronized(renderCircles) {
-            val list = Engine.build(pickerItems.size, scaleX, scaleY)
-            list.forEachIndexed { index, item ->
-                renderCircles.add(CircleRenderItem(pickerItems[index], item))
+        val iterator = renderCircles.iterator()
+        while(iterator.hasNext()) {
+            val item = iterator.next()
+            if(item.circleBody.isDeath()) {
+                iterator.remove()
+                shouldRecreateTexture = true
+                Log.d("PickerRenderer","remove circle "+ item.circleBody.id)
             }
         }
 
-        if(pickerItems.isNotEmpty()) {
-            pickerItems.forEach { if (it.isSelected) Engine.onTap(renderCircles.first { circle -> circle.pickerItem == it }) }
-            if (textureIds == null) textureIds = IntArray(renderCircles.size * 2)
-            initializeArrays()
-        }
+
+        PhysicsEngine.onFrameUpdated()
+        if(shouldRecreateTexture) recreateTextures()
+        calculateVertices()
+        drawFrame()
+        Log.d("PickerRenderer","current size = "+ renderCircles.size+", textureIDs size = "+ textureIds?.size)
+
     }
 
-    private fun initializeArrays() {
+    @Synchronized
+    public fun deleteTexture(textureIds: IntArray,index: Int) {
+        glDeleteTextures(1,textureIds,index*2)
+        glDeleteTextures(1,textureIds,index*2 + 1)
+    }
+
+    @Synchronized
+     private fun recreateTextures() {
+        // delete all textures
+        if(textureIds!=null && (textureIds as IntArray).size == renderCircles.size *2) {
+            (textureIds as IntArray).forEachIndexed { index, i ->
+                try {
+                deleteTexture((textureIds as IntArray),index) }
+                catch (e : Exception) {}
+            }
+        }
+        textureIds = null
+
+        // create new textures if any
+
+        if(renderCircles.isNotEmpty()) {
+            textureIds = IntArray(renderCircles.size * 2)
+            recreateArrays()
+        }
+        shouldRecreateTexture = false
+    }
+
+    private fun recreateArrays() {
         vertices = FloatArray(renderCircles.size * 8)
         textureVertices = FloatArray(renderCircles.size * 8)
-        renderCircles.forEachIndexed { i, item -> initializeItem(item, i) }
+        renderCircles.forEachIndexed { i, item -> recreateTextureItem(item, i) }
         verticesBuffer = vertices?.toFloatBuffer()
         uvBuffer = textureVertices?.toFloatBuffer()
     }
 
-    private fun initializeItem(item: CircleRenderItem, index: Int) {
+    private fun recreateTextureItem(item: CircleRenderItem, index: Int) {
         initializeVertices(item, index)
         textureVertices?.passTextureVertices(index)
         item.bindTextures(textureIds ?: IntArray(0), index)
     }
 
     private fun calculateVertices() {
-        renderCircles.forEachIndexed { i, item -> initializeVertices(item, i) }
-        vertices?.forEachIndexed { i, float -> verticesBuffer?.put(i, float) }
+        if(renderCircles.isNotEmpty()) {
+            renderCircles.forEachIndexed { i, item -> initializeVertices(item, i) }
+            vertices?.forEachIndexed { i, float -> verticesBuffer?.put(i, float) }
+        }
     }
 
     private fun initializeVertices(body: CircleRenderItem, index: Int) {
@@ -191,7 +197,7 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
 
         synchronized(renderCircles) {
             renderCircles.forEachIndexed { i, circle ->
-                circle.drawItself(programId, i, scaleX, scaleY)
+                circle.drawItself(programId, i, PhysicsEngine.scaleX, PhysicsEngine.scaleY)
             }
         }
     }
@@ -218,10 +224,10 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
         glCompileShader(this)
     }
 
-    fun swipe(x: Float, y: Float) = Engine.swipe(x.convertValue(glView.width, scaleX),
+    fun swipe(x: Float, y: Float) = PhysicsEngine.swipe(x.convertValue(glView.width, scaleX),
             y.convertValue(glView.height, scaleY))
 
-    fun release() = Engine.release()
+    fun onTouchEnd() = PhysicsEngine.onTouchEnd()
 
     private fun getItemPos(position: Vec2) = position.let {
         val x = it.x.convertPoint(glView.width, scaleX)
@@ -239,9 +245,9 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
     fun onTap(x: Float, y: Float) = getItemPos(Vec2(x, glView.height - y)).apply {
         if (this >= 0) {
             val item = renderCircles[this]
-            if (Engine.onTap(item)) {
+            if (PhysicsEngine.onTap(item.circleBody)) {
                 listener?.let {
-                    if (item.circleBody.increased) it.onBubbleDeselected(item.pickerItem, this) else it.onBubbleSelected(item.pickerItem, this)
+                    if (item.circleBody.isEnhanced()) it.onBubbleDeselected(item.pickerItem, this) else it.onBubbleSelected(item.pickerItem, this)
                 }
             }
         }
@@ -251,18 +257,25 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
 
     }
 
+    @Synchronized
     fun notifyAllItemRemove() {
-
+        orderToRemoveAllItem()
     }
 
+    @Synchronized
     fun notifyItemInserted(i: Int) {
 
     }
 
+    @Synchronized
     fun notifyDataSetChanged() {
-        removeAllItems()
+        orderToRemoveAllItem()
+        addAllItems()
+        shouldRecreateTexture = true
     }
+    private var shouldRecreateTexture : Boolean = true
 
+    @Synchronized
     fun notifyItemChanged(i: Int) {
 
     }

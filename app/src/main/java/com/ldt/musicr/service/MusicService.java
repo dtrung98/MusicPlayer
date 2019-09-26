@@ -1310,13 +1310,13 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
                             break;
 
                         case AudioManager.AUDIOFOCUS_LOSS:
-                            // Lost focus for an unbounded amount of time: stop playback and release media playback
+                            // Lost focus for an unbounded amount of time: stop playback and onTouchEnd media playback
                             service.pause();
                             break;
 
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                             // Lost focus for a short time, but we have to stop
-                            // playback. We don't release the media playback because playback
+                            // playback. We don't onTouchEnd the media playback because playback
                             // is likely to resume
                             boolean wasPlaying = service.isPlaying();
                             service.pause();

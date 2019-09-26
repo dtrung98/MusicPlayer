@@ -16,8 +16,8 @@ class Border(world: World, var position: Vec2, var direction: Int) {
     private val bodyDef: BodyDef = BodyDef()
 
     init {
-        itemBody = world.createBody(bodyDef).apply { createFixture(fixture) }
         update()
+        itemBody = world.createBody(bodyDef).apply { createFixture(fixture) }
     }
 
     fun updatePosition() {

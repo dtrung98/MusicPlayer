@@ -97,7 +97,6 @@ public class BubblePickerFragment extends BaseMusicServiceSupportFragment  imple
 
     public void initBubblePicker() {
 
-        mBubblePicker.setBubbleSize(10);
         CircleRenderItem.Companion.setBitmapSize(144f);
         CircleRenderItem.Companion.setTextSizeRatio(40f/280);
 

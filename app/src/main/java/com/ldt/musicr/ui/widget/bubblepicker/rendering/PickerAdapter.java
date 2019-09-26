@@ -6,11 +6,13 @@ import android.graphics.Typeface;
 
 import androidx.core.content.ContextCompat;
 
+import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Media;
 import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener;
 import com.ldt.musicr.ui.widget.bubblepicker.model.BubbleGradient;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
+import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.Adapter;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
 
@@ -19,14 +21,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PickerAdapter<T> extends Adapter implements BubblePickerListener, Decorator {
+public abstract class PickerAdapter<T> extends Adapter implements BubblePickerListener{
     @Override
     public float getCircleRadiusUnit(float width, float height) {
-        return 1f;
+        float minRadiusInPixel = oneDp * 50;
+        float sizePerUnit = minRadiusInPixel/ ((width>height) ? width : height);
+        return 0.075f;
     }
 
     protected Context mContext;
-    private float oneDp = 1;
+    private float oneDp = App.getInstance().getResources().getDimension(R.dimen.oneDP);
     private float unitSize = 45f; // 45dp for minimum size
 
     private final static String ROBOTO_BOLD = "roboto_bold.ttf";

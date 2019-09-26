@@ -3,6 +3,7 @@ package com.ldt.musicr.ui.widget.bubblepicker.rendering
 
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.Matrix
 import android.text.Layout
@@ -27,7 +28,7 @@ data class CircleRenderItem(val pickerItem: PickerItem, val circleBody: CircleBo
         get() = circleBody.physicalBody.position.y
 
     val radius: Float
-        get() = circleBody.radius
+        get() = circleBody.currentRadius
 
     val initialPosition: Vec2
         get() = circleBody.position
@@ -35,12 +36,12 @@ data class CircleRenderItem(val pickerItem: PickerItem, val circleBody: CircleBo
     val currentPosition: Vec2
         get() = circleBody.physicalBody.position
 
-    private var isVisible = true
+    private val isVisible : Boolean
         get() = circleBody.isVisible
     private var texture: Int = 0
     private var imageTexture: Int = 0
     private val currentTexture: Int
-        get() = if (circleBody.increased || circleBody.isIncreasing) imageTexture else texture
+        get() = if (circleBody.isEnhanced()) imageTexture else texture
     public companion object {
         var bitmapSize = 64f
 
@@ -172,9 +173,12 @@ data class CircleRenderItem(val pickerItem: PickerItem, val circleBody: CircleBo
         }
     }
 
+
+
     private fun bindTexture(textureIds: IntArray, index: Int, withImage: Boolean): Int {
         glGenTextures(1, textureIds, index)
-        createBitmap(withImage||true).toTexture(textureIds[index])
+        val bitmap = createBitmap(withImage)
+                bitmap.toTexture(textureIds[index])
         return textureIds[index]
     }
 

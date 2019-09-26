@@ -29,6 +29,7 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
 import com.ldt.musicr.util.NavigationUtil;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import butterknife.BindDimen;
 import butterknife.BindView;
@@ -138,16 +139,18 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
                 ((ArtistPickerAdapter) mAdapter).setData(ArtistLoader.getAllArtists(getContext()));
             else if(mAdapter instanceof SampleAdapter) {
                String[] list = getResources().getStringArray(R.array.genres);
-               if(list.length>=30)
-               list = Arrays.copyOf(list,1);
+               if(list.length>=mSampleSize)
+               list = Arrays.copyOf(list,mSampleSize);
                 ((SampleAdapter) mAdapter).setData(Arrays.asList(list));
             }
         }
     }
 
+    public int mSampleSize = 30;
+    public Random rnd = new Random();
+
     public void initBubblePicker() {
 
-        mBubblePicker.setBubbleSize(10);
         CircleRenderItem.Companion.setBitmapSize(144f);
         CircleRenderItem.Companion.setTextSizeRatio(40f/280);
 
@@ -207,6 +210,13 @@ public class GenreChildTab extends BaseMusicServiceFragment implements PickerAda
         Fragment parentFragment = getParentFragment();
         if(parentFragment instanceof SupportFragment)
             ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);*/
+        mAdapter.notifyAllItemRemoved();
+    }
+
+    @OnClick(R.id.reorder)
+    void reorder() {
+        mSampleSize = rnd.nextInt(30);
+        refreshData();
     }
 
     @Override

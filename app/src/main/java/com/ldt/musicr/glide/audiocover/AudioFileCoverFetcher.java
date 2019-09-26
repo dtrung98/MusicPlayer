@@ -45,7 +45,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
                 return fallback(model.filePath);
             }
         } finally {
-            retriever.release();
+            retriever.onTouchEnd();
         }
     }*/
 

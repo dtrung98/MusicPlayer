@@ -22,26 +22,11 @@ class BubblePicker : GLTextureView {
             renderer.backgroundColor = Color(value)
         }
 
-    //
-    @Deprecated(level = DeprecationLevel.WARNING,
-            message = "Use Adapter for the view setup instead")
-    var items: ArrayList<PickerItem>? = null
-        set(value) {
-            field = value
-            renderer.pickerItems = value ?: ArrayList()
-        }
-
     var adapter: Adapter? = null
         set(value) {
             field = value
             renderer.adapter = value
             value?.attach(this)
-        }
-
-    var decorator: Decorator? = null
-        set(value) {
-            field = value
-            renderer.decorator = value
         }
 
     var maxSelectedCount: Int? = null
@@ -56,16 +41,8 @@ class BubblePicker : GLTextureView {
             field = value
         }
 
-    var bubbleSize = 50
-        set(value) {
-            if (value in 1..100) {
-                renderer.bubbleSize = value
-            }
-            field = value
-        }
-
     val selectedItems: List<PickerItem?>
-        get() = renderer.selectedPickerItemItems
+        get() = renderer.selectedPickerItems
 
     var centerImmediately = false
         set(value) {
@@ -100,7 +77,7 @@ class BubblePicker : GLTextureView {
             }
             MotionEvent.ACTION_UP -> {
                 if (isClick(event)) renderer.onTap(event.x, event.y)
-                renderer.release()
+                renderer.onTouchEnd()
             }
             MotionEvent.ACTION_MOVE -> {
                 if (isSwipe(event)) {
@@ -108,16 +85,16 @@ class BubblePicker : GLTextureView {
                     previousX = event.x
                     previousY = event.y
                 } else {
-                    release()
+                    onTouchRelease()
                 }
             }
-            else -> release()
+            else -> onTouchRelease()
         }
 
         return true
     }
 
-    private fun release() = postDelayed({ renderer.release() }, 0)
+    private fun onTouchRelease() = postDelayed({ renderer.onTouchEnd() }, 0)
 
     private fun isClick(event: MotionEvent) = Math.abs(event.x - startX) < 20 && Math.abs(event.y - startY) < 20
 

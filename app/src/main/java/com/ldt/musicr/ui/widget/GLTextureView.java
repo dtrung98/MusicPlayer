@@ -154,7 +154,7 @@ public class GLTextureView
      * Whether the EGL context is actually preserved or not depends upon whether the
      * Android device that the program is running on can support an arbitrary number of EGL
      * contexts or not. Devices that can only support a limited number of EGL contexts must
-     * release the  EGL context in order to allow multiple applications to share the GPU.
+     * onTouchEnd the  EGL context in order to allow multiple applications to share the GPU.
      * <p>
      * If set to false, the EGL context will be released when the GLTextureView is paused,
      * and recreated when the GLTextureView is resumed.
@@ -1209,7 +1209,7 @@ public class GLTextureView
                                 lostEglContext = false;
                             }
 
-                            // When pausing, release the EGL surface:
+                            // When pausing, onTouchEnd the EGL surface:
                             if (pausing && mHaveEglSurface) {
                                 if (LOG_SURFACE) {
                                     Log.i("GLThread", "releasing EGL surface because paused tid=" + getId());
@@ -1217,7 +1217,7 @@ public class GLTextureView
                                 stopEglSurfaceLocked();
                             }
 
-                            // When pausing, optionally release the EGL Context:
+                            // When pausing, optionally onTouchEnd the EGL Context:
                             if (pausing && mHaveEglContext) {
                                 GLTextureView view = mGLSurfaceViewWeakRef.get();
                                 boolean preserveEglContextOnPause = view == null ?
@@ -1711,7 +1711,7 @@ public class GLTextureView
             if (mMultipleGLESContextsAllowed) {
                 return true;
             }
-            // Notify the owning thread that it should release the context.
+            // Notify the owning thread that it should onTouchEnd the context.
             // TODO: implement a fairness policy. Currently
             // if the owning thread is drawing continuously it will just
             // reacquire the EGL context.

@@ -22,7 +22,7 @@ fun FloatBuffer.passToShader(programId: Int, name: String) {
 fun FloatArray.toFloatBuffer() = ByteBuffer
         .allocateDirect(size * FLOAT_SIZE)
         .order(ByteOrder.nativeOrder())
-        .asFloatBuffer()?.put(this)
+        .asFloatBuffer().put(this)
 
 fun FloatArray.passTextureVertices(index: Int) = put(index * 8, TEXTURE_VERTICES)
 
