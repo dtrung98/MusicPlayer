@@ -63,6 +63,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
             state = which
             this.nextState = endState
             motionRunningTime = 0f
+            isBusy = true
             return true
         }
         return false
@@ -155,7 +156,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
         val distance = direction.length()
         if (distance > deltaInSecond* 200f) {
             var gravity = if (state== STATE_ENHANCED) PhysicsEngine.enhanceGravityValue else PhysicsEngine.currentGravityValue
-            gravity = (gravity /PhysicsEngine.step) * deltaInSecond
+          //  gravity = (gravity /PhysicsEngine.step) * deltaInSecond
             physicalBody.applyForce(direction.mul(gravity / distance.sqr()), physicalBody.position)
         }
     }

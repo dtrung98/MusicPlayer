@@ -227,7 +227,7 @@ public abstract class DuplicatedWaveformFragment extends Fragment implements Mar
     public void destroy() {
         if(this.mPlayer != null && this.mPlayer.isPlaying()) {
             this.mPlayer.stop();
-            this.mPlayer.onTouchEnd();
+            this.mPlayer.release();
             this.mPlayer = null;
         }
 

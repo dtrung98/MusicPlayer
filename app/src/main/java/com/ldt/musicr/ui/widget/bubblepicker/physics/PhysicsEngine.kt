@@ -7,6 +7,7 @@ import org.jbox2d.dynamics.Body
 import org.jbox2d.dynamics.World
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
 
 object PhysicsEngine {
     // World that handles everything
@@ -31,8 +32,8 @@ object PhysicsEngine {
     var gravityPoint = Vec2(0f,0f)
     private var isOnTouch = false
 
-    var normalGravityValue =6f
-    var touchGravityValue = 11f
+    var normalGravityValue = 0.1f
+    var touchGravityValue = 0.3f
 
     val enhanceGravityValue :Float
             get() = currentGravityValue*1.3f
@@ -221,7 +222,7 @@ object PhysicsEngine {
         if (Math.abs(gravityPoint.x) < 2) gravityPoint.x += -x
         if (Math.abs(gravityPoint.y) < 0.5f / scaleY) gravityPoint.y += y
        // increasedGravity = standardIncreasedGravity * Math.abs(x * 13) * Math.abs(y * 13)
-        touchGravityValue = 650f * Math.abs(x * 13) * Math.abs(y * 13)
+       // touchGravityValue = 650f * abs(x * 13) * abs(y * 13)
         isOnTouch = true
     }
 

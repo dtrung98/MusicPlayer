@@ -363,7 +363,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
     }
     public void forceStop() {
         if(mListener!=null) mListener.onPreviewDestroy();;
-        // onTouchEnd old media player
+        // release old media player
         if(mMediaPlayer!=null) {
             try {
                 if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
@@ -373,7 +373,7 @@ public class AudioPreviewPlayer implements  MediaPlayer.OnCompletionListener, Mu
     }
     private void releaseOldMediaPlayer() {
 
-        // onTouchEnd old media player
+        // release old media player
         if(mMediaPlayer!=null) {
             try {
                 if (mMediaPlayer.isPlaying()) fadeOutAndRelease(mMediaPlayer);
