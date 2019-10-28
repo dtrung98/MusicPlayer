@@ -21,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
@@ -81,6 +82,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onStreamClick(View view) {
+        super.onStreamClick(view);
     }
 
     public interface PermissionListener {

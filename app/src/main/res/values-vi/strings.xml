@@ -175,6 +175,10 @@
     <string name="folders">Thư mục</string>
     <string name="select_storage">Select storage</string>
 
+    <string name="stream">Stream</string>
+    <string name="stream_button">Stream</string>
+    <string name="stream_hint_text">Enter network address.</string>
+
     <string name="lastfm_pref">Login to LastFM to scrobble</string>
     <string name="lastfm_login_failture">Failed to Login</string>
     <string name="lastfm_login">Login to LastFM</string>

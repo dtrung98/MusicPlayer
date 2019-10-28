@@ -10,6 +10,7 @@ import com.ldt.musicr.ui.page.librarypage.artist.ArtistChildTab;
 import com.ldt.musicr.ui.page.librarypage.genre.GenreChildTab;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildTab;
+import com.ldt.musicr.ui.page.librarypage.stream.StreamChildTab;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class LibraryPagerAdapter extends FragmentPagerAdapter {
         mData.add(new ArtistChildTab());
         mData.add(new GenreChildTab());
         mData.add(new FolderChildTab());
-
+        mData.add(new StreamChildTab());
     }
 
     public LibraryPagerAdapter(Context context, FragmentManager fragmentManager) {
@@ -57,6 +58,7 @@ public class LibraryPagerAdapter extends FragmentPagerAdapter {
             case 2: return mContext.getResources().getString(R.string.artists);
             case 3: return mContext.getResources().getString(R.string.genres);
             case 4: return mContext.getResources().getString(R.string.folders);
+            case 5: return mContext.getResources().getString(R.string.stream);
             default: return null;
         }
 

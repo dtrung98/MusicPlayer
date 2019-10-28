@@ -7,18 +7,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import androidx.annotation.NonNull;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 
+import com.ldt.musicr.R;
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.loader.medialoader.PaletteGeneratorTask;
@@ -28,6 +44,7 @@ import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.util.Tool;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -44,6 +61,12 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
     private MusicPlayerRemote.ServiceToken serviceToken;
     private MusicStateReceiver musicStateReceiver;
     private boolean receiverRegistered;
+
+    private MediaPlayer mediaPlayer;
+    private SeekBar seekBar;
+    private Handler handler;
+    private Runnable runnable;
+
 
     private SongPreviewController mSongPreviewController = null;
 
@@ -225,6 +248,102 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
                 listener.onPaletteChanged();
             }
         }
+    }
+
+    public void changeSeekbar() {
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        if (mediaPlayer.isPlaying()) {
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    changeSeekbar();
+                }
+            };
+            handler.postDelayed(runnable, 1000);
+        }
+    }
+
+    public void onStreamClick(View view) {
+        EditText url = findViewById(R.id.url);
+        if (url.getText().toString().isEmpty()) {
+            url.getText().clear();
+            return;
+        }
+        // close keyboard after button click
+        InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.stream_pop_up, null);
+        handler = new Handler();
+        seekBar = popupView.findViewById(R.id.seekBarStream);
+        Button playPauseButton = popupView.findViewById(R.id.playPauseStreamButton);
+        playPauseButton.setBackgroundResource(R.drawable.ic_pause_white);
+        TextView urlView = popupView.findViewById(R.id.streamUrlView);
+        urlView.setText(url.getText().toString());
+        try {
+            mediaPlayer.setDataSource(url.getText().toString());
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                seekBar.setMax(mp.getDuration());
+                mp.start();
+                changeSeekbar();
+            }
+        });
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        playPauseButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    playPauseButton.setBackgroundResource(R.drawable.ic_play_white);
+                } else {
+                    mediaPlayer.start();
+                    playPauseButton.setBackgroundResource(R.drawable.ic_pause_white);
+                    changeSeekbar();
+                }
+            }
+        });
+        url.getText().clear();
+        // create the popup window
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                //Do Something here
+                mediaPlayer.stop();
+            }
+        });
     }
 
     private static final class MusicStateReceiver extends BroadcastReceiver {
