@@ -115,7 +115,6 @@
             android:tint="#AAA"
             android:padding="12dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="30dp"
@@ -128,6 +127,15 @@
         tools:listitem="@layout/item_art_now_playing"
         tools:layoutManager="LinearLayoutManager"
         tools:orientation="horizontal" />
+<!--    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintEnd_toStartOf="@id/title_panel"
+        app:layout_constraintDimensionRatio="1:1"/>-->
     <View
         android:id="@+id/top_gradient"
         android:layout_width="0dp"

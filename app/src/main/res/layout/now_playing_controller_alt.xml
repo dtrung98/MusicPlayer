@@ -105,7 +105,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_pause_black_24dp"
+            app:srcCompat="@drawable/ic_pause_black_24dp"
             android:tint="#AAA"
             android:padding="12dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -122,6 +122,15 @@
         tools:layoutManager="LinearLayoutManager"
         tools:orientation="horizontal"
         />
+<!--    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent=".7"/>-->
     <View
         android:id="@+id/top_gradient"
         android:layout_width="0dp"
@@ -201,10 +210,9 @@
         />
     <ImageView
         android:id="@+id/play_pause_button"
-
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_pause_black_24dp"
+        app:srcCompat="@drawable/ic_pause_black_24dp"
         app:layout_constraintTop_toBottomOf="@id/visual_seek_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/bottom_navigation_height"
@@ -246,7 +254,7 @@
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_more_vert_black_24dp"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp"
         android:padding="12dp"
         android:tint="@color/FlatWhite"
         android:layout_marginTop="28dp"
@@ -262,5 +270,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_color_picker"
         tools:layoutManager="LinearLayoutManager"
-        tools:orientation="horizontal"/>
+        tools:orientation="horizontal" />
     </androidx.constraintlayout.motion.widget.MotionLayout>

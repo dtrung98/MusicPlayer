@@ -6,8 +6,11 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.helper.songpreview.SongPreviewController;
+import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
+import com.ldt.musicr.ui.BaseActivity;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
@@ -15,6 +18,9 @@ import com.ldt.musicr.ui.dialog.DeleteSongsDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.NavigationUtil;
 import com.ldt.musicr.util.RingtoneManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Karim Abou Zeid (kabouzeid)
@@ -26,6 +32,7 @@ public class SongMenuHelper {
             /*   R.string.play,*/
             R.string.play_next,
             R.string.play_preview,
+            R.string.play_preview_all,
             R.string.add_to_queue,
             R.string.add_to_playlist,
             /*    R.string.go_to_source_playlist,*/
@@ -104,6 +111,27 @@ public class SongMenuHelper {
             case R.string.play_preview:
                 if(activity instanceof MainActivity) {
                     ((MainActivity)activity).getSongPreviewController().previewSongs(song);
+                }
+                break;
+            case R.string.play_preview_all:
+                if(activity instanceof BaseActivity) {
+                    SongPreviewController preview = ((MainActivity) activity).getSongPreviewController();
+                    if (preview != null) {
+                        if (preview.isPlayingPreview())
+                            preview.cancelPreview();
+                        else {
+                            ArrayList<Song> list = SongLoader.getAllSongs(activity);
+                            Collections.shuffle(list);
+                            int index = 0;
+                            for (int i = 0; i < list.size(); i++) {
+                                if(song.id==list.get(i).id) index = i;
+                            }
+
+                            if(index!=0)
+                            list.add(0,list.remove(index));
+                            preview.previewSongs(list);
+                        }
+                    }
                 }
                 break;
             case R.string.set_as_ringtone:

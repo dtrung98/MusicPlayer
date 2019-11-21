@@ -269,4 +269,6 @@
     <string name="more_setting">Cài đặt khác</string>
     <string name="back_description">Trở về trang trước</string>
     <string name="left_right_audio_balance">Cân bằng âm trái phải</string>
+    <string name="play_preview_all">Nghe thử (tất cả)</string>
+
 </resources>
