@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
+import com.ldt.musicr.loader.base.MediaElement;
 import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
