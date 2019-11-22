@@ -1,6 +1,6 @@
 package com.ldt.musicr.loader.base;
 
-public abstract class BaseTask<T extends  BaseMediaStoreManager> implements Runnable {
+public abstract class BaseTask<T extends BaseMediaLoader> implements Runnable {
     private static final String TAG = "BaseTask";
 
     private T mManager;

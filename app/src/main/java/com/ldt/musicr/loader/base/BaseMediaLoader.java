@@ -12,11 +12,11 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class BaseMediaStoreManager {
+public class BaseMediaLoader {
     private static final String TAG = "BaseMediaStoreManager";
 
     private Context mContext;
-    public BaseMediaStoreManager() {
+    public BaseMediaLoader() {
     }
 
     private ThreadPoolExecutor mExecutor;
