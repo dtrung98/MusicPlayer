@@ -64,6 +64,5 @@ public class GenreChildTab extends BaseMusicServiceFragment {
     @Override
     public void onMediaStoreChanged() {}
 
-
 }
 
