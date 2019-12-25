@@ -153,6 +153,8 @@ dependencies {
 
     // Navigation Controller
     implementation 'com.github.tdh7:NavigationController:1.0.0'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
 }
 
 apply plugin: 'kotlin-android-extensions'
