@@ -151,9 +151,6 @@ dependencies {
     // JBox2d
     implementation 'org.jbox2d:jbox2d-library:2.1.2.2'
 
-    // ViewPager 2
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-
     // Navigation Controller
     implementation 'com.github.tdh7:NavigationController:1.0.0'
 }
