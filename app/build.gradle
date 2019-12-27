@@ -52,11 +52,13 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     implementation 'javax.annotation:javax.annotation-api:1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
+    implementation 'androidx.preference:preference:1.1.0'
 
     // Oversroll Effect on Scrollable View
     implementation 'me.everything:overscroll-decor-android:1.0.4'
@@ -140,12 +142,17 @@ dependencies {
 
     // App Them Helper
     implementation 'com.github.kabouzeid:app-theme-helper:1.3.10'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
     // Bubble Picker
     //implementation 'com.github.tdh7:Bubble-Picker:1.1.2'
 
     // JBox2d
     implementation 'org.jbox2d:jbox2d-library:2.1.2.2'
+
+    // Navigation Controller
+    implementation 'com.github.tdh7:NavigationController:1.0.0'
 }
 
 apply plugin: 'kotlin-android-extensions'

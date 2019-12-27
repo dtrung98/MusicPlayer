@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.nowplaying;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -56,7 +58,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     @BindView(R.id.minimize_bar) View mMinimizeBar;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+   RecyclerView mRecyclerView;
+
+
+    /*@BindView(R.id.view_pager)
+    ViewPager2 mViewPager;*/
 
     @BindView(R.id.menu_button) View mMenuButton;
 
@@ -84,6 +90,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     }
 
     SnapHelper snapHelper = new PagerSnapHelper();
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -92,9 +99,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         mTitle.setSelected(true);
 
         mAdapter = new NowPlayingAdapter(getActivity());
-      //  mRecyclerView.setPageTransformer(false, new SliderTransformer());
+        //mRecyclerView.setPageTransformer(false, new SliderTransformer());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+
+        //mViewPager.setAdapter(mAdapter);
 
         snapHelper.attachToRecyclerView(mRecyclerView);
 
@@ -103,6 +112,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         mColorPickerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
 
+        //mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
         mRecyclerView.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
         mVisualSeekBar.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN);
 
@@ -206,6 +216,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
             int pos = MusicPlayerRemote.getPosition();
             if(pos>=0)
             mRecyclerView.smoothScrollToPosition(MusicPlayerRemote.getPosition());
+            //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
         } catch (Exception ignore) {}
     }
     public void setUp() {
@@ -266,6 +277,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1)
             try {
                 mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
+                //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
             } catch (Exception ignore) {}
         //checkStatusStyle();
     }
@@ -533,7 +545,4 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     private boolean mTimeTextIsSync = false;
 
     private String timeTextViewTemp = "00:00";
-
-
-
 }

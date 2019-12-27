@@ -6,48 +6,5 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker
-        android:id="@+id/bubble_picker"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:backgroundColor="@color/library_back_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <ImageView
-        android:id="@+id/refresh"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/refresh"
-        android:tint="@color/flatOrange"
-        android:padding="13dp"
-        android:background="@drawable/background_item_song_in_artist"
-        app:layout_constraintBottom_toBottomOf="@id/bubble_picker"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"/>
-    <ImageView
-        android:id="@+id/see_in_new_tab"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/fullscreen"
-        android:tint="@color/flatOrange"
-        android:padding="10dp"
-        android:background="@drawable/background_item_song_in_artist"
-        app:layout_constraintBottom_toBottomOf="@id/refresh"
-        app:layout_constraintEnd_toStartOf="@id/refresh"
-        android:layout_marginEnd="16dp"/>
-    <ImageView
-        android:id="@+id/reorder"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/shuffle_glyn"
-        android:tint="@color/flatOrange"
-        android:padding="10dp"
-        android:background="@drawable/background_item_song_in_artist"
-        app:layout_constraintBottom_toBottomOf="@id/refresh"
-        app:layout_constraintEnd_toStartOf="@id/see_in_new_tab"
-        android:layout_marginEnd="16dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
