@@ -121,7 +121,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         return mPreviewPlayer.getCurrentPreviewSong();
     }
 
-    public boolean isThisSongCurrentPreview(Song which) {
+    public boolean isPreviewingSong(Song which) {
         Song song = getCurrentSongPreviewSong();
         return song!=null&&song.equals(which);
     }

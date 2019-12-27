@@ -105,7 +105,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         if(mContext instanceof MainActivity) {
            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
            if(preview!=null) {
-               if (preview.isPlayingPreview()&&preview.isThisSongCurrentPreview(getData().get(positionData)))
+               if (preview.isPlayingPreview()&&preview.isPreviewingSong(getData().get(positionData)))
                    preview.cancelPreview();
                else {
                    preview.previewSongs(getData().get(positionData));
