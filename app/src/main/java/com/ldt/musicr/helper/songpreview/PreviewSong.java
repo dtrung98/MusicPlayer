@@ -106,8 +106,9 @@ public class PreviewSong {
 
     private final Song mSong;
 
-    public PreviewSong(Song song,int start, int finish) {
-
+    public PreviewSong(Song song,int _start, int _finish) {
+        int start = _start;
+        int finish = _finish;
         if(start < 0) start =0;
         if(finish > song.duration) finish = (int) song.duration;
 
