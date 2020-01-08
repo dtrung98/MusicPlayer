@@ -29,6 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import butterknife.Unbinder;
 
 public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
     private static final String TAG = "ArtistPagerFragment";
@@ -129,6 +130,11 @@ public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
     @Override
     public void onDestroyView() {
         mAdapter.destroy();
+
+        if(mUnbinder!=null) {
+            mUnbinder.unbind();
+            mUnbinder = null;
+        }
         super.onDestroyView();
     }
 
@@ -138,10 +144,12 @@ public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
         return inflater.inflate(R.layout.artist_pager_middle,container,false);
     }
 
+    private Unbinder mUnbinder;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);
-        ButterKnife.bind(this,view);
+        mUnbinder = ButterKnife.bind(this,view);
 
         Bundle bundle = getArguments();
         if(bundle!=null) {
