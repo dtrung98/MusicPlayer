@@ -23,6 +23,7 @@ class Border(world: World, var position: Vec2, var direction: Int) {
     fun updatePosition() {
         shape.apply {
             if (direction == HORIZONTAL) {
+
                 setAsEdge(Vec2(-100f, position.y), Vec2(100f, position.y))
             } else {
                 setAsEdge(Vec2(position.x, -100f), Vec2(position.x, 100f))

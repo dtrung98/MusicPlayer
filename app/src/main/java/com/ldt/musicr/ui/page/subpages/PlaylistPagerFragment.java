@@ -54,6 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
+import butterknife.Unbinder;
 
 public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment implements SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG ="PlaylistPagerFragment";
@@ -202,6 +203,11 @@ public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment imple
 
 
         mAdapter.destroy();
+
+        if(mUnbinder!=null) {
+            mUnbinder.unbind();
+            mUnbinder = null;
+        }
         super.onDestroyView();
     }
 
@@ -211,10 +217,12 @@ public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment imple
         return inflater.inflate(R.layout.playlist_page,container,false);
     }
 
+    private Unbinder mUnbinder;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
+        mUnbinder = ButterKnife.bind(this,view);
         initSortOrder();
         mAdapter = new SongChildAdapter(getActivity());
         //mAdapter.MEDIA_LAYOUT_RESOURCE = R.layout.item_song_bigger;
@@ -280,6 +288,7 @@ public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment imple
     public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
         Animator animator = super.onCreateAnimator(transit, enter, nextAnim);
         Log.d(TAG, "onCreateAnimator: "+transit+", "+ enter +", "+nextAnim+" | "+ animator.getDuration());
+        if(mSwipeRefresh!=null)
         mSwipeRefresh.postDelayed(() -> refreshData(false),animator.getDuration());
         return animator;
     }
