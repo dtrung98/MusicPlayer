@@ -6,8 +6,7 @@ import android.util.Log;
 
 import com.ldt.musicr.model.Song;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.lang.ref.WeakReference;
 
 public class PreviewSong {
     private static final String TAG = "PreviewSong";
@@ -106,8 +105,9 @@ public class PreviewSong {
 
     private final Song mSong;
 
-    public PreviewSong(Song song,int start, int finish) {
-
+    public PreviewSong(Song song,int _start, int _finish) {
+        int start = _start;
+        int finish = _finish;
         if(start < 0) start =0;
         if(finish > song.duration) finish = (int) song.duration;
 
@@ -211,14 +211,13 @@ public class PreviewSong {
             mPlayHandler.removeCallbacks(mFinishPlayRunnable);
         mPlayHandler = null;
 
-        mTimeTask.cancel();
     }
 
     private static final int NOT_FADE = 0;
     private static final int FADE_IN = 1;
     private static final int FADE_OUT = 2;
 
-    private static final float DEFAULT_IN_VOLUME = 0;
+    private static final float DEFAULT_IN_VOLUME = 0.1f;
     private static final float DEFAULT_OUT_VOLUME = 0.1f;
     private static final float DEFAULT_PLAY_VOLUME = 1;
 
@@ -227,7 +226,7 @@ public class PreviewSong {
     private static final int FADE_IN_DURATION = 300;
     private static final int FADE_OUT_DURATION = 350;
 
-    private static final int FADE_INTERVAL = 25;
+    private static final int FADE_INTERVAL = 20;
 
     //Calculate the number of fade steps
     private static final int NUMBER_OF_STEPS_IN = FADE_IN_DURATION/FADE_INTERVAL;
@@ -237,25 +236,8 @@ public class PreviewSong {
     private static final float DELTA_IN_VOLUME = (DEFAULT_PLAY_VOLUME  - DEFAULT_IN_VOLUME)/ (float) NUMBER_OF_STEPS_IN;
     private static final float DELTA_OUT_VOLUME = (DEFAULT_PLAY_VOLUME - DEFAULT_OUT_VOLUME)/ (float)NUMBER_OF_STEPS_OUT;
 
-
-
     private int mFadeState = NOT_FADE;
-    private Timer mTimer = new Timer(true);
-    private final TimerTask mTimeTask = new TimerTask() {
-        @Override
-        public void run() {
-            if(!onIntervalUpdate()) {
-                if(mFadeState== ACTION_FADE_OUT) onAudioFinishFadeOut();
 
-                mFadeState = NOT_FADE;
-                if(mTimer!=null) {
-                    mTimer.cancel();
-                    mTimer.purge();
-                    mTimer = null;
-                }
-            }
-        }
-    };
     private boolean onIntervalUpdate() {
         switch (mFadeState) {
             case FADE_IN:
@@ -329,28 +311,40 @@ public class PreviewSong {
         mFadeState = FADE_IN;
         update();
     }
-    private void update() {
+    private void updateWithHandler() {
+        mPlayHandler.postDelayed(mUpdateRunnable,FADE_INTERVAL);
+    }
 
-        mTimer = new Timer(true);
+    private UpdateRunnable mUpdateRunnable = new UpdateRunnable(this);
 
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                if(!onIntervalUpdate()) {
+    private static class UpdateRunnable implements Runnable {
+        private UpdateRunnable(PreviewSong s) {
+            mRefPreviewSong = new WeakReference<>(s);
+        }
+        private final WeakReference<PreviewSong> mRefPreviewSong;
+        PreviewSong s;
+        @Override
+        public void run() {
+            s = mRefPreviewSong.get();
+            if(s==null) return;
 
-                    if(mFadeState== ACTION_FADE_OUT) onAudioFinishFadeOut();
+            // if no need to update anymore
+            if(!s.onIntervalUpdate()) {
+                if(s.mFadeState==ACTION_FADE_OUT)
+                    s.onAudioFinishFadeOut();
 
-                    mFadeState = NOT_FADE;
-                    if(mTimer!=null) {
-                        mTimer.cancel();
-                        mTimer.purge();
-                        mTimer = null;
-                    }
-                }
+                s.mFadeState = NOT_FADE;
+            } else {
+                // need to update
+                s.updateWithHandler();
             }
-        };
 
-        mTimer.schedule(task,FADE_INTERVAL,FADE_INTERVAL);
+            s = null;
+        }
+    }
+
+    private void update() {
+            updateWithHandler();
     }
 
     private void fadeOut() {

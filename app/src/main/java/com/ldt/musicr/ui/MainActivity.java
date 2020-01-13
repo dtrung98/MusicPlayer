@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import com.google.android.material.internal.FlowLayout;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicPlayerRemote;
@@ -91,6 +92,7 @@ public class MainActivity extends BaseActivity {
     private PermissionListener mPermissionListener;
     public  void setPermissionListener(PermissionListener listener) {
         mPermissionListener = listener;
+
     }
 
     public void removePermissionListener() {
