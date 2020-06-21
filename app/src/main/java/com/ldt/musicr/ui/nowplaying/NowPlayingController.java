@@ -39,7 +39,7 @@ import com.ldt.musicr.ui.LayerController;
 
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
-import com.ldt.musicr.ui.widget.view.AudioVisualSeekBar;
+import com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar;
 import com.ldt.musicr.util.SortOrder;
 import com.ldt.musicr.util.Tool;
 
@@ -361,9 +361,9 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
         String path = song.data;
         long duration = song.duration;
-        if(duration>0&&path!=null&&!path.isEmpty()&&!mVisualSeekBar.getCurrentFileName().equals(path)) {
+        if(duration>0&&path!=null&&!path.isEmpty() && mVisualSeekBar.getCurrentSongID() != song.id) {
             Log.d(TAG, "start visualize "+ path +"dur = "+ duration+", pos = "+ MusicPlayerRemote.getSongProgressMillis());
-            mVisualSeekBar.visualize(path, duration, MusicPlayerRemote.getSongProgressMillis());
+            mVisualSeekBar.visualize(song, duration, MusicPlayerRemote.getSongProgressMillis());
         } else {
             Log.d(TAG, "ignore visualize "+path);
         }
@@ -386,7 +386,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         mBigTitle.setTextColor(Tool.lighter(color1,0.5f));
        // mBigArtist.setAlpha(alpha2);
         mBigArtist.setTextColor(color2);
-        mVisualSeekBar.updateProperties();
+        mVisualSeekBar.updateDrawProperties();
 
     }
 
@@ -498,8 +498,8 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         }
     };
     @Override
-    public void onSeekBarSeekTo(AudioVisualSeekBar seekBar, int i, boolean b) {
-        if(b) MusicPlayerRemote.seekTo(i);
+    public void onSeekBarSeekTo(AudioVisualSeekBar seekBar, int position) {
+        MusicPlayerRemote.seekTo(position);
     }
 
     @Override
@@ -533,7 +533,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         text+=dur_second;
         if(mConstraintRoot.getProgress()!=0) {
             mTimeTextView.setText(text);
-            Log.d(TAG, "setTextTime: "+text);
+            //Log.d(TAG, "setTextTime: "+text);
             mTimeTextIsSync = true;
         }
         else {

@@ -38,7 +38,7 @@ import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;
 import com.ldt.musicr.helpers.MusicPlaybackTrack;
 import com.ldt.musicr.services.MusicPlayer;
 import com.ldt.musicr.util.Util;
-import com.ldt.musicr.ui.widget.view.AudioVisualSeekBar;
+import com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar;
 import com.ldt.musicr.ui.widget.bubblepopupmenu.BubbleMenuCenter;
 import com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout;
 import com.ldt.musicr.ui.widget.PlayPauseButton;

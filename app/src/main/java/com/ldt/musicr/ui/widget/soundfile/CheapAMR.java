@@ -15,8 +15,12 @@
  */
 package com.ldt.musicr.ui.widget.soundfile;
 
-import java.io.File;
-import java.io.FileInputStream;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
+import android.util.Log;
+
+import com.ldt.musicr.App;
+
 import java.io.InputStream;
 
 /**
@@ -32,10 +36,10 @@ import java.io.InputStream;
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>
  */
-public class CheapAMR extends CheapSoundFile {
+public class CheapAMR extends SoundFile {
     public static Factory getFactory() {
         return new Factory() {
-            public CheapSoundFile create() {
+            public SoundFile create() {
                 return new CheapAMR();
             }
             public String[] getSupportedExtensions() {
@@ -91,10 +95,10 @@ public class CheapAMR extends CheapSoundFile {
         return "AMR";
     }
 
-    public void ReadFile(File inputFile)
+    public void readFile(Uri inputFile)
             throws java.io.FileNotFoundException,
             java.io.IOException {
-        super.ReadFile(inputFile);
+        super.readFile(inputFile);
         mNumFrames = 0;
         mMaxFrames = 64;  // This will grow as needed
         mFrameGains = new int[mMaxFrames];
@@ -103,14 +107,24 @@ public class CheapAMR extends CheapSoundFile {
         mBitRate = 10;
         mOffset = 0;
 
+        InputStream stream = null;
+        AssetFileDescriptor file;
+        file = App.getInstance().getContentResolver().openAssetFileDescriptor(inputFile, "r");
+
+        if(file == null) throw  new NullPointerException("File is null");
+
+        stream = file.createInputStream();
+        if(stream == null) throw new NullPointerException("Input stream is null");
+
+        else Log.d("audioSeekbar", "ReadFile: input stream is not null");
+
         // No need to handle filesizes larger than can fit in a 32-bit int
-        mFileSize = (int)mInputFile.length();
+        mFileSize = (int) file.getLength();
 
         if (mFileSize < 128) {
             throw new java.io.IOException("File too small to parse");
         }
 
-        FileInputStream stream = new FileInputStream(mInputFile);
         byte[] header = new byte[12];
         stream.read(header, 0, 6);
         mOffset += 6;

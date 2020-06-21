@@ -17,9 +17,13 @@ package com.ldt.musicr.ui.widget.soundfile;
  */
 
 
+        import android.content.res.AssetFileDescriptor;
+        import android.net.Uri;
         import android.util.Log;
 
-        import java.io.File;
+        import com.ldt.musicr.App;
+
+        import java.io.InputStream;
 
 /**
  * CheapWAV represents a standard 16-bit WAV file, splitting it into
@@ -27,12 +31,12 @@ package com.ldt.musicr.ui.widget.soundfile;
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>
  */
-public class CheapWAV extends CheapSoundFile {
+public class CheapWAV extends SoundFile {
     public static final String TAG = "CheapWAV";
 
     public static Factory getFactory() {
         return new Factory() {
-            public CheapSoundFile create() {
+            public SoundFile create() {
                 return new CheapWAV();
             }
             public String[] getSupportedExtensions() {
@@ -83,15 +87,28 @@ public class CheapWAV extends CheapSoundFile {
         return "WAV";
     }
 
-    public void ReadFile(File inputFile) throws java.io.IOException {
-        super.ReadFile(inputFile);
-        mFileSize = (int) mInputFile.length();
+    public void readFile(Uri inputFile) throws java.io.IOException {
+        super.readFile(inputFile);
+
+        InputStream stream = null;
+        AssetFileDescriptor file;
+        file = App.getInstance().getContentResolver().openAssetFileDescriptor(inputFile, "r");
+
+        if(file == null) throw  new NullPointerException("File is null");
+
+        stream = file.createInputStream();
+        if(stream == null) throw new NullPointerException("Input stream is null");
+
+        else Log.d("audioSeekbar", "ReadFile: input stream is not null");
+
+        // No need to handle filesizes larger than can fit in a 32-bit int
+        mFileSize = (int) file.getLength();
 
         if (mFileSize < 128) {
             throw new java.io.IOException("File too small to parse");
         }
         try {
-            WavFile wavFile = WavFile.openWavFile(inputFile);
+            WavFileDescriptor wavFile = WavFileDescriptor.openWavFile(file);
             mNumFrames = (int) (wavFile.getNumFrames() / getSamplesPerFrame());
             mFrameGains = new int[mNumFrames];
             mSampleRate = (int) wavFile.getSampleRate();

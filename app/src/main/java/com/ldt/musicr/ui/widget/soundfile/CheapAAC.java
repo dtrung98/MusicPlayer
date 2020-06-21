@@ -21,8 +21,12 @@ package com.ldt.musicr.ui.widget.soundfile;
  */
 
 
-        import java.io.File;
-        import java.io.FileInputStream;
+        import android.content.res.AssetFileDescriptor;
+        import android.net.Uri;
+        import android.util.Log;
+
+        import com.ldt.musicr.App;
+
         import java.io.InputStream;
         import java.util.HashMap;
 
@@ -34,10 +38,10 @@ package com.ldt.musicr.ui.widget.soundfile;
  *
  * Modified by Anna Stępień <anna.stepien@semantive.com>
  */
-public class CheapAAC extends CheapSoundFile {
+public class CheapAAC extends SoundFile {
     public static Factory getFactory() {
         return new Factory() {
-            public CheapSoundFile create() {
+            public SoundFile create() {
                 return new CheapAAC();
             }
 
@@ -166,10 +170,10 @@ public class CheapAAC extends CheapSoundFile {
         return str;
     }
 
-    public void ReadFile(File inputFile)
+    public void readFile(Uri inputFile)
             throws java.io.FileNotFoundException,
             java.io.IOException {
-        super.ReadFile(inputFile);
+        super.readFile(inputFile);
         mChannels = 0;
         mSampleRate = 0;
         mBitrate = 0;
@@ -183,15 +187,25 @@ public class CheapAAC extends CheapSoundFile {
 
         mAtomMap = new HashMap<Integer, Atom>();
 
+        InputStream stream = null;
+        AssetFileDescriptor file;
+        file = App.getInstance().getContentResolver().openAssetFileDescriptor(inputFile, "r");
+
+        if(file == null) throw  new NullPointerException("File is null");
+
+        // Read the first 8 bytes
+        stream = file.createInputStream();
+        if(stream == null) throw new NullPointerException("Input stream is null");
+
+        else Log.d("audioSeekbar", "ReadFile: input stream is not null");
+
         // No need to handle filesizes larger than can fit in a 32-bit int
-        mFileSize = (int) mInputFile.length();
+        mFileSize = (int) file.getLength();
 
         if (mFileSize < 128) {
             throw new java.io.IOException("File too small to parse");
         }
 
-        // Read the first 8 bytes
-        FileInputStream stream = new FileInputStream(mInputFile);
         byte[] header = new byte[8];
         stream.read(header, 0, 8);
 
@@ -201,14 +215,14 @@ public class CheapAAC extends CheapSoundFile {
                 header[6] == 'y' &&
                 header[7] == 'p') {
             // Create a new stream, reset to the beginning of the file
-            stream = new FileInputStream(mInputFile);
+            stream = file.createInputStream();
             parseMp4(stream, mFileSize);
         } else {
             throw new java.io.IOException("Unknown file format");
         }
 
         if (mMdatOffset > 0 && mMdatLength > 0) {
-            stream = new FileInputStream(mInputFile);
+            stream = file.createInputStream();
             stream.skip(mMdatOffset);
             mOffset = mMdatOffset;
             parseMdat(stream, mMdatLength);

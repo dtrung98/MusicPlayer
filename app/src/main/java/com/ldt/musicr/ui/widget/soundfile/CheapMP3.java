@@ -17,25 +17,32 @@ package com.ldt.musicr.ui.widget.soundfile;
  */
 
 
-        import java.io.File;
-        import java.io.FileInputStream;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
+import android.util.Log;
+
+import com.ldt.musicr.App;
+
+import java.io.InputStream;
 
 /**
  * CheapMP3 represents an MP3 file by doing a "cheap" scan of the file,
  * parsing the frame headers only and getting an extremely rough estimate
  * of the volume level of each frame.
- *
+ * <p>
  * Modified by Anna Stępień <anna.stepien@semantive.com>
- *
  */
-public class CheapMP3 extends CheapSoundFile {
+public class CheapMP3 extends SoundFile {
+    private static final String TAG = "CheapMP3";
+
     public static Factory getFactory() {
         return new Factory() {
-            public CheapSoundFile create() {
+            public SoundFile create() {
                 return new CheapMP3();
             }
+
             public String[] getSupportedExtensions() {
-                return new String[] { "mp3" };
+                return new String[]{"mp3"};
             }
         };
     }
@@ -89,10 +96,10 @@ public class CheapMP3 extends CheapSoundFile {
         return "MP3";
     }
 
-    public void ReadFile(File inputFile)
+    public void readFile(Uri uri)
             throws java.io.FileNotFoundException,
-            java.io.IOException {
-        super.ReadFile(inputFile);
+            java.io.IOException, NullPointerException {
+        super.readFile(uri);
         mNumFrames = 0;
         mMaxFrames = 64;  // This will grow as needed
         mFrameGains = new int[mMaxFrames];
@@ -100,10 +107,20 @@ public class CheapMP3 extends CheapSoundFile {
         mMinGain = 255;
         mMaxGain = 0;
 
-        // No need to handle filesizes larger than can fit in a 32-bit int
-        mFileSize = (int)mInputFile.length();
+        Log.d(TAG, "ReadFile: will open a input stream soon");
+        InputStream stream = null;
+        AssetFileDescriptor file;
+        file = App.getInstance().getContentResolver().openAssetFileDescriptor(uri, "r");
 
-        FileInputStream stream = new FileInputStream(mInputFile);
+        if(file == null) throw  new NullPointerException("File is null");
+
+        stream = file.createInputStream();
+        if(stream == null) throw new NullPointerException("Input stream is null");
+
+        else Log.d("audioSeekbar", "ReadFile: input stream is not null");
+
+        // No need to handle filesizes larger than can fit in a 32-bit int
+        mFileSize = (int) file.getLength();
 
         int pos = 0;
         int offset = 0;
@@ -193,7 +210,7 @@ public class CheapMP3 extends CheapSoundFile {
                 // 2 channels
                 mGlobalChannels = 2;
                 if (mpgVersion == 1) {
-                    gain = ((buffer[9]  & 0x7F) << 1) +
+                    gain = ((buffer[9] & 0x7F) << 1) +
                             ((buffer[10] & 0x80) >> 7);
                 } else {
                     gain = 0;  // ???
@@ -247,13 +264,13 @@ public class CheapMP3 extends CheapSoundFile {
     }
 
     static private int BITRATES_MPEG1_L3[] = {
-            0,  32,  40,  48,  56,  64,  80,  96,
-            112, 128, 160, 192, 224, 256, 320,  0 };
+            0, 32, 40, 48, 56, 64, 80, 96,
+            112, 128, 160, 192, 224, 256, 320, 0};
     static private int BITRATES_MPEG2_L3[] = {
-            0,   8,  16,  24,  32,  40,  48,  56,
-            64,  80,  96, 112, 128, 144, 160, 0 };
+            0, 8, 16, 24, 32, 40, 48, 56,
+            64, 80, 96, 112, 128, 144, 160, 0};
     static private int SAMPLERATES_MPEG1_L3[] = {
-            44100, 48000, 32000, 0 };
+            44100, 48000, 32000, 0};
     static private int SAMPLERATES_MPEG2_L3[] = {
-            22050, 24000, 16000, 0 };
+            22050, 24000, 16000, 0};
 };

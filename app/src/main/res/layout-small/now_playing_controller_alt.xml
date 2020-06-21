@@ -190,7 +190,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/visual_seek_bar"
         />
-    <com.ldt.musicr.ui.widget.view.AudioVisualSeekBar
+    <com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar
         android:id="@+id/visual_seek_bar"
         android:layout_width="0dp"
         android:layout_height="120dp"

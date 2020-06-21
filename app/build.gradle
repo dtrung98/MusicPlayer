@@ -9,12 +9,16 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         versionCode 4
-        versionName '1.2.2'
+        versionName '1.2.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 29
         renderscriptSupportModeEnabled true
         vectorDrawables.useSupportLibrary = true
+
         multiDexEnabled true
+        dexOptions {
+            javaMaxHeapSize "4g"
+        }
     }
     buildTypes {
         release {
@@ -49,7 +53,8 @@ dependencies {
     })
     //  debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
     //  releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-    implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.google.android.material:material:1.3.0-alpha01'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -58,13 +63,13 @@ dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
-    implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.preference:preference:1.1.1'
 
-    // Oversroll Effect on Scrollable View
+    // Over scroll Effect on Scrollable View
     implementation 'me.everything:overscroll-decor-android:1.0.4'
 
     // Kotlin
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.daasuu:EasingInterpolator:1.0.0'
@@ -80,8 +85,8 @@ dependencies {
    // implementation 'com.moos:Material-ProgressView:1.0.6'
 
     // Butter Knife
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 
     // Round Image View
     implementation 'com.makeramen:roundedimageview:2.3.0'
@@ -91,9 +96,9 @@ dependencies {
     //implementation 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
 
     // Glide V4
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    implementation "com.github.bumptech.glide:okhttp3-integration:4.9.0"
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
     // RecyclerView FastScroller
 
     //  Original
@@ -111,11 +116,11 @@ dependencies {
     //implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     // Retrofit 2
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
 
     // Gson & Gson Converter
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
 
     // JAudioTagger
     implementation 'com.github.AdrienPoupa:jaudiotagger:2.2.3'
@@ -128,7 +133,7 @@ dependencies {
     //implementation 'com.github.kabouzeid:app-theme-helper:1.3.10'
 
     // Photo View
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     // Jsoup HTML parser library @ https://jsoup.org/
     implementation 'org.jsoup:jsoup:1.11.3'
@@ -150,9 +155,6 @@ dependencies {
 
     // JBox2d
     implementation 'org.jbox2d:jbox2d-library:2.1.2.2'
-
-    // Navigation Controller
-    implementation 'com.github.tdh7:NavigationController:1.0.0'
 }
 
 apply plugin: 'kotlin-android-extensions'

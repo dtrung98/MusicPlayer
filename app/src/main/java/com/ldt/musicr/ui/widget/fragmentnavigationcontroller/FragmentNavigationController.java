@@ -18,7 +18,6 @@ import java.util.Stack;
 /**
  * Created by burt on 2016. 5. 24..
  */
-@SuppressLint("ValidFragment")
 public class FragmentNavigationController extends SupportFragment {
 
     private FragmentManager fragmentManager = null;

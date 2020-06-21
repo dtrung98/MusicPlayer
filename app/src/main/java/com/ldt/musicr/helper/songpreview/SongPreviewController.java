@@ -7,9 +7,8 @@ import android.util.Log;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.widget.soundfile.CheapSoundFile;
+import com.ldt.musicr.ui.widget.avsb.SoundFile;
 
-import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +23,8 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     }
 
     @Override
-    public void onServiceConnected() {}
+    public void onServiceConnected() {
+    }
 
     @Override
     public void onServiceDisconnected() {
@@ -44,19 +44,22 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     @Override
     public void onPlayStateChanged() {
         boolean isPlaying = MusicPlayerRemote.isPlaying();
-        if(isPlaying && mPreviewPlayer!=null && mPreviewPlayer.isPlayingPreview()) {
+        if (isPlaying && mPreviewPlayer != null && mPreviewPlayer.isPlayingPreview()) {
             mPreviewPlayer.pause();
         }
     }
 
     @Override
-    public void onRepeatModeChanged() {}
+    public void onRepeatModeChanged() {
+    }
 
     @Override
-    public void onShuffleModeChanged() {}
+    public void onShuffleModeChanged() {
+    }
 
     @Override
-    public void onMediaStoreChanged() {}
+    public void onMediaStoreChanged() {
+    }
 
     @Override
     public void onPaletteChanged() {
@@ -85,7 +88,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
     public void destroy() {
 
-        if(mSoundFilesTask!=null) mSoundFilesTask.cancel();
+        if (mSoundFilesTask != null) mSoundFilesTask.cancel();
         mSoundFilesTask = null;
         mPreviewPlayer.destroy();
         mPreviewPlayer = null;
@@ -94,16 +97,16 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     }
 
     public void addSongPreviewListener(SongPreviewListener listener) {
-        if(listener!=null&&!mListeners.contains(listener))
-        mListeners.add(listener);
+        if (listener != null && !mListeners.contains(listener))
+            mListeners.add(listener);
     }
 
     public void removeAudioPreviewerListener(SongPreviewListener listener) {
-        if(listener!=null) mListeners.remove(listener);
+        if (listener != null) mListeners.remove(listener);
     }
 
     public void previewSongs(List<Song> songs) {
-        Log.d(TAG, "previewSongs: size = "+songs.size());
+        Log.d(TAG, "previewSongs: size = " + songs.size());
         previewSongs(songs.toArray(new Song[0]));
     }
 
@@ -113,7 +116,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
     public Song getCurrentSongPreviewSong() {
         PreviewSong song = mPreviewPlayer.getCurrentPreviewSong();
-        if(song==null) return null;
+        if (song == null) return null;
         return song.getSong();
     }
 
@@ -123,16 +126,16 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
     public boolean isPreviewingSong(Song which) {
         Song song = getCurrentSongPreviewSong();
-        return song!=null&&song.equals(which);
+        return song != null && song.equals(which);
     }
 
     public void previewSongs(Song... songs) {
         boolean isMusicPlaying = MusicPlayerRemote.isPlaying();
 
-        if(mSoundFilesTask!=null) mSoundFilesTask.cancel();
+        if (mSoundFilesTask != null) mSoundFilesTask.cancel();
         mPreviewPlayer.stopSession();
 
-        if(isMusicPlaying) {
+        if (isMusicPlaying) {
             MusicPlayerRemote.playOrPause();
         }
         mPreviewPlayer.shouldPlayingMusicServiceOnFinish(isMusicPlaying);
@@ -143,7 +146,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     }
 
     public void cancelPreview() {
-        if(mSoundFilesTask!=null) mSoundFilesTask.cancel();
+        if (mSoundFilesTask != null) mSoundFilesTask.cancel();
         mSoundFilesTask = null;
         mPreviewPlayer.stopSession();
     }
@@ -156,6 +159,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         public SoundFilesLoader(SongPreviewController controller) {
             mRefController = new WeakReference<>(controller);
         }
+
         private boolean mIsCanceled = false;
 
         public void cancel() {
@@ -169,36 +173,37 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
             for (Song song :
                     songs) {
-                if(mIsCanceled) break;
-               loadPreviewSong(song);
+                if (mIsCanceled) break;
+                loadPreviewSong(song);
             }
 
             return null;
         }
 
         private void loadPreviewSong(Song song) {
-            File file = new File(song.data);
-            if(!file.exists()) return;
-
-            CheapSoundFile cheapSoundFile = null;
+            SoundFile cheapSoundFile = null;
             try {
-                cheapSoundFile = CheapSoundFile.create(file.getAbsolutePath(), null);
-            } catch (final Exception e) { return;}
+                cheapSoundFile = SoundFile.create(song, null);
+            } catch (final Exception e) {
+                return;
+            }
 
-            if(cheapSoundFile!=null)
+            if (cheapSoundFile != null)
                 try {
                     calculateSound(cheapSoundFile);
-                } catch (final Exception e) {return;}
+                } catch (final Exception e) {
+                    return;
+                }
 
             SongPreviewController controller = mRefController.get();
-            if(controller!=null&&!mIsCanceled) {
+            if (controller != null && !mIsCanceled) {
                 controller.mHandler.post(
                         () -> controller.onNewPreviewSongReady(
                                 new PreviewSong(song, (int) mMillisPlayFrom, (int) mMillisPlayTo)));
             }
         }
 
-        private double mMillisPlayFrom =0;
+        private double mMillisPlayFrom = 0;
         private double mMillisPlayTo = 0;
 
         private double mSampleRate;
@@ -209,7 +214,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
         private int[] mFrameGain;
 
-        private synchronized void calculateSound(CheapSoundFile soundFile) {
+        private synchronized void calculateSound(SoundFile soundFile) {
             // run in the background
             mNumFrames = soundFile.getNumFrames();
             mSampleRate = soundFile.getSampleRate();
@@ -222,10 +227,10 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
             double durationZone;
             double timeFromZone = 0;
 
-            if(mDuration<40) {
+            if (mDuration < 40) {
                 durationZone = 40;
                 timeFromZone = 5;
-            } else if(mDuration<60) {
+            } else if (mDuration < 60) {
                 timeFromZone = 5;
                 durationZone = mIntDuration - 5 - 5;
             } else {
@@ -233,13 +238,13 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
                 durationZone = mIntDuration - timeFromZone - 8;
             }
 
-            int frameFromZone = (int) (mNumFrames*timeFromZone/mDuration);
+            int frameFromZone = (int) (mNumFrames * timeFromZone / mDuration);
             //   int frameToZone = (int) (frameFromZone + durationZone*2);
             //   int frameToZone = (int) (mNumFrames-1);
-            int frameToZone = (int) (frameFromZone + durationZone*mNumFrames/mDuration);
-            if(frameToZone>mNumFrames-1) frameToZone = (int) (mNumFrames-1);
+            int frameToZone = (int) (frameFromZone + durationZone * mNumFrames / mDuration);
+            if (frameToZone > mNumFrames - 1) frameToZone = (int) (mNumFrames - 1);
 
-            int[] frameGainInPlayingZone = Arrays.copyOfRange(mFrameGain,frameFromZone,frameToZone);
+            int[] frameGainInPlayingZone = Arrays.copyOfRange(mFrameGain, frameFromZone, frameToZone);
 
             int numberFrameGainPlayingZone = frameGainInPlayingZone.length;
 
@@ -247,38 +252,39 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
             // reduce the FrameGain to PenGain
             // 1 pen gain = 0.5s
             float penGainSecond_Guessing = 0.5f;
-            durationZone = ((frameToZone-frameFromZone)/(mNumFrames+0f))*mDuration;
-            int numberPenGain_Guess = (int) (Math.floor(((frameToZone-frameFromZone)/(mNumFrames+0f))*(mDuration/penGainSecond_Guessing))); // each 500ms
-            int numberFrameEachPenGain = numberFrameGainPlayingZone/numberPenGain_Guess;
+            durationZone = ((frameToZone - frameFromZone) / (mNumFrames + 0f)) * mDuration;
+            int numberPenGain_Guess = (int) (Math.floor(((frameToZone - frameFromZone) / (mNumFrames + 0f)) * (mDuration / penGainSecond_Guessing))); // each 500ms
+            int numberFrameEachPenGain = numberFrameGainPlayingZone / numberPenGain_Guess;
 
-            numberPenGain_Guess = (int) Math.ceil((numberFrameGainPlayingZone+0f)/numberFrameEachPenGain);
-            float penGainSecond = (float) (durationZone/numberPenGain_Guess);
+            numberPenGain_Guess = (int) Math.ceil((numberFrameGainPlayingZone + 0f) / numberFrameEachPenGain);
+            float penGainSecond = (float) (durationZone / numberPenGain_Guess);
 
             double[] originalPenGain = new double[numberPenGain_Guess];
 
             originalPenGain[0] = 0;
             int iPen = 0;
             int pos = 0;
-            for(int iFrame = 0;iFrame < numberFrameGainPlayingZone;iFrame++) {
-                originalPenGain[iPen] +=frameGainInPlayingZone[iFrame];
+            for (int iFrame = 0; iFrame < numberFrameGainPlayingZone; iFrame++) {
+                originalPenGain[iPen] += frameGainInPlayingZone[iFrame];
                 pos++;
-                if(iPen==numberPenGain_Guess-1) Log.d(TAG, "last : frame["+iFrame+"] = "+frameGainInPlayingZone[iFrame]+", pos = "+ pos );
+                if (iPen == numberPenGain_Guess - 1)
+                    Log.d(TAG, "last : frame[" + iFrame + "] = " + frameGainInPlayingZone[iFrame] + ", pos = " + pos);
 
-                if(iFrame == numberFrameGainPlayingZone - 1) {
-                    originalPenGain[iPen] /=pos;
-                    Log.d(TAG, "last : ipen = "+iPen+", average = "+ originalPenGain[iPen]+", from "+ pos+" element" +" / "+numberFrameEachPenGain);
-                } else if (pos==numberFrameEachPenGain) {
-                    originalPenGain[iPen]/=numberFrameEachPenGain;
+                if (iFrame == numberFrameGainPlayingZone - 1) {
+                    originalPenGain[iPen] /= pos;
+                    Log.d(TAG, "last : ipen = " + iPen + ", average = " + originalPenGain[iPen] + ", from " + pos + " element" + " / " + numberFrameEachPenGain);
+                } else if (pos == numberFrameEachPenGain) {
+                    originalPenGain[iPen] /= numberFrameEachPenGain;
 
                     pos = 0;
                     iPen++;
                 }
             }
-            Log.d(TAG, "calculateSound: duration = "+ mDuration);
+            Log.d(TAG, "calculateSound: duration = " + mDuration);
 
             // make pen gains smoothly
             // computeDoublesForAllZoomLevels(numberPenGain_Guess, originalPenGain);
-            double[] SmoothedPenGain =originalPenGain;// new double[numberPenGain_Guess];
+            double[] SmoothedPenGain = originalPenGain;// new double[numberPenGain_Guess];
 //        for (int i_pen = 0; i_pen < numberPenGain_Guess; i_pen++)
 //            SmoothedPenGain[i_pen] = getHeight(i_pen, numberPenGain_Guess, originalPenGain, scaleFactor, minGain, range);
 
@@ -298,32 +304,31 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
             int newEndPen = endPen;
 
             double minPenBeforeStartPen = SmoothedPenGain[startPen];
-            int item = (startPen <= staticEdge) ? 0: startPen - staticEdge;
-            for(;item<startPen;item++)
-                if(SmoothedPenGain[item] < minPenBeforeStartPen) {
+            int item = (startPen <= staticEdge) ? 0 : startPen - staticEdge;
+            for (; item < startPen; item++)
+                if (SmoothedPenGain[item] < minPenBeforeStartPen) {
                     minPenBeforeStartPen = SmoothedPenGain[item];
                     newStartPen = item;
                 }
 
             double minPenAfterEndPen = SmoothedPenGain[endPen];
-            for(int i = endPen+1;i<=endPen+staticEdge&&i<SmoothedPenGain.length;i++)
-                if(SmoothedPenGain[i]<minPenAfterEndPen) {
+            for (int i = endPen + 1; i <= endPen + staticEdge && i < SmoothedPenGain.length; i++)
+                if (SmoothedPenGain[i] < minPenAfterEndPen) {
                     minPenAfterEndPen = SmoothedPenGain[i];
                     newEndPen = i;
                 }
 
-            Log.d(TAG, "calculateSound: start = "+ newStartPen+", penNum = "+ (newEndPen- newStartPen) );
+            Log.d(TAG, "calculateSound: start = " + newStartPen + ", penNum = " + (newEndPen - newStartPen));
 
-            mMillisPlayFrom =  1000*(timeFromZone + newStartPen*penGainSecond);
-            mMillisPlayTo =  1000*(timeFromZone + newEndPen*penGainSecond);
-            Log.d(TAG, "calculateSound: time from "+ mMillisPlayFrom +" to "+ mMillisPlayTo);
+            mMillisPlayFrom = 1000 * (timeFromZone + newStartPen * penGainSecond);
+            mMillisPlayTo = 1000 * (timeFromZone + newEndPen * penGainSecond);
+            Log.d(TAG, "calculateSound: time from " + mMillisPlayFrom + " to " + mMillisPlayTo);
         }
 
 
         // Returns beginning index of maximum average
         // subarray of length 'k'
-        static int findMaxAverage(double arr[], int n, int k)
-        {
+        static int findMaxAverage(double arr[], int n, int k) {
 
             // Check if 'k' is valid
             if (k > n)
@@ -335,14 +340,12 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
                 sum += arr[i];
 
             double max_sum = sum;
-            int max_end = k-1;
+            int max_end = k - 1;
 
             // Compute sum of remaining subarrays
-            for (int i = k; i < n; i++)
-            {
-                sum = sum + arr[i] - arr[i-k];
-                if (sum > max_sum)
-                {
+            for (int i = k; i < n; i++) {
+                sum = sum + arr[i] - arr[i - k];
+                if (sum > max_sum) {
                     max_sum = sum;
                     max_end = i;
                 }
@@ -352,6 +355,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
             //return max_end - k + 1;
             return max_end - k;
         }
+
         protected double getHeight(int i, int totalPens, double[] penGain, float scaleFactor, float minGain, float range) {
             double value = (getGain(i, totalPens, penGain) * scaleFactor - minGain) / range;
 
@@ -379,6 +383,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         }
 
     }
+
     private Handler mHandler = new Handler();
 
     private void onNewPreviewSongReady(PreviewSong song) {
