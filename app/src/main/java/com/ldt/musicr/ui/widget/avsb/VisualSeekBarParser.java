@@ -76,7 +76,7 @@ class VisualSeekBarParser implements ProgressListener {
 
                     try {
                         mSoundFile = com.ldt.musicr.ui.widget.soundfile.SoundFile.create(song, this);
-                        Thread.sleep(2500);
+                        //Thread.sleep(2500);
                     } catch (FileNotFoundException e) {
                         mMessage = "File is not found";
                     } catch (Exception e) {
