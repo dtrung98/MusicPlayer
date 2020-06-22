@@ -35,6 +35,7 @@ import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class GenreChildTab extends BaseMusicServiceFragment {
     public static final String TAG="GenreChildTab";
@@ -55,15 +56,25 @@ public class GenreChildTab extends BaseMusicServiceFragment {
     @BindDimen(R.dimen._16dp)
     float m16Dp;
 
+    private Unbinder mUnbinder;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
+        mUnbinder = ButterKnife.bind(this,view);
     }
 
     @Override
     public void onMediaStoreChanged() {}
 
+    @Override
+    public void onDestroyView() {
 
+        if(mUnbinder!=null) {
+            mUnbinder.unbind();
+            mUnbinder = null;
+        }
+        super.onDestroyView();
+    }
 }
 

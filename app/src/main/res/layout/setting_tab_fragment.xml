@@ -17,7 +17,7 @@
     <androidx.constraintlayout.widget.Group
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="specific_playlist,specific_playlist_note,more_setting,more_setting_icon,create_now"
+        app:constraint_referenced_ids="specific_playlist,specific_playlist_note,create_now"
         android:visibility="gone"
         tools:visibility="visible"/>
     <View

@@ -21,6 +21,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.page.subpages.MoreOptionFragment;
 import com.ldt.musicr.ui.widget.rangeseekbar.OnRangeChangedListener;
 import com.ldt.musicr.ui.widget.rangeseekbar.RangeSeekBar;
 import com.ldt.musicr.util.Tool;
@@ -247,6 +248,6 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment implemen
     @BindView(R.id.more_setting) View mMoreSettingView;
     @OnClick(R.id.more_setting)
     void goToMoreSetting() {
-
+        getNavigationController().presentFragment(MoreOptionFragment.newInstance());
     }
 }
