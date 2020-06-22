@@ -1,7 +1,5 @@
 package com.ldt.musicr.ui.widget.avsb;
 
-import android.content.res.AssetFileDescriptor;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
@@ -10,14 +8,13 @@ import com.ldt.musicr.model.Song;
 
 import java.io.FileNotFoundException;
 
-import static com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar.ACTION_SEEK_BAR_PARSING_FILE;
-
 class VisualSeekBarParser implements ProgressListener {
     private final AudioVisualSeekBar mSeekBar;
 
-    protected AssetFileDescriptor mFile;
-    protected SoundFile mSoundFile;
-    private double NumberFrameInAPen;
+    /* Parser response message: use to check the result */
+    private String mMessage = "";
+
+    protected com.ldt.musicr.ui.widget.soundfile.SoundFile mSoundFile;
     protected boolean mInitialized;
     protected float range;
     protected float scaleFactor;
@@ -25,43 +22,92 @@ class VisualSeekBarParser implements ProgressListener {
     protected double mSampleRate;
     protected double mSamplesPerFrame;
     protected double mNumFrames;
-    protected double mDuration;
+    protected double mParseDuration;
     protected int mIntDuration;
     protected int mMaxGain, mMinGain;
     protected int[] mFrameGain;
+
+    private int mNumberFrameInAPen;
     int mNumberFrameAppearInScreen;
     int mNumberPensAppearInScreen;
 
     int mTotalPens;
     double[] mSmoothedPenGain;
 
+    private float mViewWidth = 0;
+    private float mViewHeight = 0;
+
+    private double getDeclaredDuration() {
+        return mSeekBar.mSongDeclareDuration;
+    }
+
+    private boolean isSoundFileDataAvailable() {
+        return mNumFrames != 0;
+    }
+
+    private boolean isViewSizeAvailable() {
+        return mViewWidth != 0;
+    }
+
+    void viewSizeChanged(float newW, float newH) {
+        if (newW != mViewWidth || newH != mViewHeight) {
+            mViewWidth = newW;
+            mViewHeight = newH;
+            AppExecutors.getInstance().networkIO().execute(this::parseVisualData);
+        }
+    }
+
     public VisualSeekBarParser(@NonNull AudioVisualSeekBar seekBar) {
         mSeekBar = seekBar;
     }
+
+    /**
+     * Step 1: Parse the sound file
+     * Step 2: When the view size available, or change, use the parsed data to update the visual data
+     * Variable changed: if sound file changed -> restart from step 1. if view size changed -> restart from step 2.
+     *
+     * @param song
+     */
     void parse(Song song) {
         AppExecutors.getInstance().networkIO().execute(() -> {
+                    mMessage = "";
+                    /* notify the seek bar that parser is starting to parse a file */
+                    AppExecutors.getInstance().mainThread().execute(mSeekBar::startParsingFile);
+
                     try {
-                        mSoundFile = SoundFile.create(song, this);
+                        mSoundFile = com.ldt.musicr.ui.widget.soundfile.SoundFile.create(song, this);
+                        Thread.sleep(2500);
                     } catch (FileNotFoundException e) {
-                        mSeekBar.seekBarNotify(ACTION_SEEK_BAR_PARSING_FILE,"File is not found");
+                        mMessage = "File is not found";
                     } catch (Exception e) {
-                        mSeekBar.seekBarNotify(ACTION_SEEK_BAR_PARSING_FILE, "Could not parse audio");
+                        mMessage = "Could not parse the audio";
                     }
 
-                    if(mSoundFile != null) parse();
+                    if (mMessage.isEmpty())
+                        parse();
+
+                    /* notify the seek bar that parsing process had finish */
                     AppExecutors.getInstance().mainThread().execute(mSeekBar::finishParsingFile);
                 }
         );
     }
 
+    @WorkerThread
     private void parse() {
         // run in the background
+        parseSoundFileData();
+        parseVisualData();
+
+    }
+
+    @WorkerThread
+    private void parseSoundFileData() {
         mNumFrames = mSoundFile.getNumFrames();
         //Log.d(TAG, "calculateSound: "+mNumFrames);
         mSampleRate = mSoundFile.getSampleRate();
         mSamplesPerFrame = mSoundFile.getSamplesPerFrame();
-        mDuration = mNumFrames * mSamplesPerFrame / mSampleRate + 0.0f;
-        mIntDuration = (int) mDuration;
+        mParseDuration = mNumFrames * mSamplesPerFrame / mSampleRate + 0.0f;
+        mIntDuration = (int) mParseDuration;
         mFrameGain = mSoundFile.getFrameGains();
         mMaxGain = 0;
         mMinGain = 255;
@@ -69,6 +115,13 @@ class VisualSeekBarParser implements ProgressListener {
             if (mMaxGain < mFrameGain[i]) mMaxGain = mFrameGain[i];
             if (mMinGain > mFrameGain[i]) mMinGain = mFrameGain[i];
         }
+    }
+
+    @WorkerThread
+    private void parseVisualData() {
+        if (!isSoundFileDataAvailable()) return;
+        if (!isViewSizeAvailable()) return;
+
 
         //30 s for a screen width
         // how many frames appeared in a screen width ?
@@ -76,17 +129,20 @@ class VisualSeekBarParser implements ProgressListener {
         // >> how many frame for one pen ?
         // duration = 1.5*Width
 
-        mNumberPensAppearInScreen = (int) (((mSeekBar.mWidth + mSeekBar.mPenDistance) / (0.0f + mSeekBar.oneDp) + 1.0f) / 4.0f);
+        mNumberPensAppearInScreen = (int) (((mSeekBar.mWidth + mSeekBar.mPenDistance) / (0.0f + mSeekBar.mOneDp) + 1.0f) / 4.0f);
 
-        double secondsInScreen = (mDuration / 4f) / 1000f;
+        double secondsInScreen = (getDeclaredDuration() / 1000f) / 4f;
         //Log.d(TAG, "calculateSound: duration  = "+duration+", sis = "+ secondsInScreen);
-        mNumberFrameAppearInScreen = (int) (mNumFrames * secondsInScreen / mDuration);
-        NumberFrameInAPen = (float)mNumberFrameAppearInScreen / mNumberPensAppearInScreen;
-        double re = (mNumFrames + 0.0f) / NumberFrameInAPen;
+        mNumberFrameAppearInScreen = (int) (mNumFrames * secondsInScreen / mParseDuration);
+        mNumberFrameInAPen = mNumberFrameAppearInScreen / mNumberPensAppearInScreen;
+        double re = (mNumFrames + 0.0f) / mNumberFrameInAPen;
         mTotalPens = (re == ((int) re)) ? (int) re : ((int) re + 1);
 
         double[] originalPenGain = new double[mTotalPens];
-        originalPenGain[0] = 0;
+
+        if (originalPenGain.length > 0)
+            originalPenGain[0] = 0;
+
         //  reduce the frame gains array (large data) into the pen gains with smaller data.
         int iPen = 0;
         int pos = 0;
@@ -97,8 +153,8 @@ class VisualSeekBarParser implements ProgressListener {
             pos++;
             if (iFrame == mNumFrames - 1) {
                 originalPenGain[iPen] /= pos;
-            } else if (pos == NumberFrameInAPen) {
-                originalPenGain[iPen] /= NumberFrameInAPen;
+            } else if (pos == mNumberFrameInAPen) {
+                originalPenGain[iPen] /= mNumberFrameInAPen;
                 pos = 0;
                 iPen++;
             }
@@ -108,9 +164,8 @@ class VisualSeekBarParser implements ProgressListener {
         mSmoothedPenGain = new double[mTotalPens];
         for (int i_pen = 0; i_pen < mTotalPens; i_pen++)
             mSmoothedPenGain[i_pen] = getHeight(i_pen, mTotalPens, originalPenGain, scaleFactor, minGain, range);
-
+        int x = 0;
     }
-
 
     @WorkerThread
     protected double getHeight(int i, int totalPens, double[] penGain, float scaleFactor, float minGain, float range) {
@@ -142,7 +197,7 @@ class VisualSeekBarParser implements ProgressListener {
 
         // Build histogram of 256 bins and figure out the new scaled max
         maxGain = 0;
-        int gainHist[] = new int[256];
+        int[] gainHist = new int[256];
         for (int i = 0; i < totalPenGains; i++) {
             int smoothedGain = (int) (getGain(i, totalPenGains, originPenGain) * scaleFactor);
             if (smoothedGain < 0)
@@ -200,7 +255,6 @@ class VisualSeekBarParser implements ProgressListener {
             }
         }
     }
-
 
 
     @Override

@@ -1,4 +1,5 @@
 package com.ldt.musicr.util;
+
 import android.animation.TimeInterpolator;
 import android.app.Activity;
 import android.graphics.Color;
@@ -8,9 +9,12 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
+
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -155,23 +159,24 @@ public class Animation extends Activity {
         for (int i = 0; i < interpolatorList.size(); i++) {
             Interpolator interpolator = interpolatorList.get(i);
             View view = root.getChildAt(i);
-        //   TranslateAnimation Tanimation = new TranslateAnimation(0, displaySize.x - maxTextWidth - 2 * margin, 0, 0);
-            ScaleAnimation animation = new ScaleAnimation(2,1,2,1);
-        //    RotateAnimation animation = new RotateAnimation(0,60);
+            //   TranslateAnimation Tanimation = new TranslateAnimation(0, displaySize.x - maxTextWidth - 2 * margin, 0, 0);
+            ScaleAnimation animation = new ScaleAnimation(2, 1, 2, 1);
+            //    RotateAnimation animation = new RotateAnimation(0,60);
             animation.setFillAfter(true);
-       //     Tanimation.setFillAfter(true);
+            //     Tanimation.setFillAfter(true);
             animation.setDuration(ANIMATION_DURATION);
-         //   Tanimation.setDuration(ANIMATION_DURATION);
+            //   Tanimation.setDuration(ANIMATION_DURATION);
             if (interpolator != null) {
                 animation.setInterpolator(interpolator);
-            //    Tanimation.setInterpolator(pp_interpolator);
+                //    Tanimation.setInterpolator(pp_interpolator);
             }
 
-        //    view.startAnimation(Tanimation);
+            //    view.startAnimation(Tanimation);
             view.startAnimation(animation);
-         //   view.setRotation(60);
+            //   view.setRotation(60);
         }
     }
+
     private void addViews(List<Interpolator> interpolatorList, Class aClass) {
         if (aClass == null) {
             title.setVisibility(View.GONE);
@@ -251,7 +256,7 @@ public class Animation extends Activity {
         colorList.add(Color.parseColor("#8E24AA"));
         colorList.add(Color.parseColor("#607d8b"));
         colorList.add(Color.parseColor("#827717"));
-     //   Collections.shuffle(colorList);
+        //   Collections.shuffle(colorList);
         return colorList;
     }
 
@@ -270,86 +275,100 @@ public class Animation extends Activity {
         interpolatorList.add(new LinearOutSlowInInterpolator());
         return interpolatorList;
     }
-  public  static  Interpolator getInterpolator(int id)
-  {
-      switch (id)
-      {
-          case 0:return new LinearInterpolator();
-          case 1:return new AccelerateInterpolator();
-          case 2:return new DecelerateInterpolator();
-          case 3:return new AccelerateDecelerateInterpolator();
-          case 4:return new OvershootInterpolator();
-          case 5:return new AnticipateInterpolator();
-          case 6:return new AnticipateOvershootInterpolator();
-          case 7:return new BounceInterpolator();
-          case 8:return new FastOutLinearInInterpolator();
-          case 9:return new LinearInterpolator();
-          case 10:return new LinearOutSlowInInterpolator();
-          default: return null;
-      }
-  }
-  public static TimeInterpolator getEasingInterpolator(int id) {
-      switch (id) {
-          case 0:
-              return new EasingInterpolator(Ease.LINEAR);
-          case 1:
-              return new EasingInterpolator(Ease.QUAD_IN);
-          case 2:
-              return new EasingInterpolator(Ease.QUAD_OUT);
-          case 3:
-              return new EasingInterpolator(Ease.QUAD_IN_OUT);
-          case 4:
-              return new EasingInterpolator(Ease.CUBIC_IN);
-          case 5:
-              return new EasingInterpolator(Ease.CUBIC_OUT);
-          case 6:
-              return new EasingInterpolator(Ease.CUBIC_IN_OUT);
-          case 7:
-              return new EasingInterpolator(Ease.QUART_IN);
-          case 8:
-              return new EasingInterpolator(Ease.QUART_OUT);
-          case 9:
-              return new EasingInterpolator(Ease.QUART_IN_OUT);
-          case 10:
-              return new EasingInterpolator(Ease.QUINT_IN);
-          case 11:
-              return new EasingInterpolator(Ease.QUINT_OUT);
-          case 12:
-              return new EasingInterpolator(Ease.QUINT_IN_OUT);
-          case 13:
-              return new EasingInterpolator(Ease.SINE_IN);
-          case 14:
-              return new EasingInterpolator(Ease.SINE_OUT);
-          case 15:
-              return new EasingInterpolator(Ease.SINE_IN_OUT);
-          case 16:
-              return new EasingInterpolator(Ease.BACK_IN);
-          case 17:
-              return new EasingInterpolator(Ease.BACK_OUT);
-          case 18:
-              return new EasingInterpolator(Ease.BACK_IN_OUT);
-          case 19:
-              return new EasingInterpolator(Ease.CIRC_IN);
-          case 20:
-              return new EasingInterpolator(Ease.CIRC_OUT);
-          case 21:
-              return new EasingInterpolator(Ease.CIRC_IN_OUT);
-          case 22:
-              return new EasingInterpolator(Ease.BOUNCE_IN);
-          case 23:
-              return new EasingInterpolator(Ease.BOUNCE_OUT);
-          case 24:
-              return new EasingInterpolator(Ease.BOUNCE_IN_OUT);
-          case 25:
-              return new EasingInterpolator(Ease.ELASTIC_IN);
-          case 26:
-              return new EasingInterpolator(Ease.ELASTIC_OUT);
-          case 27:
-              return new EasingInterpolator(Ease.ELASTIC_IN_OUT);
-          default:
-              return new EasingInterpolator(Ease.LINEAR);
-      }
-  }
+
+    @NonNull
+    public static Interpolator getInterpolator(int id) {
+        switch (id) {
+            case 0:
+                return new LinearInterpolator();
+            case 1:
+                return new AccelerateInterpolator();
+            case 2:
+                return new DecelerateInterpolator();
+            case 3:
+                return new AccelerateDecelerateInterpolator();
+            case 4:
+                return new OvershootInterpolator();
+            case 5:
+                return new AnticipateInterpolator();
+            case 6:
+                return new AnticipateOvershootInterpolator();
+            case 7:
+                return new BounceInterpolator();
+            case 8:
+                return new FastOutLinearInInterpolator();
+            case 9:
+                return new LinearInterpolator();
+            case 10:
+                return new LinearOutSlowInInterpolator();
+            default:
+                return new FastOutSlowInInterpolator();
+        }
+    }
+
+    public static TimeInterpolator getEasingInterpolator(int id) {
+        switch (id) {
+            case 0:
+                return new EasingInterpolator(Ease.LINEAR);
+            case 1:
+                return new EasingInterpolator(Ease.QUAD_IN);
+            case 2:
+                return new EasingInterpolator(Ease.QUAD_OUT);
+            case 3:
+                return new EasingInterpolator(Ease.QUAD_IN_OUT);
+            case 4:
+                return new EasingInterpolator(Ease.CUBIC_IN);
+            case 5:
+                return new EasingInterpolator(Ease.CUBIC_OUT);
+            case 6:
+                return new EasingInterpolator(Ease.CUBIC_IN_OUT);
+            case 7:
+                return new EasingInterpolator(Ease.QUART_IN);
+            case 8:
+                return new EasingInterpolator(Ease.QUART_OUT);
+            case 9:
+                return new EasingInterpolator(Ease.QUART_IN_OUT);
+            case 10:
+                return new EasingInterpolator(Ease.QUINT_IN);
+            case 11:
+                return new EasingInterpolator(Ease.QUINT_OUT);
+            case 12:
+                return new EasingInterpolator(Ease.QUINT_IN_OUT);
+            case 13:
+                return new EasingInterpolator(Ease.SINE_IN);
+            case 14:
+                return new EasingInterpolator(Ease.SINE_OUT);
+            case 15:
+                return new EasingInterpolator(Ease.SINE_IN_OUT);
+            case 16:
+                return new EasingInterpolator(Ease.BACK_IN);
+            case 17:
+                return new EasingInterpolator(Ease.BACK_OUT);
+            case 18:
+                return new EasingInterpolator(Ease.BACK_IN_OUT);
+            case 19:
+                return new EasingInterpolator(Ease.CIRC_IN);
+            case 20:
+                return new EasingInterpolator(Ease.CIRC_OUT);
+            case 21:
+                return new EasingInterpolator(Ease.CIRC_IN_OUT);
+            case 22:
+                return new EasingInterpolator(Ease.BOUNCE_IN);
+            case 23:
+                return new EasingInterpolator(Ease.BOUNCE_OUT);
+            case 24:
+                return new EasingInterpolator(Ease.BOUNCE_IN_OUT);
+            case 25:
+                return new EasingInterpolator(Ease.ELASTIC_IN);
+            case 26:
+                return new EasingInterpolator(Ease.ELASTIC_OUT);
+            case 27:
+                return new EasingInterpolator(Ease.ELASTIC_IN_OUT);
+            default:
+                return new EasingInterpolator(Ease.LINEAR);
+        }
+    }
+
     /**
      * Interpolator defining the animation curve for mScroller
      */
@@ -368,7 +387,7 @@ public class Animation extends Activity {
         for (float factor : FACTORS) {
             try {
                 //noinspection unchecked
-                interpolatorList.add(         (Interpolator) aClass.getConstructor(float.class).newInstance(factor));
+                interpolatorList.add((Interpolator) aClass.getConstructor(float.class).newInstance(factor));
             } catch (Exception ignored) {
             }
         }
