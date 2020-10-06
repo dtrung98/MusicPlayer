@@ -155,6 +155,8 @@ dependencies {
 
     // JBox2d
     implementation 'org.jbox2d:jbox2d-library:2.1.2.2'
+
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
 }
 
 apply plugin: 'kotlin-android-extensions'

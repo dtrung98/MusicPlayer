@@ -285,15 +285,6 @@ public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment imple
     }
 
     @Override
-    public Animator onCreateAnimator(int transit, boolean enter, int nextAnim) {
-        Animator animator = super.onCreateAnimator(transit, enter, nextAnim);
-        Log.d(TAG, "onCreateAnimator: "+transit+", "+ enter +", "+nextAnim+" | "+ animator.getDuration());
-        if(mSwipeRefresh!=null)
-        mSwipeRefresh.postDelayed(() -> refreshData(false),animator.getDuration());
-        return animator;
-    }
-
-    @Override
     public void onSetStatusBarMargin(int value) {
         ((ViewGroup.MarginLayoutParams)toolbar.getLayoutParams()).topMargin = value;
         toolbar.requestLayout();
