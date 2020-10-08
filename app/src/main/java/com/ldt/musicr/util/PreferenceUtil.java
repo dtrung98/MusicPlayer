@@ -449,7 +449,7 @@ public final class PreferenceUtil {
     public final void setIsUsingArtistImageAsBackground(boolean value) {
         final SharedPreferences.Editor editor = mPreferences.edit();
         editor.putBoolean(USE_ARTIST_IMAGE_AS_BACKGROUND,value);
-        editor.apply();;
+        editor.apply();
     }
 
     public final boolean isUsingArtistImageAsBackground() {

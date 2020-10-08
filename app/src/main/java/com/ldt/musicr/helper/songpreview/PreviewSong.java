@@ -250,9 +250,7 @@ public class PreviewSong {
 
                 updateVolume(ACTION_FADE_IN);
 
-                if(mCurrentVolume==DEFAULT_PLAY_VOLUME)
-                    return false;
-                return true;
+                return mCurrentVolume != DEFAULT_PLAY_VOLUME;
 
             case ACTION_FADE_OUT:
                 if(mCurrentVolume > DEFAULT_PLAY_VOLUME) mCurrentVolume = DEFAULT_PLAY_VOLUME;
@@ -263,9 +261,7 @@ public class PreviewSong {
 
                 updateVolume(ACTION_FADE_OUT);
 
-                if(mCurrentVolume==DEFAULT_OUT_VOLUME)
-                    return false;
-                return true;
+                return mCurrentVolume != DEFAULT_OUT_VOLUME;
             default:
                 return false;
         }

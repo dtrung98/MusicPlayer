@@ -49,7 +49,7 @@ public class PlaylistChildTab extends MusicServiceFragment implements FeaturePla
             ((MusicServiceActivity)getActivity()).addMusicServiceEventListener(this);
         }
         refreshData();
-;    }
+    }
     private void refreshData() {
         if(getActivity() !=null)
       mAdapter.setData(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));

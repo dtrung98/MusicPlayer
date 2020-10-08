@@ -57,8 +57,6 @@ public class CheapAAC extends SoundFile {
         public byte[] data;
     }
 
-    ;
-
     public static final int kDINF = 0x64696e66;
     public static final int kFTYP = 0x66747970;
     public static final int kHDLR = 0x68646c72;
@@ -171,7 +169,7 @@ public class CheapAAC extends SoundFile {
     }
 
     public void readFile(Uri inputFile)
-            throws java.io.FileNotFoundException,
+            throws
             java.io.IOException {
         super.readFile(inputFile);
         mChannels = 0;

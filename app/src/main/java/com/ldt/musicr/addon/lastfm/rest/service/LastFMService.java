@@ -27,5 +27,5 @@ public interface LastFMService {
     Call<LastFmArtist> getArtistInfo(@Query("artist") String artistName, @Nullable @Query("lang") String language, @Nullable @Header("Cache-Control") String cacheControl);
 
     @GET
-    public Call<String> getPhotoPage(@Url String url, @Nullable @Query("lang") String language, @Nullable @Header("Cache-Control") String cacheControl);
+    Call<String> getPhotoPage(@Url String url, @Nullable @Query("lang") String language, @Nullable @Header("Cache-Control") String cacheControl);
 }

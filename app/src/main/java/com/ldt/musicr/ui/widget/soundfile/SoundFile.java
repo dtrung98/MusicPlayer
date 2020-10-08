@@ -46,8 +46,8 @@ package com.ldt.musicr.ui.widget.soundfile;
  */
 public class SoundFile {
     public interface Factory {
-        public SoundFile create();
-        public String[] getSupportedExtensions();
+        SoundFile create();
+        String[] getSupportedExtensions();
     }
 
     static Factory[] sSubclassFactories = new Factory[] {
@@ -78,7 +78,7 @@ public class SoundFile {
      */
     public static SoundFile create(Song song,
                                    ProgressListener progressListener)
-            throws java.io.FileNotFoundException,
+            throws
             java.io.IOException {
 
         Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(song.id));
@@ -124,7 +124,7 @@ public class SoundFile {
     protected SoundFile() {}
 
     public void readFile(Uri inputFile)
-            throws java.io.FileNotFoundException,
+            throws
             java.io.IOException {
         mInputFile = inputFile;
     }
@@ -178,8 +178,8 @@ public class SoundFile {
     private static final char[] HEX_CHARS = {
             '0', '1', '2', '3', '4', '5', '6', '7',
             '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-    public static String bytesToHex (byte hash[]) {
-        char buf[] = new char[hash.length * 2];
+    public static String bytesToHex (byte[] hash) {
+        char[] buf = new char[hash.length * 2];
         for (int i = 0, x = 0; i < hash.length; i++) {
             buf[x++] = HEX_CHARS[(hash[i] >>> 4) & 0xf];
             buf[x++] = HEX_CHARS[hash[i] & 0xf];

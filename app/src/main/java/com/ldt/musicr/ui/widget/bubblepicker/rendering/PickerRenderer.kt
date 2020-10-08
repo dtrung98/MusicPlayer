@@ -27,7 +27,7 @@ import kotlin.math.sqrt
 inline val <reified T> T.TAG: String
     get() = T::class.java.simpleName
 
-public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
+class PickerRenderer(val glView: View) : GLTextureView.Renderer {
     override fun onSurfaceDestroyed(gl: GL10?) {
     }
 
@@ -130,7 +130,7 @@ public class PickerRenderer(val glView: View) : GLTextureView.Renderer {
     }
 
     @Synchronized
-    public fun deleteTexture(textureIds: IntArray,index: Int) {
+    fun deleteTexture(textureIds: IntArray, index: Int) {
         glDeleteTextures(1,textureIds,index*2)
         glDeleteTextures(1,textureIds,index*2 + 1)
     }

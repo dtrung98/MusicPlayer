@@ -328,7 +328,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
         // Returns beginning index of maximum average
         // subarray of length 'k'
-        static int findMaxAverage(double arr[], int n, int k) {
+        static int findMaxAverage(double[] arr, int n, int k) {
 
             // Check if 'k' is valid
             if (k > n)

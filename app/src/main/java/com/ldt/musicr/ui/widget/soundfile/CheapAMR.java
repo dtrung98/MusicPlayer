@@ -96,7 +96,7 @@ public class CheapAMR extends SoundFile {
     }
 
     public void readFile(Uri inputFile)
-            throws java.io.FileNotFoundException,
+            throws
             java.io.IOException {
         super.readFile(inputFile);
         mNumFrames = 0;
@@ -804,11 +804,11 @@ public class CheapAMR extends SoundFile {
     // Block size in bytes for each of the 16 frame types, not
     // counting the initial byte that indicates the frame type.
     // Can be used to skip over unsupported frame types.
-    static private int BLOCK_SIZES[] = {
+    static private int[] BLOCK_SIZES = {
             12, 13, 15, 17, 19, 20, 26, 31,
             5, 0, 0, 0, 0, 0, 0, 0 };
 
-    static private int GAIN_FAC_MR515[] = {
+    static private int[] GAIN_FAC_MR515 = {
             28753, 2785, 6594, 7413, 10444, 1269, 4423, 1556,
             12820, 2498, 4833, 2498, 7864, 1884, 3153, 1802,
             20193, 3031, 5857, 4014, 8970, 1392, 4096, 655,
@@ -819,7 +819,7 @@ public class CheapAMR extends SoundFile {
             9256, 1761, 3522, 1966, 5529, 737, 3194, 778
     };
 
-    static private int QUA_ENER_MR515[] = {
+    static private int[] QUA_ENER_MR515 = {
             17333, -3431, 4235, 5276, 8325, -10422, 683, -8609,
             10148, -4398, 1472, -4398, 5802, -6907, -2327, -7303,
             14189, -2678, 3181, -180, 6972, -9599, 0, -16305,
@@ -830,7 +830,7 @@ public class CheapAMR extends SoundFile {
             7251, -7508, -1343, -6529, 2668, -15255, -2212, -2454, -14774
     };
 
-    static private int QUA_GAIN_CODE[] = {
+    static private int[] QUA_GAIN_CODE = {
             159, -3776, -22731, 206, -3394, -20428,
             268, -3005, -18088, 349, -2615, -15739,
             419, -2345, -14113, 482, -2138, -12867,
@@ -848,7 +848,7 @@ public class CheapAMR extends SoundFile {
             12510, 2673, 16096, 16263, 3060, 18429,
             21142, 3448, 20763, 27485, 3836, 23097};
 
-    static private int GAIN_FAC_MR475[] = {
+    static private int[] GAIN_FAC_MR475 = {
             812, 128, 542, 140, 2873, 1135, 2266, 3402,
             2067, 563, 12677, 647, 4132, 1798, 5601, 5285,
             7689, 374, 3735, 441, 10912, 2638, 11807, 2494,
@@ -978,9 +978,9 @@ public class CheapAMR extends SoundFile {
             12743, 2605, 8937, 3140, 19033, 7764, 18347, 3880,
             20475, 3682, 19602, 3380, 13044, 19373, 10526, 23124};
 
-    static private int GRAY[] = {0, 1, 3, 2, 5, 6, 4, 7};
+    static private int[] GRAY = {0, 1, 3, 2, 5, 6, 4, 7};
 
-    static private int QUA_GAIN_PITCH[] = {
+    static private int[] QUA_GAIN_PITCH = {
             0, 3277, 6556, 8192, 9830, 11469, 12288, 13107, 13926,
             14746, 15565, 16384, 17203, 18022, 18842, 19661};
 }

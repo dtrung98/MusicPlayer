@@ -50,6 +50,6 @@ public class ArtistSignatureUtil {
 
     public ObjectKey getArtistSignature(String artistName, boolean isLoadOriginal, int whichImage) {
         String value = String.valueOf(getArtistSignatureRaw(artistName));
-        return new ObjectKey(artistName+"_"+"original="+isLoadOriginal+"_"+"pos="+whichImage+"_"+String.valueOf(getArtistSignatureRaw(artistName)));
+        return new ObjectKey(artistName+"_"+"original="+isLoadOriginal+"_"+"pos="+whichImage+"_"+ getArtistSignatureRaw(artistName));
     }
 }

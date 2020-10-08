@@ -42,7 +42,7 @@ data class CircleRenderItem(val pickerItem: PickerItem, val circleBody: CircleBo
     private var imageTexture: Int = 0
     private val currentTexture: Int
         get() = if (circleBody.isEnhanced()) imageTexture else texture
-    public companion object {
+    companion object {
         var bitmapSize = 64f
 
         var textSizeRatio = 40f/256

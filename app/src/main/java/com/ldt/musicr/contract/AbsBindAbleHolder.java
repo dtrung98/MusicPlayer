@@ -10,5 +10,5 @@ public abstract class AbsBindAbleHolder<I> extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void bind(I item) {};
+    public void bind(I item) {}
 }

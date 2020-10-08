@@ -40,7 +40,7 @@ public abstract class NavigationFragment extends Fragment {
         Log.d(TAG, "saveTheme: b = " +b);
         savedTheme = b;
     }
-    ;
+
     public boolean isWhiteTheme() {
         return true;
     }

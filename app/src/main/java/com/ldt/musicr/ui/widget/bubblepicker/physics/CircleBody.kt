@@ -53,12 +53,12 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
     var motionRunningTime = 0f
     var isBusy = false
 
-    public val density: Float
+    val density: Float
     get() {
         return 0.5f//PhysicsEngine.interpolate(0.8f,0.2f, currentRadius/2f)
     }
 
-    public fun runMotion(which : Int, endState : Int) : Boolean {
+    fun runMotion(which : Int, endState : Int) : Boolean {
         if(!isBusy) {
             state = which
             this.nextState = endState
@@ -69,7 +69,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
         return false
     }
 
-    public fun runMotion(which : Int, endState : Int, interpolator: Interpolator) : Boolean {
+    fun runMotion(which : Int, endState : Int, interpolator: Interpolator) : Boolean {
         if(!isBusy) {
             state = which
             this.nextState = endState
@@ -80,11 +80,11 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
         }
         return false
     }
-    public fun isDeath() : Boolean {
+    fun isDeath() : Boolean {
         return state == STATE_DEATH
     }
 
-    public fun isEnhanced() : Boolean {
+    fun isEnhanced() : Boolean {
         return state == STATE_ENHANCED || state == STATE_MOTION_ENHANCE
     }
 
@@ -96,7 +96,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
 
     private var interpolator : Interpolator = OvershootInterpolator()
 
-    public fun step(deltaInSecond : Float) {
+    fun step(deltaInSecond : Float) {
         motionRunningTime +=deltaInSecond
         when (state) {
             STATE_JUST_CREATE -> {
@@ -223,7 +223,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
     val currentRadius : Float
         get()= sizePerUnit * sizeUnit* currentRatio
 
-    public fun updateSizePerUnitValue(value :Float) {
+    fun updateSizePerUnitValue(value :Float) {
         sizePerUnit = value
         updateSize()
     }
@@ -241,7 +241,7 @@ class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerU
         isBusy = false
     }
 
-    public fun destroy() {
+    fun destroy() {
         PhysicsEngine.destroyBody(physicalBody)
     }
 }

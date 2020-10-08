@@ -77,7 +77,7 @@ public class SongLoader {
 
         try {
             if (path!=null) {
-                String name = path.toString();
+                String name = path;
                 extension = name.substring(name.lastIndexOf(".") +1);
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class SongLoader {
 
             try {
                 Files.walk(Paths.get(root)).filter(path -> NO_MEDIA_TAG.equals(path.getFileName().toString())).map(Path::toFile).collect(Collectors.toCollection(() -> noMedias));
-            } catch (Exception ignored) {};
+            } catch (Exception ignored) {}
             for (int i = 0, noMediaPathsSize = noMedias.size(); i < noMediaPathsSize; i++) {
 
                 try {
@@ -279,7 +279,7 @@ public class SongLoader {
 
                         try {
                             audioFile = AudioFileIO.read(file);
-                        } catch (Exception ignored) {};
+                        } catch (Exception ignored) {}
 
                         if(audioFile!=null) {
                             Tag tag = audioFile.getTag();

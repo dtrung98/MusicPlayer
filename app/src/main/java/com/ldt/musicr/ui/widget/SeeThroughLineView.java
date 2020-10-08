@@ -127,7 +127,7 @@ public class SeeThroughLineView extends View {
         mBackground.draw(mBackgroundCanvas);
      //   mBackgroundCanvas.drawBitmap(mMaskBitmap, 0.f, 0.f, backgroundCloudEffectPaint);
 
-        int padding[] = new int[]
+        int[] padding = new int[]
                 {
                         getPaddingLeft(),
                         getPaddingTop(),

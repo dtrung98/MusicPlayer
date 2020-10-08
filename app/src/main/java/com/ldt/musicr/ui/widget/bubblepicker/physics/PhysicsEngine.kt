@@ -51,7 +51,7 @@ object PhysicsEngine {
         updateBorders()
     }
 
-    public val floorYValue = 0.5f
+    val floorYValue = 0.5f
 
     private fun updateBorders() {
         if(lineBorders.isEmpty()) {
@@ -62,7 +62,7 @@ object PhysicsEngine {
                     Border(world, Vec2(0f, -floorYValue / scaleY), Border.HORIZONTAL))
         } else {
             lineBorders[0].apply {
-                position.y = floorYValue / scaleY;
+                position.y = floorYValue / scaleY
                 updatePosition()
             }
 
@@ -90,9 +90,9 @@ object PhysicsEngine {
         return currentUnitValue >0f
     }
 
-    public fun interpolate(start: Float, end: Float, f: Float) = start + f * (end - start)
+    fun interpolate(start: Float, end: Float, f: Float) = start + f * (end - start)
 
-    public fun onRadiusUnitChanged(value : Float) {
+    fun onRadiusUnitChanged(value : Float) {
         currentUnitValue = value
         // update borders
         if(isUnitAvailable) {
@@ -102,7 +102,7 @@ object PhysicsEngine {
         }
     }
 
-    public fun onViewPortSizeChanged(width : Float, height : Float, radiusUnitValue  : Float) {
+    fun onViewPortSizeChanged(width : Float, height : Float, radiusUnitValue  : Float) {
 
         scaleX = if(width < height) height/width else 1f
         scaleY = if(width < height) 1f else width/height
@@ -111,7 +111,7 @@ object PhysicsEngine {
     }
 
     @Synchronized
-    public fun onFrameUpdated() : Boolean {
+    fun onFrameUpdated() : Boolean {
         recordValue()
 
         if (isUnitAvailable && circleBodies.isNotEmpty()) {
@@ -140,43 +140,43 @@ object PhysicsEngine {
     /**
      * Call to create new circle shape
      */
-    public fun createCircle(pickerItem : PickerItem) : CircleBody {
+    fun createCircle(pickerItem : PickerItem) : CircleBody {
         val x = if (rnd.nextBoolean()) -PhysicsEngine.startX else PhysicsEngine.startX
         val y = if (rnd.nextBoolean()) - 0.5f / scaleY else 0.5f / scaleY
         return CircleBody(CircleBody.nextId,world, Vec2(x,y), currentUnitValue,pickerItem.radiusUnit)
     }
 
-    public fun addCircle(circleBody: CircleBody) {
+    fun addCircle(circleBody: CircleBody) {
         circleBodies.add(circleBody)
     }
 
     /**
      *  Call to create multiple circle shapes
      */
-    public fun addCircles(circles : List<CircleBody>) {
+    fun addCircles(circles : List<CircleBody>) {
         circleBodies.addAll(circles)
     }
 
-    public fun removeCircle(position : Int) {
+    fun removeCircle(position : Int) {
         if(!circleBodies[position].isDeath())
         circleBodies[position].runMotion(CircleBody.STATE_MOTION_HIDE, CircleBody.STATE_DEATH)
     }
 
-    public fun removeCircles(itemPos : List<CircleBody>) {
+    fun removeCircles(itemPos : List<CircleBody>) {
         itemPos.forEach {
             if(!it.isDeath())
             it.runMotion(CircleBody.STATE_MOTION_HIDE,CircleBody.STATE_DEATH)
         }
     }
 
-    public fun orderToRemoveAllCircles() {
+    fun orderToRemoveAllCircles() {
         circleBodies.forEach{
             if(!it.isBusy&&!it.isDeath())
             it.runMotion(CircleBody.STATE_MOTION_HIDE, CircleBody.STATE_DEATH)
         }
     }
 
-    public fun destroyBody(body : Body) {
+    fun destroyBody(body : Body) {
         world.destroyBody(body)
     }
 

@@ -84,7 +84,7 @@ public class SoundFile {
     }
 
     public static SoundFile create(Song song, ProgressListener progressListener)
-            throws java.io.FileNotFoundException,
+            throws
             java.io.IOException, InvalidInputException {
         return create(song.id, song.data, progressListener);
     }
@@ -92,8 +92,8 @@ public class SoundFile {
     // Create and return a SoundFile object using the file fileName.
     public static SoundFile create(long audioId, String dataColumn,
                                    ProgressListener progressListener)
-        throws java.io.FileNotFoundException,
-               java.io.IOException, InvalidInputException {
+        throws
+            java.io.IOException, InvalidInputException {
 
         Uri uri = Uri.withAppendedPath(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, String.valueOf(audioId));
         AssetFileDescriptor file;
@@ -190,8 +190,8 @@ public class SoundFile {
     }
 
     private void ParseFile(Uri uri, AssetFileDescriptor inputFile, String dataColumn)
-        throws java.io.FileNotFoundException,
-               java.io.IOException, InvalidInputException {
+        throws
+            java.io.IOException, InvalidInputException {
         MediaExtractor extractor = new MediaExtractor();
         MediaFormat format = null;
         int i;
@@ -521,7 +521,7 @@ public class SoundFile {
         long presentation_time = 0;
 
         int frame_size = 1024;  // number of samples per frame per channel for an mp4 (AAC) stream.
-        byte buffer[] = new byte[frame_size * numChannels * 2];  // a sample is coded with a short.
+        byte[] buffer = new byte[frame_size * numChannels * 2];  // a sample is coded with a short.
         mDecodedBytes.position(startOffset);
         numSamples += (2 * frame_size);  // Adding 2 frames, Cf. priming frames for AAC.
         int tot_num_frames = 1 + (numSamples / frame_size);  // first AAC frame = 2 bytes
@@ -643,8 +643,8 @@ public class SoundFile {
     // The size of a sample is assumed to be 16 bits (for a single channel).
     // When done, buffer will contain {sample 1 left, sample 1 right, sample 2 left, etc.}
     private void swapLeftRightChannels(byte[] buffer) {
-        byte left[] = new byte[2];
-        byte right[] = new byte[2];
+        byte[] left = new byte[2];
+        byte[] right = new byte[2];
         if (buffer.length % 4 != 0) {  // 2 channels, 2 bytes per sample (for one channel).
             // Invalid buffer size.
             return;
@@ -679,7 +679,7 @@ public class SoundFile {
         outputStream.write(WAVHeader.getWAVHeader(mSampleRate, mChannels, numSamples));
 
         // Write the samples to the file, 1024 at a time.
-        byte buffer[] = new byte[1024 * mChannels * 2];  // Each sample is coded with a short.
+        byte[] buffer = new byte[1024 * mChannels * 2];  // Each sample is coded with a short.
         mDecodedBytes.position(startOffset);
         int numBytesLeft = numSamples * mChannels * 2;
         while (numBytesLeft >= buffer.length) {

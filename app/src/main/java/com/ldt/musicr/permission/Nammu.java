@@ -234,15 +234,11 @@ public class Nammu {
         ArrayList<String> ignoredPermissions = getIgnoredPermissions();
         for (String permission : ignoredPermissions) {
             if (previouslyGranted != null && !previouslyGranted.isEmpty()) {
-                if (previouslyGranted.contains(permission)) {
-                    previouslyGranted.remove(permission);
-                }
+                previouslyGranted.remove(permission);
             }
 
             if (currentPermissions != null && !currentPermissions.isEmpty()) {
-                if (currentPermissions.contains(permission)) {
-                    currentPermissions.remove(permission);
-                }
+                currentPermissions.remove(permission);
             }
         }
         for (String permission : currentPermissions) {

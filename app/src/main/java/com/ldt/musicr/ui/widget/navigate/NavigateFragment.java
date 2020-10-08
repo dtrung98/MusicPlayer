@@ -41,8 +41,7 @@ public class NavigateFragment extends Fragment implements BackPressable {
     @Override
     public boolean onBackPressed() {
         if(mNavigationController.getTopFragment().isReadyToDismiss())
-            if(!(isNavigationControllerInit() && mNavigationController.dismissFragment(true)))
-        return false;
+            return isNavigationControllerInit() && mNavigationController.dismissFragment(true);
             return true;
     }
 

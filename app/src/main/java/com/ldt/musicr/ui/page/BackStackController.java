@@ -261,8 +261,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
                 mViewPager.setCurrentItem(mNavigationStack.get(mNavigationStack.size()-1),true);
             }
         } else if(mViewPager.getCurrentItem()!=0) mViewPager.setCurrentItem(0,true);
-        else if(mViewPager.getCurrentItem()==0&&!mNavigationAdapter.onBackPressed(0))
-        return false;
+        else return mViewPager.getCurrentItem() != 0 || mNavigationAdapter.onBackPressed(0);
         return true;
     }
 

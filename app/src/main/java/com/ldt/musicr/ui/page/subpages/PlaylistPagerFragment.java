@@ -273,7 +273,8 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
 
     private void refreshData() {
         refreshData(true);
-    };
+    }
+
     private void refreshData(boolean b) {
         mSwipeRefresh.setRefreshing(b);
         mSwipeRefresh.post(() -> {
