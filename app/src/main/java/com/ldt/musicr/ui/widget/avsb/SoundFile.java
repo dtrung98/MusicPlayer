@@ -111,7 +111,7 @@ public class SoundFile {
         }
         SoundFile soundFile = new SoundFile();
         soundFile.setProgressListener(progressListener);
-        soundFile.ParseFile(uri, file, dataColumn);
+        soundFile.parseFile(uri, file, dataColumn);
         return soundFile;
     }
 
@@ -189,7 +189,7 @@ public class SoundFile {
         mProgressListener = progressListener;
     }
 
-    private void ParseFile(Uri uri, AssetFileDescriptor inputFile, String dataColumn)
+    private void parseFile(Uri uri, AssetFileDescriptor inputFile, String dataColumn)
         throws
             java.io.IOException, InvalidInputException {
         MediaExtractor extractor = new MediaExtractor();

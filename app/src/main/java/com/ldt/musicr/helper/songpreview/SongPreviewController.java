@@ -7,7 +7,7 @@ import android.util.Log;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.widget.avsb.SoundFile;
+import com.ldt.musicr.ui.widget.soundfile.SoundFile;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -181,6 +181,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         }
 
         private void loadPreviewSong(Song song) {
+            final long start = System.currentTimeMillis();
             SoundFile cheapSoundFile = null;
             try {
                 cheapSoundFile = SoundFile.create(song, null);
@@ -188,12 +189,17 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
                 return;
             }
 
+            final long middle = System.currentTimeMillis();
+
             if (cheapSoundFile != null)
                 try {
                     calculateSound(cheapSoundFile);
                 } catch (final Exception e) {
                     return;
                 }
+
+            final long end = System.currentTimeMillis();
+            Log.d(TAG, ("loadPreviewSong costs " + (end - start) + "ms: creating sound file costs " + (middle - start) + ", calculating costs " + (end - middle)));
 
             SongPreviewController controller = mRefController.get();
             if (controller != null && !mIsCanceled) {
