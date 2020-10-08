@@ -79,6 +79,7 @@
         tools:listitem="@layout/item_feature_song"
         tools:orientation="vertical"
         tools:layoutManager="LinearLayoutManager"
+        android:overScrollMode="never"
         />
     <TextView
         android:id="@+id/see_all"

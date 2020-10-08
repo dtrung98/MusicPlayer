@@ -7,18 +7,23 @@
     android:layout_height="match_parent"
     tools:background="#444"
     tools:context=".ui.page.librarypage.song.SongChildTab">
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-        android:id="@+id/recycler_view"
+    <com.ldt.springback.view.SpringBackLayout
+        android:id="@+id/springBackLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/preview_random_panel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:listitem="@layout/item_song_normal"
         tools:layoutManager="LinearLayoutManager"
         tools:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/preview_random_panel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="4dp"
         app:fastScrollAutoHide="true"
         app:fastScrollAutoHideDelay="1500"
@@ -28,7 +33,9 @@
         app:fastScrollPopupTextColor="@android:color/primary_text_dark"
         app:fastScrollPopupTextSize="46sp"
         app:fastScrollThumbColor="@color/FlatYellow"
+        android:overScrollMode="never"
         />
+    </com.ldt.springback.view.SpringBackLayout>
     <androidx.constraintlayout.widget.Group
         android:id="@+id/random_group"
         android:layout_width="wrap_content"

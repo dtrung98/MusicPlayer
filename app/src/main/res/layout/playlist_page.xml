@@ -1,199 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:background="@color/backward_color"
     tools:context="com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment">
-<com.google.android.material.appbar.AppBarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:elevation="0dp">
-<com.google.android.material.appbar.CollapsingToolbarLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-   android:id="@+id/playlist_pager_collapsing_toolbar"
-    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-    app:titleEnabled="false">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:theme="@style/ToolbarColoredBackArrow"
-        android:minHeight="?attr/actionBarSize"
-        app:layout_collapseMode="pin"
-        app:popupTheme="@style/AppTheme"
-        app:title="@string/playlist"
-        app:titleTextColor="@color/FlatWhite">
-        <ImageView
-            android:id="@+id/menu_button"
-            android:layout_width="?attr/actionBarSize"
-            android:layout_height="?attr/actionBarSize"
-            app:srcCompat="@drawable/ic_more_horiz_black_24dp"
-            android:background="@drawable/ripple_oval"
-            app:tint="@color/FlatWhite"
-            android:padding="18dp"
-            android:layout_gravity="end"/>
-    </androidx.appcompat.widget.Toolbar>
-    <RelativeLayout
-        app:layout_collapseMode="pin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#44000000">
 
-    <com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout
-        android:id="@+id/background_constraint"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        app:imageViewId="@id/art"
-        app:shadowDeltaLeft="6dp"
-        app:shadowDeltaTop="4dp"
-        app:shadowDeltaRight="-6dp"
-        app:shadowDeltaBottom="4dp"
-        >
-        <ImageView
-            android:id="@+id/art"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginBottom="18dp"
-            android:src="@drawable/default_image_round"
-            app:layout_constraintStart_toStartOf="parent"
-            android:background="@drawable/white_rounded"
-            android:padding="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginLeft="45dp" />
+        android:elevation="0dp"
+        tools:targetApi="lollipop">
 
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="?attr/actionBarSize"
-                android:minHeight="30dp"
-                android:text="@string/songs"
-                android:textColor="@color/flatOrange"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:maxLines="2"
-                android:ellipsize="end"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/art"
-                app:layout_constraintTop_toTopOf="@+id/art"
-                app:layout_constraintBottom_toTopOf="@id/description"
-                app:layout_constraintVertical_chainStyle="packed"
-                android:layout_marginLeft="18dp"
-                android:layout_marginRight="?attr/actionBarSize" />
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:minHeight="25dp"
-                android:text="@string/artists"
-                android:textColor="@color/FlatWhite"
-                android:maxLines="3"
-                android:ellipsize="end"
-                android:textSize="13sp"
-                android:alpha="0.9"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/title"
-                app:layout_constraintStart_toStartOf="@id/title"
-                app:layout_constraintTop_toBottomOf="@+id/title"
-                app:layout_constraintBottom_toBottomOf="@id/art"/>
-        <View
-            android:id="@+id/play_option_panel"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/playlist_pager_collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:layout_constraintTop_toBottomOf="@id/art"/>
-        <View
-            android:id="@+id/play_all_panel"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/play_all_icon"
-            app:layout_constraintEnd_toEndOf="@id/play_all_button"
-            app:layout_constraintTop_toTopOf="@id/play_all_icon"
-            app:layout_constraintBottom_toBottomOf="@id/play_all_icon"
-            android:background="@drawable/ripple_effect_15dp_radius"
-            />
-        <ImageView
-            android:id="@+id/play_all_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/ic_play_arrow_black_24dp"
-            app:tint="#BBFF9500"
-            android:layout_marginStart="?attr/actionBarSize"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/play_all_button"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="0dp"
-             />
-            <TextView
-                android:id="@+id/play_all_button"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                app:layout_constraintTop_toTopOf="@id/play_option_panel"
-                app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
-                app:layout_constraintStart_toEndOf="@id/play_all_icon"
-                android:gravity="center"
-                android:text="@string/play_all_songs"
-                android:textStyle="bold"
-                android:paddingEnd="14dp"
-                android:paddingStart="0dp"
-                android:textColor="#BBFF9500"
-                 />
-            <TextView
-                android:id="@+id/shuffle_play_button"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                app:layout_constraintTop_toTopOf="@id/play_option_panel"
-                app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
-                app:layout_constraintStart_toEndOf="@id/play_all_button"
-                android:layout_marginStart="8dp"
-                android:layout_toEndOf="@id/play_all_button"
-                android:background="@drawable/ripple_effect_15dp_radius"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:gravity="center"
-                android:text="@string/play_random"
-                android:textStyle="bold"
-                android:textColor="#BBFF9500"
-                android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@id/play_all_button" />
-    </com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout>
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
 
-    </RelativeLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme"
+                app:theme="@style/ToolbarColoredBackArrow"
+                app:title="@string/playlist"
+                app:titleTextColor="@color/FlatWhite">
 
-</com.google.android.material.appbar.CollapsingToolbarLayout>
+                <ImageView
+                    android:id="@+id/menu_button"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_gravity="end"
+                    android:background="@drawable/ripple_oval"
+                    android:padding="18dp"
+                    app:srcCompat="@drawable/ic_more_horiz_black_24dp"
+                    app:tint="@color/FlatWhite" />
+            </androidx.appcompat.widget.Toolbar>
 
-</com.google.android.material.appbar.AppBarLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#44000000"
+                app:layout_collapseMode="pin">
+
+                <com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout
+                    android:id="@+id/background_constraint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    app:imageViewId="@id/art"
+                    app:shadowDeltaBottom="4dp"
+                    app:shadowDeltaLeft="6dp"
+                    app:shadowDeltaRight="-6dp"
+                    app:shadowDeltaTop="4dp">
+
+                    <ImageView
+                        android:id="@+id/art"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_marginStart="45dp"
+                        android:layout_marginBottom="18dp"
+                        android:background="@drawable/white_rounded"
+                        android:padding="3dp"
+                        android:src="@drawable/default_image_round"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginEnd="?attr/actionBarSize"
+                        android:layout_marginRight="?attr/actionBarSize"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:minHeight="30dp"
+                        android:text="@string/songs"
+                        android:textColor="@color/flatOrange"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/description"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/art"
+                        app:layout_constraintTop_toTopOf="@+id/art"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.9"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:minHeight="25dp"
+                        android:text="@string/artists"
+                        android:textColor="@color/FlatWhite"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/art"
+                        app:layout_constraintEnd_toEndOf="@id/title"
+                        app:layout_constraintStart_toStartOf="@id/title"
+                        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+                    <View
+                        android:id="@+id/play_option_panel"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        app:layout_constraintTop_toBottomOf="@id/art" />
+
+                    <View
+                        android:id="@+id/play_all_panel"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/ripple_effect_15dp_radius"
+                        app:layout_constraintBottom_toBottomOf="@id/play_all_icon"
+                        app:layout_constraintEnd_toEndOf="@id/play_all_button"
+                        app:layout_constraintStart_toStartOf="@id/play_all_icon"
+                        app:layout_constraintTop_toTopOf="@id/play_all_icon" />
+
+                    <ImageView
+                        android:id="@+id/play_all_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="?attr/actionBarSize"
+                        android:paddingStart="8dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="5dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/play_all_button"
+                        app:srcCompat="@drawable/ic_play_arrow_black_24dp"
+                        app:tint="#BBFF9500" />
+
+                    <TextView
+                        android:id="@+id/play_all_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="14dp"
+                        android:text="@string/play_all_songs"
+                        android:textColor="#BBFF9500"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
+                        app:layout_constraintStart_toEndOf="@id/play_all_icon"
+                        app:layout_constraintTop_toTopOf="@id/play_option_panel" />
+
+                    <TextView
+                        android:id="@+id/shuffle_play_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/play_all_button"
+                        android:background="@drawable/ripple_effect_15dp_radius"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="@string/play_random"
+                        android:textColor="#BBFF9500"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/play_option_panel"
+                        app:layout_constraintStart_toEndOf="@id/play_all_button"
+                        app:layout_constraintTop_toTopOf="@id/play_option_panel" />
+                </com.ldt.musicr.ui.widget.BlurImageViewChildConstraintLayout>
+
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.ldt.springback.view.SpringBackLayout
+        android:id="@+id/springBackLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-        android:id="@+id/playlist_big_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/minimum_bottom_back_stack_margin"
-        tools:listitem="@layout/item_song_normal"
-        app:fastScrollAutoHide="true"
-        app:fastScrollAutoHideDelay="1500"
-        app:fastScrollPopupBackgroundSize="88dp"
-        app:fastScrollPopupBgColor="@color/flatOrange"
-        app:fastScrollPopupPosition="adjacent"
-        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
-        app:fastScrollPopupTextSize="46sp"
-        app:fastScrollThumbColor="@color/flatOrange"
-       />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:springBackMode="bottom">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+                android:id="@+id/playlist_big_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/minimum_bottom_back_stack_margin"
+                app:fastScrollAutoHide="true"
+                app:fastScrollAutoHideDelay="1500"
+                app:fastScrollPopupBackgroundSize="88dp"
+                app:fastScrollPopupBgColor="@color/flatOrange"
+                app:fastScrollPopupPosition="adjacent"
+                app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+                app:fastScrollPopupTextSize="46sp"
+                app:fastScrollThumbColor="@color/flatOrange"
+                tools:listitem="@layout/item_song_normal"
+                android:overScrollMode="never"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.ldt.springback.view.SpringBackLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

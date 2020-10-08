@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/root"
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_panel_color"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
     <View
         android:id="@+id/status_bar"
         android:layout_width="0dp"
@@ -43,7 +42,8 @@
         app:layout_constraintTop_toBottomOf="@id/back_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:overScrollMode="never">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Play sample preview songs"
+                tools:text="Play sample preview songs"
                 android:textColor="@color/FlatWhite"
                 android:background="@drawable/ripple_effect_15dp_radius"
                 android:layout_marginStart="30dp"

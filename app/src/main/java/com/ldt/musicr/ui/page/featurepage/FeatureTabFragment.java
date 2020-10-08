@@ -48,6 +48,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
         ButterKnife.bind(this,view);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
+        mSwipeRefreshLayout.setEnabled(false);
 
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
