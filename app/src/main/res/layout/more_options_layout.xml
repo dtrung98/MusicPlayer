@@ -21,10 +21,10 @@
         android:layout_marginTop="8dp"
         app:srcCompat="@drawable/ic_arrow_back_black_24dp"
         android:background="@drawable/ripple_oval"
-        android:tint="@color/FlatWhite"
         android:padding="9dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/status_bar" />
+        app:layout_constraintTop_toBottomOf="@id/status_bar"
+        app:tint="@color/FlatWhite" />
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"

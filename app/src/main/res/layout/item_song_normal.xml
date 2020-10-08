@@ -88,9 +88,9 @@
         android:layout_marginEnd="6dp"
         android:layout_height="45dp"
         app:srcCompat="@drawable/ic_more_horiz_black_24dp"
-        android:tint="#DDF5F5F5"
         android:scaleType="centerInside"
-        android:background="@drawable/ripple_oval" />
+        android:background="@drawable/ripple_oval"
+        app:tint="#DDF5F5F5" />
     <ImageView
         android:id="@+id/quick_play_pause"
         android:layout_width="0dp"
@@ -101,7 +101,6 @@
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintEnd_toEndOf="@id/image"
         tools:src="@drawable/ic_volume_up_black_24dp"
-        android:tint="@color/FlatWhite"
         tools:visibility="gone"
-        />
+        app:tint="@color/FlatWhite" />
 </androidx.constraintlayout.widget.ConstraintLayout>

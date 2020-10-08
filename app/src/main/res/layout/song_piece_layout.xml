@@ -65,7 +65,7 @@
     android:src="@drawable/refresh"
     android:padding="18dp"
     android:rotation="180"
-    android:tint="#AAF5F5F5"
+    app:tint="#AAF5F5F5"
     android:elevation="1dp"
     />
 

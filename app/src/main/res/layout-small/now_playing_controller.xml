@@ -111,7 +111,7 @@
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_pause_black_24dp"
-            android:tint="#AAA"
+            app:tint="#AAA"
             android:padding="12dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -215,7 +215,7 @@
         android:layout_marginBottom="@dimen/bottom_navigation_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:padding="9dp"
         android:background="@drawable/ripple_oval"
         />
@@ -228,7 +228,7 @@
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintEnd_toStartOf="@id/play_pause_button"
         android:layout_marginEnd="20dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
         />
@@ -240,7 +240,7 @@
         app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintStart_toEndOf="@id/play_pause_button"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
         android:layout_marginStart="20dp"
@@ -253,7 +253,7 @@
         app:layout_constraintStart_toEndOf="parent"
         app:srcCompat="@drawable/ic_more_vert_black_24dp"
         android:padding="12dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:scaleX="0.75"
         android:scaleY="0.75"
         android:alpha="0"

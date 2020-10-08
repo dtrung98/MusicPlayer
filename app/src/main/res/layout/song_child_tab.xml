@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/refresh"
         android:rotation="180"
-        android:tint="#AAEEEEEE"
+        app:tint="#AAEEEEEE"
         android:padding="12dp"
         android:background="@drawable/ripple_oval"
         android:clickable="true"
@@ -84,7 +84,7 @@
         app:srcCompat="@drawable/ic_shuffle_black_24dp"
         android:paddingTop="13dp"
         android:paddingBottom="13dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:layout_marginStart="17dp"
         android:layout_marginLeft="17dp" />
     <TextView

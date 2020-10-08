@@ -17,9 +17,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/sort_descending"
-        android:tint="@color/FlatWhite"
         android:padding="12dp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="10dp"
+        app:tint="@color/FlatWhite" />
     <TextView
         android:id="@+id/sort_text"
         android:layout_width="0dp"

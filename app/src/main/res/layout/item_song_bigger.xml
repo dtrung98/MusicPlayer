@@ -103,9 +103,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_more_horiz_black_24dp"
-        android:tint="@color/FlatWhite"
         android:padding="12dp"
-        android:background="@drawable/ripple_oval"/>
+        android:background="@drawable/ripple_oval"
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/quick_play_pause"
         android:layout_width="0dp"
@@ -116,6 +116,6 @@
         app:layout_constraintBottom_toBottomOf="@id/image"
         android:elevation="1dp"
         android:padding="12dp"
-        android:tint="#394545"
-        android:alpha="0.55"/>
+        android:alpha="0.55"
+        app:tint="#394545" />
 </androidx.constraintlayout.widget.ConstraintLayout>

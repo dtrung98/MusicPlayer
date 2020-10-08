@@ -34,7 +34,7 @@
             android:layout_height="?attr/actionBarSize"
             app:srcCompat="@drawable/ic_more_horiz_black_24dp"
             android:background="@drawable/ripple_oval"
-            android:tint="@color/FlatWhite"
+            app:tint="@color/FlatWhite"
             android:padding="18dp"
             android:layout_gravity="end"/>
     </androidx.appcompat.widget.Toolbar>
@@ -127,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             app:srcCompat="@drawable/ic_play_arrow_black_24dp"
-            android:tint="#BBFF9500"
+            app:tint="#BBFF9500"
             android:layout_marginStart="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/play_all_button"

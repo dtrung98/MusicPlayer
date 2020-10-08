@@ -78,7 +78,7 @@
         android:src="@drawable/columns"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         />
     <ImageView
         android:id="@+id/search"
@@ -90,7 +90,7 @@
         android:src="@drawable/search"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         />

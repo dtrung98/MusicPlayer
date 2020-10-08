@@ -105,8 +105,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/ic_pause_black_24dp"
-            android:tint="#AAA"
+            app:srcCompat="@drawable/ic_pause_black_24dp"
+            app:tint="#AAA"
             android:padding="12dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
@@ -203,15 +203,14 @@
 
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_pause_black_24dp"
+        app:srcCompat="@drawable/ic_pause_black_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/bottom_navigation_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:tint="@color/FlatWhite"
         android:padding="9dp"
         android:background="@drawable/ripple_oval"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/prev_button"
         android:layout_width="50dp"
@@ -221,10 +220,9 @@
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintEnd_toStartOf="@id/play_pause_button"
         android:layout_marginEnd="20dp"
-        android:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/next_button"
         android:layout_width="50dp"
@@ -233,23 +231,21 @@
         app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintStart_toEndOf="@id/play_pause_button"
-        android:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
         android:layout_marginStart="20dp"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/menu_button"
         android:layout_width="@dimen/now_laying_height_in_minimize_mode"
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_more_vert_black_24dp"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp"
         android:padding="12dp"
-        android:tint="@color/FlatWhite"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="4dp"
-        />
+        app:tint="@color/FlatWhite" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/color_picker_recycler_view"
         android:layout_width="0dp"

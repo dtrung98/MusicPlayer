@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
-        android:tint="@color/flatBlue"
+        app:tint="@color/flatBlue"
         android:layout_marginTop="2dp"
         />
 
@@ -81,7 +81,7 @@
         app:layout_constraintEnd_toStartOf="@id/repeat_button"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/smooth_shuffle"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:background="@drawable/ripple_oval"
         android:padding="11dp"/>
     <ImageView
@@ -92,7 +92,7 @@
         app:layout_constraintStart_toEndOf="@id/shuffle_button"
         app:layout_constraintEnd_toStartOf="@id/playlist_title"
         android:src="@drawable/repeat"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:background="@drawable/ripple_oval"
         android:padding="11dp" />
     <TextView

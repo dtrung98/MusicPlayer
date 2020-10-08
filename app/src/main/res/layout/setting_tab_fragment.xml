@@ -298,7 +298,7 @@
         app:layout_constraintEnd_toEndOf="@id/more_setting"
         app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/right_light"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:padding="12dp"/>
     <View
         android:id="@+id/divider"

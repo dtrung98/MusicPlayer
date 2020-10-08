@@ -106,8 +106,8 @@
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_pause_black_24dp"
-            android:tint="#AAA"
-            android:padding="12dp"/>
+            android:padding="12dp"
+            app:tint="#AAA" />
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -137,6 +137,7 @@
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/now_playing_top_gradient"
         android:alpha="1"/>
     <View
@@ -156,13 +157,15 @@
         android:layout_height="wrap_content"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="@string/this_is_name_of_the_song"
+        tools:text="This is the name of the song, this is the name of the song"
         android:textColor="@color/FlatWhite"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:paddingHorizontal="24dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/big_artist"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
         />
     <TextView
@@ -173,6 +176,7 @@
         app:layout_constraintStart_toStartOf="@id/big_title"
         app:layout_constraintEnd_toEndOf="@id/big_title"
         android:layout_marginBottom="20dp"
+        android:paddingHorizontal="24dp"
         android:textStyle="bold"
         android:textSize="12sp"
         android:textColor="#DDF5F5F5"
@@ -218,10 +222,9 @@
         android:layout_marginBottom="@dimen/bottom_navigation_height"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:tint="@color/FlatWhite"
         android:padding="9dp"
         android:background="@drawable/ripple_oval"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/prev_button"
         android:layout_width="50dp"
@@ -231,10 +234,9 @@
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintEnd_toStartOf="@id/play_pause_button"
         android:layout_marginEnd="20dp"
-        android:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/next_button"
         android:layout_width="50dp"
@@ -243,11 +245,10 @@
         app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintStart_toEndOf="@id/play_pause_button"
-        android:tint="@color/FlatWhite"
         android:padding="13dp"
         android:background="@drawable/ripple_oval"
         android:layout_marginStart="20dp"
-        />
+        app:tint="@color/FlatWhite" />
     <ImageView
         android:id="@+id/menu_button"
         android:layout_width="@dimen/now_laying_height_in_minimize_mode"
@@ -256,10 +257,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_more_vert_black_24dp"
         android:padding="12dp"
-        android:tint="@color/FlatWhite"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="4dp"
-        />
+        app:tint="@color/FlatWhite" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/color_picker_recycler_view"
         android:layout_width="0dp"

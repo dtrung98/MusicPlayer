@@ -122,7 +122,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_back_button"
         android:layout_margin="6dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:background="@drawable/ripple_oval"
         android:focusable="true"
         android:clickable="true"/>
@@ -135,7 +135,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/fullscreen"
         android:layout_margin="6dp"
-        android:tint="@color/FlatWhite"
+        app:tint="@color/FlatWhite"
         android:background="@drawable/ripple_oval"
         android:focusable="true"
         android:clickable="true"/>
@@ -148,7 +148,7 @@
         app:layout_constraintTop_toTopOf="@id/big_image"
         app:layout_constraintBottom_toBottomOf="@id/description"
         android:src="@drawable/play_round"
-        android:tint="#F5F5F5"
+        app:tint="#F5F5F5"
         android:background="@drawable/circle_border"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
