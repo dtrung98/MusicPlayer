@@ -13,8 +13,6 @@ import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.settingpage.SettingTabFragment;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 public class BottomNavigationPagerAdapter extends FragmentPagerAdapter {

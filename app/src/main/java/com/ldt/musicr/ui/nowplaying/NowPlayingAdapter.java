@@ -10,18 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.ldt.musicr.R;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
-import com.ldt.musicr.glide.artistimage.ArtistImage;
 import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;

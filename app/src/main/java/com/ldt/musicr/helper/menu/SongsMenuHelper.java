@@ -1,7 +1,5 @@
 package com.ldt.musicr.helper.menu;
 
-import androidx.annotation.NonNull;
-
 /**
  * @author Karim Abou Zeid (kabouzeid)
  * modified by Le Dinh Trung (dtrung98)

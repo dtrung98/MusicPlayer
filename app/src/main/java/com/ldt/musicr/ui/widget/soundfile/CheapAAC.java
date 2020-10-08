@@ -51,7 +51,7 @@ public class CheapAAC extends SoundFile {
         };
     }
 
-    class Atom {
+    static class Atom {
         public int start;
         public int len;  // including header
         public byte[] data;

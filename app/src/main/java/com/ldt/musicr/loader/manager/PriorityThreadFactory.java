@@ -18,7 +18,7 @@ public class PriorityThreadFactory implements ThreadFactory {
             public void run() {
                 try {
                     Process.setThreadPriority(mThreadPriority);
-                } catch (Throwable t) {
+                } catch (Throwable ignored) {
 
                 }
                 runnable.run();

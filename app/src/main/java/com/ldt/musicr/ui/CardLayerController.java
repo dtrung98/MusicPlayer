@@ -490,7 +490,7 @@ public class CardLayerController {
     private GestureDetector mGestureDetector;
     public SwipeGestureListener mGestureListener = new SwipeGestureListener();
 
-    class SwipeGestureListener extends SwipeDetectorGestureListener {
+    static class SwipeGestureListener extends SwipeDetectorGestureListener {
         public boolean down = false;
         private boolean flingMasked = false;
         public float assignPosY0;

@@ -31,7 +31,7 @@ public class ModifiedStickyScrollView extends ScrollView {
     public ModifiedStickyScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-    public class StickyStruct {
+    public static class StickyStruct {
         public View view;
         public int posTop,posBot;
         public StickyStruct(View v) {

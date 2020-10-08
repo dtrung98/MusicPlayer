@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
-import androidx.annotation.StyleRes;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;

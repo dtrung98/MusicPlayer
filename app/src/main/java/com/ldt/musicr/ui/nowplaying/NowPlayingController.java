@@ -439,7 +439,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     }
 
 
-    private class CustomDecoration extends RecyclerView.ItemDecoration {
+    private static class CustomDecoration extends RecyclerView.ItemDecoration {
         public CustomDecoration() {
             super();
         }

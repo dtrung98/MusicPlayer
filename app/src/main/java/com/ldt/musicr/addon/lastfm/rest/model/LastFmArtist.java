@@ -77,7 +77,7 @@ public class LastFmArtist {
             this.bio = bio;
         }
 
-        public class Bio {
+        public static class Bio {
             @Expose
             private String content;
 

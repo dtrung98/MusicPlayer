@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.SurfaceTexture;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.TextureView;
@@ -77,7 +76,7 @@ public class BubblePicker extends TextureView implements TextureView.SurfaceText
     /*
      * Thread to draw a green square moving around the textureView.
      */
-    class RenderingThread extends Thread {
+    static class RenderingThread extends Thread {
         private final TextureView mSurface;
         private volatile boolean mRunning = true;
 

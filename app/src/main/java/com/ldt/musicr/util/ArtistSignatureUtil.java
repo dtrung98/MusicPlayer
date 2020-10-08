@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import android.util.Log;
 
 import com.bumptech.glide.signature.ObjectKey;
 import com.ldt.musicr.App;

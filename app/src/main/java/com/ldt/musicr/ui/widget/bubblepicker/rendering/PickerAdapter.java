@@ -8,11 +8,9 @@ import androidx.core.content.ContextCompat;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
-import com.ldt.musicr.model.Media;
 import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener;
 import com.ldt.musicr.ui.widget.bubblepicker.model.BubbleGradient;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
-import com.ldt.musicr.ui.widget.bubblepicker.physics.PhysicsEngine;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.Adapter;
 import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
 

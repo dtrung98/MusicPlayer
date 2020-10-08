@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui.page.librarypage;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FolderChildTab extends Fragment {

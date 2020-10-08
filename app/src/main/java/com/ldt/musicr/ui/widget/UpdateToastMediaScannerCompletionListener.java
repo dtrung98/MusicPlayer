@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.widget.Toast;
 
 import com.ldt.musicr.R;
 
