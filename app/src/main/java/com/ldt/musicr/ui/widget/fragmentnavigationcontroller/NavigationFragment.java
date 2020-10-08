@@ -13,21 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.util.Tool;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Created by burt on 2016. 5. 24..
- */
-public abstract class SupportFragment extends Fragment {
+public abstract class NavigationFragment extends Fragment {
     private static final String TAG ="SupportFragment";
     public static int PRESENT_STYLE_DEFAULT = PresentStyle.ACCORDION_LEFT;
 
     private WeakReference<FragmentNavigationController> weakFragmentNaviagationController = null;
     protected boolean animatable = true;
-    private AndroidFragmentFrameLayout innerRootLayout = null;
+    private FragmentTransitionFrameLayout innerRootLayout = null;
     private View contentView = null;
     private PresentStyle presentStyle = null;
     public boolean isWhiteTheme(boolean current) {
@@ -62,8 +59,8 @@ public abstract class SupportFragment extends Fragment {
         weakFragmentNaviagationController = new WeakReference<>(fragmentNavigationController);
     }
 
-    public MainActivity getMainActivity() {
-     return (MainActivity) getActivity();
+    public AppActivity getMainActivity() {
+     return (AppActivity) getActivity();
     }
 
 
@@ -89,7 +86,7 @@ public abstract class SupportFragment extends Fragment {
         View v = onCreateView(inflater, container);
         if(v == null) return v;
         contentView = v;
-        innerRootLayout = new AndroidFragmentFrameLayout(getActivity());
+        innerRootLayout = new FragmentTransitionFrameLayout(getActivity());
         innerRootLayout.addView(contentView);
         return innerRootLayout;
     }
@@ -109,7 +106,7 @@ public abstract class SupportFragment extends Fragment {
      * This is the layout for wrapping contentView
      * @return AndroidFragmentFrameLayout
      */
-    public AndroidFragmentFrameLayout getRootLayout() {
+    public FragmentTransitionFrameLayout getRootLayout() {
         return innerRootLayout;
     }
 

@@ -42,7 +42,7 @@ import com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar;
 import com.ldt.musicr.ui.widget.bubblepopupmenu.BubbleMenuCenter;
 import com.ldt.musicr.ui.widget.rounded.DarkenRoundedBackgroundFrameLayout;
 import com.ldt.musicr.ui.widget.PlayPauseButton;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.R;
 
 import com.ldt.musicr.ui.widget.ToggleButton;

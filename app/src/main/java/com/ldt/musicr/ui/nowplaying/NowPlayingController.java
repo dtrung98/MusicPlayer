@@ -30,14 +30,13 @@ import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.page.BaseLayerFragment;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.page.CardLayerFragment;
 
 import com.ldt.musicr.model.Song;
 
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.LayerController;
-
-import com.ldt.musicr.ui.MainActivity;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar;
 import com.ldt.musicr.util.SortOrder;
@@ -49,7 +48,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NowPlayingController extends BaseLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, PalettePickerAdapter.OnColorChangedListener {
+public class NowPlayingController extends CardLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, PalettePickerAdapter.OnColorChangedListener {
     private static final String TAG ="NowPlayingController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
@@ -113,19 +112,19 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
 
         //mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
-        mRecyclerView.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
-        mVisualSeekBar.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN);
+        mRecyclerView.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot,event));
+        mVisualSeekBar.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN);
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
         Log.d(TAG, "onViewCreated");
-       if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).addMusicServiceEventListener(this,true);
+       if(getActivity() instanceof MusicServiceActivity) ((AppActivity)getActivity()).addMusicServiceEventListener(this,true);
        setUp();
     }
 
     @Override
     public void onDestroyView() {
 
-        if(getActivity() instanceof BaseActivity) ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity) ((AppActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
 
@@ -237,7 +236,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     }
 
     @Override
-    public void onUpdateLayer( ArrayList<LayerController.Attr> attrs, ArrayList<Integer> actives, int me) {
+    public void onUpdateLayer(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
 
         if(mRoot==null) return;
         if(me ==1) {
@@ -262,7 +261,7 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     }
 
     @Override
-    public void onTranslateChanged(LayerController.Attr attr) {
+    public void onTranslateChanged(CardLayerController.CardLayerAttribute attr) {
         //Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
         if(getMaxPositionType())
         setRadius(0);
@@ -284,11 +283,11 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     public void checkStatusStyle(){
         if(mConstraintRoot.getProgress()>=0.9&&mDimView.getAlpha()<=0.1
         ) {
-            if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).setTheme(true);
+            if(getActivity() instanceof AppActivity)
+            ((AppActivity)getActivity()).setTheme(true);
         } else {
-            if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).setTheme(false);
+            if(getActivity() instanceof AppActivity)
+            ((AppActivity)getActivity()).setTheme(false);
         }
     }
 
@@ -343,8 +342,8 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
     @OnClick(R.id.playlist_title)
     void popUpPlayingList() {
         Activity activity = getActivity();
-        if(activity instanceof MainActivity) {
-            ((MainActivity)getActivity()).popUpPlaylistTab();
+        if(activity instanceof AppActivity) {
+            ((AppActivity)getActivity()).popUpPlaylistTab();
         }
     }
     private void updatePlayingSongInfo() {
@@ -369,8 +368,8 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
         }
 
         mVisualSeekBar.postDelayed(mUpdateProgress,10);
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).refreshPalette();
+        if(getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity)getActivity()).refreshPalette();
     }
 
 
@@ -416,10 +415,10 @@ public class NowPlayingController extends BaseLayerFragment implements MusicServ
 
     @Override
     public boolean onGestureDetected(int gesture) {
-        if(gesture==LayerController.SINGLE_TAP_UP) {
-            LayerController.Attr a = getLayerController().getMyAttr(this);
+        if(gesture== CardLayerController.SINGLE_TAP_UP) {
+            CardLayerController.CardLayerAttribute a = getCardLayerController().getMyAttr(this);
             if(a!=null) {
-                if(a.getState()== LayerController.Attr.MINIMIZED)
+                if(a.getState()== CardLayerController.CardLayerAttribute.MINIMIZED)
                     a.animateToMax();
                 else
                     a.animateToMin();

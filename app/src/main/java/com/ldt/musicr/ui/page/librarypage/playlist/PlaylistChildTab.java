@@ -12,18 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.page.MusicServiceFragment;
 import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.page.featurepage.FeaturePlaylistAdapter;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PlaylistChildTab extends BaseMusicServiceFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
+public class PlaylistChildTab extends MusicServiceFragment implements FeaturePlaylistAdapter.PlaylistClickListener {
     public static final String TAG ="PlaylistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -45,8 +45,8 @@ public class PlaylistChildTab extends BaseMusicServiceFragment implements Featur
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
-        if(getActivity() instanceof BaseActivity) {
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity) {
+            ((MusicServiceActivity)getActivity()).addMusicServiceEventListener(this);
         }
         refreshData();
 ;    }
@@ -57,10 +57,10 @@ public class PlaylistChildTab extends BaseMusicServiceFragment implements Featur
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        SupportFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
+        NavigationFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
         Fragment parentFragment = getParentFragment();
-        if(parentFragment instanceof SupportFragment)
-            ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);
+        if(parentFragment instanceof NavigationFragment)
+            ((NavigationFragment)parentFragment).getNavigationController().presentFragment(sf);
     }
 
     @Override

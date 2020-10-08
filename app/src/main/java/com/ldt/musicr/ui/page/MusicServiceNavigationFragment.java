@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.View;
 
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
-public abstract class BaseMusicServiceFragment extends Fragment implements MusicServiceEventListener {
+public abstract class MusicServiceNavigationFragment extends NavigationFragment implements MusicServiceEventListener {
     @Override
     public void onServiceConnected() {
+
+    }
+
+    @Override
+    public void onPaletteChanged() {
 
     }
 
@@ -25,13 +30,13 @@ public abstract class BaseMusicServiceFragment extends Fragment implements Music
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Activity activity = getActivity();
-        if(activity instanceof BaseActivity) ((BaseActivity)activity).addMusicServiceEventListener(this);
+        if(activity instanceof MusicServiceActivity) ((MusicServiceActivity)activity).addMusicServiceEventListener(this);
     }
 
     @Override
     public void onDestroyView() {
         Activity activity = getActivity();
-        if(activity instanceof BaseActivity)((BaseActivity)activity).removeMusicServiceEventListener(this);
+        if(activity instanceof MusicServiceActivity)((MusicServiceActivity)activity).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
 
@@ -61,7 +66,7 @@ public abstract class BaseMusicServiceFragment extends Fragment implements Music
     }
 
     @Override
-    public void onPaletteChanged() {
+    public void onMediaStoreChanged() {
 
     }
 }

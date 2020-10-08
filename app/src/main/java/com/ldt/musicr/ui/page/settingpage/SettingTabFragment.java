@@ -19,8 +19,8 @@ import android.widget.TextView;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.LocaleHelper;
-import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 import com.ldt.musicr.ui.page.subpages.MoreOptionFragment;
 import com.ldt.musicr.ui.widget.rangeseekbar.OnRangeChangedListener;
 import com.ldt.musicr.ui.widget.rangeseekbar.RangeSeekBar;
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
-public class SettingTabFragment extends BaseMusicServiceSupportFragment implements OnRangeChangedListener {
+public class SettingTabFragment extends MusicServiceNavigationFragment implements OnRangeChangedListener {
     private static final String EN = "en";
     private static final String VI = "vi";
 
@@ -58,8 +58,8 @@ public class SettingTabFragment extends BaseMusicServiceSupportFragment implemen
     @OnCheckedChanged(R.id.hide_switch)
     void onChangedUseArtistImgAsBg(boolean value) {
         App.getInstance().getPreferencesUtility().setIsUsingArtistImageAsBackground(value);
-        if(getActivity() instanceof MainActivity) {
-            ((MainActivity)getActivity()).getBackStackController().onUsingArtistImagePreferenceChanged();
+        if(getActivity() instanceof AppActivity) {
+            ((AppActivity)getActivity()).getBackStackController().onUsingArtistImagePreferenceChanged();
         }
     }
 

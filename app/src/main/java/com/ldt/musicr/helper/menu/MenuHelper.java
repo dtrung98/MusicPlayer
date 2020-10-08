@@ -13,8 +13,8 @@ import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeletePlaylistDialog;
@@ -68,8 +68,8 @@ public class MenuHelper {
                 MusicPlayerRemote.playNext(artist.getSongs());
                 return true;
             case R.string.play_preview:
-                if(activity instanceof BaseActivity) {
-                    SongPreviewController preview = ((MainActivity) activity).getSongPreviewController();
+                if(activity instanceof MusicServiceActivity) {
+                    SongPreviewController preview = ((AppActivity) activity).getSongPreviewController();
                     if (preview != null) {
                         if (preview.isPlayingPreview())
                             preview.cancelPreview();
@@ -98,8 +98,8 @@ public class MenuHelper {
                 MusicPlayerRemote.playNext(new ArrayList<>(PlaylistPagerFragment.getPlaylistWithListId(activity, playlist,"")));
                 return true;
             case R.string.play_preview:
-                if(activity instanceof MainActivity) {
-                    SongPreviewController preview =((MainActivity) activity).getSongPreviewController();
+                if(activity instanceof AppActivity) {
+                    SongPreviewController preview =((AppActivity) activity).getSongPreviewController();
                     if(preview!=null) {
                         if (preview.isPlayingPreview())
                             preview.cancelPreview();

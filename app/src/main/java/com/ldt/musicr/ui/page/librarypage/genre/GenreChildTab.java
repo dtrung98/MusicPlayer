@@ -3,41 +3,18 @@ package com.ldt.musicr.ui.page.librarypage.genre;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.medialoader.ArtistLoader;
-import com.ldt.musicr.loader.medialoader.GenreLoader;
-import com.ldt.musicr.loader.medialoader.SongLoader;
-import com.ldt.musicr.model.Artist;
-import com.ldt.musicr.model.Genre;
-import com.ldt.musicr.model.Song;
-import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
-import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
-import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.widget.bubblepicker.SampleAdapter;
-import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.CircleRenderItem;
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.BubblePicker;
-import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
-import com.ldt.musicr.util.NavigationUtil;
-
-import java.util.Arrays;
-import java.util.Random;
+import com.ldt.musicr.ui.page.MusicServiceFragment;
 
 import butterknife.BindDimen;
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class GenreChildTab extends BaseMusicServiceFragment {
+public class GenreChildTab extends MusicServiceFragment {
     public static final String TAG="GenreChildTab";
 
     public static GenreChildTab newInstance() {

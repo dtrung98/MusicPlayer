@@ -27,8 +27,8 @@ import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.helper.songpreview.SongPreviewListener;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.page.librarypage.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
@@ -57,8 +57,8 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
     public AbsSongAdapter(Context context) {
         super(context);
 
-        if(context instanceof BaseActivity) {
-           SongPreviewController controller = ((BaseActivity)context).getSongPreviewController();
+        if(context instanceof MusicServiceActivity) {
+           SongPreviewController controller = ((MusicServiceActivity)context).getSongPreviewController();
            if(controller!=null)
            controller.addSongPreviewListener(this);
         }
@@ -67,24 +67,24 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
     @Override
     protected void onDataSet() {
 
-        if(mContext instanceof MainActivity) {
-            SongPreviewController controller = ((MainActivity) mContext).getSongPreviewController();
+        if(mContext instanceof AppActivity) {
+            SongPreviewController controller = ((AppActivity) mContext).getSongPreviewController();
             if(controller!=null)
             mPreviewSong = controller.getCurrentPreviewSong();
         }
     }
 
     public void destroy() {
-        if(mContext instanceof MainActivity) {
-           SongPreviewController controller  = ((MainActivity)mContext).getSongPreviewController();
+        if(mContext instanceof AppActivity) {
+           SongPreviewController controller  = ((AppActivity)mContext).getSongPreviewController();
            if(controller!=null) controller.removeAudioPreviewerListener(this);
         }
         super.destroy();
     }
 
     public  void previewAll(boolean shuffle) {
-        if(mContext instanceof MainActivity) {
-            SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+        if(mContext instanceof AppActivity) {
+            SongPreviewController preview =((AppActivity) mContext).getSongPreviewController();
             if(preview!=null) {
                 if (preview.isPlayingPreview())
                     preview.cancelPreview();
@@ -102,8 +102,8 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
 
     protected void previewThisSong(int positionData) {
 
-        if(mContext instanceof MainActivity) {
-           SongPreviewController preview =((MainActivity) mContext).getSongPreviewController();
+        if(mContext instanceof AppActivity) {
+           SongPreviewController preview =((AppActivity) mContext).getSongPreviewController();
            if(preview!=null) {
                if (preview.isPlayingPreview()&&preview.isPreviewingSong(getData().get(positionData)))
                    preview.cancelPreview();
@@ -116,8 +116,8 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
 
      private void forceStopPreview() {
         mPreviewSong = null;
-        if(mContext instanceof MainActivity) {
-            SongPreviewController controller =  ((MainActivity)mContext).getSongPreviewController();
+        if(mContext instanceof AppActivity) {
+            SongPreviewController controller =  ((AppActivity)mContext).getSongPreviewController();
             if(controller!=null) controller.cancelPreview();
         }
     }

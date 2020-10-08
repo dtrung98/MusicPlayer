@@ -22,7 +22,7 @@
         android:theme="@style/AppThemeNoWallpaper"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.AppActivity"
             android:theme="@style/SplashThemeV2"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"

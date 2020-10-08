@@ -33,10 +33,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
- *  Create relationship between Activity and Music Player Service
+ *  This base activity creates relationship between Activity and Music Player Service
+ *  The only sub-class of this activity is AppActivity
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements MusicServiceEventListener {
+public abstract class MusicServiceActivity extends AppCompatActivity implements MusicServiceEventListener {
     private static final String TAG = "BaseActivity";
 
     private final ArrayList<MusicServiceEventListener> mMusicServiceEventListeners = new ArrayList<>();
@@ -58,12 +59,12 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
         serviceToken = MusicPlayerRemote.bindToService(this, new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                BaseActivity.this.onServiceConnected();
+                MusicServiceActivity.this.onServiceConnected();
             }
 
             @Override
             public void onServiceDisconnected(ComponentName name) {
-                BaseActivity.this.onServiceDisconnected();
+                MusicServiceActivity.this.onServiceDisconnected();
             }
         });
 
@@ -229,16 +230,16 @@ public abstract class BaseActivity extends AppCompatActivity implements MusicSer
 
     private static final class MusicStateReceiver extends BroadcastReceiver {
 
-        private final WeakReference<BaseActivity> reference;
+        private final WeakReference<MusicServiceActivity> reference;
 
-        public MusicStateReceiver(final BaseActivity activity) {
+        public MusicStateReceiver(final MusicServiceActivity activity) {
             reference = new WeakReference<>(activity);
         }
 
         @Override
         public void onReceive(final Context context, @NonNull final Intent intent) {
             final String action = intent.getAction();
-            BaseActivity activity = reference.get();
+            MusicServiceActivity activity = reference.get();
             if (activity != null&&action!=null) {
                 switch (action) {
                     case MusicService.META_CHANGED:

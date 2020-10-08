@@ -18,14 +18,14 @@ import com.ldt.musicr.ui.page.librarypage.artist.ArtistChildTab;
 import com.ldt.musicr.ui.page.librarypage.genre.GenreChildTab;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildTab;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.util.Tool;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LibraryTabFragment extends SupportFragment {
+public class LibraryTabFragment extends NavigationFragment {
     private static final String TAG ="LibraryTabFragment";
 
     @BindView(R.id.back_image)

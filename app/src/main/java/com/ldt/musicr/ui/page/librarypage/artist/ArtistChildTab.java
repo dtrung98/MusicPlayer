@@ -16,13 +16,12 @@ import android.view.ViewGroup;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
-import com.ldt.musicr.loader.base.MediaElement;
 import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
-import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
+import com.ldt.musicr.ui.page.MusicServiceFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ArtistChildTab extends BaseMusicServiceFragment implements ArtistAdapter.ArtistClickListener {
+public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapter.ArtistClickListener {
     public static final String TAG ="ArtistChildTab";
 
     @BindView(R.id.recycler_view)
@@ -90,11 +89,11 @@ public class ArtistChildTab extends BaseMusicServiceFragment implements ArtistAd
 
     @Override
     public void onArtistItemClick(Artist artist) {
-        SupportFragment sf = ArtistPagerFragment.newInstance(artist);
+        NavigationFragment sf = ArtistPagerFragment.newInstance(artist);
   /*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*/
             Fragment parentFragment = getParentFragment();
-            if(parentFragment instanceof SupportFragment)
-                ((SupportFragment)parentFragment).getNavigationController().presentFragment(sf);
+            if(parentFragment instanceof NavigationFragment)
+                ((NavigationFragment)parentFragment).getNavigationController().presentFragment(sf);
     }
 
     @Override

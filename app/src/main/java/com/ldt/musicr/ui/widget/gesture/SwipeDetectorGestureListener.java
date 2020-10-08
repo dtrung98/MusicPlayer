@@ -5,8 +5,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.ldt.musicr.ui.page.BaseLayerFragment;
-import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.CardLayerController;
 
 public class SwipeDetectorGestureListener extends GestureDetector.SimpleOnGestureListener {
     private static final String TAG ="SwipeDetector";
@@ -15,9 +15,9 @@ public class SwipeDetectorGestureListener extends GestureDetector.SimpleOnGestur
     private static final int SWIPE_THRESHOLD = 100;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
     public int item = -1;
-    public LayerController.Attr attr;
-    public BaseLayerFragment layer;
-    public void setMotionLayer(int i, BaseLayerFragment b, LayerController.Attr a) {
+    public CardLayerController.CardLayerAttribute attr;
+    public CardLayerFragment layer;
+    public void setMotionLayer(int i, CardLayerFragment b, CardLayerController.CardLayerAttribute a) {
         item = i;
         layer = b;
         attr = a;

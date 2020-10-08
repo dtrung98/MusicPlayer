@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class IntroStepOneFragment extends SupportFragment implements MainActivity.PermissionListener {
+public class PermissionRequiredFragment extends NavigationFragment implements AppActivity.PermissionListener {
     private static final String TAG ="IntroStepOneFragment";
 
 
@@ -63,7 +63,7 @@ public class IntroStepOneFragment extends SupportFragment implements MainActivit
     public void onPermissionGranted() {
         mSwipeRefresh.setRefreshing(false);
         Log.d(TAG, "onPermissionGranted");
-        getMainActivity().startGUI();
+        getMainActivity().showMainUI();
     }
 
     @Override

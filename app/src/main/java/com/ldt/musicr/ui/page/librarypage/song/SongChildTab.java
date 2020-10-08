@@ -18,7 +18,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.ui.page.BaseMusicServiceFragment;
+import com.ldt.musicr.ui.page.MusicServiceFragment;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
@@ -31,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends BaseMusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack{
+public class SongChildTab extends MusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack{
     public static final String TAG ="SongChildTab";
 
     @BindView(R.id.recycler_view)

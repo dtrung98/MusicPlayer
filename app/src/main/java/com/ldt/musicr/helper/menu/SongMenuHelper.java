@@ -10,8 +10,8 @@ import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeleteSongsDialog;
@@ -109,13 +109,13 @@ public class SongMenuHelper {
     public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Song song, int string_res_option) {
         switch (string_res_option) {
             case R.string.play_preview:
-                if(activity instanceof MainActivity) {
-                    ((MainActivity)activity).getSongPreviewController().previewSongs(song);
+                if(activity instanceof AppActivity) {
+                    ((AppActivity)activity).getSongPreviewController().previewSongs(song);
                 }
                 break;
             case R.string.play_preview_all:
-                if(activity instanceof BaseActivity) {
-                    SongPreviewController preview = ((MainActivity) activity).getSongPreviewController();
+                if(activity instanceof MusicServiceActivity) {
+                    SongPreviewController preview = ((AppActivity) activity).getSongPreviewController();
                     if (preview != null) {
                         if (preview.isPlayingPreview())
                             preview.cancelPreview();

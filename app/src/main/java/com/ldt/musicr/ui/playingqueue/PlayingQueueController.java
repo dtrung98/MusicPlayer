@@ -26,9 +26,9 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.MainActivity;
-import com.ldt.musicr.ui.page.BaseLayerFragment;
-import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.util.Tool;
 
@@ -44,7 +44,7 @@ import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_FLING;
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL;
 
-public class PlayingQueueController extends BaseLayerFragment implements MusicServiceEventListener {
+public class PlayingQueueController extends CardLayerFragment implements MusicServiceEventListener {
     private static final String TAG ="PlayingQueueController";
     @BindView(R.id.rootCardView)
     CardView mRootCardView;
@@ -84,13 +84,13 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     private PlayingQueueAdapter mAdapter;
     @OnTouch({R.id.playlist_title,R.id.down})
     boolean touchDetected(View view, MotionEvent event) {
-        return mLayerController.streamOnTouchEvent(mRoot,event);
+        return mCardLayerController.dispatchOnTouchEvent(mRoot,event);
     }
     @OnClick({R.id.playlist_title,R.id.down})
     void titlePanelClicked() {
-        LayerController.Attr a = mLayerController.getMyAttr(this);
+        CardLayerController.CardLayerAttribute a = mCardLayerController.getMyAttr(this);
         if(a!=null) {
-            if(a.getState()== LayerController.Attr.MINIMIZED)
+            if(a.getState()== CardLayerController.CardLayerAttribute.MINIMIZED)
                 a.animateToMax();
             else
                 a.animateToMin();
@@ -122,8 +122,8 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         mRecyclerView.setAdapter(mAdapter);
 
-        if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).addMusicServiceEventListener(this);
+        if(getActivity() instanceof AppActivity)
+            ((AppActivity)getActivity()).addMusicServiceEventListener(this);
         setUp();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -143,7 +143,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
                 if(!recyclerView.canScrollVertically(-1)) Log.d(TAG, "onScrolled: on top");
                 else if(!recyclerView.canScrollVertically(1)) Log.d(TAG, "onScrolled: on bottom");
 
-                if(!recyclerView.canScrollVertically(-1)&&recyclerView.getScrollState()==SCROLL_STATE_FLING&&dy<0) mLayerController.getMyAttr(PlayingQueueController.this).shakeOnMax(-dy);
+                if(!recyclerView.canScrollVertically(-1)&&recyclerView.getScrollState()==SCROLL_STATE_FLING&&dy<0) mCardLayerController.getMyAttr(PlayingQueueController.this).shakeOnMax(-dy);
             }
         });
     }
@@ -162,7 +162,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
             //    Toast.makeText(getContext(),"Down",Toast.LENGTH_SHORT).show();
                 mFirstTouchEvent = true;
                 view.onTouchEvent(event);
-                if(isRecyclerViewOnTop) mLayerController.streamOnTouchEvent(mRoot,event);
+                if(isRecyclerViewOnTop) mCardLayerController.dispatchOnTouchEvent(mRoot,event);
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, "onTouchRecyclerView: up");
@@ -170,14 +170,14 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
                 mPreviousY = 0;
                 if(mInStreamEvent) {
                     mInStreamEvent = false;
-                    mLayerController.streamOnTouchEvent(mRoot, event);
+                    mCardLayerController.dispatchOnTouchEvent(mRoot, event);
                 }
                  view.onTouchEvent(event);
                 break;
             default:
                 Log.d(TAG, "onTouchRecyclerView: "+event.getAction());
                 if(mPreviousY<currentY&&isRecyclerViewOnTop) mInStreamEvent = true;
-                if(mInStreamEvent) mLayerController.streamOnTouchEvent(mRoot,event);
+                if(mInStreamEvent) mCardLayerController.dispatchOnTouchEvent(mRoot,event);
                 else view.onTouchEvent(event);
                 mFirstTouchEvent = false;
         }
@@ -187,8 +187,8 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
 
     @Override
     public void onDestroyView() {
-        if(getActivity() instanceof MainActivity)
-            ((MainActivity)getActivity()).removeMusicServiceEventListener(this);
+        if(getActivity() instanceof AppActivity)
+            ((AppActivity)getActivity()).removeMusicServiceEventListener(this);
         mSet = false;
         mAdapter.destroy();
         super.onDestroyView();
@@ -208,10 +208,10 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
 
     @Override
     public boolean onGestureDetected(int gesture) {
-        if(gesture==LayerController.SINGLE_TAP_UP) {
-            LayerController.Attr a = mLayerController.getMyAttr(this);
+        if(gesture== CardLayerController.SINGLE_TAP_UP) {
+            CardLayerController.CardLayerAttribute a = mCardLayerController.getMyAttr(this);
             if(a!=null) {
-                if(a.getState()== LayerController.Attr.MINIMIZED)
+                if(a.getState()== CardLayerController.CardLayerAttribute.MINIMIZED)
                     a.animateToMax();
                 else
                     a.animateToMin();
@@ -223,7 +223,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     float mPrevProgress = 0;
 
     @Override
-    public void onTranslateChanged(LayerController.Attr attr) {
+    public void onTranslateChanged(CardLayerController.CardLayerAttribute attr) {
             Log.d(TAG, "onTranslateChanged");
 
             float pc = attr.getRuntimePercent();
@@ -290,7 +290,7 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     }
 
     @Override
-    public void onUpdateLayer(ArrayList<LayerController.Attr> attrs, ArrayList<Integer> actives, int me) {
+    public void onUpdateLayer(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
 
         if(mRoot==null) return;
         if(me ==1) {
@@ -318,9 +318,9 @@ public class PlayingQueueController extends BaseLayerFragment implements MusicSe
     }
 
     public void popUp() {
-        LayerController.Attr a = mLayerController.getMyAttr(this);
+        CardLayerController.CardLayerAttribute a = mCardLayerController.getMyAttr(this);
         if(a!=null) {
-            if(a.getState()== LayerController.Attr.MINIMIZED)
+            if(a.getState()== CardLayerController.CardLayerAttribute.MINIMIZED)
                 a.animateToMax();
         }
     }

@@ -26,8 +26,8 @@ import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.ui.LayerController;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
 import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
@@ -36,66 +36,66 @@ import es.dmoral.toasty.Toasty;
 
 public class NavigationUtil {
 
-    public static void navigateToBackStackController(@NonNull final  MainActivity activity) {
-        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
-        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+    public static void navigateToBackStackController(@NonNull final AppActivity activity) {
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
-        if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED&&nowPlayingAttr.getState()!= LayerController.Attr.MINIMIZED) {
+        if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED&&nowPlayingAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED) {
             // 2 layer is maximized
             playingQueueAttr.animateToMin();
             playingQueueAttr.getParent().postDelayed(nowPlayingAttr::animateToMin,550);
-        } else if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED) {
+        } else if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED) {
             // only playing queue
             playingQueueAttr.animateToMin();
-        } else if(nowPlayingAttr.getState()!= LayerController.Attr.MINIMIZED) {
+        } else if(nowPlayingAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED) {
             // only now playing
             nowPlayingAttr.animateToMin();
         }
     }
 
-    public static void navigateToNowPlayingController(@NonNull final MainActivity activity) {
-        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
-        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+    public static void navigateToNowPlayingController(@NonNull final AppActivity activity) {
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
-        if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED && nowPlayingAttr.getState() != LayerController.Attr.MINIMIZED) {
+        if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED && nowPlayingAttr.getState() != CardLayerController.CardLayerAttribute.MINIMIZED) {
             // 2 layer is maximized
             playingQueueAttr.animateToMin();
-        } else if(playingQueueAttr.getState()!= LayerController.Attr.MINIMIZED) {
+        } else if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED) {
             // playing queue is maximize, while now playing is minimize
             playingQueueAttr.animateToMin();
             playingQueueAttr.getParent().postDelayed(nowPlayingAttr::animateToMax,550);
-        } else if(nowPlayingAttr.getState()== LayerController.Attr.MINIMIZED) {
+        } else if(nowPlayingAttr.getState()== CardLayerController.CardLayerAttribute.MINIMIZED) {
             // both are minimized
             nowPlayingAttr.animateToMax();
         }
     }
 
-    public static void navigateToPlayingQueueController(@NonNull final MainActivity activity) {
-        final LayerController.Attr playingQueueAttr = activity.getLayerController().getMyAttr(activity.getPlayingQueueController());
-        final LayerController.Attr nowPlayingAttr = activity.getLayerController().getMyAttr(activity.getNowPlayingController());
+    public static void navigateToPlayingQueueController(@NonNull final AppActivity activity) {
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
-        if (playingQueueAttr.getState() == LayerController.Attr.MINIMIZED) {
+        if (playingQueueAttr.getState() == CardLayerController.CardLayerAttribute.MINIMIZED) {
             // playing queue is minimize, while now playing is maximize
             playingQueueAttr.animateToMax();
         }
     }
 
     public static void navigateToArtist(@NonNull final Activity activity, final int artistId) {
-        if (activity instanceof MainActivity) {
-            final MainActivity mainActivity = (MainActivity) activity;
+        if (activity instanceof AppActivity) {
+            final AppActivity appActivity = (AppActivity) activity;
 
-            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab(true);
+            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
 
-            navigateToBackStackController(mainActivity);
+            navigateToBackStackController(appActivity);
         }
     }
 
     public static LibraryTabFragment getLibraryTab( Activity activity) {
-        if(activity instanceof  MainActivity) {
-            final  MainActivity mainActivity = (MainActivity) activity;
-            return mainActivity.getBackStackController().navigateToLibraryTab(false);
+        if(activity instanceof AppActivity) {
+            final AppActivity appActivity = (AppActivity) activity;
+            return appActivity.getBackStackController().navigateToLibraryTab(false);
         }
         return null;
     }
@@ -109,13 +109,13 @@ public class NavigationUtil {
     }
 
     public static void navigateToPlaylist(@NonNull final Activity activity, final Playlist playlist) {
-        if (activity instanceof MainActivity) {
-            final MainActivity mainActivity = (MainActivity) activity;
+        if (activity instanceof AppActivity) {
+            final AppActivity appActivity = (AppActivity) activity;
 
-            LibraryTabFragment fragment = mainActivity.getBackStackController().navigateToLibraryTab(true);
+            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(PlaylistPagerFragment.newInstance(activity,playlist,null));
-            navigateToBackStackController(mainActivity);
+            navigateToBackStackController(appActivity);
         }
     }
 

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.page.BackStackController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
@@ -85,8 +85,8 @@ public class FeatureLinearHolder {
 
         @OnClick(R.id.back_top_header)
         void goToPlaylistChildTab() {
-            if(mContext instanceof MainActivity) {
-                BackStackController controller = ((MainActivity) mContext).getBackStackController();
+            if(mContext instanceof AppActivity) {
+                BackStackController controller = ((AppActivity) mContext).getBackStackController();
                 if (controller != null) {
                     LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
                     if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(PlaylistChildTab.TAG);
@@ -134,8 +134,8 @@ public class FeatureLinearHolder {
 
         @OnClick({R.id.see_all, R.id.back_top_header})
         void seeAll() {
-            if(mContext instanceof MainActivity) {
-                BackStackController controller = ((MainActivity) mContext).getBackStackController();
+            if(mContext instanceof AppActivity) {
+                BackStackController controller = ((AppActivity) mContext).getBackStackController();
                 if (controller != null) {
                   LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
                           if(libraryTabFragment!=null) libraryTabFragment.navigateToTab(SongChildTab.TAG);

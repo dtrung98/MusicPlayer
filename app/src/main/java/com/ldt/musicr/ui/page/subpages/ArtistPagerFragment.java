@@ -21,7 +21,7 @@ import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
-import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -31,7 +31,7 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 
-public class ArtistPagerFragment extends BaseMusicServiceSupportFragment {
+public class ArtistPagerFragment extends MusicServiceNavigationFragment {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
     public static ArtistPagerFragment newInstance(Artist artist) {

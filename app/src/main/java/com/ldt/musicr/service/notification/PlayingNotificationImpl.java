@@ -27,7 +27,7 @@ import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.util.ImageUtil;
 import com.ldt.musicr.util.PreferenceUtil;
 
@@ -69,7 +69,7 @@ public class PlayingNotificationImpl extends PlayingNotification {
 
         linkButtons(notificationLayout, notificationLayoutBig);
 
-        Intent action = new Intent(service, MainActivity.class);
+        Intent action = new Intent(service, AppActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         final PendingIntent clickIntent = PendingIntent.getActivity(service, 0, action, 0);
         final PendingIntent deleteIntent = buildPendingIntent(service, MusicService.ACTION_QUIT, null);

@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui.page.subpages;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -31,7 +30,7 @@ import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 
 import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
-import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildAdapter;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
@@ -56,7 +55,7 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 
-public class PlaylistPagerFragment extends BaseMusicServiceSupportFragment implements SortOrderBottomSheet.SortOrderChangedListener {
+public class PlaylistPagerFragment extends MusicServiceNavigationFragment implements SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG ="PlaylistPagerFragment";
 
     @Override

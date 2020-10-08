@@ -12,24 +12,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.ldt.musicr.ui.LayerController;
+import com.ldt.musicr.ui.CardLayerController;
 
 import java.util.ArrayList;
 
-public abstract class BaseLayerFragment extends Fragment implements LayerController.BaseLayer {
-    private static final String TAG ="BaseLayerFragment";
+public abstract class CardLayerFragment extends Fragment implements CardLayerController.BaseLayer {
+    private static final String TAG ="CardLayerFragment";
 
-    public LayerController getLayerController() {
-        return mLayerController;
+    public CardLayerController getCardLayerController() {
+        return mCardLayerController;
     }
 
-    public LayerController mLayerController;
-    public  void setLayerController(LayerController layerController) {
-        this.mLayerController = layerController;
+    public CardLayerController mCardLayerController;
+    public  void setCardLayerController(CardLayerController cardLayerController) {
+        this.mCardLayerController = cardLayerController;
     }
 
     @Override
-    public void onAddedToContainer(LayerController.Attr attr) {
+    public void onAddedToContainer(CardLayerController.CardLayerAttribute attr) {
 
     }
 
@@ -49,12 +49,12 @@ public abstract class BaseLayerFragment extends Fragment implements LayerControl
     }
 
     @Override
-    public void onUpdateLayer(ArrayList<LayerController.Attr> attrs, ArrayList<Integer> actives, int me) {
+    public void onUpdateLayer(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
 
     }
 
     @Override
-    public void onTranslateChanged(LayerController.Attr attr) {
+    public void onTranslateChanged(CardLayerController.CardLayerAttribute attr) {
 
     }
 
@@ -66,8 +66,8 @@ public abstract class BaseLayerFragment extends Fragment implements LayerControl
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if(mMaxPosition==0) {
-            if (getMaxPositionType()) mMaxPosition = mLayerController.ScreenSize[1];
-            else mMaxPosition = (int) (mLayerController.ScreenSize[1] -mLayerController.status_height - 2 * mLayerController.oneDp - mLayerController.mMaxMarginTop);
+            if (getMaxPositionType()) mMaxPosition = mCardLayerController.ScreenSize[1];
+            else mMaxPosition = (int) (mCardLayerController.ScreenSize[1] - mCardLayerController.status_height - 2 * mCardLayerController.oneDp - mCardLayerController.mMaxMarginTop);
         }
         return getParent(getActivity(),container,mMaxPosition);
     }

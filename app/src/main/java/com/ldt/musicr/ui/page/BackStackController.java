@@ -25,9 +25,9 @@ import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.BaseActivity;
-import com.ldt.musicr.ui.LayerController;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
 import com.ldt.musicr.util.Tool;
@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class BackStackController extends BaseLayerFragment implements ViewPager.OnPageChangeListener, MusicServiceEventListener {
+public class BackStackController extends CardLayerFragment implements ViewPager.OnPageChangeListener, MusicServiceEventListener {
     private static final String TAG ="BackStackController";
     @BindView(R.id.root) CardView mRoot;
     @BindView(R.id.dim_view) View mDimView;
@@ -70,8 +70,8 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
 
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity)getActivity()).addMusicServiceEventListener(this);
 
         oneDP = getResources().getDimension(R.dimen.oneDP);
        mNavigationHeight = getActivity().getResources().getDimension(R.dimen.bottom_navigation_height);
@@ -80,19 +80,19 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
        mViewPager.setAdapter(mNavigationAdapter);
        mViewPager.setOffscreenPageLimit(3);
        mViewPager.addOnPageChangeListener(this);
-       mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
+       mViewPager.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot,event));
 
        onUsingArtistImagePreferenceChanged();
 
     }
 
     public boolean streamOnTouchEvent(MotionEvent event) {
-       return mLayerController.streamOnTouchEvent(mRoot,event);
+       return mCardLayerController.dispatchOnTouchEvent(mRoot,event);
     }
 
 
     @Override
-    public void onUpdateLayer(ArrayList<LayerController.Attr> attrs, ArrayList<Integer> actives, int me) {
+    public void onUpdateLayer(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
 
         if(mRoot==null) return;
         if(me ==1) {
@@ -126,7 +126,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
         doTranslateNavigation(attrs,actives,me);
     }
-    public void doTranslateNavigation(ArrayList<LayerController.Attr> attrs, ArrayList<Integer> actives, int me) {
+    public void doTranslateNavigation(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
         if(mBottomNavigationParent!=null) {
             if (me == 1) {
                 float pc = attrs.get(actives.get(0)).getRuntimePercent();
@@ -140,7 +140,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
     }
 
     @Override
-    public void onTranslateChanged(LayerController.Attr attr) {
+    public void onTranslateChanged(CardLayerController.CardLayerAttribute attr) {
         if(mRoot!=null) {
             float pc = (attr.mCurrentTranslate)/attr.getMaxPosition();
             Log.d(TAG, "onTranslateChanged : pc = "+pc);
@@ -178,7 +178,7 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
         return mBottomNavigationView;
     }
 
-    public BackStackController attachBottomNavigationView(MainActivity activity) {
+    public BackStackController attachBottomNavigationView(AppActivity activity) {
 
         try {
             mBottomNavigationParent = activity.findViewById(R.id.bottom_navigation_parent);
@@ -360,8 +360,8 @@ public class BackStackController extends BaseLayerFragment implements ViewPager.
 
     @Override
     public void onDestroyView() {
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
 

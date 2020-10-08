@@ -57,7 +57,7 @@ import com.ldt.musicr.util.Tool;
 
 import com.ldt.musicr.R;
 
-import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;

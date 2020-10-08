@@ -12,17 +12,17 @@ import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FeatureTabFragment extends BaseMusicServiceSupportFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
+public class FeatureTabFragment extends MusicServiceNavigationFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG ="FeatureTabFragment";
 
     @BindView(R.id.status_bar)
@@ -76,7 +76,7 @@ public class FeatureTabFragment extends BaseMusicServiceSupportFragment implemen
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        SupportFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
+        NavigationFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
         getNavigationController().presentFragment(sf);
     }
 

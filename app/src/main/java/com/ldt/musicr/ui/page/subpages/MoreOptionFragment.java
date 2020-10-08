@@ -1,9 +1,7 @@
 package com.ldt.musicr.ui.page.subpages;
 
-import android.icu.text.CaseMap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +14,9 @@ import androidx.annotation.Nullable;
 import com.ldt.musicr.R;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.ui.page.BaseMusicServiceSupportFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 import com.ldt.musicr.util.Tool;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -29,7 +26,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import es.dmoral.toasty.Toasty;
 
-public class MoreOptionFragment extends BaseMusicServiceSupportFragment {
+public class MoreOptionFragment extends MusicServiceNavigationFragment {
     private static final String TAG = "MoreOptionFragment";
 
     @BindView(R.id.status_bar)

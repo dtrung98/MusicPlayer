@@ -17,7 +17,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
 import com.ldt.musicr.model.Artist;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.util.LastFMUtil;
 import com.ldt.musicr.util.MusicUtil;
 
@@ -34,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Response;
 
-public class ArtistTrialPager extends SupportFragment implements ResultCallback {
+public class ArtistTrialPager extends NavigationFragment implements ResultCallback {
     private static final String TAG ="ArtistTrialPager";
     // we need these very low values to make sure our artist image loading calls doesn't block the image loading queue
     private static final int TIMEOUT = 750;

@@ -23,7 +23,7 @@ import com.ldt.musicr.appwidgets.base.BaseAppWidget;
 import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;
-import com.ldt.musicr.ui.MainActivity;
+import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.util.ImageUtil;
 
 public class AppWidgetCard extends BaseAppWidget {
@@ -148,7 +148,7 @@ public class AppWidgetCard extends BaseAppWidget {
         final ComponentName serviceName = new ComponentName(context, MusicService.class);
 
         // Home
-        action = new Intent(context, MainActivity.class);
+        action = new Intent(context, AppActivity.class);
         action.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         pendingIntent = PendingIntent.getActivity(context, 0, action, 0);
         views.setOnClickPendingIntent(R.id.image, pendingIntent);

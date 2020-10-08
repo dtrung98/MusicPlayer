@@ -1,7 +1,7 @@
 package com.ldt.musicr.ui.widget.fragmentnavigationcontroller;
 
 import android.animation.TimeInterpolator;
-import android.annotation.SuppressLint;
+
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +18,10 @@ import java.util.Stack;
 /**
  * Created by burt on 2016. 5. 24..
  */
-public class FragmentNavigationController extends SupportFragment {
+public class FragmentNavigationController extends NavigationFragment {
 
     private FragmentManager fragmentManager = null;
-    private Stack<SupportFragment> fragmentStack = new Stack<>();
+    private Stack<NavigationFragment> fragmentStack = new Stack<>();
     private @IdRes int containerViewId;
     private Object sync = new Object();
     private PresentStyle presentStyle = PresentStyle.get(PresentStyle.NONE);
@@ -45,7 +45,7 @@ public class FragmentNavigationController extends SupportFragment {
                     .commit();
         }
     }
-    public SupportFragment getTopFragment() {
+    public NavigationFragment getTopFragment() {
         if(fragmentStack.size()!=0)return  fragmentStack.lastElement();
         return null;
     }
@@ -97,7 +97,7 @@ public class FragmentNavigationController extends SupportFragment {
         return duration;
     }
 
-    public void pushFragment(SupportFragment fragment) {
+    public void pushFragment(NavigationFragment fragment) {
         PresentStyle oldPresetStyle = presentStyle;
         setDuration(300);
         setInterpolator(new AccelerateDecelerateInterpolator());
@@ -111,11 +111,11 @@ public class FragmentNavigationController extends SupportFragment {
         dismissFragment();
     }
 
-    public void presentFragment(SupportFragment fragment) {
+    public void presentFragment(NavigationFragment fragment) {
         presentFragment(fragment, true);
     }
 
-    public void presentFragment(SupportFragment fragment, boolean withAnimation) {
+    public void presentFragment(NavigationFragment fragment, boolean withAnimation) {
 
         if(fragmentManager == null) return;
 
@@ -137,7 +137,7 @@ public class FragmentNavigationController extends SupportFragment {
                 fragment.setAnimatable(withAnimation);
                 fragment.setPresentStyle(presentStyle);
                 // hide last fragment and add new fragment
-                SupportFragment hideFragment = fragmentStack.peek();
+                NavigationFragment hideFragment = fragmentStack.peek();
                 hideFragment.onHideFragment();
                 fragmentManager
                         .beginTransaction()
@@ -171,7 +171,7 @@ public class FragmentNavigationController extends SupportFragment {
         if(fragmentStack.size() == 1) {
 
             // remove root
-            SupportFragment fragmentToRemove= fragmentStack.pop();
+            NavigationFragment fragmentToRemove= fragmentStack.pop();
             fragmentToRemove.setNavigationController(this);
             fragmentToRemove.setAnimatable(withAnimation);
             fragmentManager
@@ -186,11 +186,11 @@ public class FragmentNavigationController extends SupportFragment {
 
         synchronized (sync) {
 
-            SupportFragment fragmentToRemove = fragmentStack.pop();
+            NavigationFragment fragmentToRemove = fragmentStack.pop();
             fragmentToRemove.setNavigationController(this);
             fragmentToRemove.setAnimatable(withAnimation);
 
-            SupportFragment fragmentToShow = fragmentStack.peek();
+            NavigationFragment fragmentToShow = fragmentStack.peek();
             fragmentToShow.setNavigationController(this);
             fragmentToShow.setAnimatable(withAnimation);
             fragmentManager
@@ -211,7 +211,7 @@ public class FragmentNavigationController extends SupportFragment {
         if(fragmentStack.size() == 1) {
 
             // show the root fragment
-            SupportFragment fragmentToShow = fragmentStack.peek();
+            NavigationFragment fragmentToShow = fragmentStack.peek();
             fragmentToShow.setNavigationController(this);
             fragmentToShow.setAnimatable(withAnimation);
             fragmentManager
@@ -223,11 +223,11 @@ public class FragmentNavigationController extends SupportFragment {
 
         synchronized (sync) {
 
-            SupportFragment fragmentToRemove = fragmentStack.pop();
+            NavigationFragment fragmentToRemove = fragmentStack.pop();
             fragmentToRemove.setNavigationController(this);
             fragmentToRemove.setAnimatable(withAnimation);
 
-            SupportFragment fragmentToShow = fragmentStack.peek();
+            NavigationFragment fragmentToShow = fragmentStack.peek();
             fragmentToShow.setNavigationController(this);
             fragmentToShow.setAnimatable(withAnimation);
             fragmentManager

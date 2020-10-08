@@ -7,29 +7,26 @@ import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
-/**
- * Created by burt on 2016. 5. 26..
- */
-class AndroidFragmentFrameLayout extends FrameLayout {
+class FragmentTransitionFrameLayout extends FrameLayout {
     private float yFraction = 0;
     private float xFraction = 0;
     private ViewTreeObserver.OnPreDrawListener preDrawListener = null;
 
-    public AndroidFragmentFrameLayout(Context context) {
+    public FragmentTransitionFrameLayout(Context context) {
         super(context);
     }
 
-    public AndroidFragmentFrameLayout(Context context, AttributeSet attrs) {
+    public FragmentTransitionFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AndroidFragmentFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FragmentTransitionFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public AndroidFragmentFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FragmentTransitionFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
@@ -71,14 +68,14 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationY(translationY);
         setRotationX(-90 * fraction);
         setPivotY(0);
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
     }
 
     public void setCubeBack(float fraction) {
         float translationX = getWidth() * fraction;
         setTranslationX(translationX);
         setRotationY(90 * fraction);
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
         setPivotX(getWidth());
     }
 
@@ -86,7 +83,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         float translationY = getHeight() * fraction;
         setTranslationY(translationY);
         setRotationX(-90 * fraction);
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
         setPivotY(getHeight());
     }
 
@@ -102,7 +99,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationX(translationX);
         setRotationY(90 * fraction);
         setPivotX(0);
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setRotateDown(float fraction) {
@@ -110,7 +107,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationX(translationX);
         setRotation(20 * fraction);
         setPivotY(getHeight());
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
     }
 
     public void setRotateUp(float fraction) {
@@ -118,7 +115,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationX(translationX);
         setRotation(-20 * fraction);
         setPivotY(0);
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
     }
 
     public void setRotateLeft(float fraction) {
@@ -126,7 +123,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationY(translationY);
         setRotation(20 * fraction);
         setPivotX(0);
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setRotateRight(float fraction) {
@@ -134,7 +131,7 @@ class AndroidFragmentFrameLayout extends FrameLayout {
         setTranslationY(translationY);
         setRotation(-20 * fraction);
         setPivotX(getWidth());
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setYFraction(float fraction) {
@@ -182,24 +179,24 @@ class AndroidFragmentFrameLayout extends FrameLayout {
     public void setTableHorizontalPivotZero(float fraction) {
         setRotationY(90 * fraction);
         setPivotX(0);
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setTableHorizontalPivotWidth(float fraction) {
         setRotationY(-90 * fraction);
         setPivotX(getWidth());
-        setPivotY(getHeight() / 2);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setTableVerticalPivotZero(float fraction) {
         setRotationX(-90 * fraction);
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
         setPivotY(0);
     }
 
     public void setTableVerticalPivotHeight(float fraction) {
         setRotationX(90 * fraction);
-        setPivotX(getWidth() / 2);
+        setPivotX(getWidth() / 2f);
         setPivotY(getHeight());
     }
 
@@ -233,13 +230,13 @@ class AndroidFragmentFrameLayout extends FrameLayout {
 
     public void setZoomSlideHorizontal(float fraction) {
         setTranslationX(getWidth() * fraction);
-        setPivotX(getWidth() / 2);
-        setPivotY(getHeight() / 2);
+        setPivotX(getWidth() / 2f);
+        setPivotY(getHeight() / 2f);
     }
 
     public void setZoomSlideVertical(float fraction) {
         setTranslationY(getHeight() * fraction);
-        setPivotX(getWidth() / 2);
-        setPivotY(getHeight() / 2);
+        setPivotX(getWidth() / 2f);
+        setPivotY(getHeight() / 2f);
     }
 }

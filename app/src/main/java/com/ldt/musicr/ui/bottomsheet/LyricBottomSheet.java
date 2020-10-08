@@ -29,7 +29,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.BaseActivity;
+import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
@@ -168,14 +168,14 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
         }
         updateLyric();
         updateMenuButton();
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).addMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity)getActivity()).addMusicServiceEventListener(this);
     }
 
     @Override
     public void onDestroyView() {
-        if(getActivity() instanceof BaseActivity)
-            ((BaseActivity)getActivity()).removeMusicServiceEventListener(this);
+        if(getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity)getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
 

@@ -13,9 +13,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.FragmentNavigationController;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
-import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.SupportFragment.PRESENT_STYLE_DEFAULT;
+import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment.PRESENT_STYLE_DEFAULT;
 
 
 public class NavigateFragment extends Fragment implements BackPressable {
@@ -49,7 +49,7 @@ public class NavigateFragment extends Fragment implements BackPressable {
     private boolean isNavigationControllerInit() {
         return null!= mNavigationController;
     }
-    public void presentFragment(SupportFragment fragment) {
+    public void presentFragment(NavigationFragment fragment) {
         if(isNavigationControllerInit()) {
 //            Random r = new Random();
 //            mNavigationController.setPresentStyle(r.nextInt(39)+1); //exclude NONE present style
@@ -59,12 +59,12 @@ public class NavigateFragment extends Fragment implements BackPressable {
     }
 
     @NonNull
-    public static NavigateFragment newInstance(@NonNull SupportFragment rootFragmentInstance) {
+    public static NavigateFragment newInstance(@NonNull NavigationFragment rootFragmentInstance) {
         NavigateFragment f = new NavigateFragment();
         f.mRootFragment = rootFragmentInstance;
         return f;
     }
-    private SupportFragment mRootFragment;
+    private NavigationFragment mRootFragment;
     private void initBackStack(Bundle savedInstanceState) {
 
         FragmentManager fm = getChildFragmentManager();
@@ -89,7 +89,7 @@ public class NavigateFragment extends Fragment implements BackPressable {
         }
     }
 
-    public void presentFragment(SupportFragment fragment, boolean animated) {
+    public void presentFragment(NavigationFragment fragment, boolean animated) {
         if(isNavigationControllerInit()) {
             mNavigationController.presentFragment(fragment,animated);
         }
