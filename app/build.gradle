@@ -20,6 +20,11 @@ android {
             javaMaxHeapSize "4g"
         }
     }
+
+    defaultConfig {
+        buildConfigField("boolean","HIDE_INCOMPLETE_FEATURES","true");
+    }
+
     buildTypes {
         release {
             minifyEnabled false

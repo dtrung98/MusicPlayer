@@ -246,6 +246,7 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
 
     }
     @BindView(R.id.more_setting) View mMoreSettingView;
+    @BindView(R.id.more_setting_icon) View mMoreSettingIcon;
     @OnClick(R.id.more_setting)
     void goToMoreSetting() {
         getNavigationController().presentFragment(MoreOptionFragment.newInstance());

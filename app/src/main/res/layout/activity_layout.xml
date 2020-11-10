@@ -40,6 +40,8 @@
             app:dispatchSystemBarsInsets_End="consumed"
             app:dispatchSystemBarsInsets_Start="consumed"
             android:background="@color/background_panel_color"
+            android:clickable="true"
+            android:focusable="true"
             >
 
             <View
