@@ -14,10 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.dtrung98.insetsview.ext.WindowThemingKt;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 
 import android.util.Log;
 import android.view.MenuItem;
@@ -31,24 +33,20 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.intro.IntroController;
-import com.ldt.musicr.ui.playingqueue.PlayingQueueController;
+import com.ldt.musicr.ui.nowplaying.NowPlayingLayerFragment;
+import com.ldt.musicr.ui.playingqueue.PlayingQueueLayerFragment;
 import com.ldt.musicr.ui.page.BackStackController;
-import com.ldt.musicr.ui.nowplaying.NowPlayingController;
 import com.ldt.musicr.util.NavigationUtil;
 
-import butterknife.BindView;
 
 public class AppActivity extends MusicServiceActivity {
     private static final String TAG = "AppActivity";
     private static final int CODE_PERMISSIONS_WRITE_STORAGE = 1;
 
-    @BindView(R.id.appRoot)
     public ConstraintLayout mAppRootView;
 
-    @BindView(R.id.layer_container)
     public FrameLayout mLayerContainerView;
 
-    @BindView(R.id.bottom_navigation_view)
     BottomNavigationView mBottomNavigationView;
 
     private void bindView() {
@@ -58,8 +56,8 @@ public class AppActivity extends MusicServiceActivity {
     }
 
     public BackStackController mBackStackController;
-    public NowPlayingController mNowPlayingController;
-    public PlayingQueueController mPlayingQueueController;
+    public NowPlayingLayerFragment mNowPlayingController;
+    public PlayingQueueLayerFragment mPlayingQueueLayerFragment;
 
     public CardLayerController getCardLayerController() {
         return mCardLayerController;
@@ -95,6 +93,13 @@ public class AppActivity extends MusicServiceActivity {
 
     private PermissionListener mPermissionListener;
 
+    @NonNull
+    public final int[] getCurrentSystemInsets() {
+        return mCurrentSystemInsets;
+    }
+
+    private int[] mCurrentSystemInsets = new int[]{0, 0, 0, 0};
+
     public void setPermissionListener(PermissionListener listener) {
         mPermissionListener = listener;
 
@@ -123,16 +128,26 @@ public class AppActivity extends MusicServiceActivity {
             setTheme(R.style.AppTheme);
             Log.d(TAG, "onCreate: not the first time");
         } else Log.d(TAG, "onCreate: the first time");
-        if (mUseDynamicTheme)
+        if (mUseDynamicTheme) {
             setTheme(R.style.AppThemeNoWallpaper);
+        }
 
         App.getInstance().getPreferencesUtility().notFirstTime();
-
+        WindowThemingKt.setUpDarkSystemUIVisibility(this.getWindow());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_layout);
+
+        // save the window system insets for in-app using
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            mCurrentSystemInsets[0] = insets.getSystemWindowInsetLeft();
+            mCurrentSystemInsets[1] = insets.getSystemWindowInsetTop();
+            mCurrentSystemInsets[2] = insets.getSystemWindowInsetRight();
+            mCurrentSystemInsets[3] = insets.getSystemWindowInsetBottom();
+            return ViewCompat.onApplyWindowInsets(v, insets);
+        });
         bindView();
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         mAppRootView.post(new Runnable() {
             @Override
             public void run() {
@@ -164,7 +179,7 @@ public class AppActivity extends MusicServiceActivity {
     }
 
     public void showMainUI() {
-       /* remove the intro navigation */
+        /* remove the intro navigation */
         if (mIntroController != null) {
             removePermissionListener();
             mIntroController.getNavigationController().popAllFragments();
@@ -173,12 +188,12 @@ public class AppActivity extends MusicServiceActivity {
         //runLoading();
         mCardLayerController = new CardLayerController(this);
         mBackStackController = new BackStackController();
-        mNowPlayingController = new NowPlayingController();
-        mPlayingQueueController = new PlayingQueueController();
+        mNowPlayingController = new NowPlayingLayerFragment();
+        mPlayingQueueLayerFragment = new PlayingQueueLayerFragment();
 
         mBackStackController.attachBottomNavigationView(this);
 
-        mCardLayerController.init(mLayerContainerView, mBackStackController, mNowPlayingController, mPlayingQueueController);
+        mCardLayerController.init(mLayerContainerView, mBackStackController, mNowPlayingController, mPlayingQueueLayerFragment);
     }
 
     @Override
@@ -316,18 +331,18 @@ public class AppActivity extends MusicServiceActivity {
     }
 
     public void popUpPlaylistTab() {
-        if (mPlayingQueueController != null) mPlayingQueueController.popUp();
+        if (mPlayingQueueLayerFragment != null) mPlayingQueueLayerFragment.popUp();
     }
 
     public BackStackController getBackStackController() {
         return mBackStackController;
     }
 
-    public NowPlayingController getNowPlayingController() {
+    public NowPlayingLayerFragment getNowPlayingController() {
         return mNowPlayingController;
     }
 
-    public PlayingQueueController getPlayingQueueController() {
-        return mPlayingQueueController;
+    public PlayingQueueLayerFragment getPlayingQueueLayerFragment() {
+        return mPlayingQueueLayerFragment;
     }
 }

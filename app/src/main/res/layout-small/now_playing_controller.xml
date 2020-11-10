@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ec="http://schemas.android.com/apk/res-auto"
-    tools:context="com.ldt.musicr.ui.nowplaying.NowPlayingController">
+    tools:context="com.ldt.musicr.ui.nowplaying.NowPlayingLayerFragment">
 <androidx.constraintlayout.motion.widget.MotionLayout
     android:id="@+id/constraint_root"
     android:layout_width="match_parent"

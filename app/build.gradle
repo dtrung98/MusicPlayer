@@ -32,6 +32,19 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+        release {
+            storeFile file("debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
@@ -167,6 +180,9 @@ dependencies {
 
     //Spring Back Layout for over scroll effect
     implementation 'com.github.ldt-libs:SpringBackLayout:1.0'
+
+    // InsetsView
+    implementation 'com.github.ldt-libs:InsetsView:1.1'
 
     // Leak Canary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'

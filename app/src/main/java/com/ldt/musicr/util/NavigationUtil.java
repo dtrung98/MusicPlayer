@@ -37,7 +37,7 @@ import es.dmoral.toasty.Toasty;
 public class NavigationUtil {
 
     public static void navigateToBackStackController(@NonNull final AppActivity activity) {
-        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueLayerFragment());
         final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
         if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED&&nowPlayingAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED) {
@@ -54,7 +54,7 @@ public class NavigationUtil {
     }
 
     public static void navigateToNowPlayingController(@NonNull final AppActivity activity) {
-        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueLayerFragment());
         final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
         if(playingQueueAttr.getState()!= CardLayerController.CardLayerAttribute.MINIMIZED && nowPlayingAttr.getState() != CardLayerController.CardLayerAttribute.MINIMIZED) {
@@ -71,7 +71,7 @@ public class NavigationUtil {
     }
 
     public static void navigateToPlayingQueueController(@NonNull final AppActivity activity) {
-        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueController());
+        final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueLayerFragment());
         final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
         if (playingQueueAttr.getState() == CardLayerController.CardLayerAttribute.MINIMIZED) {

@@ -63,23 +63,23 @@ public class CardLayerController {
         }
     }
 
-    public interface BaseLayer {
+    public interface CardLayer {
 
         /**
-         * Phương thức được gọi khi layer được Controller thay đổi thông số của layer
+         * Phương thức được gọi khi có sự thay đổi thuộc tính của layer (position, state ..)
          * <br>Dùng phương thức này để cập nhật ui cho layer
-         * <br>Note : Không cài đặt sự kiện chạm cho rootView
+         * <br>Note: Không cài đặt sự kiện chạm cho rootView
          * <br> Thay vào đó sự kiện chạm sẽ được truyền tới hàm onTouchParentView
          */
-        void onUpdateLayer(ArrayList<CardLayerAttribute> attrs, ArrayList<Integer> actives, int me);
+        void onLayerUpdate(ArrayList<CardLayerAttribute> attrs, ArrayList<Integer> actives, int me);
 
-        void onTranslateChanged(CardLayerAttribute attr);
+        void onLayerPositionChanged(CardLayerAttribute attr);
 
         boolean onTouchParentView(boolean handled);
 
-        View getParent(Activity activity, ViewGroup viewGroup, int maxPosition);
+        View getLayerRootView(Activity activity, ViewGroup viewGroup, int maxPosition);
 
-        void onAddedToContainer(CardLayerAttribute attr);
+        void onAddedToLayerController(CardLayerAttribute attr);
 
         /**
          * Cài đặt khoảng cách giữa đỉnh layer và viền trên
@@ -87,26 +87,29 @@ public class CardLayerController {
          *
          * @return true : full screen, false : below the status bar and below the back_layer_margin_top
          */
-        boolean getMaxPositionType();
+        boolean isFullscreenLayer();
 
         boolean onBackPressed();
 
         /**
-         * Cài đặt khoảng cách giữa đỉnh layer và viền dưới
-         * khi layer đạt vị trí min
+         * The minimum value of a card layer
          *
          * @return Giá trị pixel của Margin dưới
          */
-        int minPosition(Context context, int maxHeight);
+        int getLayerMinHeight(Context context, int maxHeight);
 
         /**
          * Tag nhằm phân biệt giữa các layer
          *
          * @return String tag
          */
-        String tag();
+        String getLayerTag();
 
         boolean onGestureDetected(int gesture);
+    }
+
+    public AppCompatActivity getActivity() {
+        return activity;
     }
 
     private AppCompatActivity activity;
@@ -354,7 +357,7 @@ public class CardLayerController {
             final int item_copy = item;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
-                    mCardLayers.get(actives.get(item_copy)).onUpdateLayer(mCardLayerAttrs, actives, item_copy);
+                    mCardLayers.get(actives.get(item_copy)).onLayerUpdate(mCardLayerAttrs, actives, item_copy);
                 });
             }
         }
@@ -472,7 +475,7 @@ public class CardLayerController {
 
             attr.updateTranslateY();
             final int item_copy = item;
-            mCardLayers.get(actives.get(item)).onUpdateLayer(mCardLayerAttrs, actives, item_copy);
+            mCardLayers.get(actives.get(item)).onLayerUpdate(mCardLayerAttrs, actives, item_copy);
         }
 
     }
@@ -763,17 +766,17 @@ public class CardLayerController {
         public static final int CAPTURED = 0;
 
         public int getState() {
-            if (minPosition == mCurrentTranslate) return MINIMIZED;
+            if (minHeight == mCurrentTranslate) return MINIMIZED;
             if (getMaxPosition() == mCurrentTranslate) return MAXIMIZED;
             return CAPTURED;
         }
 
         public float getPercent() {
-            return (mCurrentTranslate - minPosition + 0f) / (getMaxPosition() - minPosition + 0f);
+            return (mCurrentTranslate - minHeight + 0f) / (getMaxPosition() - minHeight + 0f);
         }
 
         public float getRuntimePercent() {
-            return ((getMaxPosition() - parent.getTranslationY() + mScaleDeltaTranslate) - minPosition + 0f) / (getMaxPosition() - minPosition + 0f);
+            return ((getMaxPosition() - parent.getTranslationY() + mScaleDeltaTranslate) - minHeight + 0f) / (getMaxPosition() - minHeight + 0f);
         }
 
         public float getRuntimeSelfTranslate() {
@@ -781,15 +784,15 @@ public class CardLayerController {
         }
 
         public boolean isBigger1_4() {
-            return (mCurrentTranslate - minPosition) * 4 > (getMaxPosition() - minPosition);
+            return (mCurrentTranslate - minHeight) * 4 > (getMaxPosition() - minHeight);
         }
 
         public boolean isSmaller3_4() {
-            return (mCurrentTranslate - minPosition) * 4 < 3 * (getMaxPosition() - minPosition);
+            return (mCurrentTranslate - minHeight) * 4 < 3 * (getMaxPosition() - minHeight);
         }
 
         public boolean isSmaller_1_2() {
-            return (mCurrentTranslate - minPosition) * 2 < (getMaxPosition() - minPosition);
+            return (mCurrentTranslate - minHeight) * 2 < (getMaxPosition() - minHeight);
         }
 
         public float getRealTranslateY() {
@@ -802,9 +805,9 @@ public class CardLayerController {
 
         public void animateOnInit() {
             parent.setTranslationY(getMaxPosition());
-            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minPosition)).setInterpolator(Animation.sInterpolator);
+            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator);
             //  parent.animate().translationYBy(-getMaxPositionType()+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-getMaxPositionType() + getRealTranslateY()),0,(int)getMaxPositionType())).setInterpolator(Animation.sInterpolator);
-            mCurrentTranslate = minPosition;
+            mCurrentTranslate = minHeight;
         }
 
         public void initImmediately() {
@@ -822,7 +825,7 @@ public class CardLayerController {
             setCurrentTranslate(translateY);
             updateTranslateY();
             if (mGestureListener.isLayerAvailable())
-                mCardLayers.get(mGestureListener.item).onTranslateChanged(this);
+                mCardLayers.get(mGestureListener.item).onLayerPositionChanged(this);
             updateLayerChanged();
         }
 
@@ -843,16 +846,16 @@ public class CardLayerController {
                 animateLayerChanged();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minPosition)).setInterpolator(Animation.sInterpolator)
+                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator)
                             .setUpdateListener(animation -> {
                                 if (item != -1)
-                                    mCardLayers.get(item).onTranslateChanged(CardLayerAttribute.this);
+                                    mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
                             });
                 } else {
-                    ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minPosition));
+                    ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight));
                     oa.addUpdateListener(animation -> {
                         if (item != -1)
-                            mCardLayers.get(item).onTranslateChanged(CardLayerAttribute.this);
+                            mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
                     });
                     oa.setInterpolator(Animation.sInterpolator);
                     oa.start();
@@ -864,7 +867,7 @@ public class CardLayerController {
             if (selfTranslateY == mCurrentTranslate) return;
             mCurrentTranslate = selfTranslateY;
             if (parent != null) {
-                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minPosition)).setInterpolator(Animation.sInterpolator);
+                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator);
             }
         }
 
@@ -884,7 +887,7 @@ public class CardLayerController {
                     (float) absDy / addedDistance;
 
             int xduration = computeAxisDuration(dx, xvel, 0);
-            int yduration = computeAxisDuration(dy, yvel, (int) Math.abs(getMaxPosition() - minPosition));
+            int yduration = computeAxisDuration(dy, yvel, (int) Math.abs(getMaxPosition() - minHeight));
 
             return (int) (xduration * xweight + yduration * yweight);
         }
@@ -944,7 +947,7 @@ public class CardLayerController {
 
         public void animateToMin() {
             mGestureListener.item = getMyPosition(this);
-            animateTo(minPosition);
+            animateTo(minHeight);
         }
 
         public void updateTranslateY() {
@@ -963,7 +966,7 @@ public class CardLayerController {
         }
 
         public String Tag;
-        public float minPosition;
+        public float minHeight;
         public int upInterpolator;
         public int downInterpolator;
         public int upDuration;
@@ -999,13 +1002,13 @@ public class CardLayerController {
             return this;
         }
 
-        public float getMinPosition() {
-            return minPosition;
+        public float getMinHeight() {
+            return minHeight;
         }
 
 
-        public CardLayerAttribute setMinPosition(float value) {
-            this.minPosition = value;
+        public CardLayerAttribute setMinHeight(float value) {
+            this.minHeight = value;
             return this;
         }
 
@@ -1055,11 +1058,11 @@ public class CardLayerController {
             return this;
         }
 
-        public CardLayerAttribute set(BaseLayer l) {
-            this.setTag(l.tag())
-                    .setMinPosition(l.minPosition(activity, ScreenSize[1]))
-                    .setMaxPosition(l.getMaxPositionType())
-                    .setCurrentTranslate(this.getMinPosition());
+        public CardLayerAttribute set(CardLayer l) {
+            this.setTag(l.getLayerTag())
+                    .setMinHeight(l.getLayerMinHeight(activity, ScreenSize[1]))
+                    .setMaxPosition(l.isFullscreenLayer())
+                    .setCurrentTranslate(this.getMinHeight());
 
             return this;
         }
@@ -1095,13 +1098,13 @@ public class CardLayerController {
         CardLayerFragment layer = mCardLayers.get(i);
         CardLayerAttribute attr = mCardLayerAttrs.get(i);
         attr.set(layer);
-        attr.attachView(layer.getParent(activity, mChildLayerContainer, (int) attr.getMaxPosition()));
+        attr.attachView(layer.getLayerRootView(activity, mChildLayerContainer, (int) attr.getMaxPosition()));
 
-        activity.getSupportFragmentManager().beginTransaction().add(mChildLayerContainer.getId(), layer).commit();
+        activity.getSupportFragmentManager().beginTransaction().add(mChildLayerContainer.getId(), layer).commitNow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             attr.parent.setElevation(0);
         }
-        layer.onAddedToContainer(attr);
+        layer.onAddedToLayerController(attr);
     }
 
 
@@ -1140,13 +1143,13 @@ public class CardLayerController {
             }
     }
 
-    public CardLayerAttribute getMyAttr(BaseLayer l) {
+    public CardLayerAttribute getMyAttr(CardLayer l) {
         int pos = mCardLayers.indexOf(l);
         if (pos != -1) return mCardLayerAttrs.get(pos);
         return null;
     }
 
-    public int getMyPosition(@NonNull BaseLayer l) {
+    public int getMyPosition(@NonNull CardLayer l) {
         return mCardLayers.indexOf(l);
     }
 

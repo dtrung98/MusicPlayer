@@ -8,10 +8,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,64 +46,73 @@ import com.ldt.musicr.util.SortOrder;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NowPlayingController extends CardLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, PalettePickerAdapter.OnColorChangedListener {
-    private static final String TAG ="NowPlayingController";
-    @BindView(R.id.root) CardView mRoot;
-    @BindView(R.id.dim_view) View mDimView;
-    private float mMaxRadius= 18;
+public class NowPlayingLayerFragment extends CardLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, PalettePickerAdapter.OnColorChangedListener {
+    private static final String TAG = "NowPlayingLayerFragment";
+    @BindView(R.id.root)
+    CardView mRoot;
+    @BindView(R.id.dim_view)
+    View mDimView;
+    private float mMaxRadius = 18;
 
-    @BindView(R.id.minimize_bar) View mMinimizeBar;
+    @BindView(R.id.minimize_bar)
+    View mMinimizeBar;
 
     @BindView(R.id.recycler_view)
-   RecyclerView mRecyclerView;
-
+    RecyclerView mRecyclerView;
 
     /*@BindView(R.id.view_pager)
     ViewPager2 mViewPager;*/
 
-    @BindView(R.id.menu_button) View mMenuButton;
+    @BindView(R.id.menu_button)
+    View mMenuButton;
 
     @BindView(R.id.visual_seek_bar)
     AudioVisualSeekBar mVisualSeekBar;
-    @BindView(R.id.time_text_view) TextView mTimeTextView;
-    @BindView(R.id.big_title) TextView mBigTitle;
-    @BindView(R.id.big_artist) TextView mBigArtist;
+    @BindView(R.id.time_text_view)
+    TextView mTimeTextView;
+    @BindView(R.id.big_title)
+    TextView mBigTitle;
+    @BindView(R.id.big_artist)
+    TextView mBigArtist;
     private NowPlayingAdapter mAdapter;
-    @BindView(R.id.color_picker_recycler_view) RecyclerView mColorPickerRecyclerView;
+    @BindView(R.id.color_picker_recycler_view)
+    RecyclerView mColorPickerRecyclerView;
     private PalettePickerAdapter mPalettePickerAdapter;
 
     @OnClick(R.id.menu_button)
     void more() {
-        if(getActivity() !=null)
+        if (getActivity() != null)
             OptionBottomSheet
-                    .newInstance(SongMenuHelper.NOW_PLAYING_OPTION,MusicPlayerRemote.getCurrentSong())
+                    .newInstance(SongMenuHelper.NOW_PLAYING_OPTION, MusicPlayerRemote.getCurrentSong())
                     .show(getActivity().getSupportFragmentManager(), "song_popup_menu");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.now_playing_controller,container,false);
+        return inflater.inflate(R.layout.now_playing_controller, container, false);
     }
 
     SnapHelper snapHelper = new PagerSnapHelper();
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mTitle.setSelected(true);
 
         mAdapter = new NowPlayingAdapter(getActivity());
         //mRecyclerView.setPageTransformer(false, new SliderTransformer());
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         //mViewPager.setAdapter(mAdapter);
 
@@ -108,23 +120,25 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
 
         mPalettePickerAdapter = new PalettePickerAdapter(this);
         mColorPickerRecyclerView.setAdapter(mPalettePickerAdapter);
-        mColorPickerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        mColorPickerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
 
         //mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
-        mRecyclerView.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot,event));
-        mVisualSeekBar.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event) &&  event.getAction()!=MotionEvent.ACTION_DOWN);
+        mRecyclerView.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event));
+        mVisualSeekBar.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event) && event.getAction() != MotionEvent.ACTION_DOWN);
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
         Log.d(TAG, "onViewCreated");
-       if(getActivity() instanceof MusicServiceActivity) ((AppActivity)getActivity()).addMusicServiceEventListener(this,true);
-       setUp();
+        if (getActivity() instanceof MusicServiceActivity)
+            ((AppActivity) getActivity()).addMusicServiceEventListener(this, true);
+        setUp();
     }
 
     @Override
     public void onDestroyView() {
 
-        if(getActivity() instanceof MusicServiceActivity) ((AppActivity)getActivity()).removeMusicServiceEventListener(this);
+        if (getActivity() instanceof MusicServiceActivity)
+            ((AppActivity) getActivity()).removeMusicServiceEventListener(this);
         super.onDestroyView();
     }
 
@@ -137,7 +151,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     @Override
     public void onServiceConnected() {
         Log.d(TAG, "onServiceConnected");
-      setUp();
+        setUp();
     }
 
     @Override
@@ -162,7 +176,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     public void onPlayStateChanged() {
         Log.d(TAG, "onPlayStateChanged");
         updatePlayPauseState();
-        mVisualSeekBar.postDelayed(mUpdateProgress,10);
+        mVisualSeekBar.postDelayed(mUpdateProgress, 10);
     }
 
     @Override
@@ -191,20 +205,20 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     public void onPaletteChanged() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            ((RippleDrawable)mPlayPauseButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-            ((RippleDrawable)mPrevButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-            ((RippleDrawable)mMenuButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-            ((RippleDrawable)mNextButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
-            ((RippleDrawable)mPlaylistTitle.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable) mPlayPauseButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable) mPrevButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable) mMenuButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable) mNextButton.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
+            ((RippleDrawable) mPlaylistTitle.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));
         }
-        onColorPaletteReady(Tool.ColorOne,Tool.ColorTwo,Tool.AlphaOne,Tool.AlphaTwo);
+        onColorPaletteReady(Tool.ColorOne, Tool.ColorTwo, Tool.AlphaOne, Tool.AlphaTwo);
     }
 
     /*
      *
      *   End of Implementing MusicServiceEventListener
-    *
-    */
+     *
+     */
 
     private void updateQueue() {
         mAdapter.setData(MusicPlayerRemote.getPlayingQueue());
@@ -213,11 +227,13 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     private void updateQueuePosition() {
         try {
             int pos = MusicPlayerRemote.getPosition();
-            if(pos>=0)
-            mRecyclerView.smoothScrollToPosition(MusicPlayerRemote.getPosition());
+            if (pos >= 0)
+                mRecyclerView.smoothScrollToPosition(MusicPlayerRemote.getPosition());
             //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
+
     public void setUp() {
         updatePlayingSongInfo();
         updatePlayPauseState();
@@ -226,101 +242,114 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     }
 
     private void setRadius(float value) {
-        if(mRoot!=null) {
+        if (mRoot != null) {
             float valueTemp;
-            if(value>1) valueTemp=1;
-            else if(value<=0.1f) valueTemp = 0;
+            if (value > 1) valueTemp = 1;
+            else if (value <= 0.1f) valueTemp = 0;
             else valueTemp = value;
             mRoot.setRadius(mMaxRadius * valueTemp);
         }
     }
 
     @Override
-    public void onUpdateLayer(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
+    public void onLayerUpdate(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
 
-        if(mRoot==null) return;
-        if(me ==1) {
-            mDimView.setAlpha(0.3f*(attrs.get(actives.get(0)).getRuntimePercent()));
-          //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),true);
-            setRadius( attrs.get(actives.get(0)).getRuntimePercent());
-        } else
-        {
+        if (mRoot == null) return;
+        if (me == 1) {
+            mDimView.setAlpha(0.3f * (attrs.get(actives.get(0)).getRuntimePercent()));
+            //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),true);
+            setRadius(attrs.get(actives.get(0)).getRuntimePercent());
+        } else {
             //  other, active_i >1
             // min = 0.3
             // max = 0.45
-            float min = 0.3f, max =0.65f;
+            float min = 0.3f, max = 0.65f;
             float hieu = max - min;
-            float heSo_sau = (me-1.0f)/(me-0.75f); // 1/2, 2/3,3/4, 4/5, 5/6 ...
-            float heSo_truoc =  (me-2.0f)/(me-0.75f); // 0/1, 1/2, 2/3, ...
-            float darken = min + hieu*heSo_truoc + hieu*(heSo_sau - heSo_truoc)*attrs.get(actives.get(0)).getRuntimePercent();
+            float heSo_sau = (me - 1.0f) / (me - 0.75f); // 1/2, 2/3,3/4, 4/5, 5/6 ...
+            float heSo_truoc = (me - 2.0f) / (me - 0.75f); // 0/1, 1/2, 2/3, ...
+            float darken = min + hieu * heSo_truoc + hieu * (heSo_sau - heSo_truoc) * attrs.get(actives.get(0)).getRuntimePercent();
             // Log.d(TAG, "darken = " + darken);
             mDimView.setAlpha(darken);
             setRadius(1);
         }
-      //  checkStatusStyle();
+        //  checkStatusStyle();
     }
 
     @Override
-    public void onTranslateChanged(CardLayerController.CardLayerAttribute attr) {
+    public void onLayerPositionChanged(CardLayerController.CardLayerAttribute attr) {
         //Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
-        if(getMaxPositionType())
-        setRadius(0);
+        if (isFullscreenLayer())
+            setRadius(0);
         else setRadius(attr.getRuntimePercent());
 
         mConstraintRoot.setProgress(attr.getRuntimePercent());
         // sync time text view
-        if(mConstraintRoot.getProgress()!=0&&!mTimeTextIsSync) {
+        if (mConstraintRoot.getProgress() != 0 && !mTimeTextIsSync) {
             mTimeTextView.setText(timeTextViewTemp);
-            Log.d(TAG, "onTranslateChanged: timeTextView : "+timeTextViewTemp);
+            Log.d(TAG, "onTranslateChanged: timeTextView : " + timeTextViewTemp);
         }
-        if(mConstraintRoot.getProgress()==0||mConstraintRoot.getProgress()==1)
+        if (mConstraintRoot.getProgress() == 0 || mConstraintRoot.getProgress() == 1)
             try {
                 mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
                 //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
-            } catch (Exception ignore) {}
+            } catch (Exception ignore) {
+            }
         //checkStatusStyle();
     }
-    public void checkStatusStyle(){
-        if(mConstraintRoot.getProgress()>=0.9&&mDimView.getAlpha()<=0.1
+
+    public void checkStatusStyle() {
+        if (mConstraintRoot.getProgress() >= 0.9 && mDimView.getAlpha() <= 0.1
         ) {
-            if(getActivity() instanceof AppActivity)
-            ((AppActivity)getActivity()).setTheme(true);
+            if (getActivity() instanceof AppActivity)
+                ((AppActivity) getActivity()).setTheme(true);
         } else {
-            if(getActivity() instanceof AppActivity)
-            ((AppActivity)getActivity()).setTheme(false);
+            if (getActivity() instanceof AppActivity)
+                ((AppActivity) getActivity()).setTheme(false);
         }
     }
 
     @Override
-    public int minPosition(Context context,int h) {
-        return (int) (context.getResources().getDimension(R.dimen.bottom_navigation_height)+ context.getResources().getDimension(R.dimen.now_laying_height_in_minimize_mode));
+    public int getLayerMinHeight(Context context, int h) {
+        int systemInsetsBottom = 0;
+        CardLayerController controller = getCardLayerController();
+        Activity activity = controller != null ? controller.getActivity() : getActivity();
+        if (activity instanceof AppActivity) {
+            systemInsetsBottom = ((AppActivity) activity).getCurrentSystemInsets()[3];
+        }
+        Log.d(TAG, "activity availibility = "+ (activity != null));
+        Log.d(TAG, "systemInsetsBottom = "+ systemInsetsBottom);
+        return systemInsetsBottom + (int) (context.getResources().getDimension(R.dimen.bottom_navigation_height) + context.getResources().getDimension(R.dimen.now_laying_height_in_minimize_mode));
     }
 
+
     @Override
-    public String tag() {
+    public String getLayerTag() {
         return TAG;
     }
 
-    @OnClick({R.id.play_pause_button,R.id.button_right})
+    @OnClick({R.id.play_pause_button, R.id.button_right})
     void playOrPause() {
         MusicPlayerRemote.playOrPause();
 /*        Handler handler = new Handler();
         handler.postDelayed(MusicPlayerRemote::playOrPause,50);*/
     }
+
     @OnClick(R.id.prev_button)
     void goToPrevSong() {
         MusicPlayerRemote.back();
    /*     Handler handler = new Handler();
         handler.postDelayed(MusicPlayerRemote::back,50);*/
     }
+
     @OnClick(R.id.next_button)
     void goToNextSong() {
         MusicPlayerRemote.playNextSong();
 /*        Handler handler = new Handler();
         handler.postDelayed(MusicPlayer::next,100);*/
     }
-    void updatePlayPauseState(){
-        if(MusicPlayerRemote.isPlaying()) {
+
+    void updatePlayPauseState() {
+        if (MusicPlayerRemote.isPlaying()) {
             mButtonRight.setImageResource(R.drawable.ic_pause_black_24dp);
             mPlayPauseButton.setImageResource(R.drawable.pause_round);
         } else {
@@ -329,12 +358,16 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
         }
     }
 
-    @BindView(R.id.title) TextView mTitle;
-    @BindView(R.id.playlist_title) TextView mPlaylistTitle;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.playlist_title)
+    TextView mPlaylistTitle;
     @BindView(R.id.button_right)
     ImageView mButtonRight;
-    @BindView(R.id.prev_button) ImageView mPrevButton;
-    @BindView(R.id.next_button) ImageView mNextButton;
+    @BindView(R.id.prev_button)
+    ImageView mPrevButton;
+    @BindView(R.id.next_button)
+    ImageView mNextButton;
 
     @BindView(R.id.play_pause_button)
     ImageView mPlayPauseButton;
@@ -342,48 +375,49 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     @OnClick(R.id.playlist_title)
     void popUpPlayingList() {
         Activity activity = getActivity();
-        if(activity instanceof AppActivity) {
-            ((AppActivity)getActivity()).popUpPlaylistTab();
+        if (activity instanceof AppActivity) {
+            ((AppActivity) getActivity()).popUpPlaylistTab();
         }
     }
+
     private void updatePlayingSongInfo() {
-       Song song = MusicPlayerRemote.getCurrentSong();
-       if(song==null||song.id==-1) {
-           ArrayList<Song> list = SongLoader.getAllSongs(mPlayPauseButton.getContext(), SortOrder.SongSortOrder.SONG_DATE);
-           if(list.isEmpty()) return;
-           MusicPlayerRemote.openQueue(list,0,false);
-           return;
-       }
+        Song song = MusicPlayerRemote.getCurrentSong();
+        if (song == null || song.id == -1) {
+            ArrayList<Song> list = SongLoader.getAllSongs(mPlayPauseButton.getContext(), SortOrder.SongSortOrder.SONG_DATE);
+            if (list.isEmpty()) return;
+            MusicPlayerRemote.openQueue(list, 0, false);
+            return;
+        }
         mTitle.setText(String.format("%s %s %s", song.title, getString(R.string.middle_dot), song.artistName));
         mBigTitle.setText(song.title);
         mBigArtist.setText(song.artistName);
 
         String path = song.data;
         long duration = song.duration;
-        if(duration>0&&path!=null&&!path.isEmpty() && mVisualSeekBar.getCurrentSongID() != song.id) {
-            Log.d(TAG, "start visualize "+ path +"dur = "+ duration+", pos = "+ MusicPlayerRemote.getSongProgressMillis());
+        if (duration > 0 && path != null && !path.isEmpty() && mVisualSeekBar.getCurrentSongID() != song.id) {
+            Log.d(TAG, "start visualize " + path + "dur = " + duration + ", pos = " + MusicPlayerRemote.getSongProgressMillis());
             mVisualSeekBar.visualize(song, duration, MusicPlayerRemote.getSongProgressMillis());
         } else {
-            Log.d(TAG, "ignore visualize "+path);
+            Log.d(TAG, "ignore visualize " + path);
         }
 
-        mVisualSeekBar.postDelayed(mUpdateProgress,10);
-        if(getActivity() instanceof MusicServiceActivity)
-            ((MusicServiceActivity)getActivity()).refreshPalette();
+        mVisualSeekBar.postDelayed(mUpdateProgress, 10);
+        if (getActivity() instanceof MusicServiceActivity)
+            ((MusicServiceActivity) getActivity()).refreshPalette();
     }
 
 
     private void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
-        Log.d(TAG, "onColorPaletteReady :"+color1+", "+color2+", "+alpha1+", "+alpha2);
+        Log.d(TAG, "onColorPaletteReady :" + color1 + ", " + color2 + ", " + alpha1 + ", " + alpha2);
         mPlayPauseButton.setColorFilter(Tool.getBaseColor());
         mPrevButton.setColorFilter(color2);
         mNextButton.setColorFilter(color2);
 
-      //  mTimeTextView.setTextColor(color1);
-     //   (mTimeTextView.getBackground()).setColorFilter(color1, PorterDuff.Mode.SRC_IN);
+        //  mTimeTextView.setTextColor(color1);
+        //   (mTimeTextView.getBackground()).setColorFilter(color1, PorterDuff.Mode.SRC_IN);
 
-        mBigTitle.setTextColor(Tool.lighter(color1,0.5f));
-       // mBigArtist.setAlpha(alpha2);
+        mBigTitle.setTextColor(Tool.lighter(color1, 0.5f));
+        // mBigArtist.setAlpha(alpha2);
         mBigArtist.setTextColor(color2);
         mVisualSeekBar.updateDrawProperties();
 
@@ -415,10 +449,10 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
 
     @Override
     public boolean onGestureDetected(int gesture) {
-        if(gesture== CardLayerController.SINGLE_TAP_UP) {
+        if (gesture == CardLayerController.SINGLE_TAP_UP) {
             CardLayerController.CardLayerAttribute a = getCardLayerController().getMyAttr(this);
-            if(a!=null) {
-                if(a.getState()== CardLayerController.CardLayerAttribute.MINIMIZED)
+            if (a != null) {
+                if (a.getState() == CardLayerController.CardLayerAttribute.MINIMIZED)
                     a.animateToMax();
                 else
                     a.animateToMin();
@@ -429,7 +463,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     }
 
     @Override
-    public boolean getMaxPositionType() {
+    public boolean isFullscreenLayer() {
         return true;
     }
 
@@ -449,6 +483,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
             super.getItemOffsets(outRect, view, parent, state);
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -460,8 +495,8 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
         super.onResume();
 
         fragmentPaused = false;
-        if(mVisualSeekBar!=null) {
-            mVisualSeekBar.postDelayed(mUpdateProgress,10);
+        if (mVisualSeekBar != null) {
+            mVisualSeekBar.postDelayed(mUpdateProgress, 10);
         }
     }
 
@@ -470,7 +505,7 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
     ////////////////////////////////
 
     private boolean isTouchedVisualSeekbar = false;
-    private int overflowcounter=0;
+    private int overflowcounter = 0;
     boolean fragmentPaused = false;
     // seekbar
     public Runnable mUpdateProgress = new Runnable() {
@@ -478,24 +513,25 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
         public void run() {
             long position = MusicPlayerRemote.getSongProgressMillis();
 
-            if(!isTouchedVisualSeekbar)
-                setTextTime(position,MusicPlayerRemote.getSongDurationMillis());
+            if (!isTouchedVisualSeekbar)
+                setTextTime(position, MusicPlayerRemote.getSongDurationMillis());
 
-            if(mVisualSeekBar!=null) {
+            if (mVisualSeekBar != null) {
                 mVisualSeekBar.setProgress((int) position);
                 //TODO: Set elapsedTime
             }
             overflowcounter--;
-            if(MusicPlayerRemote.isPlaying()) {
+            if (MusicPlayerRemote.isPlaying()) {
                 //TODO: ???
-                int delay = (int) (150 -(position)%100);
-                if(overflowcounter<0 && !fragmentPaused) {
-                    overflowcounter ++;
-                    mVisualSeekBar.postDelayed(mUpdateProgress,delay);
+                int delay = (int) (150 - (position) % 100);
+                if (overflowcounter < 0 && !fragmentPaused) {
+                    overflowcounter++;
+                    mVisualSeekBar.postDelayed(mUpdateProgress, delay);
                 }
             }
         }
     };
+
     @Override
     public void onSeekBarSeekTo(AudioVisualSeekBar seekBar, int position) {
         MusicPlayerRemote.seekTo(position);
@@ -513,29 +549,29 @@ public class NowPlayingController extends CardLayerFragment implements MusicServ
 
     @Override
     public void onSeekBarSeeking(int seekingValue) {
-        setTextTime(seekingValue,MusicPlayerRemote.getSongDurationMillis());
+        setTextTime(seekingValue, MusicPlayerRemote.getSongDurationMillis());
     }
-    private void setTextTime(long pos, long duration) {
-        int minute = (int) (pos/1000/60);
-        int second = (int) (pos/1000-  minute*60);
-        int dur_minute = (int) (duration/1000/60);
-        int dur_second = (int) (duration/1000 - dur_minute*60);
 
-        String text ="";
-        if(minute<10) text+="0";
-        text+=minute+":";
-        if(second<10) text+="0";
-        text+= second+" | ";
-        if(dur_minute<10) text+="0";
-        text+= dur_minute+":";
-        if(dur_second<10) text+="0";
-        text+=dur_second;
-        if(mConstraintRoot.getProgress()!=0) {
+    private void setTextTime(long pos, long duration) {
+        int minute = (int) (pos / 1000 / 60);
+        int second = (int) (pos / 1000 - minute * 60);
+        int dur_minute = (int) (duration / 1000 / 60);
+        int dur_second = (int) (duration / 1000 - dur_minute * 60);
+
+        String text = "";
+        if (minute < 10) text += "0";
+        text += minute + ":";
+        if (second < 10) text += "0";
+        text += second + " | ";
+        if (dur_minute < 10) text += "0";
+        text += dur_minute + ":";
+        if (dur_second < 10) text += "0";
+        text += dur_second;
+        if (mConstraintRoot.getProgress() != 0) {
             mTimeTextView.setText(text);
             //Log.d(TAG, "setTextTime: "+text);
             mTimeTextIsSync = true;
-        }
-        else {
+        } else {
             mTimeTextIsSync = false;
             timeTextViewTemp = text;
         }
