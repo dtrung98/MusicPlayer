@@ -1,11 +1,16 @@
 package com.ldt.musicr.ui.page.librarypage.song;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SongChildTab extends MusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack{
-    public static final String TAG ="SongChildTab";
+public class SongChildTab extends MusicServiceFragment implements SortOrderBottomSheet.SortOrderChangedListener, PreviewRandomPlayAdapter.FirstItemCallBack {
+    public static final String TAG = "SongChildTab";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -56,10 +61,10 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
     Group mRandomGroup;
 
     private int mCurrentSortOrder = 0;
-    private void initSortOrder() {
-         mCurrentSortOrder = App.getInstance().getPreferencesUtility().getSongChildSortOrder();
-    }
 
+    private void initSortOrder() {
+        mCurrentSortOrder = App.getInstance().getPreferencesUtility().getSongChildSortOrder();
+    }
 //    @BindView(R.id.top_background) View mTopBackground;
 //    @BindView(R.id.bottom_background) View mBottomBackground;
 //    @BindView(R.id.random_header) View mRandomHeader;
@@ -67,38 +72,51 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
 
 
     @OnClick({R.id.preview_random_panel})
-     void shuffle() {
+    void shuffle() {
         mAdapter.shuffle();
     }
 
-    SongChildAdapter mAdapter;
+    private final SongChildAdapter mAdapter = new SongChildAdapter();
 //    PreviewRandomPlayAdapter mPreviewAdapter;
 
     @OnClick(R.id.refresh)
     void refresh() {
         mRefresh.animate().rotationBy(360).setInterpolator(Animation.getInterpolator(6)).setDuration(650);
-        mRefresh.postDelayed(mAdapter::randomize,300);
+        mRefresh.postDelayed(mAdapter::randomize, 300);
     }
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.song_child_tab,container,false);
+        return inflater.inflate(R.layout.song_child_tab, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
+        mAdapter.setName(TAG);
+        mAdapter.setCallBack(this);
+        mAdapter.setSortOrderChangedListener(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
-
+        ButterKnife.bind(this, view);
         initSortOrder();
-
-        mAdapter = new SongChildAdapter(getActivity());
-        mAdapter.setName(TAG);
-        mAdapter.setCallBack(this);
-        mAdapter.setSortOrderChangedListener(this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        ViewCompat.setOnApplyWindowInsetsListener(mRecyclerView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                v.setPadding(insets.getSystemWindowInsetLeft(),
+                        0,
+                        insets.getSystemWindowInsetRight(),
+                        (int) (insets.getSystemWindowInsetBottom() + v.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
+                return ViewCompat.onApplyWindowInsets(v, insets);
+            }
+        });
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mRecyclerView.setAdapter(mAdapter);
 
         refreshData();
@@ -114,11 +132,12 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
     /*    if(getContext() != null)
         SongLoader.doSomething(getContext());
 */
-        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(),SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
+        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(), SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
         mAdapter.setData(songs);
         showOrHidePreview(!songs.isEmpty());
 
     }
+
     private void showOrHidePreview(boolean show) {
         int v = show ? View.VISIBLE : View.GONE;
 
@@ -140,13 +159,14 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
 
     @Override
     public void onPlayingMetaChanged() {
-        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+        if (mAdapter != null)
+            mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
     public void onPaletteChanged() {
-        if(mRecyclerView instanceof FastScrollRecyclerView) {
-            FastScrollRecyclerView recyclerView = ((FastScrollRecyclerView)mRecyclerView);
+        if (mRecyclerView instanceof FastScrollRecyclerView) {
+            FastScrollRecyclerView recyclerView = ((FastScrollRecyclerView) mRecyclerView);
             recyclerView.setPopupBgColor(Tool.getHeavyColor());
             recyclerView.setThumbColor(Tool.getHeavyColor());
         }
@@ -156,12 +176,13 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
 
     @Override
     public void onPlayStateChanged() {
-        if(mAdapter!=null)mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
+        if (mAdapter != null)
+            mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED);
     }
 
     @Override
     public void onMediaStoreChanged() {
-        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(),SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
+        ArrayList<Song> songs = SongLoader.getAllSongs(getActivity(), SortOrderBottomSheet.mSortOrderCodes[mCurrentSortOrder]);
         mAdapter.setData(songs);
         showOrHidePreview(!songs.isEmpty());
     }
@@ -173,7 +194,7 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
 
     @Override
     public void onOrderChanged(int newType, String name) {
-        if(mCurrentSortOrder!=newType) {
+        if (mCurrentSortOrder != newType) {
             mCurrentSortOrder = newType;
             App.getInstance().getPreferencesUtility().setSongChildSortOrder(mCurrentSortOrder);
             refreshData();

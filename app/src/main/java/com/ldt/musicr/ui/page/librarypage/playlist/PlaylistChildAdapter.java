@@ -46,15 +46,25 @@ public class PlaylistChildAdapter extends RecyclerView.Adapter<PlaylistChildAdap
     private static final String TAG = "PlaylistAdapter";
     public ArrayList<Playlist> mPlaylistData = new ArrayList<>();
     public FeaturePlaylistAdapter.PlaylistClickListener mListener;
+
+    public void init(Context context) {
+        mContext = context;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
     private Context mContext;
+
+    public void setShowAuto(boolean showAuto) {
+        this.showAuto = showAuto;
+    }
+
     private boolean showAuto;
     private int songCountInt;
     private long firstAlbumID=-1;
 
-    public PlaylistChildAdapter(Context mContext, boolean showAuto) {
-        this.mContext = mContext;
-        this.showAuto = showAuto;
-    }
     public void setOnItemClickListener(FeaturePlaylistAdapter.PlaylistClickListener listener) {
         mListener = listener;
     }

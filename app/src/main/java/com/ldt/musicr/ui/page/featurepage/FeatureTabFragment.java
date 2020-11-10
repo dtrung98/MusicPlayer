@@ -2,10 +2,13 @@ package com.ldt.musicr.ui.page.featurepage;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +16,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
-import com.ldt.musicr.ui.page.subpages.PlaylistPagerFragment;
+import com.ldt.musicr.ui.page.subpages.PlaylistPageFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
@@ -23,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FeatureTabFragment extends MusicServiceNavigationFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
-    private static final String TAG ="FeatureTabFragment";
+    private static final String TAG = "FeatureTabFragment";
 
     @BindView(R.id.status_bar)
     View mStatusView;
@@ -45,12 +48,20 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
         mSwipeRefreshLayout.setEnabled(false);
+        ViewCompat.setOnApplyWindowInsetsListener(mNestedScrollView, (v, insets) -> {
+            v.setPadding(
+                    insets.getSystemWindowInsetLeft(),
+                    0,
+                    insets.getSystemWindowInsetRight(),
+                    (int) (insets.getSystemWindowInsetBottom() + v.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
+            return ViewCompat.onApplyWindowInsets(v, insets);
+        });
 
-        mFeatureLinearHolder = new FeatureLinearHolder(getActivity(),mNestedScrollView);
+        mFeatureLinearHolder = new FeatureLinearHolder(getActivity(), mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
 
         refreshData();
@@ -58,7 +69,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     private void refreshData() {
 
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             mFeatureLinearHolder.setSuggestedPlaylists(PlaylistLoader.getAllPlaylistsWithAuto(getActivity()));
             mFeatureLinearHolder.setSuggestedSongs(SongLoader.getAllSongs(getActivity()));
         }
@@ -69,7 +80,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @Override
     public void onSetStatusBarMargin(int value) {
-        if(mStatusView!=null) {
+        if (mStatusView != null) {
             mStatusView.getLayoutParams().height = value;
             mStatusView.requestLayout();
         }
@@ -77,7 +88,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        NavigationFragment sf = PlaylistPagerFragment.newInstance(getContext(),playlist,bitmap);
+        NavigationFragment sf = PlaylistPageFragment.newInstance(getContext(), playlist, bitmap);
         getNavigationController().presentFragment(sf);
     }
 

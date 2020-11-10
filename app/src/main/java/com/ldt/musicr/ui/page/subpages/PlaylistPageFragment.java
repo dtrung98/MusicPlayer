@@ -55,7 +55,7 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 
-public class PlaylistPagerFragment extends MusicServiceNavigationFragment implements SortOrderBottomSheet.SortOrderChangedListener {
+public class PlaylistPageFragment extends MusicServiceNavigationFragment implements SortOrderBottomSheet.SortOrderChangedListener {
     private static final String TAG ="PlaylistPagerFragment";
 
     @Override
@@ -83,7 +83,7 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
 
-    SongChildAdapter mAdapter;
+    private final SongChildAdapter mAdapter = new SongChildAdapter();
 
     Playlist mPlaylist;
 
@@ -177,8 +177,8 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
 
     Bitmap mPreviewBitmap;
 
-    public static PlaylistPagerFragment newInstance(Context context,Playlist playlist,@Nullable Bitmap previewBitmap) {
-        PlaylistPagerFragment fragment = new PlaylistPagerFragment();
+    public static PlaylistPageFragment newInstance(Context context, Playlist playlist, @Nullable Bitmap previewBitmap) {
+        PlaylistPageFragment fragment = new PlaylistPageFragment();
         fragment.mPlaylist = playlist;
         fragment.mPreviewBitmap = previewBitmap;
         return fragment;
@@ -213,7 +213,13 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.playlist_page,container,false);
+        return inflater.inflate(R.layout.fragment_playlist_page,container,false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
     }
 
     private Unbinder mUnbinder;
@@ -223,7 +229,6 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
         super.onViewCreated(view, savedInstanceState);
         mUnbinder = ButterKnife.bind(this,view);
         initSortOrder();
-        mAdapter = new SongChildAdapter(getActivity());
         //mAdapter.MEDIA_LAYOUT_RESOURCE = R.layout.item_song_bigger;
         mAdapter.setSortOrderChangedListener(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -242,8 +247,10 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
             mPreviewBitmap = null;
         }
         setName();
+        mSwipeRefresh.setEnabled(false);
         mSwipeRefresh.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
+        this.refreshData();
     }
 
     public static List<Song> getPlaylistWithListId(@NonNull Context context, Playlist list, String sortOrder) {
@@ -279,7 +286,7 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
         mSwipeRefresh.setRefreshing(b);
         mSwipeRefresh.post(() -> {
             if(mLoadPlaylist!=null) mLoadPlaylist.cancel();
-            mLoadPlaylist = new loadPlaylist(PlaylistPagerFragment.this);
+            mLoadPlaylist = new loadPlaylist(PlaylistPageFragment.this);
             mLoadPlaylist.execute();
         });
     }
@@ -354,10 +361,10 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
     }
 
     private static class loadPlaylist extends AsyncTask<Void, Void, List<Song>> {
-        PlaylistPagerFragment mFragment;
+        PlaylistPageFragment mFragment;
         private loadArtwork mLoadArtwork;
 
-        loadPlaylist(PlaylistPagerFragment fragment) {
+        loadPlaylist(PlaylistPageFragment fragment) {
             mFragment = fragment;
         }
 
@@ -391,8 +398,8 @@ public class PlaylistPagerFragment extends MusicServiceNavigationFragment implem
     }
 
     private static class loadArtwork extends AsyncTask<Void,Void,Bitmap> {
-        PlaylistPagerFragment mFragment;
-        loadArtwork(PlaylistPagerFragment fragment) {
+        PlaylistPageFragment mFragment;
+        loadArtwork(PlaylistPageFragment fragment) {
             mFragment = fragment;
         }
         public void cancel() {

@@ -13,10 +13,29 @@
         android:layout_height="match_parent"
         android:background="@color/background_panel_color"
         app:layoutDescription="@xml/now_playing_animation">
-        <com.dtrung98.insetsview.SafeAreaView
-            android:id="@+id/safeView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+
+        <FrameLayout
+            android:id="@+id/safeViewTop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_height="0dp"
+            android:clipToPadding="false"/>
+
+        <FrameLayout
+            android:id="@+id/safeViewBottom"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:clipToPadding="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_height="0dp"/>
+
         <View
             android:id="@+id/divider"
             android:layout_width="0dp"
@@ -166,16 +185,16 @@
             android:id="@+id/big_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
             android:paddingHorizontal="24dp"
+            android:shadowColor="#88000000"
+            android:shadowRadius="8"
             android:textColor="@color/FlatWhite"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:shadowRadius="8"
-            android:shadowColor="#88000000"
-            android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toTopOf="@id/big_artist"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -230,15 +249,14 @@
 
         <ImageView
             android:id="@+id/play_pause_button"
-
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginBottom="@dimen/bottom_navigation_height"
             android:background="@drawable/ripple_oval"
             android:padding="9dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/safeViewBottom"
+            app:layout_constraintEnd_toEndOf="@id/safeViewBottom"
+            app:layout_constraintStart_toStartOf="@id/safeViewBottom"
             app:layout_constraintTop_toBottomOf="@id/visual_seek_bar"
             app:srcCompat="@drawable/ic_pause_black_24dp"
             app:tint="@color/FlatWhite" />
@@ -285,18 +303,6 @@
             app:srcCompat="@drawable/ic_more_vert_black_24dp"
             app:tint="@color/FlatWhite" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/color_picker_recycler_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:alpha="0"
-            app:layout_constraintStart_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/menu_button"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.5"
-            tools:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/item_color_picker"
-            tools:orientation="horizontal" />
     </androidx.constraintlayout.motion.widget.MotionLayout>
 
     <View
@@ -304,5 +310,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0"
-        android:background="@android:color/black" />
+        android:background="@android:color/black"
+        tools:visibility="gone" />
 </androidx.cardview.widget.CardView>

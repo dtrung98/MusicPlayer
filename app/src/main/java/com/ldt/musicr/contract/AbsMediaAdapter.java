@@ -15,7 +15,11 @@ import com.ldt.musicr.util.Tool;
 public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Media> extends AbsDataAdapter<VH, I> {
     private static final String TAG = "AbsMediaAdapter";
 
-    protected Context mContext;
+    public Context getContext() {
+        return mContext;
+    }
+
+    private Context mContext;
     protected int mMediaPlayDataItem = -1;
     protected String mName = TAG;
 
@@ -31,8 +35,10 @@ public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Me
         return mName;
     }
 
-    public AbsMediaAdapter(Context context) {
-        this.mContext = context;
+    public AbsMediaAdapter() {}
+
+    public void init(Context context) {
+        mContext = context;
     }
 
     @Override

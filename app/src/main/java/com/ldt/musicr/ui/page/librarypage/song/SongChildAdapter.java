@@ -38,8 +38,8 @@ public class SongChildAdapter extends AbsSongAdapter
 
     private static final String TAG = "SongChildAdapter";
 
-    public SongChildAdapter(Context context) {
-        super(context);
+    public SongChildAdapter() {
+        super();
     }
 
     public int mRandomItem = 0;
@@ -67,7 +67,7 @@ public class SongChildAdapter extends AbsSongAdapter
     protected void onMenuItemClick(int positionInData) {
         OptionBottomSheet
                 .newInstance(mOptionRes,getData().get(positionInData))
-                .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
+                .show(((AppCompatActivity)getContext()).getSupportFragmentManager(), "song_popup_menu");
     }
     public int MEDIA_LAYOUT_RESOURCE = R.layout.item_song_normal;
 
@@ -115,9 +115,9 @@ public class SongChildAdapter extends AbsSongAdapter
     }
 
     private void sortHolderClicked() {
-        if(mContext instanceof AppCompatActivity) {
+        if(getContext() instanceof AppCompatActivity) {
             SortOrderBottomSheet bs = SortOrderBottomSheet.newInstance(this);
-            bs.show(((AppCompatActivity)mContext).getSupportFragmentManager(),TAG);
+            bs.show(((AppCompatActivity)getContext()).getSupportFragmentManager(),TAG);
         }
     }
 
@@ -211,7 +211,7 @@ public class SongChildAdapter extends AbsSongAdapter
         @Override
         public void bind(Object object) {
             if(mSortOrderListener!=null) {
-              String str =  mContext.getResources().getString(
+              String str =  getContext().getResources().getString(
                         SortOrderBottomSheet.mSortStringRes[mSortOrderListener.getSavedOrder()]);
               mSortText.setText(str);
             }

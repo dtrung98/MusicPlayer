@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/background_panel_color"
+    tools:ignore="MotionLayoutInvalidSceneFileReference">
+
+    <View
+        android:id="@+id/minimize_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/bottom_navigation_height"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/down"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/playlist_title"
+        app:layout_constraintTop_toTopOf="@id/minimize_bar"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
+        app:tint="@color/flatBlue" />
+
+    <FrameLayout
+        android:id="@+id/spacingInsetTopParent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/minimize_bar"
+        android:background="@color/yellow">
+
+        <com.dtrung98.insetsview.viewgroup.InsetsFrameLayout
+            android:id="@+id/spacingInsetTop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:applySystemBarsInsets_Top="padding"
+            tools:paddingTop="@dimen/_56dp"/>
+    </FrameLayout>
+
+    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:overScrollMode="never"
+        app:fastScrollAutoHide="true"
+        app:fastScrollAutoHideDelay="1500"
+        app:fastScrollPopupBackgroundSize="88dp"
+        app:fastScrollPopupBgColor="@color/FlatYellow"
+        app:fastScrollPopupPosition="adjacent"
+        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+        app:fastScrollPopupTextSize="46sp"
+        app:fastScrollThumbColor="@color/FlatYellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/minimize_bar"
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_song_big" />
+
+    <TextView
+        android:id="@+id/playlist_title"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginTop="3dp"
+        android:ellipsize="marquee"
+        android:gravity="center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:maxWidth="150dp"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="All Songs"
+        android:textColor="@color/flatBlue"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/down"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/minimize_bar"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/shuffle_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ripple_oval"
+        android:padding="11dp"
+        android:src="@drawable/smooth_shuffle"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintEnd_toStartOf="@id/repeat_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/minimize_bar"
+        app:tint="@color/FlatWhite" />
+
+    <ImageView
+        android:id="@+id/repeat_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ripple_oval"
+        android:padding="11dp"
+        android:src="@drawable/repeat"
+        app:layout_constraintEnd_toStartOf="@id/playlist_title"
+        app:layout_constraintStart_toEndOf="@id/shuffle_button"
+        app:layout_constraintTop_toTopOf="@id/minimize_bar"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:tint="@color/FlatWhite" />
+
+    <TextView
+        android:id="@+id/lyric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:background="@drawable/ripple_16dp_border"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:text="@string/lyric"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/playlist_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/down"
+        app:layout_constraintTop_toTopOf="@id/playlist_title" />
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple_16dp_border"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:text="@string/save_as"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/down"
+        app:layout_constraintTop_toTopOf="@id/minimize_bar" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

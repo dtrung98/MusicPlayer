@@ -3,12 +3,17 @@ package com.ldt.musicr.ui.page.librarypage.artist;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapter.ArtistClickListener {
-    public static final String TAG ="ArtistChildTab";
+    public static final String TAG = "ArtistChildTab";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -41,28 +46,44 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    ArtistAdapter mAdapter;
+    private final ArtistAdapter mAdapter = new ArtistAdapter();
     Unbinder mUnBinder;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.artist_child_tab,container,false);
+        return inflater.inflate(R.layout.artist_child_tab, container, false);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
+        mAdapter.setName(TAG);
+        mAdapter.setArtistClickListener(this);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this,view);
+        mUnBinder = ButterKnife.bind(this, view);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new ArtistAdapter(getActivity());
-        mAdapter.setName(TAG);
-        mAdapter.setArtistClickListener(this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mRecyclerView.setAdapter(mAdapter);
-        if(mSwipeRefreshLayout!=null)
-        mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
+        ViewCompat.setOnApplyWindowInsetsListener(mRecyclerView, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                v.setPadding(insets.getSystemWindowInsetLeft(),
+                        0,
+                        insets.getSystemWindowInsetRight(),
+                        (int) (insets.getSystemWindowInsetBottom() + v.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
+                return ViewCompat.onApplyWindowInsets(v, insets);
+            }
+        });
 
+        if (mSwipeRefreshLayout != null) {
+            mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
+        }
         refresh();
 
     }
@@ -70,19 +91,20 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
     @Override
     public void onDestroyView() {
 
-        if(mLoadArtist!=null) mLoadArtist.cancel(true);
+        if (mLoadArtist != null) mLoadArtist.cancel(true);
         mAdapter.destroy();
-        if(mUnBinder !=null)
+        if (mUnBinder != null)
             mUnBinder.unbind();
 
         super.onDestroyView();
     }
+
     private LoadArtistAsyncTask mLoadArtist;
 
     private void refresh() {
 
-        if(mLoadArtist!=null) mLoadArtist.cancel(true);
-        mLoadArtist= new LoadArtistAsyncTask(this);
+        if (mLoadArtist != null) mLoadArtist.cancel(true);
+        mLoadArtist = new LoadArtistAsyncTask(this);
         mLoadArtist.execute();
 
     }
@@ -90,10 +112,10 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
     @Override
     public void onArtistItemClick(Artist artist) {
         NavigationFragment sf = ArtistPagerFragment.newInstance(artist);
-  /*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*/
-            Fragment parentFragment = getParentFragment();
-            if(parentFragment instanceof NavigationFragment)
-                ((NavigationFragment)parentFragment).getNavigationController().presentFragment(sf);
+        /*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*/
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof NavigationFragment)
+            ((NavigationFragment) parentFragment).getNavigationController().presentFragment(sf);
     }
 
     @Override
@@ -140,6 +162,7 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
         private ArrayList<Genre>[] mGenres;
         private List<Artist> mArtist;
     }
+
     private static class LoadArtistAsyncTask extends AsyncTask<Void, Void, AsyncResult> {
         private WeakReference<ArtistChildTab> mFragment;
 
@@ -153,12 +176,12 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
             AsyncResult result = new AsyncResult();
             Context context = null;
 
-            if(App.getInstance()!=null)
-            context = App.getInstance().getApplicationContext();
+            if (App.getInstance() != null)
+                context = App.getInstance().getApplicationContext();
 
-            if(context!=null)
-            result.mArtist = ArtistLoader.getAllArtists(App.getInstance());
-            else  return null;
+            if (context != null)
+                result.mArtist = ArtistLoader.getAllArtists(App.getInstance());
+            else return null;
 
         /*    if(result.mArtist!=null) {
                 result.mGenres = new ArrayList[result.mArtist.size()];
@@ -176,18 +199,19 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
             cancel(true);
             mFragment.clear();
         }
+
         private boolean mCancelled = false;
 
         @Override
         protected void onPostExecute(AsyncResult asyncResult) {
-            if(mCancelled) return;
+            if (mCancelled) return;
             ArtistChildTab fragment = mFragment.get();
-            if(fragment!=null&&!fragment.isDetached()) {
+            if (fragment != null && !fragment.isDetached()) {
                 if (fragment.mSwipeRefreshLayout != null)
                     fragment.mSwipeRefreshLayout.setRefreshing(false);
-                if(!asyncResult.mArtist.isEmpty())
-             //       fragment.mAdapter.setData(asyncResult.mArtist, asyncResult.mGenres);
-                fragment.mAdapter.setData(asyncResult.mArtist);
+                if (!asyncResult.mArtist.isEmpty())
+                    //       fragment.mAdapter.setData(asyncResult.mArtist, asyncResult.mGenres);
+                    fragment.mAdapter.setData(asyncResult.mArtist);
                 fragment.mLoadArtist = null;
             }
         }

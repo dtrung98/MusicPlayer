@@ -2,158 +2,192 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="com.ldt.musicr.ui.playingqueue.PlayingQueueLayerFragment">
-<androidx.cardview.widget.CardView
-    android:id="@+id/rootCardView"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:cardBackgroundColor="@color/background_panel_color"
-    app:cardPreventCornerOverlap="true">
-<androidx.constraintlayout.motion.widget.MotionLayout
-    android:id="@+id/constraint_root"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutDescription="@xml/playing_queue_animation">
-    <View
-        android:id="@+id/minimize_bar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/shuffle_button"
-        />
-    <ImageView
-        android:id="@+id/down"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/playlist_title"
-        app:layout_constraintBottom_toBottomOf="@id/playlist_title"
-        app:layout_constraintStart_toEndOf="@id/playlist_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio="1:1"
-        app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
-        android:layout_marginTop="2dp"
-        app:tint="@color/flatBlue" />
-    <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/minimize_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_song_big"
-        tools:layoutManager="LinearLayoutManager"
-        android:overScrollMode="never"
-        android:layout_marginTop="12dp"
-        app:fastScrollAutoHide="true"
-        app:fastScrollAutoHideDelay="1500"
-        app:fastScrollPopupBackgroundSize="88dp"
-        app:fastScrollPopupBgColor="@color/FlatYellow"
-        app:fastScrollPopupPosition="adjacent"
-        app:fastScrollPopupTextColor="@android:color/primary_text_dark"
-        app:fastScrollPopupTextSize="46sp"
-        app:fastScrollThumbColor="@color/FlatYellow"
-        />
-    <TextView
-        android:id="@+id/playlist_title"
-        android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        app:layout_constraintTop_toTopOf="@id/minimize_bar"
-        app:layout_constraintWidth_default="percent"
-        android:layout_marginTop="3dp"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/down"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        android:textColor="@color/flatBlue"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:text="@string/all_songs"
-        android:scrollHorizontally="true"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:marqueeRepeatLimit ="marquee_forever"
-        android:maxWidth="150dp"
-        android:gravity="center_vertical"
-        />
-    <ImageView
-        android:id="@+id/shuffle_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toTopOf="@id/down"
-        app:layout_constraintBottom_toBottomOf="@id/down"
-        app:layout_constraintEnd_toStartOf="@id/repeat_button"
-        app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/smooth_shuffle"
-        android:background="@drawable/ripple_oval"
-        android:padding="11dp"
-        app:tint="@color/FlatWhite" />
-    <ImageView
-        android:id="@+id/repeat_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:layout_constraintTop_toTopOf="@id/shuffle_button"
-        app:layout_constraintStart_toEndOf="@id/shuffle_button"
-        app:layout_constraintEnd_toStartOf="@id/playlist_title"
-        android:src="@drawable/repeat"
-        android:background="@drawable/ripple_oval"
-        android:padding="11dp"
-        app:tint="@color/FlatWhite" />
-    <TextView
-        android:id="@+id/lyric"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/playlist_title"
-        app:layout_constraintBottom_toBottomOf="@id/playlist_title"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:text="@string/lyric"
-        app:layout_constraintStart_toEndOf="@id/down"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/ripple_16dp_border"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:textStyle="bold"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"/>
-    <TextView
-        android:id="@+id/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/down"
-        android:gravity="center"
-        android:textSize="14sp"
-        android:text="@string/save_as"
-        app:layout_constraintStart_toEndOf="@id/down"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/ripple_16dp_border"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:textStyle="bold"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:alpha="0"
-        android:visibility="invisible"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:clickable="true"
-        android:focusable="true"/>
-</androidx.constraintlayout.motion.widget.MotionLayout>
-    <View
-        android:id="@+id/dim_view"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/rootCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:alpha="0"/>
-</androidx.cardview.widget.CardView>
-<View
-android:layout_width="match_parent"
-android:layout_height="50dp"
-android:layout_gravity="bottom"
-android:background="@color/background_panel_color" />
-    </FrameLayout>
+        app:cardBackgroundColor="@color/background_panel_color"
+        app:cardPreventCornerOverlap="true">
+
+        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:id="@+id/constraint_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutDescription="@xml/playing_queue_animation">
+
+            <View
+                android:id="@+id/minimize_bar"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bottom_navigation_height"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/down"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="2dp"
+                app:layout_constraintBottom_toBottomOf="@id/playlist_title"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/playlist_title"
+                app:layout_constraintTop_toTopOf="@id/playlist_title"
+                app:srcCompat="@drawable/ic_keyboard_arrow_down_black_24dp"
+                app:tint="@color/flatBlue" />
+
+            <FrameLayout
+                android:id="@+id/spacingInsetTopParent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/minimize_bar">
+
+                <com.dtrung98.insetsview.viewgroup.InsetsFrameLayout
+                    android:id="@+id/spacingInsetTop"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:applySystemBarsInsets_Bottom="padding" />
+            </FrameLayout>
+
+            <com.ldt.springback.view.SpringBackLayout
+                android:id="@+id/springBackLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/spacingInsetTopParent"
+                app:springBackMode="bottom">
+
+                <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:overScrollMode="never"
+                    app:fastScrollAutoHide="true"
+                    app:fastScrollAutoHideDelay="1500"
+                    app:fastScrollPopupBackgroundSize="88dp"
+                    app:fastScrollPopupBgColor="@color/FlatYellow"
+                    app:fastScrollPopupPosition="adjacent"
+                    app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+                    app:fastScrollPopupTextSize="46sp"
+
+                    app:fastScrollThumbColor="@color/FlatYellow"
+                    tools:layoutManager="LinearLayoutManager"
+                    tools:listitem="@layout/item_song_big" />
+            </com.ldt.springback.view.SpringBackLayout>
+
+            <TextView
+                android:id="@+id/playlist_title"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="3dp"
+                android:ellipsize="marquee"
+                android:gravity="center_vertical"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxWidth="150dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/all_songs"
+                android:textColor="@color/flatBlue"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+                app:layout_constraintEnd_toStartOf="@id/down"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/minimize_bar"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.5" />
+
+            <ImageView
+                android:id="@+id/shuffle_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ripple_oval"
+                android:padding="11dp"
+                android:src="@drawable/smooth_shuffle"
+                app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+                app:layout_constraintEnd_toStartOf="@id/repeat_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/minimize_bar"
+                app:tint="@color/FlatWhite" />
+
+            <ImageView
+                android:id="@+id/repeat_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/ripple_oval"
+                android:padding="11dp"
+                android:src="@drawable/repeat"
+                app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+                app:layout_constraintEnd_toStartOf="@id/playlist_title"
+                app:layout_constraintStart_toEndOf="@id/shuffle_button"
+                app:layout_constraintTop_toTopOf="@id/minimize_bar"
+                app:tint="@color/FlatWhite" />
+
+            <TextView
+                android:id="@+id/lyric"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_16dp_border"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:text="@string/lyric"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/down"
+                app:layout_constraintTop_toTopOf="@id/minimize_bar" />
+
+            <TextView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0"
+                android:background="@drawable/ripple_16dp_border"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:text="@string/save_as"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/down"
+                app:layout_constraintTop_toBottomOf="@id/down" />
+        </androidx.constraintlayout.motion.widget.MotionLayout>
+
+        <View
+            android:id="@+id/dim_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0"
+            android:background="@android:color/black" />
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@color/background_panel_color" />
+</FrameLayout>

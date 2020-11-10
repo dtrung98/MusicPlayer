@@ -60,19 +60,13 @@
     android:textStyle="bold"
     android:gravity="center_vertical"
     />
-    <androidx.appcompat.widget.SearchView
+    <com.ldt.musicr.ui.widget.view.MPSearchLikelyView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:iconifiedByDefault="false"
-        app:queryHint="@string/search_string"
-        app:defaultQueryHint="@string/search"
         android:focusable="true"
         android:background="@drawable/search_view_background"
         android:clickable="true"
-        app:theme="@style/AppSearchView"
-        android:queryBackground="@android:color/transparent"
-        app:queryBackground="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header"
@@ -111,6 +105,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tab_layout"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:overScrollMode="never"
         />
     <View
         android:id="@+id/gradient_line"

@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,7 +92,7 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
     @BindView(R.id.save)
     View mSaveView;
 
-    private PlayingQueueAdapter mAdapter;
+    private final PlayingQueueAdapter mAdapter = new PlayingQueueAdapter();
 
     @OnTouch({R.id.playlist_title, R.id.down})
     boolean touchDetected(View view, MotionEvent event) {
@@ -105,6 +108,13 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
             else
                 a.animateToMin();
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
+        mAdapter.setName(TAG);
     }
 
     private void onColorPaletteReady(int color1, int color2, float alpha1, float alpha2) {
@@ -127,13 +137,20 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
         ButterKnife.bind(this, view);
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mPlaylistTitle.setSelected(true);
-        mAdapter = new PlayingQueueAdapter(getContext());
-        mAdapter.setName(TAG);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        // apply window insets to recyclerview
+        ViewCompat.setOnApplyWindowInsetsListener(mRecyclerView, (v, insets) -> {
+            mRecyclerView.setPadding(insets.getSystemWindowInsetLeft(), 0, insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return ViewCompat.onApplyWindowInsets(v, insets);
+        });
+
+        // attach adapter to recyclerview
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         mRecyclerView.setAdapter(mAdapter);
 
-        if (getActivity() instanceof AppActivity)
+        if (getActivity() instanceof AppActivity) {
             ((AppActivity) getActivity()).addMusicServiceEventListener(this);
+        }
         setUp();
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

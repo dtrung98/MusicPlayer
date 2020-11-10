@@ -9,6 +9,7 @@ import android.view.View;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
 
 public abstract class MusicServiceNavigationFragment extends NavigationFragment implements MusicServiceEventListener {
     @Override
@@ -68,5 +69,10 @@ public abstract class MusicServiceNavigationFragment extends NavigationFragment 
     @Override
     public void onMediaStoreChanged() {
 
+    }
+
+    @Override
+    public int getPresentTransition() {
+        return PresentStyle.FADE;
     }
 }

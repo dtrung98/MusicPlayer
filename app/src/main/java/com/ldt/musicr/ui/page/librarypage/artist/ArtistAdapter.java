@@ -7,9 +7,11 @@ import android.graphics.Outline;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,20 +61,20 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
     public interface ArtistClickListener {
         void onArtistItemClick(Artist artist);
     }
+
     private ArtistClickListener mListener;
+
     public void setArtistClickListener(ArtistClickListener listener) {
         mListener = listener;
     }
+
     public void removeListener() {
         mListener = null;
     }
 
-    ArtistAdapter(Context context) {
-        super(context);
-    }
-
     @Override
-    protected void onMenuItemClick(int positionInData) {}
+    protected void onMenuItemClick(int positionInData) {
+    }
 
 
     @Override
@@ -81,10 +83,10 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
     }
 
     private void clearAndCancelAllTask() {
-        for (Map.Entry<Artist, GenreArtistTask> map:
-             mGenreArtistTaskMap.entrySet()) {
+        for (Map.Entry<Artist, GenreArtistTask> map :
+                mGenreArtistTaskMap.entrySet()) {
             GenreArtistTask task = map.getValue();
-            if(task!=null) task.cancel();
+            if (task != null) task.cancel();
         }
 
         mGenreArtistTaskMap.clear();
@@ -92,13 +94,14 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
 
     private void onTaskComplete(Artist artist, ArrayList<Genre> genres, int positionSaved) {
         mGenreArtistTaskMap.remove(artist);
-        attachGenreByPosition(genres,artist,positionSaved);
+        attachGenreByPosition(genres, artist, positionSaved);
     }
+
     private void attachGenreByPosition(ArrayList<Genre> genres, Artist artist, int itemPos) {
-        if(itemPos>=0 && itemPos<getData().size()) {
-            if (artist.equals(getData().get(itemPos))&&mGenres[itemPos]==null)  {
+        if (itemPos >= 0 && itemPos < getData().size()) {
+            if (artist.equals(getData().get(itemPos)) && mGenres[itemPos] == null) {
                 mGenres[itemPos] = genres;
-                notifyItemChanged(itemPos,GENRE_UPDATE);
+                notifyItemChanged(itemPos, GENRE_UPDATE);
             }
         }
     }
@@ -106,22 +109,22 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
     @NonNull
     @Override
     public AbsBindAbleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ItemHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_artist_child,viewGroup,false));
+        return new ItemHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_artist_child, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AbsBindAbleHolder itemHolder, int i) {
-        if(itemHolder instanceof ItemHolder) {
+        if (itemHolder instanceof ItemHolder) {
             if (mGenres != null && mGenres.length > i - 1)
-                ((ItemHolder)itemHolder).bind(getData().get(i), mGenres[i]);
-            else ((ItemHolder)itemHolder).bind(getData().get(i), null);
+                ((ItemHolder) itemHolder).bind(getData().get(i), mGenres[i]);
+            else ((ItemHolder) itemHolder).bind(getData().get(i), null);
         }
     }
 
     @Override
     protected boolean onLongPressedItem(AbsBindAbleHolder holder, int position) {
         super.onLongPressedItem(holder, position);
-        OptionBottomSheet.newInstance(MenuHelper.ARTIST_OPTION,getData().get(position)).show(((AppCompatActivity)mContext).getSupportFragmentManager(),"artist_option");
+        OptionBottomSheet.newInstance(MenuHelper.ARTIST_OPTION, getData().get(position)).show(((AppCompatActivity) getContext()).getSupportFragmentManager(), "artist_option");
         return true;
     }
 
@@ -131,6 +134,7 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         int blue = (int) ((Color.blue(color) * (1 - factor) / 255 + factor) * 255);
         return Color.argb(Color.alpha(color), red, green, blue);
     }
+
     public static int lighter(int color, float factor, int alpha) {
         int red = (int) ((Color.red(color) * (1 - factor) / 255 + factor) * 255);
         int green = (int) ((Color.green(color) * (1 - factor) / 255 + factor) * 255);
@@ -142,16 +146,16 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
     @NonNull
     @Override
     public String getSectionName(int i) {
-        if(getData().get(getDataPosition(i)).getName().isEmpty())
+        if (getData().get(getDataPosition(i)).getName().isEmpty())
             return "";
-        return getData().get(getDataPosition(i)).getName().substring(0,1);
+        return getData().get(getDataPosition(i)).getName().substring(0, 1);
     }
 
     class ItemHolder extends AbsMediaHolder {
 
         public ItemHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mImage.setOutlineProvider(new ViewOutlineProvider() {
                     @Override
@@ -162,6 +166,7 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
                 mImage.setClipToOutline(true);
             }
         }
+
         @BindView(R.id.title)
         TextView mArtist;
 
@@ -181,13 +186,14 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
 
         @OnLongClick(R.id.panel)
         boolean onLongClickPanel() {
-            return onLongPressedItem(this,getAdapterPosition());
+            return onLongPressedItem(this, getAdapterPosition());
         }
 
         @OnClick(R.id.panel)
         void goToThisArtist() {
-            if(mListener!=null) mListener.onArtistItemClick(getData().get(getAdapterPosition()));
+            if (mListener != null) mListener.onArtistItemClick(getData().get(getAdapterPosition()));
         }
+
         @BindView(R.id.root)
         View mRoot;
 
@@ -197,23 +203,24 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         public void bind(Artist artist, ArrayList<Genre> genres) {
             mArtist.setText(artist.getName());
             mCount.setText(String.format("%d %s", artist.getSongCount(), mCount.getContext().getResources().getString(R.string.songs)));
-            if(genres==null) {
+            if (genres == null) {
                 mGenreOne.setText("⋯");
                 mGenreTwo.setVisibility(View.GONE);
-                Log.d(TAG, "load genre item "+getAdapterPosition() );
+                Log.d(TAG, "load genre item " + getAdapterPosition());
 
                 GenreArtistTask task = mGenreArtistTaskMap.get(artist);
-                if(task==null) {
+                if (task == null) {
                     task = new GenreArtistTask(ArtistAdapter.this, artist, getAdapterPosition());
-                    mGenreArtistTaskMap.put(artist,task);
+                    mGenreArtistTaskMap.put(artist, task);
                     task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
 
             } else bindGenre(genres);
             //try {
-                loadArtistImage(artist);
-          // } catch (Exception ignored) {}
+            loadArtistImage(artist);
+            // } catch (Exception ignored) {}
         }
+
         private void loadArtistImage(Artist artist) {
           /* String[] artists = artist.getName().replace(" ft ",",").replace(';',',').split("\\s*,\\s*");
            Artist artistTemp;
@@ -221,9 +228,9 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
                artistTemp = new Artist(artist.id,artists[0].replace(",",""),artist.albumCount,artist.songCount);
            else artistTemp = artist;*/
 
-            ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist)
-                   // .tryToLoadOriginal(true)
-                    .generateBuilder(mContext)
+            ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), artist)
+                    // .tryToLoadOriginal(true)
+                    .generateBuilder(getContext())
                     .build()
                     .centerCrop()
                     .error(R.drawable.music_style)
@@ -236,13 +243,14 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
                         @Override
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                             int color;
-                            if(resource!=null)
-                            color  = PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(resource), mContext.getResources().getColor(R.color.flatBlue));
-                            else color =  mContext.getResources().getColor(R.color.flatBlue);
-                            int fixedColor = lighter(color,0.55f,0x90);
+                            if (resource != null)
+                                color = PhonographColorUtil.getColor(PhonographColorUtil.generatePalette(resource), mPanelColor.getResources().getColor(R.color.flatBlue));
+                            else color = mPanelColor.getResources().getColor(R.color.flatBlue);
+                            int fixedColor = lighter(color, 0.55f, 0x90);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                                 mPanelColor.getBackground().setTint(fixedColor);
-                            else mPanelColor.getBackground().setColorFilter(fixedColor, PorterDuff.Mode.SRC_ATOP);
+                            else
+                                mPanelColor.getBackground().setColorFilter(fixedColor, PorterDuff.Mode.SRC_ATOP);
 //
 //                            if (usePalette)
 //                                setColors(color, holder);
@@ -255,11 +263,11 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         }
 
         public void bindGenre(ArrayList<Genre> genres) {
-           if(genres.isEmpty()) {
+            if (genres.isEmpty()) {
                 mGenreOne.setText(R.string.unknown_genres);
                 mGenreOne.setVisibility(View.VISIBLE);
                 mGenreTwo.setVisibility(View.GONE);
-            } else if(genres.size()==1) {
+            } else if (genres.size() == 1) {
                 mGenreOne.setText(genres.get(0).name);
                 mGenreOne.setVisibility(View.VISIBLE);
                 mGenreTwo.setVisibility(View.GONE);
@@ -272,10 +280,11 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         }
     }
 
-    private static class GenreArtistTask extends AsyncTask<Void,Void,ArrayList<Genre>> {
+    private static class GenreArtistTask extends AsyncTask<Void, Void, ArrayList<Genre>> {
         private WeakReference<ArtistAdapter> mAAReference;
         private int mItemPos;
         private Artist mArtist;
+
         public GenreArtistTask(ArtistAdapter adapter, Artist artist, int itemPos) {
             super();
             mAAReference = new WeakReference<>(adapter);
@@ -284,6 +293,7 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         }
 
         private boolean mCancelled = false;
+
         private void cancel() {
             mCancelled = true;
             cancel(true);
@@ -294,28 +304,29 @@ public class ArtistAdapter extends AbsMediaAdapter<AbsBindAbleHolder, Artist> im
         @Override
         protected ArrayList<Genre> doInBackground(Void... voids) {
 
-            if(mAAReference.get()!=null&&mArtist!=null&&!mCancelled) {
-                return GenreLoader.getGenreForArtist(mAAReference.get().mContext, mArtist.getId());
+            if (mAAReference.get() != null && mArtist != null && !mCancelled) {
+                return GenreLoader.getGenreForArtist(mAAReference.get().getContext(), mArtist.getId());
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Genre> genres) {
-            if(genres!=null&&mAAReference.get()!=null&&!mCancelled) {
-             mAAReference.get().onTaskComplete( mArtist, genres, mItemPos);
+            if (genres != null && mAAReference.get() != null && !mCancelled) {
+                mAAReference.get().onTaskComplete(mArtist, genres, mItemPos);
             }
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull AbsBindAbleHolder holder, int position, @NonNull List<Object> payloads) {
-    if(!payloads.isEmpty()&&holder instanceof ItemHolder) {
-            if((payloads.get(0)).equals(GENRE_UPDATE)&&position<mGenres.length)
-                ((ItemHolder)holder).bindGenre(mGenres[position]);
-    } else
-        super.onBindViewHolder(holder, position, payloads);
+        if (!payloads.isEmpty() && holder instanceof ItemHolder) {
+            if ((payloads.get(0)).equals(GENRE_UPDATE) && position < mGenres.length)
+                ((ItemHolder) holder).bindGenre(mGenres[position]);
+        } else
+            super.onBindViewHolder(holder, position, payloads);
     }
+
     private static final String GENRE_UPDATE = "genre_update";
 
 

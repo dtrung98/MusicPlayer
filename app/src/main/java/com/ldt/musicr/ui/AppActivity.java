@@ -134,7 +134,10 @@ public class AppActivity extends MusicServiceActivity {
 
         App.getInstance().getPreferencesUtility().notFirstTime();
         WindowThemingKt.setUpDarkSystemUIVisibility(this.getWindow());
-        super.onCreate(savedInstanceState);
+
+        // will not handle saving/restoring instance state
+        super.onCreate(null);
+
         setContentView(R.layout.activity_layout);
 
         // save the window system insets for in-app using

@@ -5,8 +5,7 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:orientation="vertical"
 android:layout_width="match_parent"
 android:layout_height="wrap_content"
-android:animateLayoutChanges="true"
-android:paddingBottom="@dimen/minimum_bottom_back_stack_margin">
+android:animateLayoutChanges="true">
 
 <include android:id="@+id/playlist_frame"
     layout="@layout/playlists_piece_layout"/>

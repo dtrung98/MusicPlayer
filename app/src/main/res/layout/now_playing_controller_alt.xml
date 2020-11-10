@@ -1,274 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_panel_color"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_panel_color"
+    tools:ignore="MotionLayoutInvalidSceneFileReference">
+
+    <FrameLayout
+        android:id="@+id/safeViewTop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_height="0dp"
+        android:clipToPadding="false"
+        />
+
+    <FrameLayout
+        android:id="@+id/safeViewBottom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false"
+        tools:layout_height="0dp" />
+
     <View
         android:id="@+id/minimize_bar"
         android:layout_width="0dp"
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="10dp"
+        android:alpha="0"
         android:background="#22555555"
-        android:alpha="0"/>
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_panel"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="@dimen/now_laying_height_in_minimize_mode"
-        app:layout_constraintEnd_toEndOf="parent"
         android:alpha="0"
         android:scaleX="0.5"
-        android:scaleY="0.5">
+        android:scaleY="0.5"
+        app:layout_constraintBottom_toBottomOf="@id/minimize_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/playlist_title"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/button_right"
-            android:text="Scars to your beautiful • Alessia Cara - BRAVO The Hits 2016"
-            android:textColor="@color/color_aaa"
+            android:ellipsize="marquee"
             android:gravity="center"
+            android:marqueeRepeatLimit="marquee_forever"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:scrollHorizontally="true"
             android:singleLine="true"
-            android:ellipsize="marquee"
-            android:marqueeRepeatLimit ="marquee_forever"
+            android:text="Scars to your beautiful • Alessia Cara - BRAVO The Hits 2016"
+            android:textColor="@color/color_aaa"
             android:textSize="13sp"
             android:textStyle="bold"
-            />
+            app:layout_constraintBottom_toTopOf="@id/playlist_title"
+            app:layout_constraintEnd_toStartOf="@id/button_right"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
         <TextView
             android:id="@+id/play_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/playlist_title"
-            app:layout_constraintStart_toStartOf="@id/title"
-            app:layout_constraintEnd_toStartOf="@id/playlist_title"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
             android:text="play in"
             android:textColor="#888"
             android:textSize="10sp"
+            app:layout_constraintEnd_toStartOf="@id/playlist_title"
             app:layout_constraintHorizontal_chainStyle="packed"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            />
+            app:layout_constraintStart_toStartOf="@id/title"
+            app:layout_constraintTop_toTopOf="@id/playlist_title" />
+
         <TextView
             android:id="@+id/playlist_title"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/play_in"
-            app:layout_constraintEnd_toStartOf="@id/button_right"
-            android:text="Tất cả bài hát"
-            android:textColor="#999"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/ripple_16dp_translucent"
             android:clickable="true"
+            android:ellipsize="end"
             android:focusable="true"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="Tất cả bài hát"
+            android:textColor="#999"
             android:textSize="10sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="2dp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:layout_marginEnd="4dp"/>
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_right"
+            app:layout_constraintStart_toEndOf="@id/play_in"
+            app:layout_constraintTop_toBottomOf="@id/title" />
+
         <ImageView
             android:id="@+id/button_right"
             android:layout_width="0dp"
-            app:layout_constrainedWidth="true"
             android:layout_height="@dimen/now_laying_height_in_minimize_mode"
-            app:layout_constraintDimensionRatio="W,1:1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_pause_black_24dp"
             android:padding="12dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_pause_black_24dp"
             app:tint="#AAA" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHeight_default="percent"
         app:layout_constraintHeight_percent=".7"
-        tools:listitem="@layout/item_art_now_playing"
-        tools:layoutManager="LinearLayoutManager"
-        tools:orientation="horizontal"
-        />
-<!--    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent=".7"/>-->
+        tools:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/item_art_now_playing"
+        tools:orientation="horizontal" />
+    <!--    <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent=".7"/>-->
     <View
         android:id="@+id/top_gradient"
         android:layout_width="0dp"
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:alpha="1"
         android:background="@drawable/now_playing_top_gradient"
-        android:alpha="1"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/bottom_gradient"
         android:layout_width="0dp"
         android:layout_height="220dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/recycler_view"
-        android:background="@drawable/now_playing_bottom_gradient"
         android:alpha="1"
+        android:background="@drawable/now_playing_bottom_gradient"
+        app:layout_constraintBottom_toBottomOf="@id/recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
 
         />
+
     <TextView
         android:id="@+id/big_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
+        android:layout_marginBottom="4dp"
         android:ellipsize="end"
-        tools:text="This is the name of the song, this is the name of the song"
+        android:gravity="center"
+        android:maxLines="1"
+        android:paddingHorizontal="24dp"
         android:textColor="@color/FlatWhite"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:paddingHorizontal="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/big_artist"
-        android:layout_marginBottom="4dp"
-        android:gravity="center"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="This is the name of the song, this is the name of the song" />
+
     <TextView
         android:id="@+id/big_artist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintStart_toStartOf="@id/big_title"
-        app:layout_constraintEnd_toEndOf="@id/big_title"
         android:layout_marginBottom="20dp"
+        android:gravity="center"
         android:paddingHorizontal="24dp"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        android:textColor="#DDF5F5F5"
         android:text="@string/this_is_artist_of_the_song"
-        app:layout_constraintBottom_toTopOf="@id/time_text_view"/>
+        android:textColor="#DDF5F5F5"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/time_text_view"
+        app:layout_constraintEnd_toEndOf="@id/big_title"
+        app:layout_constraintStart_toStartOf="@id/big_title" />
+
     <TextView
         android:id="@+id/time_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginBottom="4dp"
         android:layout_marginTop="6dp"
+        android:layout_marginBottom="4dp"
+        android:alpha="0.85"
+        android:background="@drawable/time_text_view_background"
+        android:gravity="center"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:paddingTop="2dp"
+        android:paddingEnd="8dp"
         android:paddingBottom="2dp"
         android:text="02:38 | 04:07"
         android:textColor="@color/FlatWhite"
         android:textSize="10sp"
-        android:alpha="0.85"
-        android:background="@drawable/time_text_view_background"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/visual_seek_bar"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.ldt.musicr.ui.widget.avsb.AudioVisualSeekBar
         android:id="@+id/visual_seek_bar"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bottom_gradient"
         app:layout_constraintBottom_toBottomOf="@id/bottom_gradient"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottom_gradient" />
+
     <ImageView
         android:id="@+id/play_pause_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        app:srcCompat="@drawable/ic_pause_black_24dp"
-        app:layout_constraintTop_toBottomOf="@id/visual_seek_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="@dimen/bottom_navigation_height"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:padding="9dp"
         android:background="@drawable/ripple_oval"
+        android:padding="9dp"
+        app:layout_constraintBottom_toTopOf="@id/safeViewBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/visual_seek_bar"
+        app:srcCompat="@drawable/ic_pause_black_24dp"
         app:tint="@color/FlatWhite" />
+
     <ImageView
         android:id="@+id/prev_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/ripple_oval"
+        android:padding="13dp"
         android:src="@drawable/prevred"
-        app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintEnd_toStartOf="@id/play_pause_button"
-        android:layout_marginEnd="20dp"
-        android:padding="13dp"
-        android:background="@drawable/ripple_oval"
+        app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:tint="@color/FlatWhite" />
+
     <ImageView
         android:id="@+id/next_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/ripple_oval"
+        android:padding="13dp"
         android:src="@drawable/nextred"
-        app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:layout_constraintBottom_toBottomOf="@id/play_pause_button"
         app:layout_constraintStart_toEndOf="@id/play_pause_button"
-        android:padding="13dp"
-        android:background="@drawable/ripple_oval"
-        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toTopOf="@id/play_pause_button"
         app:tint="@color/FlatWhite" />
+
     <ImageView
         android:id="@+id/menu_button"
         android:layout_width="@dimen/now_laying_height_in_minimize_mode"
         android:layout_height="@dimen/now_laying_height_in_minimize_mode"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_more_vert_black_24dp"
-        android:padding="12dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
-        app:tint="@color/FlatWhite" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/color_picker_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintTop_toBottomOf="@id/menu_button"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:listitem="@layout/item_color_picker"
-        tools:layoutManager="LinearLayoutManager"
-        tools:orientation="horizontal" />
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+        app:layout_constraintTop_toBottomOf="@id/safeViewTop"
+        app:srcCompat="@drawable/ic_more_vert_black_24dp"
+        app:tint="@color/FlatWhite" />
+</androidx.constraintlayout.motion.widget.MotionLayout>

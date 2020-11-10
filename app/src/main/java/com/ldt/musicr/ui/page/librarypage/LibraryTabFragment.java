@@ -30,8 +30,7 @@ public class LibraryTabFragment extends NavigationFragment {
 
     @BindView(R.id.back_image)
     ImageView mBackImage;
-    @BindView(R.id.search_view)
-    SearchView mSearchView;
+
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
 
@@ -63,8 +62,7 @@ public class LibraryTabFragment extends NavigationFragment {
     }
 
     @OnClick(R.id.search_view)
-    void searchViewClicked() {
-        mSearchView.onActionViewExpanded();
+    void searchLikelyViewClicked() {
     }
 
     @Override
@@ -87,13 +85,6 @@ public class LibraryTabFragment extends NavigationFragment {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         // mTabLayout.setTabsFromPagerAdapter(mTabAdapter);//deprecated
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mSearchView.onActionViewExpanded();
-        mSearchView.clearFocus();
     }
 
     public Fragment navigateToTab(int item) {

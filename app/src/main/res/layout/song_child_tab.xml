@@ -34,6 +34,8 @@
         app:fastScrollPopupTextSize="46sp"
         app:fastScrollThumbColor="@color/FlatYellow"
         android:overScrollMode="never"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/bottom_back_stack_spacing"
         />
     </com.ldt.springback.view.SpringBackLayout>
     <androidx.constraintlayout.widget.Group

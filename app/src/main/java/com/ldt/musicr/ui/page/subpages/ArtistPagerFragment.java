@@ -125,7 +125,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private SongInArtistPagerAdapter mAdapter;
+    private final SongInArtistPagerAdapter mAdapter = new SongInArtistPagerAdapter();
 
     @Override
     public void onDestroyView() {
@@ -141,10 +141,17 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.artist_pager_middle,container,false);
+        return inflater.inflate(R.layout.artist_pager_primary,container,false);
     }
 
     private Unbinder mUnbinder;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
+        mAdapter.setName(TAG);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -155,8 +162,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
         if(bundle!=null) {
             mArtist = bundle.getParcelable(ARTIST);
         }
-        mAdapter = new SongInArtistPagerAdapter(getContext());
-        mAdapter.setName(TAG);
+
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 

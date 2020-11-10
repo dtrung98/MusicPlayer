@@ -11,10 +11,6 @@ import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 public class SongInArtistPagerAdapter extends SongChildAdapter {
     private static final String TAG = "SongInArtistPagerAdapter";
 
-    public SongInArtistPagerAdapter(Context context) {
-        super(context);
-    }
-
     @Override
     public int getItemViewType(int position) {
         if(position==0) return R.layout.item_sort_song_child;
@@ -25,6 +21,6 @@ public class SongInArtistPagerAdapter extends SongChildAdapter {
     protected void onMenuItemClick(int positionInData) {
         OptionBottomSheet
                 .newInstance(SongMenuHelper.SONG_ARTIST_OPTION,getData().get(positionInData))
-                .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
+                .show(((AppCompatActivity)getContext()).getSupportFragmentManager(), "song_popup_menu");
     }
 }

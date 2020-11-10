@@ -27,7 +27,7 @@ public class GenreChildTab extends MusicServiceFragment {
         return inflater.inflate(R.layout.genre_child_tab,container,false);
     }
 
-    @BindDimen(R.dimen.minimum_bottom_back_stack_margin)
+    @BindDimen(R.dimen.bottom_back_stack_spacing)
     float mMinBottomPadding;
 
     @BindDimen(R.dimen._16dp)

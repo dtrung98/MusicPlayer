@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.FragmentNavigationController;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
 
 import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment.PRESENT_STYLE_DEFAULT;
 
@@ -57,7 +58,7 @@ public class IntroController {
         FragmentManager fm = activity.getSupportFragmentManager();
         mNavigationController = FragmentNavigationController.navigationController(fm, R.id.back_wall_container);
         mNavigationController.setAbleToPopRoot(true);
-        mNavigationController.setPresentStyle(PRESENT_STYLE_DEFAULT);
+        mNavigationController.setPresentStyle(PresentStyle.FADE);
         mNavigationController.setDuration(250);
         mNavigationController.setInterpolator(new AccelerateDecelerateInterpolator());
         mNavigationController.presentFragment(new PermissionRequiredFragment());

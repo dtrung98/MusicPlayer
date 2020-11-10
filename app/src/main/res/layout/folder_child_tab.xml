@@ -5,4 +5,4 @@
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="@dimen/minimum_bottom_back_stack_margin"/>
+    android:paddingBottom="@dimen/bottom_back_stack_spacing"/>

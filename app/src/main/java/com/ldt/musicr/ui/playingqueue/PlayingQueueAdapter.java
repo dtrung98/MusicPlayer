@@ -16,15 +16,11 @@ import org.jetbrains.annotations.NotNull;
 public class PlayingQueueAdapter extends AbsSongAdapter {
     private static final String TAG = "PlayingQueueAdapter";
 
-    public PlayingQueueAdapter(Context context) {
-        super(context);
-    }
-
     @Override
     protected void onMenuItemClick(int positionInData) {
         OptionBottomSheet
                 .newInstance(SongMenuHelper.SONG_QUEUE_OPTION,getData().get(positionInData))
-                .show(((AppCompatActivity)mContext).getSupportFragmentManager(), "song_popup_menu");
+                .show(((AppCompatActivity)getContext()).getSupportFragmentManager(), "song_popup_menu");
     }
 
     @NotNull

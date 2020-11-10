@@ -38,16 +38,21 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
     public ArrayList<Song> mAllSongs = new ArrayList<>();
     public ArrayList<Song> mData = new ArrayList<>();
     public int currentlyPlayingPosition = 0;
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public void init(Context context) {
+        mContext = context;
+    }
+
     private Context mContext;
     private long[] songIDs;
     private boolean isPlaylist;
     private boolean animate;
     private int lastPosition = -1;
     private long playlistId;
-
-    public FeatureSongAdapter(Context context) {
-        this.mContext = context;
-    }
 
     public void setData(List<Song> data) {
         mAllSongs.clear();

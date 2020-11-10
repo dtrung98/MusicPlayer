@@ -13,7 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.motion.widget.MotionLayout;
 import androidx.cardview.widget.CardView;
+import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,10 +82,12 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
     TextView mBigTitle;
     @BindView(R.id.big_artist)
     TextView mBigArtist;
-    private NowPlayingAdapter mAdapter;
-    @BindView(R.id.color_picker_recycler_view)
-    RecyclerView mColorPickerRecyclerView;
-    private PalettePickerAdapter mPalettePickerAdapter;
+    @BindView(R.id.safeViewTop)
+    View mSpacingInsetTop;
+    @BindView(R.id.safeViewBottom)
+    View mSpacingInsetBottom;
+
+    private final NowPlayingAdapter mAdapter = new NowPlayingAdapter();
 
     @OnClick(R.id.menu_button)
     void more() {
@@ -101,6 +105,12 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
     SnapHelper snapHelper = new PagerSnapHelper();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAdapter.init(requireContext());
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -109,19 +119,30 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
         mMaxRadius = getResources().getDimension(R.dimen.max_radius_layer);
         mTitle.setSelected(true);
 
-        mAdapter = new NowPlayingAdapter(getActivity());
         //mRecyclerView.setPageTransformer(false, new SliderTransformer());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        ViewCompat.setOnApplyWindowInsetsListener(mSpacingInsetTop, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), 0);
+                v.requestLayout();
+                return ViewCompat.onApplyWindowInsets(v, insets);
+            }
+        });
+
+        ViewCompat.setOnApplyWindowInsetsListener(mSpacingInsetBottom, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                v.setPadding(insets.getSystemWindowInsetLeft(), 0, insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+                v.requestLayout();
+                return ViewCompat.onApplyWindowInsets(v, insets);
+            }
+        });
 
         //mViewPager.setAdapter(mAdapter);
 
         snapHelper.attachToRecyclerView(mRecyclerView);
-
-        mPalettePickerAdapter = new PalettePickerAdapter(this);
-        mColorPickerRecyclerView.setAdapter(mPalettePickerAdapter);
-        mColorPickerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-
 
         //mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
         mRecyclerView.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event));
@@ -316,8 +337,8 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
         if (activity instanceof AppActivity) {
             systemInsetsBottom = ((AppActivity) activity).getCurrentSystemInsets()[3];
         }
-        Log.d(TAG, "activity availibility = "+ (activity != null));
-        Log.d(TAG, "systemInsetsBottom = "+ systemInsetsBottom);
+        Log.d(TAG, "activity availibility = " + (activity != null));
+        Log.d(TAG, "systemInsetsBottom = " + systemInsetsBottom);
         return systemInsetsBottom + (int) (context.getResources().getDimension(R.dimen.bottom_navigation_height) + context.getResources().getDimension(R.dimen.now_laying_height_in_minimize_mode));
     }
 

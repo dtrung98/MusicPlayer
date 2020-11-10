@@ -12,7 +12,7 @@
         android:id="@+id/big_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/minimum_bottom_back_stack_margin"
+        android:layout_marginBottom="@dimen/bottom_back_stack_spacing"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/group"
-        app:constraint_referenced_ids="gradient_line,big_behind,back,title,description,recycler_view,header_gradient,gradient_top_background,play,play_background,preview_button"
+        app:constraint_referenced_ids="gradient_line,big_behind,back,title,description,springBackLayout,header_gradient,gradient_top_background,play,play_background,preview_button"
         />
     <FrameLayout
         android:id="@+id/status_bar_parent"
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         tools:text="Erik, Hungarian pop-rock singer, known from the song Élni kell"
         android:maxLines="3"
-        app:layout_constraintBottom_toTopOf="@id/recycler_view"
+        app:layout_constraintBottom_toTopOf="@id/springBackLayout"
         app:layout_constraintStart_toStartOf="@id/title"
         app:layout_constraintEnd_toEndOf="@id/title"
         android:gravity="center_vertical"
@@ -169,24 +169,31 @@
         app:layout_constraintBottom_toBottomOf="@id/description"
         android:src="@drawable/play_round"
         app:tint="#F5F5F5" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <com.ldt.springback.view.SpringBackLayout
+        android:id="@+id/springBackLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/big_behind"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:listitem="@layout/item_song_bigger"
         tools:layoutManager="LinearLayoutManager"
         android:clipToPadding="false"
-        android:paddingBottom="@dimen/minimum_bottom_back_stack_margin"
+        android:paddingBottom="@dimen/bottom_back_stack_spacing"
+        android:overScrollMode="never"
         />
+    </com.ldt.springback.view.SpringBackLayout>
+
     <View
         android:id="@+id/gradient_line"
         android:layout_width="0dp"
         android:layout_height="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/recycler_view"
+        app:layout_constraintTop_toTopOf="@id/springBackLayout"
         android:background="@drawable/gradient_shadow"
         android:alpha="0"/>
 </androidx.constraintlayout.motion.widget.MotionLayout>

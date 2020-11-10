@@ -30,7 +30,10 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
     private static final String TAG ="NowPlayingAdapter";
     private ArrayList<Song> mData = new ArrayList<>();
     private Context mContext;
-    public NowPlayingAdapter(Context context) {
+    public Context getContext() {
+        return mContext;
+    }
+    public void init(Context context) {
         mContext = context;
     }
 

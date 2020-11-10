@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:fastScrollAutoHide="true"
+            android:clipToPadding="false"
             app:fastScrollAutoHideDelay="1500"
             app:fastScrollPopupBackgroundSize="88dp"
             app:fastScrollPopupBgColor="@color/flatBlue"
@@ -34,6 +35,7 @@
             tools:listitem="@layout/item_artist_child"
             tools:orientation="vertical"
             android:overScrollMode="never"
+            android:paddingBottom="@dimen/bottom_back_stack_spacing"
             />
         <!--/android.support.v4.widget.SwipeRefreshLayout-->
     </com.ldt.springback.view.SpringBackLayout>
