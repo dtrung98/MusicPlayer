@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import android.util.Log;
 import android.view.GestureDetector;
@@ -846,18 +847,19 @@ public class CardLayerController {
                 animateLayerChanged();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator)
+                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(new FastOutSlowInInterpolator()/*Animation.sInterpolator*/)
                             .setUpdateListener(animation -> {
                                 if (item != -1)
                                     mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
                             });
                 } else {
                     ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight));
+                    oa.setInterpolator(new FastOutSlowInInterpolator());
                     oa.addUpdateListener(animation -> {
                         if (item != -1)
                             mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
                     });
-                    oa.setInterpolator(Animation.sInterpolator);
+                    //oa.setInterpolator(Animation.sInterpolator);
                     oa.start();
                 }
             }
