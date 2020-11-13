@@ -33,7 +33,7 @@ public class LoadingScreenDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.loading_layout,container,false);
+        return inflater.inflate(R.layout.dialog_loading,container,false);
     }
 
     @Override

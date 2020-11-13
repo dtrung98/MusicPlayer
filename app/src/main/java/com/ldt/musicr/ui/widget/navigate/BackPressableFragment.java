@@ -18,13 +18,13 @@ import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment.PRESENT_STYLE_DEFAULT;
 
 
-public class NavigateFragment extends Fragment implements BackPressable {
+public class BackPressableFragment extends Fragment implements BackPressable {
     FragmentNavigationController mNavigationController;
 
     @Nullable
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.back_pressable_fragment,container,false);
+        return inflater.inflate(R.layout.screen_back_pressable,container,false);
     }
 
     public Fragment getRootFragment() {
@@ -58,8 +58,8 @@ public class NavigateFragment extends Fragment implements BackPressable {
     }
 
     @NonNull
-    public static NavigateFragment newInstance(@NonNull NavigationFragment rootFragmentInstance) {
-        NavigateFragment f = new NavigateFragment();
+    public static BackPressableFragment newInstance(@NonNull NavigationFragment rootFragmentInstance) {
+        BackPressableFragment f = new BackPressableFragment();
         f.mRootFragment = rootFragmentInstance;
         return f;
     }

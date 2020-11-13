@@ -64,7 +64,7 @@ public class ArtistTrialPager extends NavigationFragment implements ResultCallba
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.genre_child_tab,container,false);
+        return inflater.inflate(R.layout.screen_tab_genre_list,container,false);
     }
 
     @Override

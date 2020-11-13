@@ -24,7 +24,7 @@ public class GenreChildTab extends MusicServiceFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.genre_child_tab,container,false);
+        return inflater.inflate(R.layout.screen_tab_genre_list,container,false);
     }
 
     @BindDimen(R.dimen.bottom_back_stack_spacing)

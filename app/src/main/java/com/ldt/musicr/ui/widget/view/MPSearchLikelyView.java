@@ -7,7 +7,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.ViewCompat;
 
 import com.ldt.musicr.R;
 
@@ -33,6 +32,6 @@ public class MPSearchLikelyView extends ConstraintLayout {
     }
 
     private void init(Context context) {
-        View.inflate(context, R.layout.search_likely_view, this);
+        View.inflate(context, R.layout.compound_search_likely_view, this);
     }
 }

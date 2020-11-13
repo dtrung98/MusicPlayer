@@ -36,7 +36,7 @@ public class PermissionRequiredFragment extends NavigationFragment implements Ap
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
         getMainActivity().setPermissionListener(this);
-        return inflater.inflate(R.layout.grant_permission_screen,container,false);
+        return inflater.inflate(R.layout.screen_grant_permission,container,false);
     }
 
     @Override

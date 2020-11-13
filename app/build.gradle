@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("boolean","HIDE_INCOMPLETE_FEATURES","true");
+        buildConfigField("boolean", "HIDE_INCOMPLETE_FEATURES", "true");
     }
 
     buildTypes {
@@ -33,6 +33,21 @@ android {
     }
     productFlavors {
     }
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    "src/main/res/",
+                    "src/main/res/layouts/cardlayer",
+                    "src/main/res/layouts/screen",
+                    "src/main/res/layouts/partial",
+                    "src/main/res/layouts/optionbottomsheet",
+                    "src/main/res/layouts/sample"
+            ]
+        }
+    }
+
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8

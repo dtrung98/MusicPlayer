@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.ldt.musicr.util.Animation;
+import com.ldt.musicr.util.InterpolatorUtil;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
 

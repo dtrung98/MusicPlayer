@@ -38,7 +38,7 @@ public class PlaylistChildTab extends MusicServiceFragment implements FeaturePla
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.playlist_child_tab, container, false);
+        return inflater.inflate(R.layout.screen_tab_playlist_list, container, false);
     }
 
     @Override

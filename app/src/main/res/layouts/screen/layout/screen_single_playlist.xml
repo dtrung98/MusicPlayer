@@ -190,7 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+            <com.ldt.musicr.ui.widget.view.MPRecyclerView
                 android:id="@+id/playlist_big_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

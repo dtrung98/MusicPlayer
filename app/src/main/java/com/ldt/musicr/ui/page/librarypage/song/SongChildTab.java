@@ -25,9 +25,9 @@ import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.page.MusicServiceFragment;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
+import com.ldt.musicr.util.InterpolatorUtil;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
-import com.ldt.musicr.util.Animation;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
@@ -81,7 +81,7 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
 
     @OnClick(R.id.refresh)
     void refresh() {
-        mRefresh.animate().rotationBy(360).setInterpolator(Animation.getInterpolator(6)).setDuration(650);
+        mRefresh.animate().rotationBy(360).setInterpolator(InterpolatorUtil.getInterpolator(6)).setDuration(650);
         mRefresh.postDelayed(mAdapter::randomize, 300);
     }
 
@@ -89,7 +89,7 @@ public class SongChildTab extends MusicServiceFragment implements SortOrderBotto
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.song_child_tab, container, false);
+        return inflater.inflate(R.layout.screen_songs_tab, container, false);
     }
 
     @Override

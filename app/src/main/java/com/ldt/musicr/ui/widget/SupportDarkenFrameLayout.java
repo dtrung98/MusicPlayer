@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
-import com.ldt.musicr.util.Animation;
+import com.ldt.musicr.util.InterpolatorUtil;
 import com.ldt.musicr.R;
 
 /**
@@ -97,7 +97,7 @@ public class SupportDarkenFrameLayout extends FrameLayout {
         if(va == null) {
             va= ValueAnimator.ofFloat(0,1);
             va.setDuration(300);
-            va.setInterpolator(Animation.getInterpolator(2));
+            va.setInterpolator(InterpolatorUtil.getInterpolator(2));
             va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {

@@ -213,7 +213,7 @@ public class PlaylistPageFragment extends MusicServiceNavigationFragment impleme
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_playlist_page,container,false);
+        return inflater.inflate(R.layout.screen_single_playlist,container,false);
     }
 
     @Override

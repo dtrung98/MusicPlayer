@@ -4,8 +4,8 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        app:constraintSetEnd="@layout/library_tab_end"
-        app:constraintSetStart="@layout/library_tab"
+        app:constraintSetEnd="@layout/screen_tab_library_end"
+        app:constraintSetStart="@layout/screen_tab_library"
         app:duration="350">
 
         <OnSwipe

@@ -20,7 +20,7 @@ public class FolderChildTab extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.folder_child_tab,container,false);
+        return inflater.inflate(R.layout.screen_tab_folder_list,container,false);
     }
 
     @Override

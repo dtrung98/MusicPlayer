@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,7 +47,6 @@ import com.ldt.musicr.util.SortOrder;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,7 +98,7 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.now_playing_controller, container, false);
+        return inflater.inflate(R.layout.screen_now_playing, container, false);
     }
 
     SnapHelper snapHelper = new PagerSnapHelper();
@@ -453,7 +451,7 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
         constraint1.clone(mConstraintRoot);
 
         ConstraintSet constraint2 = new ConstraintSet();
-        constraint2.clone(getContext(),R.layout.now_playing_controller_alt);
+        constraint2.clone(getContext(),R.layout.screen_now_playing_expanded);
 
         mButtonRight.setOnClickListener(new View.OnClickListener() {
             @Override

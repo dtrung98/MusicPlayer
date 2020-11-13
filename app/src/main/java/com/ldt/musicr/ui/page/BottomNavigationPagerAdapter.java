@@ -11,7 +11,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.ui.page.featurepage.FeatureTabFragment;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.settingpage.SettingTabFragment;
-import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
+import com.ldt.musicr.ui.widget.navigate.BackPressableFragment;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public class BottomNavigationPagerAdapter extends FragmentPagerAdapter {
         initData();
     }
 
-    public ArrayList<NavigateFragment> mData = new ArrayList<>();
+    public ArrayList<BackPressableFragment> mData = new ArrayList<>();
 
     public boolean onBackPressed(int position) {
         if(position<mData.size())
@@ -34,9 +34,9 @@ public class BottomNavigationPagerAdapter extends FragmentPagerAdapter {
 
 
     private void initData() {
-        mData.add(NavigateFragment.newInstance(new FeatureTabFragment()));
-        mData.add(NavigateFragment.newInstance(new LibraryTabFragment()));
-        mData.add(NavigateFragment.newInstance(new SettingTabFragment()));
+        mData.add(BackPressableFragment.newInstance(new FeatureTabFragment()));
+        mData.add(BackPressableFragment.newInstance(new LibraryTabFragment()));
+        mData.add(BackPressableFragment.newInstance(new SettingTabFragment()));
     }
 
     // Returns total number of pages

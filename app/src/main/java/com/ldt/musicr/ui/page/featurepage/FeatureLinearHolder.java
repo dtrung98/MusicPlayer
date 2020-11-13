@@ -20,7 +20,7 @@ import com.ldt.musicr.ui.page.BackStackController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.librarypage.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildTab;
-import com.ldt.musicr.util.Animation;
+import com.ldt.musicr.util.InterpolatorUtil;
 
 import java.util.List;
 
@@ -158,7 +158,7 @@ public class FeatureLinearHolder {
 
         @OnClick(R.id.refresh_front)
         void refresh() {
-            mRefreshButton.animate().rotationBy(360).setInterpolator(Animation.getInterpolator(6)).setDuration(650);
+            mRefreshButton.animate().rotationBy(360).setInterpolator(InterpolatorUtil.getInterpolator(6)).setDuration(650);
             mAdapter.initializeSong();
         }
 

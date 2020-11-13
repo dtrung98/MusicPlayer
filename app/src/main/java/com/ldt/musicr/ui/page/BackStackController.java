@@ -33,7 +33,7 @@ import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
-import com.ldt.musicr.ui.widget.navigate.NavigateFragment;
+import com.ldt.musicr.ui.widget.navigate.BackPressableFragment;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
-        return inflater.inflate(R.layout.back_stack_controller, container, false);
+        return inflater.inflate(R.layout.screen_card_layer_back_stack, container, false);
     }
 
 
@@ -213,9 +213,9 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
         if (go)
             mViewPager.setCurrentItem(item);
         Fragment fragment = mNavigationAdapter.getItem(1);
-        if (fragment instanceof NavigateFragment) {
-            ((NavigateFragment) fragment).popToRootFragment();
-            return ((NavigateFragment) fragment).getRootFragment();
+        if (fragment instanceof BackPressableFragment) {
+            ((BackPressableFragment) fragment).popToRootFragment();
+            return ((BackPressableFragment) fragment).getRootFragment();
         }
         return null;
     }

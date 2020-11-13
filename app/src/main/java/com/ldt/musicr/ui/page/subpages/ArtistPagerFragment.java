@@ -141,7 +141,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.artist_pager_primary,container,false);
+        return inflater.inflate(R.layout.screen_single_artist_primary,container,false);
     }
 
     private Unbinder mUnbinder;

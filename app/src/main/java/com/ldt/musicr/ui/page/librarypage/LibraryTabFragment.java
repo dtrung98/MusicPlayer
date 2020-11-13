@@ -7,7 +7,7 @@ import androidx.constraintlayout.motion.widget.MotionLayout;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.SearchView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +58,7 @@ public class LibraryTabFragment extends NavigationFragment {
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.library_tab,container,false);
+        return inflater.inflate(R.layout.screen_tab_library,container,false);
     }
 
     @OnClick(R.id.search_view)

@@ -42,7 +42,7 @@ public class MoreOptionFragment extends MusicServiceNavigationFragment {
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.more_options_layout,container, false);
+        return inflater.inflate(R.layout.screen_setting_advance,container, false);
     }
 
     private Unbinder mUnbinder;

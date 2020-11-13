@@ -66,7 +66,7 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.setting_tab_fragment,container,false);
+        return inflater.inflate(R.layout.screen_setting_tab,container,false);
     }
 
     @Override

@@ -4,8 +4,8 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
-        app:constraintSetStart="@layout/now_playing_controller"
-        app:constraintSetEnd="@layout/now_playing_controller_alt"
+        app:constraintSetStart="@layout/screen_now_playing"
+        app:constraintSetEnd="@layout/screen_now_playing_expanded"
         app:duration="350">
     </Transition>
 </MotionScene>

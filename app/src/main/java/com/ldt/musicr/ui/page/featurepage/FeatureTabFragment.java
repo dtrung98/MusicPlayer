@@ -42,7 +42,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.feature_tab_fragment, container, false);
+        return inflater.inflate(R.layout.screen_feature_tab, container, false);
     }
 
     @Override

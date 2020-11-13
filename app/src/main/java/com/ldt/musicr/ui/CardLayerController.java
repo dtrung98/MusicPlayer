@@ -28,7 +28,7 @@ import android.widget.FrameLayout;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
-import com.ldt.musicr.util.Animation;
+import com.ldt.musicr.util.InterpolatorUtil;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -345,7 +345,7 @@ public class CardLayerController {
             //Log.d(TAG, "updateLayerChanged: deltaLayer["+item+"] = "+deltaTranslateY[item]);
             // Scale và translate những layer phía sau
 
-            TimeInterpolator interpolator = Animation.getInterpolator(7);
+            TimeInterpolator interpolator = InterpolatorUtil.getInterpolator(7);
             int duration = 650;
 
             attr.parent.animate().scaleX(attr.mScaleXY).setDuration(duration).setInterpolator(interpolator);
@@ -805,7 +805,7 @@ public class CardLayerController {
 
         public void animateOnInit() {
             parent.setTranslationY(getMaxPosition());
-            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator);
+            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
             //  parent.animate().translationYBy(-getMaxPositionType()+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-getMaxPositionType() + getRealTranslateY()),0,(int)getMaxPositionType())).setInterpolator(Animation.sInterpolator);
             mCurrentTranslate = minHeight;
         }
@@ -846,7 +846,7 @@ public class CardLayerController {
                 animateLayerChanged();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator)
+                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
                             .setUpdateListener(animation -> {
                                 if (item != -1)
                                     mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
@@ -857,7 +857,7 @@ public class CardLayerController {
                         if (item != -1)
                             mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
                     });
-                    oa.setInterpolator(Animation.sInterpolator);
+                    oa.setInterpolator(InterpolatorUtil.sInterpolator);
                     oa.start();
                 }
             }
@@ -867,7 +867,7 @@ public class CardLayerController {
             if (selfTranslateY == mCurrentTranslate) return;
             mCurrentTranslate = selfTranslateY;
             if (parent != null) {
-                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(Animation.sInterpolator);
+                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
             }
         }
 
