@@ -259,7 +259,7 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
     float mPrevProgress = 0;
 
     @Override
-    public void onLayerPositionChanged(CardLayerController.CardLayerAttribute attr) {
+    public void onLayerHeightChanged(CardLayerController.CardLayerAttribute attr) {
         Log.d(TAG, "onTranslateChanged");
 
         float pc = attr.getRuntimePercent();

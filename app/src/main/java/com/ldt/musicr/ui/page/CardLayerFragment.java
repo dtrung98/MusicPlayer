@@ -57,8 +57,12 @@ public abstract class CardLayerFragment extends Fragment implements CardLayerCon
 
     }
 
+    /**
+     * Call on CardLayer position changed
+     * @param attr the CardLayerAttribute associates with this Cardlayer
+     */
     @Override
-    public void onLayerPositionChanged(CardLayerController.CardLayerAttribute attr) {
+    public void onLayerHeightChanged(CardLayerController.CardLayerAttribute attr) {
 
     }
 

@@ -21,6 +21,9 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -54,6 +57,10 @@ import butterknife.OnClick;
 
 public class NowPlayingLayerFragment extends CardLayerFragment implements MusicServiceEventListener, AudioVisualSeekBar.OnSeekBarChangeListener, PalettePickerAdapter.OnColorChangedListener {
     private static final String TAG = "NowPlayingLayerFragment";
+    public static final int WHAT_CARD_LAYER_HEIGHT_CHANGED = 101;
+    public static final int WHAT_RECYCLER_VIEW_SMOOTH_SCROLL_TO_CURRENT_POSITION = 102;
+    public static final int WHAT_UPDATE_CARD_LAYER_RADIUS = 103;
+    public static final int WHAT_ = 104;
     @BindView(R.id.root)
     CardView mRoot;
     @BindView(R.id.dim_view)
@@ -148,16 +155,18 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
         Log.d(TAG, "onViewCreated");
-        if (getActivity() instanceof MusicServiceActivity)
+        if (getActivity() instanceof MusicServiceActivity) {
             ((AppActivity) getActivity()).addMusicServiceEventListener(this, true);
-        setUp();
+        }
+        new Handler(Looper.getMainLooper()).post(this::setUp);
     }
 
     @Override
     public void onDestroyView() {
 
-        if (getActivity() instanceof MusicServiceActivity)
+        if (getActivity() instanceof MusicServiceActivity) {
             ((AppActivity) getActivity()).removeMusicServiceEventListener(this);
+        }
         super.onDestroyView();
     }
 
@@ -188,7 +197,7 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
     public void onPlayingMetaChanged() {
         Log.d(TAG, "onPlayingMetaChanged");
         updatePlayingSongInfo();
-        updateQueuePosition();
+        sendMessage(WHAT_RECYCLER_VIEW_SMOOTH_SCROLL_TO_CURRENT_POSITION);
     }
 
     @Override
@@ -243,24 +252,16 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
         mAdapter.setData(MusicPlayerRemote.getPlayingQueue());
     }
 
-    private void updateQueuePosition() {
-        try {
-            int pos = MusicPlayerRemote.getPosition();
-            if (pos >= 0)
-                mRecyclerView.smoothScrollToPosition(MusicPlayerRemote.getPosition());
-            //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
-        } catch (Exception ignore) {
+    public void setUp() {
+        if (getView() != null && isAdded() && !isRemoving() && !isDetached()) {
+            updatePlayingSongInfo();
+            updatePlayPauseState();
+            updateQueue();
+            sendMessage(WHAT_RECYCLER_VIEW_SMOOTH_SCROLL_TO_CURRENT_POSITION);
         }
     }
 
-    public void setUp() {
-        updatePlayingSongInfo();
-        updatePlayPauseState();
-        updateQueue();
-        updateQueuePosition();
-    }
-
-    private void setRadius(float value) {
+    private void setCardRadius(float value) {
         if (mRoot != null) {
             float valueTemp;
             if (value > 1) valueTemp = 1;
@@ -272,49 +273,109 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
     @Override
     public void onLayerUpdate(ArrayList<CardLayerController.CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
-
-        if (mRoot == null) return;
-        if (me == 1) {
-            mDimView.setAlpha(0.3f * (attrs.get(actives.get(0)).getRuntimePercent()));
-            //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),true);
-            setRadius(attrs.get(actives.get(0)).getRuntimePercent());
-        } else {
-            //  other, active_i >1
-            // min = 0.3
-            // max = 0.45
-            float min = 0.3f, max = 0.65f;
-            float hieu = max - min;
-            float heSo_sau = (me - 1.0f) / (me - 0.75f); // 1/2, 2/3,3/4, 4/5, 5/6 ...
-            float heSo_truoc = (me - 2.0f) / (me - 0.75f); // 0/1, 1/2, 2/3, ...
-            float darken = min + hieu * heSo_truoc + hieu * (heSo_sau - heSo_truoc) * attrs.get(actives.get(0)).getRuntimePercent();
-            // Log.d(TAG, "darken = " + darken);
-            mDimView.setAlpha(darken);
-            setRadius(1);
+        if (isAdded() && !isRemoving() && !isDetached()) {
+            float translationPercent = attrs.get(actives.get(0)).getRuntimePercent();
+            if (me == 1) {
+                mDimView.setAlpha(0.3f * translationPercent);
+                //  mRoot.setRoundNumber( attrs.get(actives.get(0)).getRuntimePercent(),true);
+                setCardRadius(translationPercent);
+            } else {
+                //  other, active_i >1
+                // min = 0.3
+                // max = 0.45
+                float min = 0.3f, max = 0.65f;
+                float hieu = max - min;
+                float heSo_sau = (me - 1.0f) / (me - 0.75f); // 1/2, 2/3,3/4, 4/5, 5/6 ...
+                float heSo_truoc = (me - 2.0f) / (me - 0.75f); // 0/1, 1/2, 2/3, ...
+                float darken = min + hieu * heSo_truoc + hieu * (heSo_sau - heSo_truoc) * translationPercent;
+                // Log.d(TAG, "darken = " + darken);
+                mDimView.setAlpha(darken);
+                setCardRadius(1);
+            }
         }
         //  checkStatusStyle();
     }
 
     @Override
-    public void onLayerPositionChanged(CardLayerController.CardLayerAttribute attr) {
-        //Log.d(TAG, "onTranslateChanged : pc = "+attr.getRuntimePercent()+", recycler_width = "+mRecyclerView.getWidth());
-        if (isFullscreenLayer())
-            setRadius(0);
-        else setRadius(attr.getRuntimePercent());
+    public void onLayerHeightChanged(CardLayerController.CardLayerAttribute attr) {
+        //sendMessage(WHAT_CARD_LAYER_POSITION_CHANGED);
+        handleLayerHeightChanged();
+    }
 
-        mConstraintRoot.setProgress(attr.getRuntimePercent());
-        // sync time text view
-        if (mConstraintRoot.getProgress() != 0 && !mTimeTextIsSync) {
-            mTimeTextView.setText(timeTextViewTemp);
-            Log.d(TAG, "onTranslateChanged: timeTextView : " + timeTextViewTemp);
+    private final Handler mNowPlayingHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            int what = msg.what;
+            if (isAdded() && !isDetached() && !isRemoving()) {
+                switch (what) {
+                    case WHAT_CARD_LAYER_HEIGHT_CHANGED:
+                        handleLayerHeightChanged();
+                        break;
+                    case WHAT_RECYCLER_VIEW_SMOOTH_SCROLL_TO_CURRENT_POSITION:
+                        handleRecyclerViewScrollToCurrentPosition();
+                        break;
+                    case WHAT_UPDATE_CARD_LAYER_RADIUS:
+                        handleUpdateCardLayerRadius();
+                        break;
+                }
+            }
         }
-        if (mConstraintRoot.getProgress() == 0 || mConstraintRoot.getProgress() == 1)
+    };
+
+    private void handleUpdateCardLayerRadius() {
+        if (isFullscreenLayer()) {
+            setCardRadius(0);
+        } else {
+            setCardRadius(mConstraintRoot.getProgress());
+        }
+    }
+
+    private void handleLayerHeightChanged() {
+        if (isAdded() && !isRemoving() && !isDetached()) {
+            CardLayerController.CardLayerAttribute attribute = NowPlayingLayerFragment.this.getCardLayerController().getMyAttr(NowPlayingLayerFragment.this);
+            if (attribute != null && isAdded() && !isRemoving() && !isDetached()) {
+                float progress = attribute.getRuntimePercent();
+
+                mConstraintRoot.setProgress(progress);
+                // sync time text view
+                if (progress != 0 && !mTimeTextIsSync) {
+                    mTimeTextView.setText(timeTextViewTemp);
+                }
+
+                sendMessage(WHAT_UPDATE_CARD_LAYER_RADIUS);
+                sendMessage(WHAT_RECYCLER_VIEW_SMOOTH_SCROLL_TO_CURRENT_POSITION);
+            }
+        }
+    }
+
+    private void handleRecyclerViewScrollToCurrentPosition() {
+        if (mConstraintRoot.getProgress() == 0 || mConstraintRoot.getProgress() == 1) {
             try {
-                mRecyclerView.scrollToPosition(MusicPlayerRemote.getPosition());
+                int position = MusicPlayerRemote.getPosition();
+                if (position >= 0) {
+                    mRecyclerView.scrollToPosition(position);
+                }
                 //mViewPager.setCurrentItem(MusicPlayerRemote.getPosition());
             } catch (Exception ignore) {
             }
-        //checkStatusStyle();
+        }
     }
+
+    private void postRunnable(Runnable runnable) {
+        mNowPlayingHandler.removeCallbacks(runnable);
+        mNowPlayingHandler.post(runnable);
+    }
+
+    private void sendMessage(int what) {
+        mNowPlayingHandler.removeMessages(what);
+        mNowPlayingHandler.sendEmptyMessage(what);
+    }
+
+    private void sendMessage(Message m) {
+        mNowPlayingHandler.removeMessages(m.what);
+        mNowPlayingHandler.sendMessage(m);
+    }
+
 
     public void checkStatusStyle() {
         if (mConstraintRoot.getProgress() >= 0.9 && mDimView.getAlpha() <= 0.1

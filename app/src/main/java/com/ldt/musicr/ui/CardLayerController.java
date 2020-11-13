@@ -73,7 +73,7 @@ public class CardLayerController {
          */
         void onLayerUpdate(ArrayList<CardLayerAttribute> attrs, ArrayList<Integer> actives, int me);
 
-        void onLayerPositionChanged(CardLayerAttribute attr);
+        void onLayerHeightChanged(CardLayerAttribute attr);
 
         boolean onTouchParentView(boolean handled);
 
@@ -825,7 +825,7 @@ public class CardLayerController {
             setCurrentTranslate(translateY);
             updateTranslateY();
             if (mGestureListener.isLayerAvailable())
-                mCardLayers.get(mGestureListener.item).onLayerPositionChanged(this);
+                mCardLayers.get(mGestureListener.item).onLayerHeightChanged(this);
             updateLayerChanged();
         }
 
@@ -849,13 +849,13 @@ public class CardLayerController {
                     parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
                             .setUpdateListener(animation -> {
                                 if (item != -1)
-                                    mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
+                                    mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
                             });
                 } else {
                     ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight));
                     oa.addUpdateListener(animation -> {
                         if (item != -1)
-                            mCardLayers.get(item).onLayerPositionChanged(CardLayerAttribute.this);
+                            mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
                     });
                     oa.setInterpolator(InterpolatorUtil.sInterpolator);
                     oa.start();

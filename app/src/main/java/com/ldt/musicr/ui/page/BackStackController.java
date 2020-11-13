@@ -150,7 +150,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
     }
 
     @Override
-    public void onLayerPositionChanged(CardLayerController.CardLayerAttribute attr) {
+    public void onLayerHeightChanged(CardLayerController.CardLayerAttribute attr) {
         if (mRoot != null) {
             float pc = (attr.mCurrentTranslate) / attr.getMaxPosition();
             Log.d(TAG, "onTranslateChanged : pc = " + pc);

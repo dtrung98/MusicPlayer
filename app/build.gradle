@@ -3,11 +3,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.ldt.musicr"
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 4
         versionName '1.2.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -124,7 +124,7 @@ dependencies {
     // MK Loader
     implementation 'com.tuyenmonkey:mkloader:1.4.0'
 
-    // AV Loader
+    // AV LoaderNOw
     implementation 'com.wang.avi:library:2.1.3'
 
     // Material Progress View
