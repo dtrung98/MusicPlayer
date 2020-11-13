@@ -151,7 +151,12 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
         //mViewPager.setOnTouchListener((v, event) -> mLayerController.streamOnTouchEvent(mRoot,event));
         mRecyclerView.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event));
-        mVisualSeekBar.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event) && event.getAction() != MotionEvent.ACTION_DOWN);
+        mVisualSeekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return mCardLayerController.dispatchOnTouchEvent(mRoot, event) && event.getAction() != MotionEvent.ACTION_DOWN && event.getAction() != MotionEvent.ACTION_UP;
+            }
+        });
 
         mVisualSeekBar.setOnSeekBarChangeListener(this);
         Log.d(TAG, "onViewCreated");
@@ -629,6 +634,12 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
     @Override
     public void onSeekBarSeeking(int seekingValue) {
+        /*
+        int distance = Math.abs(MusicPlayerRemote.getSongProgressMillis() - seekingValue);
+        if (distance > 2000) {
+            MusicPlayerRemote.seekTo(seekingValue);
+        }
+        */
         setTextTime(seekingValue, MusicPlayerRemote.getSongDurationMillis());
     }
 
