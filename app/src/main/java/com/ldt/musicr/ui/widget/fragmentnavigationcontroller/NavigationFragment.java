@@ -22,7 +22,7 @@ public abstract class NavigationFragment extends Fragment {
     private static final String TAG ="SupportFragment";
     public static int PRESENT_STYLE_DEFAULT = PresentStyle.ACCORDION_LEFT;
 
-    private WeakReference<FragmentNavigationController> weakFragmentNaviagationController = null;
+    private WeakReference<NavigationControllerFragment> weakFragmentNavigationController = null;
     protected boolean animatable = true;
     private FragmentTransitionFrameLayout innerRootLayout = null;
     private View contentView = null;
@@ -49,14 +49,14 @@ public abstract class NavigationFragment extends Fragment {
     }
 
 
-    public FragmentNavigationController getNavigationController() {
-        if(weakFragmentNaviagationController == null)
+    public NavigationControllerFragment getNavigationController() {
+        if(weakFragmentNavigationController == null)
             return null;
-        return weakFragmentNaviagationController.get();
+        return weakFragmentNavigationController.get();
     }
 
-    protected void setNavigationController(FragmentNavigationController fragmentNavigationController) {
-        weakFragmentNaviagationController = new WeakReference<>(fragmentNavigationController);
+    protected void setNavigationController(NavigationControllerFragment navigationControllerFragment) {
+        weakFragmentNavigationController = new WeakReference<>(navigationControllerFragment);
     }
 
     public AppActivity getMainActivity() {
@@ -125,7 +125,7 @@ public abstract class NavigationFragment extends Fragment {
             return null;
         }
 
-        FragmentNavigationController nav =  getNavigationController();
+        NavigationControllerFragment nav =  getNavigationController();
         if(nav == null) {
             return null; //no animatable
         }

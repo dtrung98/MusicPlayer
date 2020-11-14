@@ -9,11 +9,9 @@ import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.FragmentNavigationController;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationControllerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
-
-import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment.PRESENT_STYLE_DEFAULT;
 
 /**
  * Controller này tự động loại bỏ giao diện màn hình chính và hiển thị các màn hình (PermissionRequire, NoSongInLibrary) khi cần
@@ -21,9 +19,9 @@ import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFr
 public class IntroController {
     private static final String TAG = "IntroController";
 
-    FragmentNavigationController mNavigationController;
+    NavigationControllerFragment mNavigationController;
 
-    public FragmentNavigationController getNavigationController() {
+    public NavigationControllerFragment getNavigationController() {
         return mNavigationController;
     }
 
@@ -56,7 +54,7 @@ public class IntroController {
 
     private void initBackStack(AppCompatActivity activity, Bundle savedInstanceState) {
         FragmentManager fm = activity.getSupportFragmentManager();
-        mNavigationController = FragmentNavigationController.navigationController(fm, R.id.back_wall_container);
+        mNavigationController = NavigationControllerFragment.navigationController(fm, R.id.back_wall_container);
         mNavigationController.setAbleToPopRoot(true);
         mNavigationController.setPresentStyle(PresentStyle.FADE);
         mNavigationController.setDuration(250);

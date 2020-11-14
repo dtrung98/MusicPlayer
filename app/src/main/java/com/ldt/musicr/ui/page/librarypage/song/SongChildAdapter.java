@@ -103,7 +103,6 @@ public class SongChildAdapter extends AbsSongAdapter
     public void onOrderChanged(int newType, String name) {
         if(mSortOrderListener!=null) {
             mSortOrderListener.onOrderChanged(newType, name);
-            notifyItemChanged(0);
         }
     }
     private SortOrderBottomSheet.SortOrderChangedListener mSortOrderListener;

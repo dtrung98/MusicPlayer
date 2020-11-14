@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#99333333">
+    <com.ldt.springback.view.SpringBackLayout
+        android:id="@+id/springBackLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.ldt.musicr.ui.widget.view.MPRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                android:paddingBottom="@dimen/bottom_back_stack_spacing"
+                app:fastScrollAutoHide="true"
+                android:clipToPadding="false"
+                app:fastScrollAutoHideDelay="1500"
+                app:fastScrollPopupBackgroundSize="88dp"
+                app:fastScrollPopupBgColor="@color/flatOrange"
+                app:fastScrollPopupPosition="adjacent"
+                app:fastScrollPopupTextColor="@android:color/primary_text_dark"
+                app:fastScrollPopupTextSize="46sp"
+                app:fastScrollThumbColor="@color/flatOrange"
+                tools:listitem="@layout/item_song_normal" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.ldt.springback.view.SpringBackLayout>
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/ripple_oval"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingTop="28dp"
+        android:paddingBottom="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back_button"
+        app:tint="@color/FlatWhite" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,7 +30,7 @@ import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.page.subpages.PlaylistPageFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 
 import es.dmoral.toasty.Toasty;
 
@@ -114,7 +114,7 @@ public class NavigationUtil {
 
             LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
-                fragment.getNavigationController().presentFragment(PlaylistPageFragment.newInstance(activity,playlist,null));
+                fragment.getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(activity,playlist,null));
             navigateToBackStackController(appActivity);
         }
     }

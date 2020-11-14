@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
-import com.ldt.musicr.ui.page.subpages.PlaylistPageFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
@@ -88,7 +88,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        NavigationFragment sf = PlaylistPageFragment.newInstance(getContext(), playlist, bitmap);
+        NavigationFragment sf = SinglePlaylistFragment.newInstance(getContext(), playlist, bitmap);
         getNavigationController().presentFragment(sf);
     }
 

@@ -98,7 +98,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
 
     // RecyclerView
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
 
     // Palette
     implementation 'androidx.palette:palette:1.0.0'
@@ -206,6 +206,11 @@ dependencies {
 
     // Leak Canary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
+
+    // Lifecycle
+    implementation "android.arch.lifecycle:extensions:2.2.0"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+
 }
 
 apply plugin: 'kotlin-android-extensions'

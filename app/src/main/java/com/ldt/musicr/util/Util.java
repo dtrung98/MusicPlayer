@@ -39,8 +39,17 @@ import android.view.inputmethod.InputMethodManager;
 import com.ldt.musicr.R;
 
 import java.io.File;
+import java.util.Objects;
 
 public class Util {
+
+    public static boolean equals(Object a, Object b) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            return Objects.equals(a, b);
+        } else {
+            return (a == b) || (a != null && a.equals(b));
+        }
+    }
 
     public static final String MUSIC_ONLY_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + "=1"
             + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''";

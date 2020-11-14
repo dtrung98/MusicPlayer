@@ -17,7 +17,9 @@ public abstract class AbsDataAdapter<VH extends AbsBindAbleHolder, I> extends Re
     public final void setData(List<I> data) {
         mData.clear();
 
-        if(data!=null) mData.addAll(data);
+        if (data != null) {
+            mData.addAll(data);
+        }
 
         onDataSet();
         notifyDataSetChanged();
@@ -39,17 +41,17 @@ public abstract class AbsDataAdapter<VH extends AbsBindAbleHolder, I> extends Re
     }
 
     public void addDataItem(int i, I item) {
-        if(item!=null) {
-            int pos = (i<0) ? 0 : (i>=mData.size()) ? mData.size() : i;
-            mData.add(pos,item);
+        if (item != null) {
+            int pos = (i < 0) ? 0 : (i >= mData.size()) ? mData.size() : i;
+            mData.add(pos, item);
             notifyItemChanged(pos);
         }
     }
 
     public void addItem(I item) {
-        if(item!=null) {
+        if (item != null) {
             mData.add(item);
-            notifyItemChanged(mData.size()-1);
+            notifyItemChanged(mData.size() - 1);
         }
     }
 

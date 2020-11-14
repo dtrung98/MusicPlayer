@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.page.MusicServiceFragment;
-import com.ldt.musicr.ui.page.subpages.PlaylistPageFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.page.featurepage.FeaturePlaylistAdapter;
@@ -80,7 +80,7 @@ public class PlaylistChildTab extends MusicServiceFragment implements FeaturePla
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        NavigationFragment sf = PlaylistPageFragment.newInstance(getContext(), playlist, bitmap);
+        NavigationFragment sf = SinglePlaylistFragment.newInstance(getContext(), playlist, bitmap);
         Fragment parentFragment = getParentFragment();
         if (parentFragment instanceof NavigationFragment)
             ((NavigationFragment) parentFragment).getNavigationController().presentFragment(sf);

@@ -12,14 +12,14 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.FragmentNavigationController;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationControllerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
 import static com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment.PRESENT_STYLE_DEFAULT;
 
 
 public class BackPressableFragment extends Fragment implements BackPressable {
-    FragmentNavigationController mNavigationController;
+    NavigationControllerFragment mNavigationController;
 
     @Nullable
     @Override
@@ -67,7 +67,7 @@ public class BackPressableFragment extends Fragment implements BackPressable {
     private void initBackStack(Bundle savedInstanceState) {
 
         FragmentManager fm = getChildFragmentManager();
-        mNavigationController = FragmentNavigationController.navigationController(fm, R.id.container);
+        mNavigationController = NavigationControllerFragment.navigationController(fm, R.id.container);
         mNavigationController.setPresentStyle(PRESENT_STYLE_DEFAULT);
         mNavigationController.setDuration(250);
         mNavigationController.setInterpolator(new AccelerateDecelerateInterpolator());

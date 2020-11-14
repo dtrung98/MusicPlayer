@@ -18,7 +18,7 @@ import java.util.Stack;
 /**
  * Created by burt on 2016. 5. 24..
  */
-public class FragmentNavigationController extends NavigationFragment {
+public class NavigationControllerFragment extends NavigationFragment {
 
     private FragmentManager fragmentManager = null;
     private Stack<NavigationFragment> fragmentStack = new Stack<>();
@@ -28,11 +28,11 @@ public class FragmentNavigationController extends NavigationFragment {
     private TimeInterpolator interpolator = new LinearInterpolator();
     private long duration = 500;
 
-    public static FragmentNavigationController navigationController(@NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
-        return new FragmentNavigationController(fragmentManager, containerViewId);
+    public static NavigationControllerFragment navigationController(@NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
+        return new NavigationControllerFragment(fragmentManager, containerViewId);
     }
 
-    private FragmentNavigationController(@NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
+    private NavigationControllerFragment(@NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
         setRetainInstance(true);
         this.containerViewId = containerViewId;
         this.fragmentManager = fragmentManager;
