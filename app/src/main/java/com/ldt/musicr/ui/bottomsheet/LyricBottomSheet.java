@@ -30,6 +30,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.base.FloatingViewFragment;
 import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
@@ -50,7 +51,7 @@ import butterknife.OnClick;
 
 import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
-public class LyricBottomSheet extends BottomSheetDialogFragment  implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
+public class LyricBottomSheet extends FloatingViewFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";
     private static final String SONG_KEY = "song";
     private static final String SHOULD_AUTO_UPDATE_KEY = "should_auto_update";
@@ -117,7 +118,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.TransparentBottomSheetDialogTheme);
+        //setStyle(BottomSheetDialogFragment.STYLE_NORMAL, R.style.TransparentBottomSheetDialogTheme);
     }
 
     @Nullable
@@ -133,7 +134,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
         mAlignView.getLayoutParams ().height = (Tool.getScreenSize(getContext())[1]);
         mAlignView.requestLayout();
 
-        view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+      /*  view.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
             BottomSheetDialog dialog = (BottomSheetDialog) getDialog();
 
             Window window = dialog.getWindow();
@@ -158,7 +159,7 @@ public class LyricBottomSheet extends BottomSheetDialogFragment  implements Musi
 
                 }
             });
-        });
+        });*/
 
         // onViewCreated();
         Bundle bundle = getArguments();

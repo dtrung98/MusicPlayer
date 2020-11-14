@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.CountDownTimer;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.ui.base.FloatingViewFragment;
 import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.InterpolatorUtil;
@@ -215,6 +217,21 @@ public class CardLayerController {
             ObjectAnimator.ofObject(mLayerContainer, "backgroundColor", new ArgbEvaluator(), 0, 0x11000000).setDuration(350).start();
         }
         assign(4);
+
+        if (activity != null) {
+            activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+                @Override
+                public void handleOnBackPressed() {
+                    boolean backPressed = onBackPressed();
+                    if (!backPressed) {
+                        setEnabled(false);
+                        if (activity != null) {
+                            activity.getOnBackPressedDispatcher().onBackPressed();
+                        }
+                    }
+                }
+            });
+        }
     }
 
 

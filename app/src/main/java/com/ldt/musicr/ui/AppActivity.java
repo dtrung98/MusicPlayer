@@ -256,12 +256,6 @@ public class AppActivity extends MusicServiceActivity {
 
     @Override
     public void onBackPressed() {
-        if (mCardLayerController != null && mCardLayerController.onBackPressed()) {
-            /* does layer controller consume back pressed event */
-            return;
-        }
-
-        /* other wise */
         super.onBackPressed();
     }
 
