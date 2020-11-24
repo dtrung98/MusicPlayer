@@ -278,22 +278,15 @@ public class AppActivity extends MusicServiceActivity {
 
     private void handlePlaybackIntent(@Nullable Intent intent) {
         if (intent == null) {
-            Log.d(TAG, "handlePlaybackIntent : null intent");
             return;
         }
 
         Uri uri = intent.getData();
         String mimeType = intent.getType();
+        if (mimeType == null) {
+            mimeType = "";
+        }
         boolean handled = false;
-
-        // log
-        if (uri != null)
-            Log.d(TAG, "handlePlaybackIntent: uri_path = " + uri.getPath());
-        else
-            Log.d(TAG, "handlePlaybackIntent: uri_path = null");
-        Log.d(TAG, "handlePlaybackIntent: mimeType = " + mimeType);
-
-        Log.d(TAG, "handlePlaybackIntent: action = " + intent.getAction());
 
         if (intent.getAction() != null && intent.getAction().equals(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
             Log.d(TAG, "handlePlaybackIntent: type media play from search");
@@ -321,10 +314,9 @@ public class AppActivity extends MusicServiceActivity {
             Log.d(TAG, "handlePlaybackIntent: unhandled: " + intent.getAction());
         }
 
-        //NavigationUtil.navigateToNowPlayingController(this);
-
-        if (handled)
+        if (handled) {
             setIntent(new Intent());
+        }
     }
 
     public void popUpPlaylistTab() {

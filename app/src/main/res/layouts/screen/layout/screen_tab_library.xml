@@ -91,6 +91,7 @@
         app:tabGravity="fill"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
         app:tabIndicatorColor="#44444444"
+        android:background="@android:color/transparent"
         app:tabSelectedTextColor="@color/FlatWhite"
         android:layout_marginTop="5dp"
         app:tabMode="scrollable"

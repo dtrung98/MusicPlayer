@@ -178,7 +178,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
     }
 
     @Override
-    public String getLayerTag() {
+    public String getCardLayerTag() {
         return TAG;
     }
 

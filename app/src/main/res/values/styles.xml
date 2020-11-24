@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowBackground">@color/SplashColor</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
@@ -8,7 +8,7 @@
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
     </style>
-    <style name="AppThemeNoWallpaper" parent="Theme.AppCompat.NoActionBar">
+    <style name="AppThemeNoWallpaper" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
@@ -16,7 +16,7 @@
         <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
         <item name="colorControlHighlight">#66000000</item>
     </style>
-    <style name="SplashThemeV2" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashThemeV2" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="colorPrimaryDark">@color/FlatWhite</item>
         <item name="colorPrimary">@color/FlatWhite</item>
@@ -33,62 +33,15 @@
         <item name="android:contentDescription">@string/accessibility_overflow</item>
     </style>
 
-    <style name="FlatRedTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/flatRed</item>
-        <item name="colorPrimaryDark">@color/flatRed</item>
-        <item name="colorAccent">@color/flatRed</item>
-    </style>
-
-    <style name="Flat_OrangeTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/flatOrange</item>
-        <item name="colorPrimaryDark">@color/flatOrange</item>
-        <item name="colorAccent">@color/flatOrange</item>
-    </style>
-
-    <style name="Flat_YellowTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatYellow</item>
-        <item name="colorPrimaryDark">@color/FlatYellow</item>
-        <item name="colorAccent">@color/FlatYellow</item>
-    </style>
-
-    <style name="Flat_GreenTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatGreen</item>
-        <item name="colorPrimaryDark">@color/FlatGreen</item>
-        <item name="colorAccent">@color/FlatGreen</item>
-    </style>
-
-    <style name="Flat_TealBlueTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatTealBlue</item>
-        <item name="colorPrimaryDark">@color/FlatTealBlue</item>
-        <item name="colorAccent">@color/FlatTealBlue</item>
-    </style>
-
-    <style name="Flat_BlueTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/flatBlue</item>
-        <item name="colorPrimaryDark">@color/flatBlue</item>
-        <item name="colorAccent">@color/flatBlue</item>
-    </style>
-
-    <style name="Flat_PurpleTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/flatPurple</item>
-        <item name="colorPrimaryDark">@color/flatPurple</item>
-        <item name="colorAccent">@color/flatPurple</item>
-    </style>
-
-    <style name="Flat_PinkTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/FlatPink</item>
-        <item name="colorPrimaryDark">@color/FlatPink</item>
-        <item name="colorAccent">@color/FlatPink</item>
-    </style>
     <!-- Base application theme. -->
-    <style name="SplashThemeX" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="SplashThemeX" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <!-- Splash Screen theme. -->
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_background</item>
         <!--item name="android:windowLightStatusBar" tools:targetApi="m">true</item-->
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
@@ -172,5 +125,18 @@
         <item name="android:backgroundDimAmount">0.65</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
 
+    </style>
+
+    <style name="CardLayerStyle" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+    </style>
+
+
+    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">18dp</item>
+        <item name="cornerSizeTopLeft">18dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 </resources>

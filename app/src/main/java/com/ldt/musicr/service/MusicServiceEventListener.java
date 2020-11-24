@@ -1,24 +1,21 @@
 package com.ldt.musicr.service;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public interface MusicServiceEventListener {
-    void onServiceConnected();
+    default void onServiceConnected() {}
 
-    void onServiceDisconnected();
+    default void onServiceDisconnected() {}
 
-    void onQueueChanged();
+    default void onQueueChanged() {}
 
-    void onPlayingMetaChanged();
+    default void onPlayingMetaChanged() {}
 
-    void onPlayStateChanged();
+    default void onPlayStateChanged() {}
 
-    void onRepeatModeChanged();
+    default void onRepeatModeChanged() {}
 
-    void onShuffleModeChanged();
+    default void onShuffleModeChanged() {}
 
-    void onMediaStoreChanged();
+    default void onMediaStoreChanged() {}
 
-    void onPaletteChanged();
+    default void onPaletteChanged() {}
 }

@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/ripple_effect"
         android:clickable="true"
+        android:focusable="true"
         android:id="@+id/back_top_header"/>
     <TextView
         android:tag="sticky|-hastransparancy"

@@ -295,16 +295,6 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
     }
 
     @Override
-    public void onServiceDisconnected() {
-
-    }
-
-    @Override
-    public void onQueueChanged() {
-
-    }
-
-    @Override
     public void onPlayingMetaChanged() {
         if(mShouldAutoUpdate) autoUpdateLyric();
     }
@@ -316,26 +306,6 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
     @Override
     public void onPlayStateChanged() {
         updateMenuButton();
-    }
-
-    @Override
-    public void onRepeatModeChanged() {
-
-    }
-
-    @Override
-    public void onShuffleModeChanged() {
-
-    }
-
-    @Override
-    public void onMediaStoreChanged() {
-        Log.d(TAG, "onMediaStoreChanged");
-    }
-
-    @Override
-    public void onPaletteChanged() {
-
     }
 
     @Override

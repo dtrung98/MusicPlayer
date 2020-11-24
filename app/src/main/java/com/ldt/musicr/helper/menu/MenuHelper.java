@@ -15,11 +15,11 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.AppActivity;
-import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeletePlaylistDialog;
 import com.ldt.musicr.ui.dialog.RenamePlaylistDialog;
 import com.ldt.musicr.ui.widget.WeakContextAsyncTask;
+import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.PlaylistsUtil;
 
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class MenuHelper {
     public static boolean handleMenuClick(@NonNull AppCompatActivity activity, @NonNull Playlist playlist, int string_res_option) {
         switch (string_res_option) {
             case R.string.play_next:
-                MusicPlayerRemote.playNext(new ArrayList<>(SinglePlaylistFragment.getPlaylistWithListId(activity, playlist,"")));
+                MusicPlayerRemote.playNext(new ArrayList<>(MusicUtil.getPlaylistSongList(activity, playlist,"")));
                 return true;
             case R.string.play_preview:
                 if(activity instanceof AppActivity) {
@@ -105,7 +105,7 @@ public class MenuHelper {
                             preview.cancelPreview();
                         else {
 
-                            ArrayList<Song> list = new ArrayList<>(SinglePlaylistFragment.getPlaylistWithListId(activity, playlist,""));
+                            ArrayList<Song> list = new ArrayList<>(MusicUtil.getPlaylistSongList(activity, playlist,""));
                             Collections.shuffle(list);
                             preview.previewSongs(list);
                         }
@@ -113,10 +113,10 @@ public class MenuHelper {
                 }
                 return true;
             case R.string.add_to_queue:
-                MusicPlayerRemote.enqueue(new ArrayList<>(SinglePlaylistFragment.getPlaylistWithListId(activity, playlist,"")));
+                MusicPlayerRemote.enqueue(new ArrayList<>(MusicUtil.getPlaylistSongList(activity, playlist,"")));
                 return true;
             case R.string.add_playlist_to_playlist:
-                AddToPlaylistDialog.create(new ArrayList<>(SinglePlaylistFragment.getPlaylistWithListId(activity, playlist,""))).show(activity.getSupportFragmentManager(), "ADD_PLAYLIST");
+                AddToPlaylistDialog.create(new ArrayList<>(MusicUtil.getPlaylistSongList(activity, playlist,""))).show(activity.getSupportFragmentManager(), "ADD_PLAYLIST");
                 return true;
             case R.string.rename:
                 RenamePlaylistDialog.create(playlist.id).show(activity.getSupportFragmentManager(), "RENAME_PLAYLIST");

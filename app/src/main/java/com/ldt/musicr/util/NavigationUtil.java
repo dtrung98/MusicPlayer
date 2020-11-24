@@ -114,7 +114,7 @@ public class NavigationUtil {
 
             LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
-                fragment.getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(activity,playlist,null));
+                fragment.getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(playlist,null));
             navigateToBackStackController(appActivity);
         }
     }

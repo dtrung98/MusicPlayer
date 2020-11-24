@@ -80,7 +80,7 @@ public class PlaylistChildTab extends MusicServiceFragment implements FeaturePla
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        NavigationFragment sf = SinglePlaylistFragment.newInstance(getContext(), playlist, bitmap);
+        NavigationFragment sf = SinglePlaylistFragment.newInstance(playlist, bitmap);
         Fragment parentFragment = getParentFragment();
         if (parentFragment instanceof NavigationFragment)
             ((NavigationFragment) parentFragment).getNavigationController().presentFragment(sf);

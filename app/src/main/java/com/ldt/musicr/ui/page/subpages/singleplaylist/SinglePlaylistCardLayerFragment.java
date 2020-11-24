@@ -3,49 +3,45 @@ package com.ldt.musicr.ui.page.subpages.singleplaylist;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import androidx.core.view.OnApplyWindowInsetsListener;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.ConcatAdapter;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ConcatAdapter;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.ldt.musicr.App;
+import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.helper.EventListener;
 import com.ldt.musicr.helper.Reliable;
 import com.ldt.musicr.helper.ReliableEvent;
 import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.loader.medialoader.LastAddedLoader;
-
-import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
-import com.ldt.musicr.ui.base.MPViewModel;
-import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
-import com.ldt.musicr.ui.page.librarypage.song.SongChildAdapter;
-import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
-import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
-import com.ldt.musicr.R;
 import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
-
+import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.model.Song;
-import com.ldt.musicr.util.Util;
+import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.base.MPViewModel;
+import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
+import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
+import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
+import com.ldt.musicr.ui.page.librarypage.song.SongChildAdapter;
+import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,14 +51,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class SinglePlaylistFragment extends MusicServiceNavigationFragment implements SortOrderBottomSheet.SortOrderChangedListener, EventListener<SinglePlaylistViewModel.State> {
+public class SinglePlaylistCardLayerFragment extends CardLayerFragment implements MusicServiceEventListener, SortOrderBottomSheet.SortOrderChangedListener, EventListener<SinglePlaylistViewModel.State> {
     private static final String TAG = "PlaylistPagerFragment";
     public static final String PLAYLIST = "playlist";
-
-    @Override
-    public int getPresentTransition() {
-        return PresentStyle.ACCORDION_LEFT;
-    }
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -120,7 +111,6 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
     public void onPaletteChanged() {
         //setTheme();
         mAdapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED);
-        super.onPaletteChanged();
     }
 
     @Override
@@ -145,8 +135,8 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
 
     Bitmap mPreviewBitmap;
 
-    public static SinglePlaylistFragment newInstance(Playlist playlist, @Nullable Bitmap previewBitmap) {
-        SinglePlaylistFragment fragment = new SinglePlaylistFragment();
+    public static SinglePlaylistCardLayerFragment newInstance(Playlist playlist, @Nullable Bitmap previewBitmap) {
+        SinglePlaylistCardLayerFragment fragment = new SinglePlaylistCardLayerFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(PLAYLIST, playlist);
         fragment.setArguments(bundle);
@@ -179,8 +169,8 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
 
     @Nullable
     @Override
-    protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.screen_single_playlist_2, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container) {
+        return inflater.inflate(R.layout.card_layer_single_playlist, container, false);
     }
 
     private ConcatAdapter mConcatAdapter;
@@ -216,7 +206,7 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
 
     @OnClick(R.id.back)
     void back() {
-        getNavigationController().dismissFragment();
+        getCardLayerController().getMyAttr(this).animateToMin();
     }
 
     @Override
@@ -232,7 +222,7 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
                 }
                 if (mRecyclerView != null) {
                     mRecyclerView.setPadding(insets.getSystemWindowInsetLeft(),
-                            insets.getSystemWindowInsetTop(),
+                            0,
                             insets.getSystemWindowInsetRight(),
                             (int) (insets.getSystemWindowInsetBottom() + v.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
                 }
@@ -321,5 +311,15 @@ public class SinglePlaylistFragment extends MusicServiceNavigationFragment imple
                 break;
         }
         return true;
+    }
+
+    @Override
+    public int getLayerMinHeight(Context context, int maxHeight) {
+        return 0;
+    }
+
+    @Override
+    public String getCardLayerTag() {
+        return TAG;
     }
 }

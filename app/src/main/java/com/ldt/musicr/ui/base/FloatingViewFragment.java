@@ -19,11 +19,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 /**
- * This class is written to replace the available DialogFragment.
- * It works as simple as DialogFragment, but instead of creating a separate window-inside-dialog like DialogFragment,
- * this FloatingViewFragment adds its layout to android.R.id.content root view
- * while keeping the parent-child relationship of the created owner (fragment or activity).
- * By using this fragment, you have normal-like fragment but it floats over the entire screen.
+ * Show a fragment floating over the screen.
+ * <br/>This class is expected to replace the existing Dialog Fragment.
+ * <br/>It works as same as DialogFragment, but instead of creating a dialog to wrap the layout,
+ * Floating View Fragment attaches/adds its layout to android.R.id.content root view so
+ * no need dialog anymore.
+ * <br/>Dismiss the owner fragment will dismiss its child FloatingViewFragment automatically.
+ * <br/> Back pressed event is handled automatically by default, but you have an option to disable it
  */
 public class FloatingViewFragment extends Fragment {
     private static final String SAVED_CANCELABLE = "android:cancelable";

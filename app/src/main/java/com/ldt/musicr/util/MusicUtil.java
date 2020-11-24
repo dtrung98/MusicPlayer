@@ -19,8 +19,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
+import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
+import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.model.Album;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
@@ -412,5 +415,19 @@ public class MusicUtil {
         }
 
         return lyrics;
+    }
+
+    public static List<Song> getPlaylistSongList(@NonNull Context context, Playlist list, String sortOrder) {
+        Log.d(TAG, "getPlaylistWithListId: " + list.id);
+        if (list.name.equals(context.getString(R.string.playlist_last_added)))
+            return LastAddedLoader.getLastAddedSongs(context);
+        else if (list.name.equals(context.getString(R.string.playlist_recently_played))) {
+            return TopAndRecentlyPlayedTracksLoader.getRecentlyPlayedTracks(context);
+        } else if (list.name.equals(context.getString(R.string.playlist_top_tracks))) {
+            return TopAndRecentlyPlayedTracksLoader.getTopTracks(context);
+        } else {
+            List<Song> songlist = new ArrayList<>(PlaylistSongLoader.getPlaylistSongList(context, list.id));
+            return songlist;
+        }
     }
 }

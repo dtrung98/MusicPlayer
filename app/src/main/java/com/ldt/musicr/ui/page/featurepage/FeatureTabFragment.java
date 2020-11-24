@@ -15,15 +15,19 @@ import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
+import com.ldt.musicr.ui.AppActivity;
+import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
-import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistCardLayerFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class FeatureTabFragment extends MusicServiceNavigationFragment implements FeaturePlaylistAdapter.PlaylistClickListener, MusicServiceEventListener {
     private static final String TAG = "FeatureTabFragment";
@@ -36,6 +40,14 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @BindView(R.id.scroll_view)
     NestedScrollView mNestedScrollView;
+
+    @OnClick(R.id.search)
+    void showSearchScreen() {
+        if (getActivity() instanceof AppActivity) {
+            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(SinglePlaylistCardLayerFragment.newInstance(PlaylistLoader.getAllPlaylistsWithAuto(requireContext()).get(0), null), 0);
+            attribute.animateToMax();
+        }
+    }
 
     FeatureLinearHolder mFeatureLinearHolder;
 
@@ -88,8 +100,17 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        NavigationFragment sf = SinglePlaylistFragment.newInstance(getContext(), playlist, bitmap);
-        getNavigationController().presentFragment(sf);
+        boolean showInCardLayer = false;
+
+        if(!showInCardLayer) {
+            getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(playlist, bitmap));
+        } else if (getActivity() instanceof AppActivity) {
+            CardLayerFragment sf = SinglePlaylistCardLayerFragment.newInstance(playlist, bitmap);
+
+            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(sf, 0);
+            attribute.expandImmediately();
+            attribute.animateToMax();
+        }
     }
 
     @Override

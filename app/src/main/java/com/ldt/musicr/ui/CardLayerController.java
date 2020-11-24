@@ -27,7 +27,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.base.FloatingViewFragment;
 import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.InterpolatorUtil;
@@ -73,15 +72,18 @@ public class CardLayerController {
          * <br>Note: Không cài đặt sự kiện chạm cho rootView
          * <br> Thay vào đó sự kiện chạm sẽ được truyền tới hàm onTouchParentView
          */
-        void onLayerUpdate(ArrayList<CardLayerAttribute> attrs, ArrayList<Integer> actives, int me);
+        default void onLayerUpdate(ArrayList<CardLayerAttribute> attrs, ArrayList<Integer> actives, int me) {
+        }
 
-        void onLayerHeightChanged(CardLayerAttribute attr);
+        default void onLayerHeightChanged(CardLayerAttribute attr) {
+        }
 
         boolean onTouchParentView(boolean handled);
 
         View getLayerRootView(Activity activity, ViewGroup viewGroup, int maxPosition);
 
-        void onAddedToLayerController(CardLayerAttribute attr);
+        default void onAddedToLayerController(CardLayerAttribute attr) {
+        }
 
         /**
          * Cài đặt khoảng cách giữa đỉnh layer và viền trên
@@ -91,7 +93,9 @@ public class CardLayerController {
          */
         boolean isFullscreenLayer();
 
-        boolean onBackPressed();
+        default boolean onBackPressed() {
+            return false;
+        }
 
         /**
          * The minimum value of a card layer
@@ -105,9 +109,11 @@ public class CardLayerController {
          *
          * @return String tag
          */
-        String getLayerTag();
+        String getCardLayerTag();
 
-        boolean onGestureDetected(int gesture);
+        default boolean onGestureDetected(int gesture) {
+            return false;
+        }
     }
 
     public AppCompatActivity getActivity() {
@@ -196,7 +202,7 @@ public class CardLayerController {
         mCardLayers.clear();
 
         for (int i = 0; i < fragments.length; i++) {
-            addTabLayerFragment(fragments[i], 0);
+            addCardLayerFragment(fragments[i], 0);
             assign("add base layer " + i);
         }
 
@@ -207,7 +213,7 @@ public class CardLayerController {
         mBottomNavigationParent.animate().translationYBy(-value);
         */
         for (int i = 0; i < mCardLayerAttrs.size(); i++) {
-            mCardLayerAttrs.get(i).initImmediately();
+            mCardLayerAttrs.get(i).expandImmediately();
         }
 
         assign(3);
@@ -827,7 +833,7 @@ public class CardLayerController {
             mCurrentTranslate = minHeight;
         }
 
-        public void initImmediately() {
+        public void expandImmediately() {
             parent.setTranslationY(getRealTranslateY());
         }
 
@@ -1076,7 +1082,7 @@ public class CardLayerController {
         }
 
         public CardLayerAttribute set(CardLayer l) {
-            this.setTag(l.getLayerTag())
+            this.setTag(l.getCardLayerTag())
                     .setMinHeight(l.getLayerMinHeight(activity, ScreenSize[1]))
                     .setMaxPosition(l.isFullscreenLayer())
                     .setCurrentTranslate(this.getMinHeight());
@@ -1134,22 +1140,32 @@ public class CardLayerController {
 
     }
 
-    public void addTabLayerFragment(CardLayerFragment tabLayer, int pos) {
-        int p = Math.min(pos, mCardLayerCount);
-        if (mCardLayers.size() > pos) {
-            mCardLayers.add(pos, tabLayer);
-            mCardLayerAttrs.add(pos, new CardLayerAttribute());
+    /**
+     * add fragment to the last of stack
+     *
+     * @param cardLayerFragment
+     */
+    public CardLayerAttribute addCardLayerFragment(CardLayerFragment cardLayerFragment) {
+        return addCardLayerFragment(cardLayerFragment, mCardLayerCount);
+    }
+
+    public CardLayerAttribute addCardLayerFragment(CardLayerFragment cardLayerFragment, int index) {
+        int p = Math.min(index, mCardLayerCount);
+        CardLayerAttribute attribute = new CardLayerAttribute();
+        if (mCardLayers.size() > index) {
+            mCardLayers.add(index, cardLayerFragment);
+            mCardLayerAttrs.add(index, attribute);
         } else {
-            mCardLayers.add(tabLayer);
-            mCardLayerAttrs.add(new CardLayerAttribute());
+            mCardLayers.add(cardLayerFragment);
+            mCardLayerAttrs.add(attribute);
         }
 
         mCardLayerCount++;
 
-        tabLayer.setCardLayerController(this);
+        cardLayerFragment.setCardLayerController(this);
         initLayer(p);
         findCurrentFocusLayer();
-
+        return attribute;
     }
 
     public void removeCardLayer(String tag) {

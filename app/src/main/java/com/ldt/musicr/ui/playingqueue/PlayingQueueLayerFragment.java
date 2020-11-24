@@ -229,12 +229,12 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
     }
 
     @Override
-    public String getLayerTag() {
+    public String getCardLayerTag() {
         return TAG;
     }
 
     private void setRadius(float value) {
-        if (mRoot != null) {
+        if (mRootCardView != null) {
             if (value > 1) value = 1;
             else if (value <= 0.1f) value = 0;
             mRootCardView.setRadius(mMaxRadius * value);

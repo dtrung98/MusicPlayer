@@ -408,7 +408,7 @@ public class NowPlayingLayerFragment extends CardLayerFragment implements MusicS
 
 
     @Override
-    public String getLayerTag() {
+    public String getCardLayerTag() {
         return TAG;
     }
 
