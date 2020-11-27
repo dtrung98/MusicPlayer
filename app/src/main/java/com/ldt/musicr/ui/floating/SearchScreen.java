@@ -13,11 +13,12 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.base.FloatingViewFragment;
 import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 
 /**
  * Search screen allows user to search songs, playlists, artists
  */
-public class SearchScreen extends CardLayerFragment implements MusicServiceEventListener {
+public class SearchScreen extends MusicServiceNavigationFragment implements MusicServiceEventListener {
     private static final String TAG = "SearchScreen";
 
     @Override
@@ -28,15 +29,5 @@ public class SearchScreen extends CardLayerFragment implements MusicServiceEvent
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public int getLayerMinHeight(Context context, int maxHeight) {
-        return 0;
-    }
-
-    @Override
-    public String getCardLayerTag() {
-        return TAG;
     }
 }

@@ -24,6 +24,7 @@ import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
+import com.ldt.musicr.util.NavigationUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,10 +44,7 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @OnClick(R.id.search)
     void showSearchScreen() {
-        if (getActivity() instanceof AppActivity) {
-            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(SinglePlaylistCardLayerFragment.newInstance(PlaylistLoader.getAllPlaylistsWithAuto(requireContext()).get(0), null), 0);
-            attribute.animateToMax();
-        }
+        NavigationUtil.navigateToSearch(getActivity());
     }
 
     FeatureLinearHolder mFeatureLinearHolder;

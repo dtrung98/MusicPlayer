@@ -28,6 +28,7 @@ import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.floating.SearchScreen;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
 import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
@@ -70,7 +71,7 @@ public class NavigationUtil {
         }
     }
 
-    public static void navigateToPlayingQueueController(@NonNull final AppActivity activity) {
+    public static void navigateToPlayingQueueController(final AppActivity activity) {
         final CardLayerController.CardLayerAttribute playingQueueAttr = activity.getCardLayerController().getMyAttr(activity.getPlayingQueueLayerFragment());
         final CardLayerController.CardLayerAttribute nowPlayingAttr = activity.getCardLayerController().getMyAttr(activity.getNowPlayingController());
 
@@ -80,13 +81,25 @@ public class NavigationUtil {
         }
     }
 
-    public static void navigateToArtist(@NonNull final Activity activity, final int artistId) {
+    public static void navigateToArtist(final Activity activity, final int artistId) {
         if (activity instanceof AppActivity) {
             final AppActivity appActivity = (AppActivity) activity;
 
-            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
+            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true, false);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
+
+            navigateToBackStackController(appActivity);
+        }
+    }
+
+    public static void navigateToSearch(final Activity activity) {
+        if (activity instanceof AppActivity) {
+            final AppActivity appActivity = (AppActivity) activity;
+
+            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true, false);
+            if (fragment != null)
+                fragment.getNavigationController().presentFragment(new SearchScreen());
 
             navigateToBackStackController(appActivity);
         }

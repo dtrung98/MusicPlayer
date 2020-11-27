@@ -201,18 +201,23 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
         }
     }
 
-    public LibraryTabFragment navigateToLibraryTab(boolean go) {
-        Fragment fragment = navigateToTab(1, go);
+    public LibraryTabFragment navigateToLibraryTab(boolean navigateOrPopToRoot) {
+        return  navigateToLibraryTab(navigateOrPopToRoot, true);
+    }
+
+    public LibraryTabFragment navigateToLibraryTab(boolean navigateOrPopToRoot, boolean smoothScroll) {
+        Fragment fragment = navigateToTab(1, navigateOrPopToRoot, smoothScroll);
         if (fragment instanceof LibraryTabFragment) {
             return (LibraryTabFragment) fragment;
         }
         return null;
     }
 
-    public Fragment navigateToTab(int item, boolean go) {
-        if (go)
-            mViewPager.setCurrentItem(item);
-        Fragment fragment = mNavigationAdapter.getItem(1);
+    public Fragment navigateToTab(int item, boolean navigateOrPopToRoot, boolean smoothScroll) {
+        if (navigateOrPopToRoot) {
+            mViewPager.setCurrentItem(item, smoothScroll);
+        }
+        Fragment fragment = mNavigationAdapter.getItem(item);
         if (fragment instanceof BackPressableFragment) {
             ((BackPressableFragment) fragment).popToRootFragment();
             return ((BackPressableFragment) fragment).getRootFragment();
