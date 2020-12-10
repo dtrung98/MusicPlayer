@@ -19,5 +19,6 @@
     <item name = "id14_withFrameLayout" type = "id"/>
     <item name = "id15_withFrameLayout" type = "id"/>
     <item name="media_player_service" type ="id"/>
+    <item name="card_presentation_container_view" type="id" />
 
 </resources>

@@ -30,6 +30,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MusicServiceActivity;
+import com.ldt.musicr.ui.base.CardPresentationFragment;
 import com.ldt.musicr.ui.base.FloatingViewFragment;
 import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
@@ -51,7 +52,7 @@ import butterknife.OnClick;
 
 import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
-public class LyricBottomSheet extends FloatingViewFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
+public class LyricBottomSheet extends CardPresentationFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";
     private static final String SONG_KEY = "song";
     private static final String SHOULD_AUTO_UPDATE_KEY = "should_auto_update";

@@ -1,11 +1,13 @@
 package com.ldt.musicr.ui.base;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.Window;
 import android.widget.FrameLayout;
 
 import androidx.activity.OnBackPressedCallback;
@@ -88,10 +90,7 @@ public class FloatingViewFragment extends Fragment {
         if (mDialogContainerView != null) {
 
             // dismiss container view
-            ViewParent parent = mDialogContainerView.getParent();
-            if (parent instanceof ViewGroup) {
-                ((ViewGroup) parent).removeView(mDialogContainerView);
-            }
+            onDismissDialogContainerView();
         }
 
         mViewDestroyed = true;
@@ -178,6 +177,7 @@ public class FloatingViewFragment extends Fragment {
 
     /**
      * Override this method to use other system-created-view as root view, like DecorView
+     *
      * @return the new app root view
      */
     public ViewGroup getAppRootView() {
@@ -194,18 +194,22 @@ public class FloatingViewFragment extends Fragment {
         }
     }
 
-    public void dismissDialogContainerView() {
-        ViewParent parent = mDialogContainerView.getParent();
-        if (parent instanceof ViewGroup) {
-            ((ViewGroup) parent).removeView(mDialogContainerView);
-        }
+    protected void onDismissDialogContainer() {
+        onDismissDialogContainerView();
         if (mCallOnDismiss) {
             onDismiss();
         }
     }
 
+    protected void onDismissDialogContainerView() {
+        ViewParent parent = mDialogContainerView.getParent();
+        if (parent instanceof ViewGroup) {
+            ((ViewGroup) parent).removeView(mDialogContainerView);
+        }
+    }
+
     public void cancelDialogContainerView() {
-        dismissDialogContainerView();
+        onDismissDialogContainer();
         if (mCallOnCancel) {
             onCancel();
         }
@@ -320,7 +324,7 @@ public class FloatingViewFragment extends Fragment {
 
             // dismiss container view
             mCallOnDismiss = false;
-            dismissDialogContainerView();
+            onDismissDialogContainer();
             if (!mDismissed) {
                 onDismiss();
             }

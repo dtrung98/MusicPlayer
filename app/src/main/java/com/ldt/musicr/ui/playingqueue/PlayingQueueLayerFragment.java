@@ -66,7 +66,7 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
     @OnClick(R.id.lyric)
     void showLyric() {
         if (getActivity() != null)
-            LyricBottomSheet.newInstance().show(getActivity().getSupportFragmentManager(), "LyricBottomSheet");
+            LyricBottomSheet.newInstance().show(getChildFragmentManager(), "LyricBottomSheet");
     }
 
     @OnClick(R.id.save)

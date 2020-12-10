@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import android.util.Log;
 import android.view.GestureDetector;
@@ -368,8 +369,8 @@ public class CardLayerController {
             //Log.d(TAG, "updateLayerChanged: deltaLayer["+item+"] = "+deltaTranslateY[item]);
             // Scale và translate những layer phía sau
 
-            TimeInterpolator interpolator = InterpolatorUtil.getInterpolator(7);
-            int duration = 650;
+            TimeInterpolator interpolator = new FastOutSlowInInterpolator();
+            int duration = 400;
 
             attr.parent.animate().scaleX(attr.mScaleXY).setDuration(duration).setInterpolator(interpolator);
             //Log.d(TAG, "animateLayerChanged: item "+actives.get(item)+" : scaleX from "+attr.parent.getScaleX()+" to "+attr.mScaleXY);

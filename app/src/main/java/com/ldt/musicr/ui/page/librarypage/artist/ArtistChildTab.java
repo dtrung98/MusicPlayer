@@ -25,6 +25,7 @@ import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.ui.page.MusicServiceFragment;
+import com.ldt.musicr.ui.page.subpages.ArtistPagerFloatingFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
@@ -111,11 +112,13 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
 
     @Override
     public void onArtistItemClick(Artist artist) {
-        NavigationFragment sf = ArtistPagerFragment.newInstance(artist);
-        /*      SupportFragment sf = ArtistTrialPager.newInstance(artist);*/
+        /*NavigationFragment sf = ArtistPagerFragment.newInstance(artist);
         Fragment parentFragment = getParentFragment();
-        if (parentFragment instanceof NavigationFragment)
+        if (parentFragment instanceof NavigationFragment) {
             ((NavigationFragment) parentFragment).getNavigationController().presentFragment(sf);
+        }*/
+
+        ArtistPagerFloatingFragment.newInstance(artist).show(getChildFragmentManager(), "artist-pager");
     }
 
     @Override
