@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,9 +24,7 @@ import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.ui.page.MusicServiceFragment;
-import com.ldt.musicr.ui.page.subpages.ArtistPagerFloatingFragment;
-import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
+import com.ldt.musicr.ui.page.subpages.ArtistPagerPresentationFragment;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -118,7 +115,7 @@ public class ArtistChildTab extends MusicServiceFragment implements ArtistAdapte
             ((NavigationFragment) parentFragment).getNavigationController().presentFragment(sf);
         }*/
 
-        ArtistPagerFloatingFragment.newInstance(artist).show(getChildFragmentManager(), "artist-pager");
+        ArtistPagerPresentationFragment.newInstance(artist).show(getChildFragmentManager(), "artist-pager");
     }
 
     @Override

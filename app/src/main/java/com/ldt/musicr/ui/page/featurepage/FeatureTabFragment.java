@@ -24,6 +24,7 @@ import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
+import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistPresentationFragment;
 import com.ldt.musicr.util.NavigationUtil;
 
 import butterknife.BindView;
@@ -98,16 +99,26 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @Override
     public void onClickPlaylist(Playlist playlist, @org.jetbrains.annotations.Nullable Bitmap bitmap) {
-        boolean showInCardLayer = false;
+        final int NAVIGATION = 0;
+        final int CARD_LAYER = 1;
+        final int PRESENTATION = 2;
 
-        if(!showInCardLayer) {
-            getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(playlist, bitmap));
-        } else if (getActivity() instanceof AppActivity) {
-            CardLayerFragment sf = SinglePlaylistCardLayerFragment.newInstance(playlist, bitmap);
+        final int showType = PRESENTATION;
 
-            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(sf, 0);
-            attribute.expandImmediately();
-            attribute.animateToMax();
+        switch (showType) {
+            case PRESENTATION:
+                SinglePlaylistPresentationFragment.newInstance(playlist, bitmap).showNow(getChildFragmentManager(), "single-playlist");
+                break;
+            case CARD_LAYER:
+                CardLayerFragment sf = SinglePlaylistCardLayerFragment.newInstance(playlist, bitmap);
+
+                CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(sf, 0);
+                attribute.expandImmediately();
+                attribute.animateToMax();
+                break;
+            case NAVIGATION:
+            default:
+                getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(playlist, bitmap));
         }
     }
 

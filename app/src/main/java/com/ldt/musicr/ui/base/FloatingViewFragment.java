@@ -1,14 +1,14 @@
 package com.ldt.musicr.ui.base;
 
-import android.app.Dialog;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.Window;
-import android.widget.FrameLayout;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ContentView;
@@ -29,7 +29,9 @@ import androidx.fragment.app.FragmentTransaction;
  * <br/>Dismiss the owner fragment will dismiss its child FloatingViewFragment automatically.
  * <br/> Back pressed event is handled automatically by default, but you have an option to disable it
  */
-public class FloatingViewFragment extends Fragment {
+public class FloatingViewFragment extends Fragment implements DialogInterface.OnCancelListener, DialogInterface.OnDismissListener {
+
+    private static final String SAVED_DIALOG_STATE_TAG = "android:savedDialogState";
     private static final String SAVED_CANCELABLE = "android:cancelable";
     private static final String SAVED_SHOWS_DIALOG = "android:showsDialog";
     private static final String SAVED_BACK_STACK_ID = "android:backStackId";
@@ -44,8 +46,36 @@ public class FloatingViewFragment extends Fragment {
 
     private int mBackStackId = -1;
 
-    private boolean mCallOnDismiss = false;
-    private boolean mCallOnCancel = false;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
+    private Runnable mDismissRunnable = new Runnable() {
+        @SuppressLint("SyntheticAccessor")
+        @Override
+        public void run() {
+            mOnDismissListener.onDismiss(mContentViewContainer);
+        }
+    };
+
+    private DialogInterface.OnCancelListener mOnCancelListener =
+            new DialogInterface.OnCancelListener() {
+                @SuppressLint("SyntheticAccessor")
+                @Override
+                public void onCancel(@Nullable DialogInterface dialog) {
+                    if (mContentViewContainer != null) {
+                        FloatingViewFragment.this.onCancel(mContentViewContainer);
+                    }
+                }
+            };
+
+    private DialogInterface.OnDismissListener mOnDismissListener =
+            new DialogInterface.OnDismissListener() {
+                @SuppressLint("SyntheticAccessor")
+                @Override
+                public void onDismiss(@Nullable DialogInterface dialog) {
+                    if (mContentViewContainer != null) {
+                        FloatingViewFragment.this.onDismiss(mContentViewContainer);
+                    }
+                }
+            };
 
     public FloatingViewFragment() {
         super();
@@ -87,10 +117,23 @@ public class FloatingViewFragment extends Fragment {
 
         mDismissed = true;
         mShownByMe = false;
-        if (mDialogContainerView != null) {
-
-            // dismiss container view
-            onDismissDialogContainerView();
+        if (mContentViewContainer != null) {
+            // Instead of waiting for a posted onDismiss(), null out
+            // the listener and call onDismiss() manually to ensure
+            // that the callback happens before onDestroy()
+            mContentViewContainer.setOnDismissListener(null);
+            mContentViewContainer.dismiss();
+            if (!fromOnDismiss) {
+                // onDismiss() is always called on the main thread, so
+                // we mimic that behavior here. The difference here is that
+                // we don't post the message to ensure that the onDismiss()
+                // callback still happens before onDestroy()
+                if (Looper.myLooper() == mHandler.getLooper()) {
+                    onDismiss(mContentViewContainer);
+                } else {
+                    mHandler.post(mDismissRunnable);
+                }
+            }
         }
 
         mViewDestroyed = true;
@@ -110,15 +153,15 @@ public class FloatingViewFragment extends Fragment {
     }
 
     @Nullable
-    public ViewGroup getDialogContainerView() {
-        return mDialogContainerView;
+    public ContentViewContainer getContentViewContainer() {
+        return mContentViewContainer;
     }
 
     @NonNull
-    public final ViewGroup requireDialogContainerView() {
-        ViewGroup containerView = getDialogContainerView();
+    public final ContentViewContainer requireDialogContainerView() {
+        ContentViewContainer containerView = getContentViewContainer();
         if (containerView == null) {
-            throw new IllegalStateException("PersistentDialogFragment " + this + " does not have a container view.");
+            throw new IllegalStateException("PersistentDialogFragment " + this + " does not have a container.");
         }
         return containerView;
     }
@@ -131,31 +174,12 @@ public class FloatingViewFragment extends Fragment {
         return mCancelable;
     }
 
-    private ViewGroup mDialogContainerView;
-
-    public ViewGroup onCreateContainerView(@Nullable Bundle savedInstanceState) {
-        ViewGroup appRootView = getAppRootView();
-        FrameLayout containerView = new FrameLayout(appRootView.getContext());
-        containerView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        appRootView.addView(containerView);
-        return containerView;
-    }
+    private ContentViewContainer mContentViewContainer;
 
     @NonNull
-    @Override
-    public LayoutInflater onGetLayoutInflater(@Nullable Bundle savedInstanceState) {
-        LayoutInflater layoutInflater = super.onGetLayoutInflater(savedInstanceState);
-        if (!mShowsDialog || mCreatingDialog) {
-            return layoutInflater;
-        }
-
-        try {
-            mCreatingDialog = true;
-            mDialogContainerView = onCreateContainerView(savedInstanceState);
-        } finally {
-            mCreatingDialog = false;
-        }
-        return layoutInflater;
+    public ContentViewContainer onCreateViewContainer(@Nullable Bundle savedInstanceState) {
+        ViewGroup appRootView = getAppRootView();
+        return new ContentViewContainer(appRootView);
     }
 
     public int show(@NonNull FragmentTransaction transaction, @Nullable String tag) {
@@ -184,34 +208,14 @@ public class FloatingViewFragment extends Fragment {
         return requireActivity().getWindow().getDecorView().findViewById(android.R.id.content);
     }
 
-    public void onCancel() {
+    @Override
+    public void onCancel(@NonNull DialogInterface dialog) {
 
     }
 
-    public void onDismiss() {
+    public void onDismiss(@NonNull DialogInterface dialog) {
         if (!mViewDestroyed) {
             dismissInternal(true, true);
-        }
-    }
-
-    protected void onDismissDialogContainer() {
-        onDismissDialogContainerView();
-        if (mCallOnDismiss) {
-            onDismiss();
-        }
-    }
-
-    protected void onDismissDialogContainerView() {
-        ViewParent parent = mDialogContainerView.getParent();
-        if (parent instanceof ViewGroup) {
-            ((ViewGroup) parent).removeView(mDialogContainerView);
-        }
-    }
-
-    public void cancelDialogContainerView() {
-        onDismissDialogContainer();
-        if (mCallOnCancel) {
-            onCancel();
         }
     }
 
@@ -225,23 +229,24 @@ public class FloatingViewFragment extends Fragment {
         }
 
         View view = getView();
-        if (mDialogContainerView != null) {
+        if (mContentViewContainer != null) {
             if (view != null) {
                 if (view.getParent() != null) {
                     throw new IllegalStateException(
-                            "PersistentDialogFragment can not be attached to a container view");
+                            "FloatingViewFragment can not be attached to a container view");
                 }
 
-                mDialogContainerView.addView(view);
+                mContentViewContainer.setContentView(view);
             }
 
-            mCallOnCancel = true;
-            mCallOnDismiss = true;
+            mContentViewContainer.setCancelable(mCancelable);
+            mContentViewContainer.setOnCancelListener(mOnCancelListener);
+            mContentViewContainer.setOnDismissListener(mOnDismissListener);
             if (savedInstanceState != null) {
-               /* Bundle dialogState = savedInstanceState.getBundle(SAVED_DIALOG_STATE_TAG);
+                Bundle dialogState = savedInstanceState.getBundle(SAVED_DIALOG_STATE_TAG);
                 if (dialogState != null) {
-                    mDialog.onRestoreInstanceState(dialogState);
-                }*/
+                    mContentViewContainer.onRestoreInstanceState(dialogState);
+                }
             }
 
         }
@@ -250,8 +255,9 @@ public class FloatingViewFragment extends Fragment {
     @MainThread
     public void onStart() {
         super.onStart();
-        if (mDialogContainerView != null) {
+        if (mContentViewContainer != null) {
             mViewDestroyed = false;
+            mContentViewContainer.show();
         }
     }
 
@@ -302,9 +308,31 @@ public class FloatingViewFragment extends Fragment {
         });
     }
 
+    @NonNull
+    @Override
+    public LayoutInflater onGetLayoutInflater(@Nullable Bundle savedInstanceState) {
+        LayoutInflater layoutInflater = super.onGetLayoutInflater(savedInstanceState);
+        if (!mShowsDialog || mCreatingDialog) {
+            return layoutInflater;
+        }
+
+        try {
+            mCreatingDialog = true;
+            mContentViewContainer = onCreateViewContainer(savedInstanceState);
+        } finally {
+            mCreatingDialog = false;
+        }
+        return layoutInflater;
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        if(mContentViewContainer != null) {
+            Bundle containerState = mContentViewContainer.onSaveInstanceState();
+            outState.putBundle(SAVED_DIALOG_STATE_TAG, containerState);
+        }
+
         if (!mCancelable) {
             outState.putBoolean(SAVED_CANCELABLE, mCancelable);
         }
@@ -319,17 +347,17 @@ public class FloatingViewFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mDialogContainerView != null) {
+        if (mContentViewContainer != null) {
             mViewDestroyed = true;
 
-            // dismiss container view
-            mCallOnDismiss = false;
-            onDismissDialogContainer();
+            // dismiss container
+            mContentViewContainer.setOnDismissListener(null);
+            mContentViewContainer.dismiss();
             if (!mDismissed) {
-                onDismiss();
+                onDismiss(mContentViewContainer);
             }
 
-            mDialogContainerView = null;
+            mContentViewContainer = null;
         }
     }
 }

@@ -13,6 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +26,7 @@ import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.base.CardPresentationFragment;
+import com.ldt.musicr.ui.base.PresentationFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -33,16 +36,16 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 
-public class ArtistPagerFloatingFragment extends CardPresentationFragment implements MusicServiceEventListener {
+public class ArtistPagerPresentationFragment extends PresentationFragment implements MusicServiceEventListener {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
-    public static ArtistPagerFloatingFragment newInstance(Artist artist) {
+    public static ArtistPagerPresentationFragment newInstance(Artist artist) {
 
         Bundle args = new Bundle();
         if(artist!=null)
         args.putParcelable(ARTIST,artist);
 
-        ArtistPagerFloatingFragment fragment = new ArtistPagerFloatingFragment();
+        ArtistPagerPresentationFragment fragment = new ArtistPagerPresentationFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -161,6 +164,11 @@ public class ArtistPagerFloatingFragment extends CardPresentationFragment implem
 
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            mStatusBar.getLayoutParams().height = insets.getSystemWindowInsetTop();
+            mStatusBar.requestLayout();
+            return ViewCompat.onApplyWindowInsets(v, insets);
+        });
 
         refreshData();
     }
