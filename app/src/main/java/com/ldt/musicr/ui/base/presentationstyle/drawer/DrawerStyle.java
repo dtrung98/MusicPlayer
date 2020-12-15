@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.base.presentationstyle.card;
+package com.ldt.musicr.ui.base.presentationstyle.drawer;
 
 import android.animation.TimeInterpolator;
 import android.annotation.SuppressLint;
@@ -7,18 +7,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.base.PresentationStyle;
+import com.ldt.musicr.ui.base.presentationstyle.Attribute;
 import com.ldt.musicr.ui.widget.viewgroup.CardLayerContainerView;
 
 public class DrawerStyle extends PresentationStyle {
@@ -36,9 +37,17 @@ public class DrawerStyle extends PresentationStyle {
         return "drawer";
     }
 
-    public DrawerStyle(ViewGroup rootView) {
-        super(rootView);
-        mOneDpUnit = rootView.getResources().getDimension(R.dimen.oneDP);
+    public DrawerStyle(@NonNull ViewGroup appRootView, @Nullable DrawerStyleAttribute attribute) {
+        super(appRootView, attribute);
+        mOneDpUnit = appRootView.getResources().getDimension(R.dimen.oneDP);
+    }
+
+    public final DrawerStyleAttribute requireAttribute() {
+        Attribute attribute = getAttribute();
+        if (!(attribute instanceof DrawerStyleAttribute)) {
+            throw new IllegalStateException("The attribute used in this style ("+attribute+") is not a DrawerStyleAttribute");
+        }
+        return (DrawerStyleAttribute) attribute;
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -55,7 +64,6 @@ public class DrawerStyle extends PresentationStyle {
         carLayerView.setRadius(12 * mOneDpUnit);
         DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.gravity = Gravity.RIGHT;
-        params.setMarginStart((int) (-64 * mOneDpUnit));
         carLayerView.setLayoutParams(params);
 
         View drawerContentView = new View(context);
@@ -64,6 +72,7 @@ public class DrawerStyle extends PresentationStyle {
         drawerContentView.setLayoutParams(dcvParams);
 
         DrawerLayout drawerLayout = new DrawerLayout(context);
+        drawerLayout.MIN_DRAWER_MARGIN = requireAttribute().getLeftOverMarginDp();
         FrameLayout.LayoutParams dlParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         drawerLayout.setLayoutParams(dlParams);
         drawerLayout.addView(drawerContentView);

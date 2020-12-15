@@ -14,6 +14,9 @@ public class PresentationStyleProvider {
     }
 
     private final HashMap<String, PresentationStyle> mStyles = new HashMap<>();
+    HashMap<String, PresentationStyle> getHashMap() {
+        return mStyles;
+    }
 
     public PresentationStyle get(String name) {
         if(!validateName(name)) {

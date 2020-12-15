@@ -177,7 +177,7 @@ public class FloatingViewFragment extends Fragment implements DialogInterface.On
     private ContentViewContainer mContentViewContainer;
 
     @NonNull
-    public ContentViewContainer onCreateViewContainer(@Nullable Bundle savedInstanceState) {
+    public ContentViewContainer onCreateContainer(@Nullable Bundle savedInstanceState) {
         ViewGroup appRootView = getAppRootView();
         return new ContentViewContainer(appRootView);
     }
@@ -318,17 +318,29 @@ public class FloatingViewFragment extends Fragment implements DialogInterface.On
 
         try {
             mCreatingDialog = true;
-            mContentViewContainer = onCreateViewContainer(savedInstanceState);
+            mContentViewContainer = onCreateContainer(savedInstanceState);
+            mContentViewContainer.initialize();
+            onContainerCreated(mContentViewContainer, savedInstanceState);
         } finally {
             mCreatingDialog = false;
         }
+
         return layoutInflater;
+    }
+
+    /**
+     * Called after {@link FloatingViewFragment#onCreateContainer(Bundle)}
+     *
+     * @param container          the ContentViewContainer
+     * @param savedInstanceState the fragment's previous instance state
+     */
+    public void onContainerCreated(@NonNull ContentViewContainer container, @Nullable Bundle savedInstanceState) {
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mContentViewContainer != null) {
+        if (mContentViewContainer != null) {
             Bundle containerState = mContentViewContainer.onSaveInstanceState();
             outState.putBundle(SAVED_DIALOG_STATE_TAG, containerState);
         }

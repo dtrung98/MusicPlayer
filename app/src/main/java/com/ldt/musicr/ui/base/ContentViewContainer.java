@@ -39,6 +39,7 @@ public class ContentViewContainer implements DialogInterface {
      */
     private final ViewGroup mAppRootView;
 
+    @Nullable
     public ViewGroup getHostView() {
         return mHostView;
     }
@@ -46,12 +47,16 @@ public class ContentViewContainer implements DialogInterface {
     /**
      * The view group which holds the content layout
      */
-    private final ViewGroup mHostView;
+    @Nullable
+    private ViewGroup mHostView;
 
     public ContentViewContainer(@NonNull ViewGroup appRootView) {
         mAppRootView = appRootView;
-        mHostView = onCreateHostView(appRootView.getContext());
         mListenersHandler = new ListenersHandler(Looper.getMainLooper(), this);
+    }
+
+    protected void initialize() {
+        mHostView = onCreateHostView(getAppRootView().getContext());
     }
 
     /**
@@ -78,7 +83,9 @@ public class ContentViewContainer implements DialogInterface {
      * @param view
      */
     public void setContentView(View view) {
-        mHostView.addView(view);
+        if(mHostView != null) {
+            mHostView.addView(view);
+        }
     }
 
     private boolean mShowing = false;
@@ -220,7 +227,9 @@ public class ContentViewContainer implements DialogInterface {
      * Hide the container but do not dismiss it
      */
     public void hide() {
-        mHostView.setVisibility(View.GONE);
+        if(mHostView != null) {
+            mHostView.setVisibility(View.GONE);
+        }
     }
 
     /**
