@@ -27,6 +27,7 @@ import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.base.PresentationFragment;
+import com.ldt.springback.view.SpringBackLayout;
 
 import java.lang.ref.WeakReference;
 
@@ -160,6 +161,11 @@ public class ArtistPagerPresentationFragment extends PresentationFragment implem
         Bundle bundle = getArguments();
         if(bundle!=null) {
             mArtist = bundle.getParcelable(ARTIST);
+        }
+
+        SpringBackLayout springBackLayout = view.findViewById(R.id.springBackLayout);
+        if(springBackLayout != null) {
+            springBackLayout.setSpringBackEnable(false);
         }
 
         mRecyclerView.setAdapter(mAdapter);

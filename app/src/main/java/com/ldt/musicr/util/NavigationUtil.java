@@ -31,6 +31,7 @@ import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.floating.SearchScreen;
 import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
 import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
+import com.ldt.musicr.ui.page.subpages.ArtistPagerPresentationFragment;
 import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
 
 import es.dmoral.toasty.Toasty;
@@ -85,11 +86,15 @@ public class NavigationUtil {
         if (activity instanceof AppActivity) {
             final AppActivity appActivity = (AppActivity) activity;
 
-            LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true, false);
+        /*    LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true, false);
             if (fragment != null)
                 fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
 
-            navigateToBackStackController(appActivity);
+            navigateToBackStackController(appActivity);*/
+
+            ArtistPagerPresentationFragment fragment = ArtistPagerPresentationFragment.newInstance(ArtistLoader.getArtist(activity, artistId));
+            fragment.getDrawerStyleAttribute().setLeftOverMarginDp(64);
+            fragment.show(((AppActivity) activity).getSupportFragmentManager(), "artist-pager");
         }
     }
 

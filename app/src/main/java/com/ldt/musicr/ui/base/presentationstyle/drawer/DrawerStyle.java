@@ -20,7 +20,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.ldt.musicr.R;
 import com.ldt.musicr.ui.base.PresentationStyle;
 import com.ldt.musicr.ui.base.presentationstyle.Attribute;
-import com.ldt.musicr.ui.widget.viewgroup.CardLayerContainerView;
 
 public class DrawerStyle extends PresentationStyle {
     private int mContainerWrapperId = View.generateViewId();
@@ -59,9 +58,7 @@ public class DrawerStyle extends PresentationStyle {
         topInset += 14f * mOneDpUnit;
 
         mCardHeight = parentHeight - topInset;
-        CardLayerContainerView carLayerView = new CardLayerContainerView(context);
-        carLayerView.setId(mContainerWrapperId);
-        carLayerView.setRadius(12 * mOneDpUnit);
+        FrameLayout carLayerView = new FrameLayout(context);
         DrawerLayout.LayoutParams params = new DrawerLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         params.gravity = Gravity.RIGHT;
         carLayerView.setLayoutParams(params);
@@ -113,7 +110,7 @@ public class DrawerStyle extends PresentationStyle {
             return false;
         });
 
-        mWrapContentView = carLayerView.getSubContainerView();
+        mWrapContentView = carLayerView;
         return drawerLayout;
     }
 
