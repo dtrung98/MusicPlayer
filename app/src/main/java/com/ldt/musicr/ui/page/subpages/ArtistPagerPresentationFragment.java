@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,9 +17,12 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dtrung98.presentation.PresentationFragment;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
@@ -26,7 +30,6 @@ import com.ldt.musicr.glide.ArtistGlideRequest;
 import com.ldt.musicr.glide.GlideApp;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.base.PresentationFragment;
 import com.ldt.springback.view.SpringBackLayout;
 
 import java.lang.ref.WeakReference;
@@ -50,6 +53,12 @@ public class ArtistPagerPresentationFragment extends PresentationFragment implem
         fragment.setArguments(args);
         return fragment;
     }
+
+    @Override
+    public ViewGroup getAppRootView() {
+        return super.getAppRootView().findViewById(R.id.backStackView);
+    }
+
     @BindView(R.id.status_bar) View mStatusBar;
 
     @BindView(R.id.root) View mRoot;

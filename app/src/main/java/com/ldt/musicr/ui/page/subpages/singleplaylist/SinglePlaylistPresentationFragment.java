@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.dtrung98.presentation.PresentationFragment;
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
@@ -31,10 +32,8 @@ import com.ldt.musicr.helper.menu.MenuHelper;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.base.MPViewModel;
-import com.ldt.musicr.ui.base.PresentationFragment;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
-import com.ldt.musicr.ui.page.CardLayerFragment;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildAdapter;
 
 import butterknife.BindView;

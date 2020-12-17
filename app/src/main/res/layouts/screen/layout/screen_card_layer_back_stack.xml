@@ -18,6 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"/>
+    <FrameLayout
+        android:id="@+id/backStackView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <View
         android:id="@+id/dim_view"
         android:layout_width="match_parent"

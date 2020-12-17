@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.dtrung98.presentation.PresentationFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -30,7 +32,6 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MusicServiceActivity;
-import com.ldt.musicr.ui.base.PresentationFragment;
 import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
@@ -48,8 +49,6 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
 public class LyricBottomSheet extends PresentationFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";

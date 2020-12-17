@@ -204,6 +204,9 @@ dependencies {
     // InsetsView
     implementation 'com.github.ldt-libs:InsetsView:1.1'
 
+    // Presentation - A replacement of DialogFragment
+    implementation 'com.github.ldt-libs:Presentation:0.2'
+
     // Leak Canary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-3'
 
