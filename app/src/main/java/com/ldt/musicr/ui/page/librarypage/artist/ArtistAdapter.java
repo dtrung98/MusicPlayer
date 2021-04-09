@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui.page.librarypage.artist;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Outline;

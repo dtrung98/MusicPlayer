@@ -146,8 +146,9 @@ public class CheapMP3 extends SoundFile {
             if (bufferOffset > 0) {
                 // We didn't find a updateTouchRuntime code (0xFF) at posTop 0;
                 // shift the buffer over and try again
-                for (int i = 0; i < 12 - bufferOffset; i++)
-                    buffer[i] = buffer[bufferOffset + i];
+                if (12 - bufferOffset >= 0) {
+                    System.arraycopy(buffer, bufferOffset, buffer, 0, 12 - bufferOffset);
+                }
                 pos += bufferOffset;
                 offset = 12 - bufferOffset;
                 continue;
@@ -161,8 +162,7 @@ public class CheapMP3 extends SoundFile {
                 mpgVersion = 2;
             } else {
                 bufferOffset = 1;
-                for (int i = 0; i < 12 - bufferOffset; i++)
-                    buffer[i] = buffer[bufferOffset + i];
+                System.arraycopy(buffer, bufferOffset + 0, buffer, 0, 12 - bufferOffset);
                 pos += bufferOffset;
                 offset = 12 - bufferOffset;
                 continue;
@@ -183,8 +183,7 @@ public class CheapMP3 extends SoundFile {
 
             if (bitRate == 0 || sampleRate == 0) {
                 bufferOffset = 2;
-                for (int i = 0; i < 12 - bufferOffset; i++)
-                    buffer[i] = buffer[bufferOffset + i];
+                System.arraycopy(buffer, bufferOffset + 0, buffer, 0, 12 - bufferOffset);
                 pos += bufferOffset;
                 offset = 12 - bufferOffset;
                 continue;
@@ -244,9 +243,7 @@ public class CheapMP3 extends SoundFile {
                 int[] newOffsets = new int[newMaxFrames];
                 int[] newLens = new int[newMaxFrames];
                 int[] newGains = new int[newMaxFrames];
-                for (int i = 0; i < mNumFrames; i++) {
-                    newGains[i] = mFrameGains[i];
-                }
+                if (mNumFrames >= 0) System.arraycopy(mFrameGains, 0, newGains, 0, mNumFrames);
                 mFrameGains = newGains;
                 mMaxFrames = newMaxFrames;
             }

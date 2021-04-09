@@ -21,8 +21,6 @@
     android:layout_height="64dp">
 
     <LinearLayout android:id="@+id/root"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000"
@@ -31,7 +29,6 @@
         tools:ignore="UselessParent">
 
         <FrameLayout android:id="@+id/icon_group"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="@dimen/notification_large_icon_width"
             android:layout_height="@dimen/notification_large_icon_height"
             android:layout_weight="0">
@@ -94,7 +91,6 @@
             <!-- media buttons will be added here -->
             <ImageButton android:id="@+id/action_prev"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -108,7 +104,6 @@
 
             <ImageButton android:id="@+id/action_play_pause"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -122,7 +117,6 @@
 
             <ImageButton android:id="@+id/action_next"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"

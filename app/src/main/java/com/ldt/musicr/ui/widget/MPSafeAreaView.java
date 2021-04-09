@@ -9,8 +9,6 @@ import android.view.WindowInsets;
 
 import androidx.annotation.RequiresApi;
 
-import com.dtrung98.insetsview.SafeAreaView;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

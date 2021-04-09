@@ -158,22 +158,22 @@ class Atom {  // note: latest versions of spec simply call it 'box' instead of '
 
     // Used for debugging purpose only.
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         byte[] atom_bytes = getBytes();
 
         for (int i = 0; i < atom_bytes.length; i++) {
             if(i % 8 == 0 && i > 0) {
-                str += '\n';
+                str.append('\n');
             }
-            str += String.format("0x%02X", atom_bytes[i]);
+            str.append(String.format("0x%02X", atom_bytes[i]));
             if (i < atom_bytes.length - 1) {
-                str += ',';
+                str.append(',');
                 if (i % 8 < 7) {
-                    str += ' ';
+                    str.append(' ');
                 }
             }
         }
-        str += '\n';
-        return str;
+        str.append('\n');
+        return str.toString();
     }
 }

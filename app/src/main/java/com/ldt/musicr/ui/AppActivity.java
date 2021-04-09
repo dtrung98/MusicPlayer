@@ -176,9 +176,11 @@ public class AppActivity extends MusicServiceActivity {
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if (mCardLayerController != null) mCardLayerController.onConfigurationChanged(newConfig);
+        if (mCardLayerController != null) {
+            mCardLayerController.onConfigurationChanged(newConfig);
+        }
     }
 
     public void showMainUI() {

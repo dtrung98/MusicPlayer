@@ -21,9 +21,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-
-        //    Nammu.init(this);
-
     }
 
     @Override

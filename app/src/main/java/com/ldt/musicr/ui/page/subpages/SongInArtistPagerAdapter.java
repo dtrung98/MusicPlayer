@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui.page.subpages;
 
-import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ldt.musicr.R;

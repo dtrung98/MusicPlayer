@@ -407,12 +407,12 @@ public class Tool {
     }
     public static String convertByteArrayToString(byte[] b)
     {
-        String r ="";
+        StringBuilder r = new StringBuilder();
         int len = b.length;
         for(int i=0;i<len;i++)
-            if(i!=len-1) r+=Integer.toHexString(b[i])+":";
-            else r+=b[i];
-        return  r;
+            if(i!=len-1) r.append(Integer.toHexString(b[i])).append(":");
+            else r.append(b[i]);
+        return r.toString();
     }
     public static void showToast(Context context,String text, int time)
     {

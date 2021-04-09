@@ -26,7 +26,6 @@ import org.jaudiotagger.tag.Tag;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -388,10 +387,10 @@ public class SongLoader {
 
             Log.d(TAG, "makeSongCursor: selection ["+selection+"]");
 
-            String values = "";
+            StringBuilder values = new StringBuilder();
             for (String value :
                     selectionValues) {
-                values += "[" + value + "], ";
+                values.append("[").append(value).append("], ");
             }
             Log.d(TAG, "makeSongCursor: values = "+ values);
         }
@@ -410,12 +409,12 @@ public class SongLoader {
     }
 
     private static String generateBlacklistSelection(String selection, int pathCount) {
-        String newSelection = selection != null && !selection.trim().equals("") ? selection + " AND " : "";
-        newSelection += AudioColumns.DATA + " NOT LIKE ?";
+        StringBuilder newSelection = new StringBuilder(selection != null && !selection.trim().equals("") ? selection + " AND " : "");
+        newSelection.append(AudioColumns.DATA + " NOT LIKE ?");
         for (int i = 0; i < pathCount - 1; i++) {
-            newSelection += " AND " + AudioColumns.DATA + " NOT LIKE ?";
+            newSelection.append(" AND " + AudioColumns.DATA + " NOT LIKE ?");
         }
-        return newSelection;
+        return newSelection.toString();
     }
 
     private static String[] addBlacklistSelectionValues(String[] selectionValues, ArrayList<String> paths) {

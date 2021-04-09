@@ -194,10 +194,10 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
             Exception e = null;
             String[] artists = artistNames.split("&");
 
-            String log = "";
+            StringBuilder log = new StringBuilder();
             for (String a :
                     artists) {
-                log += " ["+a+"] ";
+                log.append(" [").append(a).append("] ");
             }
             Log.d(TAG, start+" afterSplit ="+log);
 

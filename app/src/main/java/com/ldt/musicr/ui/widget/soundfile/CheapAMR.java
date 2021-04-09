@@ -525,9 +525,7 @@ public class CheapAMR extends SoundFile {
             int[] newOffsets = new int[newMaxFrames];
             int[] newLens = new int[newMaxFrames];
             int[] newGains = new int[newMaxFrames];
-            for (int i = 0; i < mNumFrames; i++) {
-                newGains[i] = mFrameGains[i];
-            }
+            System.arraycopy(mFrameGains, 0, newGains, 0, mNumFrames);
             mFrameGains = newGains;
             mMaxFrames = newMaxFrames;
         }

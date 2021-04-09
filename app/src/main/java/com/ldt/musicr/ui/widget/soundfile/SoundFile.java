@@ -115,7 +115,7 @@ public class SoundFile {
      */
     public static String[] getSupportedExtensions() {
         return sSupportedExtensions.toArray(
-                new String[sSupportedExtensions.size()]);
+                new String[0]);
     }
 
     protected ProgressListener mProgressListener = null;

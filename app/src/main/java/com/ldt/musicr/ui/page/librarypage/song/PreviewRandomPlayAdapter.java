@@ -111,8 +111,8 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
     private long[] getRealSongIds() {
         long[] real = new long[songIDs.length];
         if(real.length!=0) real[0] = songIDs[songIDs.length-1];
-        for (int i = 0; i < songIDs.length - 1; i++) {
-            real[i+1] = songIDs[i];
+        if (songIDs.length - 1 >= 0) {
+            System.arraycopy(songIDs, 0, real, 1, songIDs.length - 1);
         }
         return real;
     }

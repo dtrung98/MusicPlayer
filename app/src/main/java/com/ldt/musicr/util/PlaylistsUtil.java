@@ -177,13 +177,13 @@ public class PlaylistsUtil {
         for (int i = 0; i < selectionArgs.length; i++) {
             selectionArgs[i] = String.valueOf(songs.get(i).idInPlayList);
         }
-        String selection = MediaStore.Audio.Playlists.Members._ID + " in (";
+        StringBuilder selection = new StringBuilder(MediaStore.Audio.Playlists.Members._ID + " in (");
         //noinspection unused
-        for (String selectionArg : selectionArgs) selection += "?, ";
-        selection = selection.substring(0, selection.length() - 2) + ")";
+        for (String selectionArg : selectionArgs) selection.append("?, ");
+        selection = new StringBuilder(selection.substring(0, selection.length() - 2) + ")");
 
         try {
-            context.getContentResolver().delete(uri, selection, selectionArgs);
+            context.getContentResolver().delete(uri, selection.toString(), selectionArgs);
         } catch (Exception e) {
             e.printStackTrace();
         }

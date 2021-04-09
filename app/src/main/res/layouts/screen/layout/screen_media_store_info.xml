@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/backward_color"/>
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -84,7 +84,7 @@
                        android:background="@color/backward_color"
                        android:text="Total Songs"
                        android:gravity="center"
-                       android:paddingRight="15dp"/>
+                       android:paddingEnd="15dp"/>
                    <com.ldt.musicr.ui.widget.SeeThroughTextView
                        android:layout_height="match_parent"
                        android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                        android:background="@color/backward_color"
                        android:text="50"
                        android:gravity="center"
-                       android:paddingLeft="20dp"/>
+                       android:paddingStart="20dp"/>
                </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -112,7 +112,7 @@
                         android:background="@color/backward_color"
                         android:text="Total Artists"
                         android:gravity="center"
-                        android:paddingRight="15dp"/>
+                        android:paddingEnd="15dp"/>
                     <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                         android:background="@color/backward_color"
                         android:text="23"
                         android:gravity="center"
-                        android:paddingLeft="15dp"/>
+                        android:paddingStart="15dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -140,7 +140,7 @@
                         android:background="@color/backward_color"
                         android:text="Initialized Playlists"
                         android:gravity="center"
-                        android:paddingRight="15dp"/>
+                        android:paddingEnd="15dp"/>
                     <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -154,7 +154,7 @@
                         android:background="@color/backward_color"
                         android:text="47"
                         android:gravity="center"
-                        android:paddingLeft="15dp"/>
+                        android:paddingStart="15dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -168,7 +168,7 @@
                         android:background="@color/backward_color"
                         android:text="Total Playing Time"
                         android:gravity="center"
-                        android:paddingRight="15dp"/>
+                        android:paddingEnd="15dp"/>
                     <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -182,7 +182,7 @@
                         android:background="@color/backward_color"
                         android:text="1459s"
                         android:gravity="center"
-                        android:paddingLeft="15dp"/>
+                        android:paddingStart="15dp"/>
                 </LinearLayout>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -196,7 +196,7 @@
                         android:background="@color/backward_color"
                         android:text="Now Playing"
                         android:gravity="center"
-                        android:paddingRight="15dp"/>
+                        android:paddingEnd="15dp"/>
                     <com.ldt.musicr.ui.widget.SeeThroughTextView
                         android:layout_height="match_parent"
                         android:layout_width="wrap_content"
@@ -210,11 +210,11 @@
                         android:background="@color/backward_color"
                         android:text="1st in playlists"
                         android:gravity="center"
-                        android:paddingLeft="15dp"/>
+                        android:paddingStart="15dp"/>
                 </LinearLayout>
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@color/backward_color"/>
             </LinearLayout>

@@ -6,9 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import androidx.core.widget.NestedScrollView;
 import android.text.Html;
 import android.text.Spanned;
@@ -16,10 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +42,6 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED;
 
 public class LyricBottomSheet extends FloatingViewFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";
@@ -270,11 +262,11 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
 
     // adapted from re posted by Phil Haack and modified to match better
     public final static String tagStart=
-            "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
+            "<\\w+((\\s+\\w+(\\s*=\\s*(?:\".*?\"|'.*?'|[^'\">\\s]+))?)+\\s*|\\s*)>";
     public final static String tagEnd=
-            "\\</\\w+\\>";
+            "</\\w+>";
     public final static String tagSelfClosing=
-            "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>";
+            "<\\w+((\\s+\\w+(\\s*=\\s*(?:\".*?\"|'.*?'|[^'\">\\s]+))?)+\\s*|\\s*)/>";
     public final static String htmlEntity=
             "&[a-zA-Z][a-zA-Z0-9]+;";
     public final static Pattern htmlPattern=Pattern.compile(

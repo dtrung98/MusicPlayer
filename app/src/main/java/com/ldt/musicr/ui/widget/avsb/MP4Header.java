@@ -85,9 +85,9 @@ public class MP4Header {
     }
 
     public String toString() {
-        String str = "";
+        StringBuilder str = new StringBuilder();
         if (mHeader == null) {
-            return str;
+            return str.toString();
         }
         int num_32bits_per_lines = 8;
         int count = 0;
@@ -95,16 +95,16 @@ public class MP4Header {
             boolean break_line = count > 0 && count % (num_32bits_per_lines * 4) == 0;
             boolean insert_space = count > 0 && count % 4 == 0 && !break_line;
             if (break_line) {
-                str += '\n';
+                str.append('\n');
             }
             if (insert_space) {
-                str += ' ';
+                str.append(' ');
             }
-            str += String.format("%02X", b);
+            str.append(String.format("%02X", b));
             count++;
         }
 
-        return str;
+        return str.toString();
     }
 
     private void setHeader() {

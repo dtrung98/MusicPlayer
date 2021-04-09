@@ -22,7 +22,6 @@ import com.ldt.musicr.ui.widget.WeakContextAsyncTask;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.PlaylistsUtil;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 

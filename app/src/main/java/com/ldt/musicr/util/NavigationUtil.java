@@ -16,7 +16,6 @@ package com.ldt.musicr.util;
 
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.audiofx.AudioEffect;
 import androidx.annotation.NonNull;

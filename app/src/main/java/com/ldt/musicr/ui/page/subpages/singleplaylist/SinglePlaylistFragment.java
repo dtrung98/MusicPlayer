@@ -16,9 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -31,9 +29,7 @@ import com.ldt.musicr.helper.EventListener;
 import com.ldt.musicr.helper.Reliable;
 import com.ldt.musicr.helper.ReliableEvent;
 import com.ldt.musicr.helper.menu.MenuHelper;
-import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 
-import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;
 import com.ldt.musicr.ui.base.MPViewModel;
 import com.ldt.musicr.ui.page.MusicServiceNavigationFragment;
 import com.ldt.musicr.ui.page.librarypage.song.SongChildAdapter;
@@ -41,14 +37,8 @@ import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;
 import com.ldt.musicr.R;
-import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
 
 import com.ldt.musicr.model.Playlist;
-import com.ldt.musicr.model.Song;
-import com.ldt.musicr.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

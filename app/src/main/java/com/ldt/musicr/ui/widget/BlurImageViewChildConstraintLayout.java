@@ -12,7 +12,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.ldt.musicr.util.BitmapEditor;
@@ -52,13 +51,12 @@ public class BlurImageViewChildConstraintLayout extends ConstraintLayout {
         t.recycle();
     }
 
-    private int[] imageRect = new int[4];
-    private int[] mBlurDelta = new int[4];
+    private final int[] imageRect = new int[4];
+    private final int[] mBlurDelta = new int[4];
 
     public void setShadowDeltaRect(int... value) {
 
-        for (int i = 0; i < 4; i++)
-            mBlurDelta[i] = value[i];
+        System.arraycopy(value, 0, mBlurDelta, 0, 4);
         invalidate();
     }
 
@@ -67,7 +65,7 @@ public class BlurImageViewChildConstraintLayout extends ConstraintLayout {
     private Canvas shadowCanvas = null;
     private boolean shadow_drawn = false;
     private Paint solidPaint;
-    private boolean mEnableBlurredImageDrawn = false;
+    private final boolean mEnableBlurredImageDrawn = false;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {

@@ -1,6 +1,5 @@
 package com.ldt.musicr.ui.playingqueue;
 
-import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;

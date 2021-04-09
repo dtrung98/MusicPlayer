@@ -37,7 +37,6 @@
             tools:ignore="ContentDescription" />
 
         <ImageButton android:id="@+id/action_quit"
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
@@ -112,7 +111,6 @@
             <!-- media buttons will be added here -->
             <ImageButton android:id="@+id/action_prev"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -126,7 +124,6 @@
 
             <ImageButton android:id="@+id/action_play_pause"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"
@@ -140,7 +137,6 @@
 
             <ImageButton android:id="@+id/action_next"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="2dp"

@@ -34,11 +34,11 @@ import java.util.Locale;
 
 /**
  *  This base activity creates relationship between Activity and Music Player Service
- *  The only sub-class of this activity is AppActivity
+ *  The only sub-class of this activity is {@link AppActivity}
  */
 
 public abstract class MusicServiceActivity extends AppCompatActivity implements MusicServiceEventListener {
-    private static final String TAG = "BaseActivity";
+    private static final String TAG = "MusicServiceActivity";
 
     private final ArrayList<MusicServiceEventListener> mMusicServiceEventListeners = new ArrayList<>();
 

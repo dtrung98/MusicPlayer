@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
-import android.renderscript.RSRuntimeException;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import androidx.annotation.FloatRange;

@@ -743,17 +743,17 @@ public class SoundFile {
         BufferedWriter writer = null;
         float presentationTime = 0;
         mDecodedSamples.rewind();
-        String row;
+        StringBuilder row;
         try {
             writer = new BufferedWriter(new FileWriter(outFile));
             for (int sampleIndex = 0; sampleIndex < mNumSamples; sampleIndex++) {
                 presentationTime = (float)(sampleIndex) / mSampleRate;
-                row = Float.toString(presentationTime);
+                row = new StringBuilder(Float.toString(presentationTime));
                 for (int channelIndex = 0; channelIndex < mChannels; channelIndex++) {
-                    row += "\t" + mDecodedSamples.get();
+                    row.append("\t").append(mDecodedSamples.get());
                 }
-                row += "\n";
-                writer.write(row);
+                row.append("\n");
+                writer.write(row.toString());
             }
         } catch (IOException e) {
             Log.w("Ringdroid", "Failed to create the sample TSV file.");
