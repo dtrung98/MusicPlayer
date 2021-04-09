@@ -141,7 +141,7 @@ public class MenuHelper {
         protected String doInBackground(Playlist... params) {
             try {
                 return String.format(App.getInstance().getApplicationContext().getString(R.string.saved_playlist_to), PlaylistsUtil.savePlaylist(App.getInstance().getApplicationContext(), params[0]));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return String.format(App.getInstance().getApplicationContext().getString(R.string.failed_to_save_playlist), e);
             }

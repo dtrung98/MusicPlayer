@@ -65,7 +65,8 @@ public class GenreLoader {
             return context.getContentResolver().query(
                     Genres.Members.getContentUri("external", genreId),
                     SongLoader.BASE_PROJECTION, SongLoader.BASE_SELECTION, null, PreferenceUtil.getInstance(context).getSongSortOrder());
-        } catch (SecurityException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -81,7 +82,8 @@ public class GenreLoader {
             return context.getContentResolver().query(
                     Genres.EXTERNAL_CONTENT_URI,
                     projection, null, null, PreferenceUtil.getInstance(context).getGenreSortOrder());
-        } catch (SecurityException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -101,7 +103,8 @@ public class GenreLoader {
             return context.getContentResolver().query(
                     Genres.EXTERNAL_CONTENT_URI,
                     projection, query, null, SortOrder.GenreSortOrder.GENRE_A_Z/*PreferenceUtil.getInstance(context).getGenreSortOrder()*/);
-        } catch (SecurityException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

@@ -142,9 +142,11 @@ public class BlurTransformation extends BitmapTransformation {
 
                 return out;
 
-            } catch (RSRuntimeException e) {
+            } catch (Exception e) {
                 // on some devices RenderScript.create() throws: android.support.v8.renderscript.RSRuntimeException: Error loading libRSSupport library
-                if (BuildConfig.DEBUG) e.printStackTrace();
+                if (BuildConfig.DEBUG) {
+                    e.printStackTrace();
+                }
             }
         }
 

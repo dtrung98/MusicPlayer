@@ -49,7 +49,8 @@ public class RingtoneManager {
             values.put(MediaStore.Audio.AudioColumns.IS_RINGTONE, "1");
             values.put(MediaStore.Audio.AudioColumns.IS_ALARM, "1");
             resolver.update(uri, values, null, null);
-        } catch (@NonNull final UnsupportedOperationException ignored) {
+        } catch (@NonNull Exception e) {
+            e.printStackTrace();
             return;
         }
 
@@ -66,6 +67,8 @@ public class RingtoneManager {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 }
             }
-        } catch (SecurityException ignored) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

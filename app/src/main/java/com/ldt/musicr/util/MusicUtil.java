@@ -37,7 +37,6 @@ import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -74,6 +73,9 @@ public class MusicUtil {
             e.printStackTrace();
             Toast.makeText(context, "Could not share this file, I'm aware of the issue.", Toast.LENGTH_SHORT).show();
             return new Intent();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Intent();
         }
     }
 
@@ -85,7 +87,11 @@ public class MusicUtil {
             values.put(MediaStore.Audio.AudioColumns.IS_RINGTONE, "1");
             values.put(MediaStore.Audio.AudioColumns.IS_ALARM, "1");
             resolver.update(uri, values, null, null);
-        } catch (@NonNull final UnsupportedOperationException ignored) {
+        } catch (@NonNull final UnsupportedOperationException e) {
+            e.printStackTrace();
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
 
@@ -107,7 +113,8 @@ public class MusicUtil {
                     cursor.close();
                 }
             }
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -253,7 +260,7 @@ public class MusicUtil {
             albumArtDir.mkdirs();
             try {
                 new File(albumArtDir, ".nomedia").createNewFile();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -305,17 +312,22 @@ public class MusicUtil {
                             Log.e("MusicUtils", "Failed to delete file " + name);
                         }
                         cursor.moveToNext();
-                    } catch (@NonNull final SecurityException ex) {
+                    } catch (@NonNull final SecurityException e) {
+                        e.printStackTrace();
                         cursor.moveToNext();
                     } catch (NullPointerException e) {
+                        e.printStackTrace();
                         Log.e("MusicUtils", "Failed to find file " + name);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
                 cursor.close();
             }
             context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
             Toast.makeText(context, context.getString(R.string.deleted_x_songs, songs.size()), Toast.LENGTH_SHORT).show();
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

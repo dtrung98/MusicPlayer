@@ -63,10 +63,8 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
                 }
             }
         // If there are any exceptions, we ignore them and continue to the other fallback method
-        } catch (ReadOnlyFileException ignored) {
-        } catch (InvalidAudioFrameException ignored) {
-        } catch (TagException ignored) {
-        } catch (IOException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // Method 2: look for album art in external files
@@ -91,7 +89,8 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
             } else {
                 try {
                     callback.onDataReady(fallback(model.filePath));
-                } catch (FileNotFoundException e) {
+                } catch (Exception e) {
+                    e.printStackTrace();
                     callback.onLoadFailed(e);
                 }
             }
@@ -106,7 +105,7 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
         if (stream != null) {
             try {
                 stream.close();
-            } catch (IOException ignore) {
+            } catch (Exception ignore) {
                 // can't do much about it
             }
         }

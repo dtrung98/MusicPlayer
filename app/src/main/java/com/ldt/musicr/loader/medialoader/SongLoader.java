@@ -185,7 +185,7 @@ public class SongLoader {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 Files.walk(Paths.get(root)).filter(path -> NO_MEDIA_TAG.equals(path.getFileName().toString())).collect(Collectors.toCollection(() -> noMediaPaths));
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -399,7 +399,8 @@ public class SongLoader {
         try {
             return context.getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     BASE_PROJECTION, selection, selectionValues, sortOrder);
-        } catch (SecurityException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

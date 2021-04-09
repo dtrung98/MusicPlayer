@@ -101,7 +101,7 @@ public class PlaylistLoader {
                         /* 1 */
                             PlaylistsColumns.NAME
                     }, selection, values, MediaStore.Audio.Playlists.DEFAULT_SORT_ORDER);
-        } catch (SecurityException e) {
+        } catch (Exception e) {
             return null;
         }
     }

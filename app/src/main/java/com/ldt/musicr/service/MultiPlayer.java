@@ -103,9 +103,14 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         try {
             mCurrentMediaPlayer.setNextMediaPlayer(null);
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             Log.i(TAG, "Next media player is current one, continuing");
         } catch (IllegalStateException e) {
+            e.printStackTrace();
             Log.e(TAG, "Media player not initialized!");
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
             return;
         }
         if (mNextMediaPlayer != null) {
@@ -122,7 +127,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
             if (setDataSourceImpl(mNextMediaPlayer, path)) {
                 try {
                     mCurrentMediaPlayer.setNextMediaPlayer(mNextMediaPlayer);
-                } catch (@NonNull IllegalArgumentException | IllegalStateException e) {
+                } catch (@NonNull Exception e) {
                     Log.e(TAG, "setNextDataSource: setNextMediaPlayer()", e);
                     if (mNextMediaPlayer != null) {
                         mNextMediaPlayer.release();
@@ -164,7 +169,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         try {
             mCurrentMediaPlayer.start();
             return true;
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -198,7 +203,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         try {
             mCurrentMediaPlayer.pause();
             return true;
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -223,7 +228,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         }
         try {
             return mCurrentMediaPlayer.getDuration();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -240,7 +245,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         }
         try {
             return mCurrentMediaPlayer.getCurrentPosition();
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -256,7 +261,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         try {
             mCurrentMediaPlayer.seekTo(whereto);
             return whereto;
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -271,7 +276,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
             mLeftVolume = l;
             mRightVolume = r;
             return true;
-        } catch (IllegalStateException e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -290,7 +295,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         try {
             mCurrentMediaPlayer.setAudioSessionId(sessionId);
             return true;
-        } catch (@NonNull IllegalArgumentException | IllegalStateException e) {
+        } catch (@NonNull Exception e) {
             return false;
         }
     }

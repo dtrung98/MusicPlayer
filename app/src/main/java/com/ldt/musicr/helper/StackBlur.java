@@ -92,13 +92,14 @@ public class StackBlur {
 
         try {
             EXECUTOR.invokeAll(horizontal);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
 
         try {
             EXECUTOR.invokeAll(vertical);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             return null;
         }
 

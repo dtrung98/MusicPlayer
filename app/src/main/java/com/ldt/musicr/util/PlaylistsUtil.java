@@ -136,7 +136,8 @@ public class PlaylistsUtil {
                 Toast.makeText(context, context.getResources().getString(
                         R.string.inserted_x_songs_into_playlist_x, numInserted, getNameForPlaylist(context, playlistId)), Toast.LENGTH_SHORT).show();
             }
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -183,7 +184,8 @@ public class PlaylistsUtil {
 
         try {
             context.getContentResolver().delete(uri, selection, selectionArgs);
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -199,7 +201,8 @@ public class PlaylistsUtil {
                     c.close();
                 }
                 return count > 0;
-            } catch (SecurityException ignored) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return false;
@@ -219,7 +222,8 @@ public class PlaylistsUtil {
                     MediaStore.Audio.Playlists._ID + "=?",
                     new String[]{String.valueOf(id)});
             context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -239,7 +243,8 @@ public class PlaylistsUtil {
                     cursor.close();
                 }
             }
-        } catch (SecurityException ignored) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "";
     }

@@ -51,7 +51,7 @@ class SynchronizedLyricsLRC extends AbsSynchronizedLyrics {
                         try {
                             m = Integer.parseInt(timeMatcher.group(1));
                             s = Float.parseFloat(timeMatcher.group(2));
-                        } catch (NumberFormatException ex) {
+                        } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                         int ms = (int) (s * LRC_SECONDS_TO_MS_MULTIPLIER) + m * LRC_MINUTES_TO_MS_MULTIPLIER;

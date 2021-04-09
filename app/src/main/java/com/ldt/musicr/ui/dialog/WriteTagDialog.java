@@ -186,7 +186,7 @@ public class WriteTagDialog extends LoadingScreenDialog {
                         albumArtFile = MusicUtil.createAlbumArtFile().getCanonicalFile();
                         info.artworkInfo.artwork.compress(Bitmap.CompressFormat.PNG, 0, new FileOutputStream(albumArtFile));
                         artwork = ArtworkFactory.createArtworkFromFile(albumArtFile);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         mMessage = "Something wrong when writing album art";
                     }
@@ -224,7 +224,7 @@ public class WriteTagDialog extends LoadingScreenDialog {
                         }
 
                         audioFile.commit();
-                    } catch (@NonNull CannotReadException | IOException | CannotWriteException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
+                    } catch (@NonNull Exception e) {
                         e.printStackTrace();
                         mMessage = e.getMessage();
                     }
@@ -239,7 +239,7 @@ public class WriteTagDialog extends LoadingScreenDialog {
                     }
                 }
 
-                finish(mMessage, info.filePaths.toArray(new String[info.filePaths.size()]));
+                finish(mMessage, info.filePaths.toArray(new String[0]));
                 return null;
             } catch (Exception e) {
                 e.printStackTrace();

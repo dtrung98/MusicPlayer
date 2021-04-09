@@ -95,7 +95,7 @@ public class ArtistImageFetcher implements DataFetcher<InputStream> {
                 Document document = null;
                 try {
                     document = Jsoup.connect(lastFmArtist.getArtist().getUrl()+"/+images").get();
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 if(document!=null) {
