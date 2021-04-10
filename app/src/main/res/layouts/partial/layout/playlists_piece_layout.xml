@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:minWidth="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_centerInParent="true"
             app:layout_constraintTop_toTopOf="@id/back_top_header"
             app:layout_constraintBottom_toBottomOf="@id/back_top_header"

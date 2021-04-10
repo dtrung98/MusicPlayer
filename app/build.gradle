@@ -11,7 +11,7 @@ android {
         versionCode 4
         versionName '1.2.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        renderscriptTargetApi 29
+        renderscriptTargetApi 30
         renderscriptSupportModeEnabled true
         vectorDrawables.useSupportLibrary = true
 
@@ -89,16 +89,19 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // ConstraintLayout
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    // Fragment
+    implementation "androidx.fragment:fragment-ktx:1.3.2"
 
     // Design
-    implementation 'com.google.android.material:material:1.3.0-alpha03'
+    implementation 'com.google.android.material:material:1.4.0-alpha02'
 
     // CardView
     implementation 'androidx.cardview:cardview:1.0.0'
 
     // RecyclerView
-    implementation 'androidx.recyclerview:recyclerview:1.2.0-alpha06'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
     // Palette
     implementation 'androidx.palette:palette:1.0.0'
@@ -115,8 +118,8 @@ dependencies {
     implementation 'me.everything:overscroll-decor-android:1.0.4'
 
     // Kotlin
-    testImplementation 'junit:junit:4.13'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
+    testImplementation 'junit:junit:4.13.2'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21"
 
     implementation 'com.daasuu:EasingInterpolator:1.0.0'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
@@ -162,7 +165,7 @@ dependencies {
     //implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     // Retrofit 2
-    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 
     // Gson & Gson Converter
     implementation 'com.google.code.gson:gson:2.8.6'
@@ -209,7 +212,7 @@ dependencies {
 
     // Lifecycle
     implementation "android.arch.lifecycle:extensions:2.2.0"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:2.3.1"
 
 }
 
