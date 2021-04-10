@@ -4,6 +4,8 @@ package com.ldt.musicr.ui.widget.fragmentnavigationcontroller;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -11,15 +13,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.util.Tool;
 
 import java.lang.ref.WeakReference;
 
 public abstract class NavigationFragment extends Fragment {
-    private static final String TAG ="SupportFragment";
+    private static final String TAG ="NavigationFragment";
     public static int PRESENT_STYLE_DEFAULT = PresentStyle.ACCORDION_LEFT;
 
     private WeakReference<NavigationControllerFragment> weakFragmentNavigationController = null;
@@ -27,23 +27,7 @@ public abstract class NavigationFragment extends Fragment {
     private FragmentTransitionFrameLayout innerRootLayout = null;
     private View contentView = null;
     private PresentStyle presentStyle = null;
-    public boolean isWhiteTheme(boolean current) {
-        saveTheme(current);
-        return true;
-    }
-    public boolean getSavedTheme() {
-        return savedTheme;
-    }
 
-    protected boolean savedTheme = true;
-    public void saveTheme(boolean b) {
-        Log.d(TAG, "saveTheme: b = " +b);
-        savedTheme = b;
-    }
-
-    public boolean isWhiteTheme() {
-        return true;
-    }
     public void onSetStatusBarMargin(int value) {
 
     }
@@ -81,7 +65,7 @@ public abstract class NavigationFragment extends Fragment {
 
     @Nullable
     @Override
-    final public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    final public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(getClass().getName(), "onCreateView");
         View v = onCreateView(inflater, container);
         if(v == null) return v;
@@ -120,7 +104,7 @@ public abstract class NavigationFragment extends Fragment {
 
     @Override
     public Animator onCreateAnimator(final int transit, final boolean enter, int nextAnim) {
-        if(animatable == false) {
+        if(!animatable) {
             animatable = true;
             return null;
         }
@@ -159,49 +143,6 @@ public abstract class NavigationFragment extends Fragment {
             animator.setInterpolator(nav.getInterpolator());
             animator.setDuration(nav.getDuration());
         }
-
-        animator.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animator) {
-
-                if(transit == FragmentTransaction.TRANSIT_FRAGMENT_OPEN) {
-
-                    if(enter) {
-                        onShowFragment();
-                    } else {
-                        //onHideFragment();
-                    }
-                } else {
-
-                    if(enter) {
-                        onShowFragment();
-                    } else {
-                        onHideFragment();
-                    }
-                }
-
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animator) {
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
-            }
-        });
         return animator;
     }
-
-
-    public void onShowFragment() {}
-    public void onHideFragment() {}
-
 }
