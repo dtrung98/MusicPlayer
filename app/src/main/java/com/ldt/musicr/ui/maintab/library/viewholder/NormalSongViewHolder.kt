@@ -5,11 +5,6 @@ import com.ldt.musicr.R
 import android.widget.TextView
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar
 import com.ldt.musicr.model.Song
-import com.ldt.musicr.glide.SongGlideRequest
-import com.ldt.musicr.glide.GlideApp
-import com.bumptech.glide.request.RequestListener
-import android.graphics.Bitmap
-import com.bumptech.glide.load.engine.GlideException
 import com.makeramen.roundedimageview.RoundedImageView
 import android.os.Build
 import android.graphics.drawable.RippleDrawable
@@ -17,22 +12,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import com.bumptech.glide.Glide
 import com.ldt.musicr.helper.songpreview.PreviewSong
 import com.ldt.musicr.service.MusicPlayerRemote
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.request.target.Target
+import com.ldt.musicr.App
 import com.ldt.musicr.model.dataitem.DataItem
 import com.ldt.musicr.notification.ActionKey
 import com.ldt.musicr.notification.ActionResponder
 import com.ldt.musicr.notification.invoke
 import com.ldt.musicr.provider.ColorProvider
+import com.ldt.musicr.utils.ArtworkUtils
 
-open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: ActionResponder? = null) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_song_normal, parent, false)), BindPlayingState, BindPreviewState, BindTheme {
+open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: ActionResponder?, layoutInflater: LayoutInflater? = null) : RecyclerView.ViewHolder((layoutInflater ?: LayoutInflater.from(parent.context)).inflate(R.layout.item_song_normal, parent, false)), BindPlayingState, BindPreviewState, BindTheme {
     private val numberView: TextView = itemView.findViewById(R.id.number)
     private val titleTextView: TextView = itemView.findViewById(R.id.title)
     private val descriptionTextView: TextView = itemView.findViewById(R.id.description)
-    private val imageView: ImageView = itemView.findViewById(R.id.image)
+    private val imageView: RoundedImageView = itemView.findViewById(R.id.image)
     private val quickPlayPauseView: ImageView = itemView.findViewById(R.id.quick_play_pause)
     private val menuView: View = itemView.findViewById(R.id.menu_button)
     private val panelView: View = itemView.findViewById(R.id.panel)
@@ -40,6 +34,8 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
     private var data: DataItem.SongItem? = null
 
     private val playState = booleanArrayOf(false, false)
+
+    private val dpX1 by lazy { App.getInstance().resources.getDimension(R.dimen.oneDP) }
 
     init {
         itemView.setOnClickListener {
@@ -68,24 +64,10 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         numberView.text = numberView.resources.getString(R.string.str_number_placeholder, positionInData + 1)
         titleTextView.text = song.title
         descriptionTextView.text = song.artistName
-        SongGlideRequest.Builder.from(GlideApp.with(itemView.context), song)
-            .ignoreMediaStore(false)
-            .generatePalette(itemView.context).build()
-            .listener(object : RequestListener<Bitmap?> {
-                override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Bitmap?>, isFirstResource: Boolean): Boolean {
-                    if (imageView is RoundedImageView) imageView.setBorderWidth(R.dimen.oneDP)
-                    return false
-                }
-
-                override fun onResourceReady(resource: Bitmap?, model: Any, target: Target<Bitmap?>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-                    if (imageView is RoundedImageView) imageView.borderWidth = 0f
-                    return false
-                }
-            })
-            .into(imageView)
         bindPlayingStateNonColor()
         bindPreviewButton(song, previewingSong)
         bindTheme()
+        ArtworkUtils.loadAlbumArtworkFromSong(imageView, song)
     }
 
     override fun bindTheme() {

@@ -22,17 +22,14 @@ import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 import java.io.InputStream;
 
 @GlideModule
-public class MyGlideModule extends AppGlideModule {
-    @Override
-    public void applyOptions(@NonNull Context context, @NonNull GlideBuilder builder) {
-        super.applyOptions(context, builder);
-    }
+public class MPGlideModule extends AppGlideModule {
 
     @Override
     public void registerComponents(@NonNull Context context, @NonNull Glide glide, @NonNull Registry registry) {
         super.registerComponents(context, glide, registry);
-        registry.append(AudioFileCover.class,InputStream.class,new AudioFileCoverLoader.Factory());
-        registry.append(ArtistImage.class,InputStream.class, new ArtistImageLoader.Factory(context));
+        registry.prepend(ArtistImage.class, InputStream.class, new ArtistImageLoader.Factory(context));
+        registry.prepend(AudioFileCover.class, InputStream.class, new AudioFileCoverLoader.Factory());
+
         registry.register(Bitmap.class, BitmapPaletteWrapper.class, new BitmapPaletteTranscoder());
         registry.replace(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
     }

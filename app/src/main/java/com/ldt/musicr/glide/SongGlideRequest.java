@@ -102,7 +102,7 @@ public class SongGlideRequest {
     }
 
     public static RequestBuilder<Bitmap> createBaseRequest(RequestManager requestManager, Song song, boolean ignoreMediaStore) {
-        if (ignoreMediaStore) {
+        if (true) {
             return requestManager.asBitmap().load(new AudioFileCover(song.data));
         } else {
             return requestManager.asBitmap().load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));

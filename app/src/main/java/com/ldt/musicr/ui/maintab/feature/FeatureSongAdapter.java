@@ -13,15 +13,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
 import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.model.Song;
 
-import com.ldt.musicr.util.Util;
 import com.ldt.musicr.util.Tool;
+import com.ldt.musicr.utils.ArtworkUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -153,19 +152,10 @@ public class FeatureSongAdapter extends RecyclerView.Adapter<FeatureSongAdapter.
             mTitle.setText(song.title);
             mDescription.setText(song.artistName);
 
-         /*   RequestManager requestManager;
-            if(mContext instanceof Activity)
-                requestManager = Glide.with((Activity) mContext);
-            else requestManager = Glide.with(itemView.getContext());
-
-            requestManager.load(Util.getAlbumArtUri(song.albumId))
+            ArtworkUtils.getBitmapRequestBuilder(mImage.getContext(), song)
                     .placeholder(R.drawable.music_empty)
                     .error(R.drawable.music_empty)
-                    .into(mImage);*/
-         Glide.with(mContext).load(Util.getAlbumArtUri(song.albumId))
-                 .placeholder(R.drawable.music_empty)
-                 .error(R.drawable.music_empty)
-                 .into(mImage);
+                    .into(mImage);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 ((RippleDrawable) itemView.getBackground()).setColor(ColorStateList.valueOf(Tool.getBaseColor()));

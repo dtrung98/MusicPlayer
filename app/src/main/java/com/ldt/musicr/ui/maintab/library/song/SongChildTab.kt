@@ -69,6 +69,8 @@ class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListen
         view.findViewById<View>(R.id.preview_random_panel).setOnClickListener { shuffle() }
         view.findViewById<View>(R.id.refresh).setOnClickListener { refresh() }
 
+        adapter.layoutInflater = layoutInflater
+
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
         ViewCompat.setOnApplyWindowInsetsListener(recyclerView) { v, insets ->

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.data.DataFetcher;
+import com.ldt.musicr.util.AudioFileCoverUtils;
 
 
 import org.jaudiotagger.audio.mp3.MP3File;
@@ -17,33 +18,32 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-/**
- * @author Karim Abou Zeid (kabouzeid)
- */
 public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
     private final AudioFileCover model;
-    private FileInputStream stream;
+    private InputStream stream;
 
     public AudioFileCoverFetcher(AudioFileCover model) {
         this.model = model;
     }
 
-/*
     @Override
-    public InputStream loadData(Priority priority) throws Exception {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
+        final MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             retriever.setDataSource(model.filePath);
             byte[] picture = retriever.getEmbeddedPicture();
             if (picture != null) {
-                return new ByteArrayInputStream(picture);
+                stream = new ByteArrayInputStream(picture);
             } else {
-                return fallback(model.filePath);
+                stream = AudioFileCoverUtils.fallback(model.filePath);
             }
+            callback.onDataReady(stream);
+        } catch (FileNotFoundException e) {
+            callback.onLoadFailed(e);
         } finally {
             retriever.release();
         }
-    }*/
+    }
 
     private static final String[] FALLBACKS = {"cover.jpg", "album.jpg", "folder.jpg", "cover.png", "album.png", "folder.png"};
 
@@ -72,27 +72,6 @@ public class AudioFileCoverFetcher implements DataFetcher<InputStream> {
             }
         }
         return null;
-    }
-
-    @Override
-    public void loadData(@NonNull Priority priority, @NonNull DataCallback<? super InputStream> callback) {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        try {
-            retriever.setDataSource(model.filePath);
-            byte[] picture = retriever.getEmbeddedPicture();
-            if (picture != null) {
-                callback.onDataReady(new ByteArrayInputStream(picture));
-            } else {
-                try {
-                    callback.onDataReady(fallback(model.filePath));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    callback.onLoadFailed(e);
-                }
-            }
-        } finally {
-            retriever.release();
-        }
     }
 
     @Override

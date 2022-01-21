@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.maintab.library.adapter
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ldt.musicr.helper.songpreview.PreviewSong
@@ -20,6 +21,7 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
     var previewingSong: PreviewSong? = null
     var playingAdapterPosition: Int = -1
     var previewingAdapterPosition: Int = -1
+    var layoutInflater: LayoutInflater? = null
 
     override fun getItemViewType(position: Int): Int {
         return when(val it = currentList[position]) {

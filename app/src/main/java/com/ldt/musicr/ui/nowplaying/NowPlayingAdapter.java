@@ -18,6 +18,7 @@ import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
+import com.ldt.musicr.utils.ArtworkUtils;
 import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
@@ -94,13 +95,12 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.It
             Artist artist = ArtistLoader.getArtist(mContext,song.artistId);
             int[] screen = Tool.getScreenSize(mContext);
 
-            Glide.with(mContext)
-                    .load(Util.getAlbumArtUri(song.albumId))
+            ArtworkUtils.getBitmapRequestBuilder(itemView.getContext(), song)
                     .override(screen[1])
                     .placeholder(R.drawable.speaker2)
                     .error(
-                            ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist).tryToLoadOriginal(true).whichImage(1).generateBuilder(mContext).buildRequestDrawable()
-                                    .error(ArtistGlideRequest.Builder.from(GlideApp.with(mContext),artist).tryToLoadOriginal(false).whichImage(1).generateBuilder(mContext).buildRequestDrawable().error(R.drawable.speaker2)
+                            ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist).tryToLoadOriginal(true).whichImage(1).generateBuilder(mContext).build()
+                                    .error(ArtistGlideRequest.Builder.from(GlideApp.with(mContext),artist).tryToLoadOriginal(false).whichImage(1).generateBuilder(mContext).build().error(R.drawable.speaker2)
                     ))
                     .into(mImage);
      /*       ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), mArtist)
