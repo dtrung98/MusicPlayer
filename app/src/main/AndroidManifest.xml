@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.Manifest.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
@@ -15,6 +14,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
@@ -22,6 +22,7 @@
         android:theme="@style/AppThemeNoWallpaper"
         tools:ignore="UnusedAttribute">
         <activity
+            android:exported="true"
             android:name=".ui.AppActivity"
             android:theme="@style/SplashThemeV2"
             android:screenOrientation="portrait"

@@ -15,6 +15,9 @@ import android.view.animation.LinearInterpolator;
 
 import java.util.Stack;
 
+/**
+ * Created by burt on 2016. 5. 24..
+ */
 public class NavigationControllerFragment extends NavigationFragment {
 
     private FragmentManager fragmentManager = null;
@@ -30,6 +33,7 @@ public class NavigationControllerFragment extends NavigationFragment {
     }
 
     private NavigationControllerFragment(@NonNull FragmentManager fragmentManager, @IdRes int containerViewId) {
+        setRetainInstance(true);
         this.containerViewId = containerViewId;
         this.fragmentManager = fragmentManager;
 

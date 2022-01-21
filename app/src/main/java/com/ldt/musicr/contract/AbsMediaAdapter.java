@@ -20,7 +20,7 @@ public abstract class AbsMediaAdapter<VH extends AbsBindAbleHolder, I extends Me
     }
 
     private Context mContext;
-    protected int mMediaPlayDataItem = -1;
+    public int mMediaPlayDataItem = -1;
     protected String mName = TAG;
 
     public static final String PLAY_STATE_CHANGED = "play_state_changed";

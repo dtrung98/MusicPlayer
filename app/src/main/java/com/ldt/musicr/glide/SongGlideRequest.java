@@ -20,7 +20,7 @@ import com.ldt.musicr.util.PreferenceUtil;
 public class SongGlideRequest {
 
     public static final DiskCacheStrategy DEFAULT_DISK_CACHE_STRATEGY = DiskCacheStrategy.NONE;
-    public static final int DEFAULT_ERROR_IMAGE = R.drawable.music_style;
+    public static final int DEFAULT_ERROR_IMAGE = R.drawable.ic_music_style;
     public static final int DEFAULT_ANIMATION = android.R.anim.fade_in;
 
     public static class Builder {
@@ -93,7 +93,6 @@ public class SongGlideRequest {
         public RequestBuilder<Bitmap> build() {
             //noinspection unchecked
             return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
-
               //     .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)

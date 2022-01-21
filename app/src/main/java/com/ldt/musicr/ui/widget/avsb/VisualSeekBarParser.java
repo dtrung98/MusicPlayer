@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
 import com.ldt.musicr.interactors.AppExecutors;
+import com.ldt.musicr.interactors.MainThreadUtils;
 import com.ldt.musicr.model.Song;
 
 import java.io.FileNotFoundException;
@@ -53,7 +54,7 @@ class VisualSeekBarParser implements ProgressListener {
         if (newW != mViewWidth || newH != mViewHeight) {
             mViewWidth = newW;
             mViewHeight = newH;
-            AppExecutors.getInstance().networkIO().execute(this::parseVisualData);
+            AppExecutors.io().execute(this::parseVisualData);
         }
     }
 
@@ -69,11 +70,10 @@ class VisualSeekBarParser implements ProgressListener {
      * @param song
      */
     void parse(Song song) {
-        AppExecutors.getInstance().networkIO().execute(() -> {
+        AppExecutors.io().execute(() -> {
                     mMessage = "";
                     /* notify the seek bar that parser is starting to parse a file */
-                    AppExecutors.getInstance().mainThread().execute(mSeekBar::startParsingFile);
-
+                    MainThreadUtils.postOnUiThread(mSeekBar::startParsingFile);
                     try {
                         mSoundFile = com.ldt.musicr.ui.widget.soundfile.SoundFile.create(song, this);
                         //Thread.sleep(2500);
@@ -87,7 +87,7 @@ class VisualSeekBarParser implements ProgressListener {
                         parse();
 
                     /* notify the seek bar that parsing process had finish */
-                    AppExecutors.getInstance().mainThread().execute(mSeekBar::finishParsingFile);
+                    MainThreadUtils.postOnUiThread(mSeekBar::finishParsingFile);
                 }
         );
     }

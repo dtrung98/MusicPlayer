@@ -40,7 +40,7 @@ import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.MusicServiceActivity;
-import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.maintab.CardLayerFragment;
 
 import com.ldt.musicr.model.Song;
 

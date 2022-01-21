@@ -4,6 +4,9 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.ldt.musicr.interactors.MainThreadUtils;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
@@ -16,8 +19,15 @@ import java.util.List;
 
 public class SongPreviewController implements MusicServiceEventListener, SongPreviewListener {
     private static final String TAG = "SongPreviewController";
+    private static SongPreviewController sInstance;
+    public static SongPreviewController getInstance() {
+        if(sInstance == null) {
+            sInstance = new SongPreviewController();
+        }
+        return sInstance;
+    }
 
-    public SongPreviewController() {
+    private SongPreviewController() {
         mPreviewPlayer = new PreviewPlayer();
         mPreviewPlayer.setSongPreviewListener(this);
     }
@@ -87,13 +97,14 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
     private PreviewPlayer mPreviewPlayer;
 
     public void destroy() {
-
-        if (mSoundFilesTask != null) mSoundFilesTask.cancel();
+        if (mSoundFilesTask != null) {
+            mSoundFilesTask.cancel();
+        }
         mSoundFilesTask = null;
         mPreviewPlayer.destroy();
         mPreviewPlayer = null;
         mListeners.clear();
-
+        sInstance = null;
     }
 
     public void addSongPreviewListener(SongPreviewListener listener) {
@@ -105,9 +116,28 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         if (listener != null) mListeners.remove(listener);
     }
 
+    public void previewSongsAndStopCurrent(List<Song> songs) {
+        if(isPlayingPreview()) {
+            cancelPreview();
+        }
+        previewSongs(songs);
+    }
+
+    public void previewSongsAndStopCurrent(@NonNull Song song) {
+        if(isPlayingPreview()) {
+            cancelPreview();
+        }
+        previewSongs(song);
+    }
+
     public void previewSongs(List<Song> songs) {
-        Log.d(TAG, "previewSongs: size = " + songs.size());
-        previewSongs(songs.toArray(new Song[0]));
+        previewSongsInternal(songs);
+    }
+
+    public void previewSongs(@NonNull Song song) {
+        final List<Song> list = new ArrayList<>(1);
+        list.add(song);
+        previewSongsInternal(list);
     }
 
     public boolean isPlayingPreview() {
@@ -129,7 +159,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         return song != null && song.equals(which);
     }
 
-    public void previewSongs(Song... songs) {
+    public void previewSongsInternal(List<Song> songs) {
         boolean isMusicPlaying = MusicPlayerRemote.isPlaying();
 
         if (mSoundFilesTask != null) mSoundFilesTask.cancel();
@@ -153,7 +183,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
     private SoundFilesLoader mSoundFilesTask;
 
-    private static class SoundFilesLoader extends AsyncTask<Song, Void, Void> {
+    private static class SoundFilesLoader extends AsyncTask<List<Song>, Void, Void> {
         private final WeakReference<SongPreviewController> mRefController;
 
         public SoundFilesLoader(SongPreviewController controller) {
@@ -168,12 +198,20 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
             mIsCanceled = true;
         }
 
+        @SafeVarargs
         @Override
-        protected Void doInBackground(Song... songs) {
+        protected final Void doInBackground(List<Song>... songs) {
 
-            for (Song song :
-                    songs) {
-                if (mIsCanceled) break;
+            if(songs.length == 0) {
+                return null;
+            }
+
+            final List<Song> list = songs[0];
+
+            for (Song song : list) {
+                if (mIsCanceled) {
+                    break;
+                }
                 loadPreviewSong(song);
             }
 
@@ -203,7 +241,7 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
 
             SongPreviewController controller = mRefController.get();
             if (controller != null && !mIsCanceled) {
-                controller.mHandler.post(
+                MainThreadUtils.postOnUiThread(
                         () -> controller.onNewPreviewSongReady(
                                 new PreviewSong(song, (int) mMillisPlayFrom, (int) mMillisPlayTo)));
             }
@@ -389,8 +427,6 @@ public class SongPreviewController implements MusicServiceEventListener, SongPre
         }
 
     }
-
-    private Handler mHandler = new Handler();
 
     private void onNewPreviewSongReady(PreviewSong song) {
         mPreviewPlayer.addToQueue(song);

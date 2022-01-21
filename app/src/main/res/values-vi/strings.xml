@@ -270,5 +270,5 @@
     <string name="back_description">Trở về trang trước</string>
     <string name="left_right_audio_balance">Cân bằng âm trái phải</string>
     <string name="play_preview_all">Nghe thử (tất cả)</string>
-
+    <string name="str_number_placeholder">%1$d</string>
 </resources>

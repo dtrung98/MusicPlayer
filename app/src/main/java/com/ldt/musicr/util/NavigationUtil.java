@@ -27,9 +27,9 @@ import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
-import com.ldt.musicr.ui.page.librarypage.LibraryTabFragment;
-import com.ldt.musicr.ui.page.subpages.ArtistPagerFragment;
-import com.ldt.musicr.ui.page.subpages.singleplaylist.SinglePlaylistFragment;
+import com.ldt.musicr.ui.maintab.library.LibraryTabFragment;
+import com.ldt.musicr.ui.maintab.subpages.ArtistPagerFragment;
+import com.ldt.musicr.ui.maintab.subpages.singleplaylist.SinglePlaylistFragment;
 
 import es.dmoral.toasty.Toasty;
 

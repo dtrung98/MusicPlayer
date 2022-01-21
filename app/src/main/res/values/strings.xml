@@ -237,10 +237,10 @@
     <string name="action_play_pause">Play/Pause</string>
     <string name="action_previous">Previous</string>
     <string name="action_next">Next</string>
-    <string name="app_widget_big_name">Phonograph - Big</string>
-    <string name="app_widget_classic_name">Phonograph - Classic</string>
-    <string name="app_widget_small_name">Phonograph - Small</string>
-    <string name="app_widget_card_name">Phonograph - Card</string>
+    <string name="app_widget_big_name">Musicr - Big</string>
+    <string name="app_widget_classic_name">Musicr - Classic</string>
+    <string name="app_widget_small_name">Musicr - Small</string>
+    <string name="app_widget_card_name">Musicr - Card</string>
     <string name="alert_ext">Press once again to exit</string>
     <string name="copy">Copy</string>
     <string name="edit">Edit</string>
@@ -320,4 +320,5 @@
     <string name="back_description">Back to previous screen</string>
     <string name="left_right_audio_balance">Left Right Audio Balance</string>
     <string name="play_preview_all">Play preview all</string>
+    <string name="str_number_placeholder">%1$d</string>
 </resources>

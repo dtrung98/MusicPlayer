@@ -60,7 +60,7 @@ public abstract class AbsDataAdapter<VH extends AbsBindAbleHolder, I> extends Re
         notifyItemRemoved(i);
     }
 
-    protected int getMediaHolderPosition(int dataPosition) {
+    public int getMediaHolderPosition(int dataPosition) {
         return dataPosition;
     }
 

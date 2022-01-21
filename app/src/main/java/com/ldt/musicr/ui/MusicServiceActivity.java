@@ -22,6 +22,7 @@ import android.util.Log;
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.loader.medialoader.PaletteGeneratorTask;
+import com.ldt.musicr.notification.GlobalEventBusMusicEventListener;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 
@@ -67,8 +68,10 @@ public abstract class MusicServiceActivity extends AppCompatActivity implements 
                 MusicServiceActivity.this.onServiceDisconnected();
             }
         });
-
-        if(mSongPreviewController==null) mSongPreviewController = new SongPreviewController();
+        addMusicServiceEventListener(GlobalEventBusMusicEventListener.INSTANCE);
+        if(mSongPreviewController==null) {
+            mSongPreviewController = SongPreviewController.getInstance();
+        }
         addMusicServiceEventListener(mSongPreviewController);
     }
 
@@ -89,7 +92,7 @@ public abstract class MusicServiceActivity extends AppCompatActivity implements 
         if(mPaletteGeneratorTask!=null) mPaletteGeneratorTask.cancel();
         mPaletteGeneratorTask = null;
 
-        if(mSongPreviewController!=null) mSongPreviewController.destroy();
+        if(mSongPreviewController != null) mSongPreviewController.destroy();
 
         MusicPlayerRemote.unbindFromService(serviceToken);
         if (receiverRegistered) {
@@ -311,7 +314,6 @@ public void addMusicServiceEventListener(final MusicServiceEventListener listene
         return context.createConfigurationContext(configuration);
     }
 
-    @SuppressWarnings("deprecation")
     private Context updateResourcesLocaleLegacy(Context context, Locale locale) {
         Resources resources = context.getResources();
         Configuration configuration = resources.getConfiguration();

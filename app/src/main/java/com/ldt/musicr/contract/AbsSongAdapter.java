@@ -31,7 +31,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.MusicServiceActivity;
-import com.ldt.musicr.ui.page.librarypage.artist.ArtistAdapter;
+import com.ldt.musicr.ui.maintab.library.artist.ArtistAdapter;
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar;
 import com.ldt.musicr.util.Tool;
 import com.makeramen.roundedimageview.RoundedImageView;
@@ -89,7 +89,7 @@ public abstract class AbsSongAdapter extends AbsMediaAdapter<AbsBindAbleHolder, 
         super.destroy();
     }
 
-    public void previewAll(boolean shuffle) {
+    public void previewAllOrStopAll(boolean shuffle) {
         if (getContext() instanceof AppActivity) {
             SongPreviewController preview = ((AppActivity) getContext()).getSongPreviewController();
             if (preview != null) {

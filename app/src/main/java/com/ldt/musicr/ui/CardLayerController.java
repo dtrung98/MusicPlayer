@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
-import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.maintab.CardLayerFragment;
 import com.ldt.musicr.ui.widget.gesture.SwipeDetectorGestureListener;
 import com.ldt.musicr.util.InterpolatorUtil;
 import com.ldt.musicr.util.Tool;

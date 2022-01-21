@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.service.MusicServiceEventListener;
-import com.ldt.musicr.ui.page.CardLayerFragment;
+import com.ldt.musicr.ui.maintab.CardLayerFragment;
 
 /**
  * Search screen allows user to search songs, playlists, artists

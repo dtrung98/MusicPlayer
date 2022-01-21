@@ -32,10 +32,10 @@
         android:layout_height="45dp"
         android:scaleType="centerInside"
         android:padding="6dp"
-        app:riv_corner_radius="2dp"
-        tools:src="@drawable/music_style"
-        tools:riv_border_width="1dp"
-        app:riv_border_color="#88000000"/>
+        app:riv_corner_radius="4dp"
+        tools:src="@drawable/ic_music_style"
+        app:riv_border_width="1dp"
+        app:riv_border_color="#44F5F5F5"/>
     <TextView
         android:id="@id/title"
         android:maxLines="1"
@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         tools:text="Girls 'Generation"
         android:textSize="12sp"
-        android:textStyle="bold"
+        android:textStyle="normal"
         android:textColor="#AAF5F5F5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title"
