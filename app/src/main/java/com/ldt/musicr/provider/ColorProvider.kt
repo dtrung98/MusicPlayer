@@ -12,9 +12,11 @@ import com.ldt.musicr.util.Tool
 
 object ColorProvider {
     // color that will change due to palette only
+    @JvmField
     val paletteRelatedLM = ResettableLazyManager()
 
     // color that will change due to dark/light mode only
+    @JvmField
     val darkLightRelatedLM = ResettableLazyManager()
 
     val baseColor by resettableLazy(paletteRelatedLM) { Tool.getBaseColor() }

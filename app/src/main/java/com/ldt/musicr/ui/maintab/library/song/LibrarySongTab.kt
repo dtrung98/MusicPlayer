@@ -16,15 +16,16 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ldt.musicr.model.Song
-import com.ldt.musicr.loader.medialoader.SongLoader
-import com.ldt.musicr.ui.bottomsheet.SortOrderBottomSheet
 import com.bumptech.glide.Glide
+import com.ldt.musicr.common.AppConfig
+import com.ldt.musicr.common.MediaManager
 import com.ldt.musicr.interactors.AppExecutors
-import com.ldt.musicr.interactors.postOnUiThread
-import com.ldt.musicr.model.dataitem.DataItem
+import com.ldt.musicr.interactors.runOnUiThread
+import com.ldt.musicr.model.item.DataItem
 import com.ldt.musicr.notification.Action
 import com.ldt.musicr.notification.ActionResponder
 import com.ldt.musicr.notification.EventKey
+import com.ldt.musicr.notification.MediaKey
 import com.ldt.musicr.ui.maintab.library.adapter.MediaAdapter
 import com.ldt.musicr.util.Tool
 import com.ldt.musicr.util.Util
@@ -33,14 +34,14 @@ import com.zalo.gitlabmobile.notification.MessageEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 
-class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListener, FirstItemCallBack, ActionResponder {
+class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListener, FirstItemCallBack, ActionResponder {
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var refreshView: ImageView
     private lateinit var imageView: ImageView
     private lateinit var titleTextView: TextView
     private lateinit var artistTextView: TextView
-    private lateinit var randomGroup: Group
+    private lateinit var shuffleTileGroup: Group
     private var currentSortOrder = 0
 
     private fun initSortOrder() {
@@ -64,7 +65,7 @@ class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListen
         imageView = view.findViewById(R.id.image)
         titleTextView = view.findViewById(R.id.title)
         artistTextView = view.findViewById(R.id.description)
-        randomGroup = view.findViewById(R.id.random_group)
+        shuffleTileGroup = view.findViewById(R.id.random_group)
 
         view.findViewById<View>(R.id.preview_random_panel).setOnClickListener { shuffle() }
         view.findViewById<View>(R.id.refresh).setOnClickListener { refresh() }
@@ -96,31 +97,56 @@ class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListen
         refreshData()
     }
 
-    private fun refreshData() {
-        AppExecutors.io().execute {
-            val songs = SongLoader.getAllSongs(App.getInstance().applicationContext, SortOrderBottomSheet.mSortOrderCodes[currentSortOrder])
-            val result = mutableListOf<DataItem>()
-
-            // Header
-            result.add(DataItem.SortingTile)
-
-            // Data
-            songs.forEachIndexed { index, song -> result.add(DataItem.SongItem(song, index)) }
-
-            //Finish
-            postOnUiThread {
-                if(isAdded && !isRemoving) {
-                    showOrHidePreview(songs.isNotEmpty())
-                    adapter.submitList(result)
-                }
+    private fun submitList(data: List<DataItem>) {
+        runOnUiThread {
+            if(isAdded && !isRemoving) {
+                val shouldShowPreview = AppConfig.isShowShuffleTileInLibrarySongTab && data.isNotEmpty() && data[0] is DataItem.SongItem
+                showOrHideShuffleTile(shouldShowPreview)
+                adapter.submitList(data)
             }
-
         }
     }
 
-    private fun showOrHidePreview(show: Boolean) {
+    private fun refreshData() {
+        AppExecutors.io().execute {
+
+            if(!MediaManager.isLoadedSongs) {
+                // fetch later
+                return@execute
+            }
+
+            val result = mutableListOf<DataItem>()
+            val playlist = MediaManager.getPlaylist(MediaKey.PLAYLIST_ID_ALL_SONGS) ?: run {
+                if(AppConfig.isShowEmptyViewInLibrarySongTab) {
+                    result.add(DataItem.Empty.Error)
+                }
+                submitList(result)
+                return@execute
+            }
+
+            val songs = mutableListOf<DataItem.SongItem>()
+
+            playlist.songs.forEach { songId ->
+                MediaManager.getSong(songId)?.also { song ->
+                    songs.add(DataItem.SongItem(song, songs.size, playlist.id))
+                }
+            }
+
+            result.addAll(songs)
+
+            // Add Sorting Tile
+            if(AppConfig.isShowSortingTileInLibrarySongTab && songs.isNotEmpty()) {
+                result.add(0, DataItem.SortingTile)
+            }
+
+            // Submit result
+            submitList(result)
+        }
+    }
+
+    private fun showOrHideShuffleTile(show: Boolean) {
         val v = if (show) View.VISIBLE else View.GONE
-        randomGroup.visibility = v
+        shuffleTileGroup.visibility = v
     }
 
     override fun onFirstItemCreated(song: Song) {
@@ -158,6 +184,9 @@ class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListen
     @Subscribe
     fun onReceivedEvent(messageEvent: MessageEvent) {
         when(messageEvent.key) {
+            EventKey.OnLoadedSongs -> {
+                refreshData()
+            }
             EventKey.OnMediaStoreChanged -> {
                 refreshData()
             }
@@ -167,20 +196,21 @@ class SongChildTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedListen
                     recyclerView.setPopupBgColor(Tool.getHeavyColor())
                     recyclerView.setThumbColor(Tool.getHeavyColor())
                 }
+                adapter.onThemeChanged()
                 //adapter.notifyOnMediaStateChanged(AbsMediaAdapter.PALETTE_CHANGED)
             }
             EventKey.OnPlayStateChanged -> {
                 //adapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED)
+                adapter.onPlayingStateChanged()
             }
             EventKey.OnPlayingMetaChanged -> {
                 //adapter.notifyOnMediaStateChanged(AbsMediaAdapter.PLAY_STATE_CHANGED)
             }
             EventKey.OnQueueChanged -> { }
             EventKey.OnRepeatModeChanged -> { }
-            EventKey.OnServiceConnected -> { }
-            EventKey.OnServiceDisconnected -> { }
             EventKey.OnShuffleModeChanged -> { }
             EventKey.Other -> { }
+            else -> { }
         }
     }
 

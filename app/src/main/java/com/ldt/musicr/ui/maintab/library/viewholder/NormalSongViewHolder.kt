@@ -14,8 +14,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.ldt.musicr.helper.songpreview.PreviewSong
 import com.ldt.musicr.service.MusicPlayerRemote
-import com.ldt.musicr.App
-import com.ldt.musicr.model.dataitem.DataItem
+import com.ldt.musicr.model.item.DataItem
 import com.ldt.musicr.notification.ActionKey
 import com.ldt.musicr.notification.ActionResponder
 import com.ldt.musicr.notification.invoke
@@ -35,15 +34,13 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
 
     private val playState = booleanArrayOf(false, false)
 
-    private val dpX1 by lazy { App.getInstance().resources.getDimension(R.dimen.oneDP) }
-
     init {
         itemView.setOnClickListener {
-            actionResponder?.invoke(ActionKey.PLAY_ALL_SONGS, bindingAdapterPosition, true)
+            data?.also { ItemViewUtils.playPlaylist(it.playlistId, it.song.id, true) }
         }
 
         itemView.findViewById<View>(R.id.menu_button).setOnClickListener {
-            ItemViewUtils.handleMenuClickOnNormalSongItem(this, data?.song, bindingAdapterPosition)
+            data?.also { ItemViewUtils.handleMenuClickOnNormalSongItem(this, it.song, bindingAdapterPosition) }
         }
 
         previewView.setOnClickListener {
@@ -64,10 +61,10 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         numberView.text = numberView.resources.getString(R.string.str_number_placeholder, positionInData + 1)
         titleTextView.text = song.title
         descriptionTextView.text = song.artistName
-        bindPlayingStateNonColor()
+        bindPlayingState()
         bindPreviewButton(song, previewingSong)
         bindTheme()
-        ArtworkUtils.loadAlbumArtworkFromSong(imageView, song)
+        ArtworkUtils.loadAlbumArtworkBySong(imageView, song)
     }
 
     override fun bindTheme() {
@@ -104,9 +101,18 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
 
         // no changes, so return
         if(playState[0] == isCurrentSongNew && playState[1] == isPlayingNew) return
+        playState[0] = isCurrentSongNew
+        playState[1] = isPlayingNew
         bindPlayingStateNonColor()
         bindPlayingStateColor()
 
+        if(playState[0]) {
+            imageView.setOnClickListener { MusicPlayerRemote.playOrPause() }
+        } else {
+            imageView.setOnClickListener(null)
+            imageView.isClickable = false
+            imageView.isFocusable = false
+        }
     }
 
     private fun bindPlayingStateColor() {

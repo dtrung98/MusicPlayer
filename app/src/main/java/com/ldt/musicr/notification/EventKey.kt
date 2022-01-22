@@ -23,5 +23,10 @@ sealed class EventKey {
     object OnMediaStoreChanged: MusicServiceEvent()
     object OnPaletteChanged: MusicServiceEvent()
 
+    object OnLoadedSongs: EventKey()
+    object OnLoadedPlaylists: EventKey()
+    object OnLoadedArtists: EventKey()
+    object OnLoadedMedia: EventKey()
+
 
 }

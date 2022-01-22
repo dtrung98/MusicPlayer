@@ -11,7 +11,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.ui.maintab.library.artist.ArtistChildTab;
 import com.ldt.musicr.ui.maintab.library.genre.GenreChildTab;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
-import com.ldt.musicr.ui.maintab.library.song.SongChildTab;
+import com.ldt.musicr.ui.maintab.library.song.LibrarySongTab;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class LibraryPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> mData = new ArrayList<>();
 
     private void initData() {
-        mData.add(new SongChildTab());
+        mData.add(new LibrarySongTab());
         mData.add(new PlaylistChildTab());
         mData.add(new ArtistChildTab());
 

@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ldt.musicr.helper.songpreview.PreviewSong
 import com.ldt.musicr.helper.songpreview.SongPreviewListener
-import com.ldt.musicr.model.dataitem.DataItem
+import com.ldt.musicr.interactors.AppExecutors
+import com.ldt.musicr.interactors.postOnUiThread
+import com.ldt.musicr.model.item.DataItem
 import com.ldt.musicr.notification.Action
 import com.ldt.musicr.notification.ActionResponder
 import com.ldt.musicr.notification.PayLoadKey
 import com.ldt.musicr.notification.ViewTypeKey
+import com.ldt.musicr.service.MusicPlayerRemote
 import com.ldt.musicr.ui.maintab.library.viewholder.*
 import java.lang.IllegalArgumentException
 
@@ -19,7 +22,11 @@ import java.lang.IllegalArgumentException
 open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), SongPreviewListener, ActionResponder {
     var actionResponder: ActionResponder? = null
     var previewingSong: PreviewSong? = null
+
+    var playingId: Int = Int.MIN_VALUE
     var playingAdapterPosition: Int = -1
+    var playingState = false
+
     var previewingAdapterPosition: Int = -1
     var layoutInflater: LayoutInflater? = null
 
@@ -29,6 +36,7 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
             is DataItem.Control -> when(it) {
                 DataItem.SortingTile -> ViewTypeKey.TYPE_TILE_SORTING_NORMAL_SONG
                 is DataItem.FeatureSectionTile -> ViewTypeKey.TYPE_TILE_SECTION_FEATURE
+                is DataItem.Empty -> ViewTypeKey.TYPE_EMPTY
             }
         }
     }
@@ -102,6 +110,34 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
         previewingAdapterPosition = -1
         if(lastPosition != -1) {
             notifyItemChanged(lastPosition, PayLoadKey.CHANGE_PREVIEW_STATE)
+        }
+    }
+
+    fun onPlayingStateChanged() {
+        AppExecutors.io().execute {
+            val playingIdNew = MusicPlayerRemote.getCurrentSong().id
+            val playingStateNew = MusicPlayerRemote.isPlaying()
+
+            if(playingState != playingStateNew || playingId != playingIdNew) {
+                val playingAdapterPositionOld = playingAdapterPosition
+                playingAdapterPosition = currentList.indexOfFirst { it is DataItem.SongItem && it.song.id == playingIdNew }
+
+                postOnUiThread {
+                    if (playingAdapterPosition != playingAdapterPositionOld && playingAdapterPositionOld > -1 && playingAdapterPositionOld < itemCount) {
+                        notifyItemChanged(playingAdapterPositionOld, PayLoadKey.CHANGE_PLAYING_STATE)
+                    }
+                    if(playingAdapterPosition != -1 && playingAdapterPosition < itemCount) {
+                        notifyItemChanged(playingAdapterPosition, PayLoadKey.CHANGE_PLAYING_STATE)
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun onThemeChanged() {
+        if(itemCount != 0) {
+            notifyItemRangeChanged(0, itemCount, PayLoadKey.CHANGE_THEME)
         }
     }
 }

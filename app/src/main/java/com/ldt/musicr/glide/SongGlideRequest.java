@@ -2,6 +2,8 @@ package com.ldt.musicr.glide;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import com.bumptech.glide.GenericTransitionOptions;
@@ -102,7 +104,7 @@ public class SongGlideRequest {
     }
 
     public static RequestBuilder<Bitmap> createBaseRequest(RequestManager requestManager, Song song, boolean ignoreMediaStore) {
-        if (true) {
+        if (ignoreMediaStore || Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return requestManager.asBitmap().load(new AudioFileCover(song.data));
         } else {
             return requestManager.asBitmap().load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId));

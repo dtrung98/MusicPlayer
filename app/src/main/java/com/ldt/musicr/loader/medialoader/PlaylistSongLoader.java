@@ -10,8 +10,44 @@ import androidx.annotation.NonNull;
 import com.ldt.musicr.model.PlaylistSong;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlaylistSongLoader {
+
+    @NonNull
+    public static List<Integer> getPlaylistSongIds(@NonNull final Context context, final int playlistId) {
+        List<Integer> songs = new ArrayList<>();
+        Cursor cursor;
+        try {
+            cursor = context.getContentResolver().query(
+                    MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId),
+                    new String[]{
+                            MediaStore.Audio.Playlists.Members.AUDIO_ID,// 0
+                    }, SongLoader.BASE_SELECTION, null,
+                    MediaStore.Audio.Playlists.Members.DEFAULT_SORT_ORDER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            cursor = null;
+        }
+
+        int songId;
+
+        if(cursor != null && cursor.moveToFirst()) {
+            do {
+                try {
+                    songId = cursor.getInt(0);
+                    songs.add(songId);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (cursor.moveToNext());
+        }
+
+        if(cursor != null) {
+            cursor.close();
+        }
+        return songs;
+    }
 
     @NonNull
     public static ArrayList<PlaylistSong> getPlaylistSongList(@NonNull final Context context, final int playlistId) {

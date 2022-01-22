@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="#444"
-    tools:context=".ui.maintab.library.song.SongChildTab">
+    tools:context=".ui.maintab.library.song.LibrarySongTab">
     <com.ldt.springback.view.SpringBackLayout
         android:id="@+id/springBackLayout"
         android:layout_width="0dp"

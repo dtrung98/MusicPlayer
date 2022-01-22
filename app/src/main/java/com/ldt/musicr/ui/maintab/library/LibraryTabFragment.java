@@ -17,7 +17,7 @@ import com.ldt.musicr.R;
 import com.ldt.musicr.ui.maintab.library.artist.ArtistChildTab;
 import com.ldt.musicr.ui.maintab.library.genre.GenreChildTab;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
-import com.ldt.musicr.ui.maintab.library.song.SongChildTab;
+import com.ldt.musicr.ui.maintab.library.song.LibrarySongTab;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.util.Tool;
 
@@ -97,7 +97,7 @@ public class LibraryTabFragment extends NavigationFragment {
 
     public Fragment navigateToTab(final String tag) {
         switch (tag) {
-            case SongChildTab.TAG:
+            case LibrarySongTab.TAG:
                  return navigateToTab(0);
             case PlaylistChildTab.TAG:
                 return navigateToTab(1);

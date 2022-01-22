@@ -2,6 +2,7 @@ package com.ldt.musicr.ui.maintab.library.viewholder
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.ldt.musicr.common.MediaManager
 import com.ldt.musicr.contract.AbsMediaAdapter
 import com.ldt.musicr.contract.AbsSongAdapter
 import com.ldt.musicr.helper.menu.SongMenuHelper
@@ -18,14 +19,6 @@ object ItemViewUtils {
         OptionBottomSheet
             .newInstance(mOptionRes, song)
             .show((viewHolder.itemView.context as AppCompatActivity).supportFragmentManager, "song_popup_menu")
-    }
-
-    /**
-     * Params: Playlist (object or id)
-     * Expect: Process play all a playlist
-     */
-    fun processPlayAll(playlistId: String) {
-
     }
 
     fun processPlayAll(songs: List<Song>, startPosition: Int, playNow: Boolean, viewHolder: RecyclerView.ViewHolder) {
@@ -65,5 +58,28 @@ object ItemViewUtils {
                 previewSongs(song)
             }
         }
+    }
+
+    /**
+     * Play all songs in given playlist
+     */
+    fun playPlaylist(playlistId: Int, firstSongId: Int? = null, shuffle: Boolean = true): Boolean {
+        val playlist = MediaManager.getPlaylist(playlistId) ?: return false
+        val songs = mutableListOf<Song>()
+        var firstSongIndex = -1
+
+        playlist.songs.forEachIndexed { index, id ->
+            MediaManager.getSong(id)?.apply {
+                if(id == firstSongId) {
+                    firstSongIndex = index
+                }
+                songs.add(this)
+            }
+        }
+
+        // The playlist doesn't contain song
+        if(firstSongId != null && firstSongIndex == -1) return false
+        MusicPlayerRemote.openQueue(songs, firstSongIndex, true)
+        return false
     }
 }

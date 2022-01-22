@@ -19,7 +19,7 @@ import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.maintab.BackStackController;
 import com.ldt.musicr.ui.maintab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
-import com.ldt.musicr.ui.maintab.library.song.SongChildTab;
+import com.ldt.musicr.ui.maintab.library.song.LibrarySongTab;
 import com.ldt.musicr.util.InterpolatorUtil;
 
 import java.util.List;
@@ -151,7 +151,7 @@ public class FeatureLinearHolder {
                 if (controller != null) {
                     LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
                     if (libraryTabFragment != null)
-                        libraryTabFragment.navigateToTab(SongChildTab.TAG);
+                        libraryTabFragment.navigateToTab(LibrarySongTab.TAG);
                 }
             }
         }

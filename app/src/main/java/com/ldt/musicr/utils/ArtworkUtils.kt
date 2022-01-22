@@ -21,7 +21,7 @@ object ArtworkUtils {
     }
 
     @JvmStatic
-    fun loadAlbumArtworkFromSong(view: ImageView, song: Song, onLoadFailed: ()-> Boolean = { false }, onLoadSuccess: (Bitmap?)-> Boolean = { false }) {
+    fun loadAlbumArtworkBySong(view: ImageView, song: Song, onLoadFailed: ()-> Boolean = { false }, onLoadSuccess: (Bitmap?)-> Boolean = { false }) {
         SongGlideRequest.Builder.from(GlideApp.with(view.context), song)
             .ignoreMediaStore(true)
             .generatePalette(view.context).build()

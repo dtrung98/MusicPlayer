@@ -2,6 +2,7 @@ package com.ldt.musicr;
 
 import android.app.Application;
 
+import com.ldt.musicr.common.AppStartup;
 import com.ldt.musicr.util.PreferenceUtil;
 
 
@@ -21,10 +22,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+        AppStartup.onAppStartup();
     }
 
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
+
 }

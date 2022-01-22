@@ -1,49 +1,37 @@
 package com.ldt.musicr.ui.maintab.library.song;
 
-import android.content.Context;
 import android.os.Handler;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Song;
 
 import com.ldt.musicr.service.MusicPlayerRemote;
-import com.ldt.musicr.util.Util;
+import com.ldt.musicr.utils.ArtworkUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import butterknife.OnClick;
-
 public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandomPlayAdapter.ItemHolder> {
-    private static final String TAG ="PreviewRandomPlayAdapter";
-    private Context mContext;
+    private final ArrayList<Song> mBackUp = new ArrayList<>();
+    private final ArrayList<Song> mData = new ArrayList<>();
 
-    private ArrayList<Song> mBackUp = new ArrayList<>();
-    private ArrayList<Song> mData = new ArrayList<>();
-
-
-    private Random mRandom = new Random();
+    private final Random mRandom = new Random();
     private long[] songIDs;
 
-    public PreviewRandomPlayAdapter(Context context) {
-        mContext = context;
-    }
+    public PreviewRandomPlayAdapter() { }
 
     public void shuffle() {
         final Handler handler = new Handler();
         handler.postDelayed(() -> {
             MusicPlayerRemote.openQueue(mData,0,true);
             //MusicPlayer.playAll(mContext, getRealSongIds(), 0, -1, Util.IdType.NA, false);
-            randommize();
+            randomize();
         },100);
     }
 
@@ -63,11 +51,9 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
     public void setData(ArrayList<Song> songs) {
         mBackUp.clear();
         if(songs!=null) mBackUp.addAll(songs);
-        randommize();
+        randomize();
     }
-
-    @OnClick(R.id.refresh)
-    public void randommize() {
+    public void randomize() {
         ArrayList<Song> songs = new ArrayList<>(mBackUp);
         mData.clear();
 
@@ -127,14 +113,7 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
         }
 
         public void bind(Song song) {
-            RequestManager requestManager;
-            if(mCallBack instanceof Fragment)
-               requestManager =  Glide.with((Fragment) mCallBack);
-            else if(mContext !=null)
-                requestManager = Glide.with(mContext);
-            else requestManager = Glide.with(itemView.getContext());
-
-            requestManager.load(Util.getAlbumArtUri(song.albumId))
+            ArtworkUtils.getBitmapRequestBuilder(itemView.getContext(), song)
                     .placeholder(R.drawable.music_empty)
                     .error(R.drawable.music_empty)
                     .into(mImage);
@@ -144,9 +123,9 @@ public class PreviewRandomPlayAdapter extends RecyclerView.Adapter<PreviewRandom
         public void onClick(View v) {
             final Handler handler = new Handler();
             handler.postDelayed(() -> {
-                MusicPlayerRemote.openQueue(mData,getAdapterPosition(),true);
+                MusicPlayerRemote.openQueue(mData,getBindingAdapterPosition(),true);
                 //MusicPlayer.playAll(mContext, getRealSongIds(), getAdapterPosition(), -1, Util.IdType.NA, false);
-                randommize();
+                randomize();
             },100);
         }
     }
