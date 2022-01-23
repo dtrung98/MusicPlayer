@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.os.CountDownTimer;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowInsetsCompat;
 
 import android.util.Log;
 import android.view.*;
@@ -32,9 +30,6 @@ import com.ldt.musicr.util.Tool;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import butterknife.BindView;
-
-
 /**
  * Lớp điều khiển cách hành xử của một giao diện gồm các layer ui chồng lên nhau
  * <br>Khi một layer trên cùng bật lên thì các layer khác bị lùi ra sau và thu nhỏ dần
@@ -48,6 +43,9 @@ public class CardLayerController {
     public static int SINGLE_TAP_CONFIRM = 1;
     public static int SINGLE_TAP_UP = 3;
     public static int LONG_PRESSED = 2;
+
+    private static final TimeInterpolator sCardAutoInterpolator = InterpolatorUtil.getInterpolator(11);
+    private static final int sCardAutoDuration = 450;
 
     public void onConfigurationChanged(Configuration newConfig) {
         if (activity != null) {
@@ -132,15 +130,12 @@ public class CardLayerController {
     private float mMaxVelocity;
     private float mMinVelocity;
 
-    @BindView(R.id.child_layer_container)
     FrameLayout mChildLayerContainer;
 
     FrameLayout mLayerContainer;
 
-    @BindView(R.id.bottom_navigation_view)
     BottomNavigationView mBottomNavigationView;
 
-    @BindView(R.id.bottom_navigation_parent)
     View mBottomNavigationParent;
 
     private void bindView(View view) {
@@ -369,8 +364,8 @@ public class CardLayerController {
             //Log.d(TAG, "updateLayerChanged: deltaLayer["+item+"] = "+deltaTranslateY[item]);
             // Scale và translate những layer phía sau
 
-            TimeInterpolator interpolator = InterpolatorUtil.getInterpolator(7);
-            int duration = 650;
+            final TimeInterpolator interpolator = sCardAutoInterpolator;
+            final int duration = sCardAutoDuration;
 
             attr.parent.animate().scaleX(attr.mScaleXY).setDuration(duration).setInterpolator(interpolator);
             //Log.d(TAG, "animateLayerChanged: item "+actives.get(item)+" : scaleX from "+attr.parent.getScaleX()+" to "+attr.mScaleXY);
@@ -379,11 +374,9 @@ public class CardLayerController {
             //          translationY(getRealTranslateY()).setDuration((long) (350 + 150f/ScreenSize[1]*minPosition)).setInterpolator(Animation.sInterpolator)
 
             final int item_copy = item;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
-                    mCardLayers.get(actives.get(item_copy)).onLayerUpdate(mCardLayerAttrs, actives, item_copy);
-                });
-            }
+            attr.parent.animate().translationY(attr.getRealTranslateY()).setDuration(duration).setInterpolator(interpolator).setUpdateListener(animation -> {
+                mCardLayers.get(actives.get(item_copy)).onLayerUpdate(mCardLayerAttrs, actives, item_copy);
+            });
         }
 
     }
@@ -706,9 +699,6 @@ public class CardLayerController {
 
     }
 
-    CountDownTimer countDownTimer;
-    boolean inCountDownTime = false;
-
     /**
      * Xử lý sự kiện nhấn nút back
      */
@@ -869,21 +859,11 @@ public class CardLayerController {
             if (parent != null) {
                 animateLayerChanged();
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
-                            .setUpdateListener(animation -> {
-                                if (item != -1)
-                                    mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
-                            });
-                } else {
-                    ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight));
-                    oa.addUpdateListener(animation -> {
-                        if (item != -1)
-                            mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
-                    });
-                    oa.setInterpolator(InterpolatorUtil.sInterpolator);
-                    oa.start();
-                }
+                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
+                        .setUpdateListener(animation -> {
+                            if (item != -1)
+                                mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
+                        });
             }
         }
 
