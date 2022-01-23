@@ -74,9 +74,9 @@ public abstract class CardLayerFragment extends Fragment implements CardLayerCon
     @Override
     public final View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (mMaxPosition == 0) {
-            if (isFullscreenLayer()) mMaxPosition = mCardLayerController.ScreenSize[1];
+            if (isFullscreenLayer()) mMaxPosition = mCardLayerController.screenSize[1];
             else
-                mMaxPosition = (int) (mCardLayerController.ScreenSize[1] - mCardLayerController.status_height - 2 * mCardLayerController.oneDp - mCardLayerController.mMaxMarginTop);
+                mMaxPosition = (int) (mCardLayerController.screenSize[1] - mCardLayerController.statusBarHeight - 2 * mCardLayerController.oneDp - mCardLayerController.maxMarginTop);
         }
         return getLayerRootView(getActivity(), container, mMaxPosition);
     }

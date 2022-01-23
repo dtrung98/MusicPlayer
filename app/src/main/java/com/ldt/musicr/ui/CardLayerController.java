@@ -17,13 +17,10 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowInsetsCompat;
 
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.FrameLayout;
 
 import com.ldt.musicr.R;
@@ -59,7 +56,7 @@ public class CardLayerController {
 //            ScreenSize[0] = (int) (oneDp*newConfig.screenWidthDp);
 //            ScreenSize[1] = (int) (oneDp*newConfig.screenHeightDp);
 //            status_height = Tool.getStatusHeight(activity.getResources());
-            Log.d(TAG, "onConfigurationChanged: " + ScreenSize[0] + ", " + ScreenSize[1]);
+            Log.d(TAG, "onConfigurationChanged: " + screenSize[0] + ", " + screenSize[1]);
             //  animateLayerChanged();
         }
     }
@@ -121,11 +118,11 @@ public class CardLayerController {
     }
 
     private AppCompatActivity activity;
-    public float margin_inDp = 10f;
-    public float mMaxMarginTop;
+    public float maxMarginDp = 12f;
+    public float maxMarginTop;
     public float oneDp;
-    public int[] ScreenSize = new int[2];
-    public float status_height = 0;
+    public int[] screenSize = new int[2];
+    public float statusBarHeight = 0;
 
     public float bottom_navigation_height;
 
@@ -157,14 +154,21 @@ public class CardLayerController {
     public CardLayerController(AppCompatActivity activity) {
         this.activity = activity;
         oneDp = Tool.getOneDps(activity);
-        mMaxMarginTop = margin_inDp * oneDp;
-        ScreenSize[0] = ((AppActivity) activity).mAppRootView.getWidth();
-        ScreenSize[1] = ((AppActivity) activity).mAppRootView.getHeight();
+        maxMarginTop = maxMarginDp * oneDp;
+        screenSize[0] = ((AppActivity) activity).mAppRootView.getWidth();
+        screenSize[1] = ((AppActivity) activity).mAppRootView.getHeight();
 
         mCardLayerCount = 0;
         mCardLayers = new ArrayList<>();
         mCardLayerAttrs = new ArrayList<>();
-        this.status_height = (status_height == 0) ? 24 * oneDp : status_height;
+        this.statusBarHeight = (statusBarHeight == 0) ? 24 * oneDp : statusBarHeight;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final WindowInsets platformWindowInsets = activity.getWindow().getDecorView().getRootView().getRootWindowInsets();
+            if(platformWindowInsets != null) {
+                this.statusBarHeight = platformWindowInsets.getStableInsetTop();
+            }
+        }
 
         this.bottom_navigation_height = activity.getResources().getDimension(R.dimen.bottom_navigation_height);
 
@@ -246,7 +250,7 @@ public class CardLayerController {
      * @return
      */
     private float convertPixelToScaleX(float marginInPx) {
-        return 1 - marginInPx * 2 / ScreenSize[0];
+        return 1 - marginInPx * 2 / screenSize[0];
     }
 
     /**
@@ -330,26 +334,26 @@ public class CardLayerController {
             // bắt đầu vòng lặp từ item 1
             int position = actives.get(item);
 
-            scaleXY[item] = convertPixelToScaleX((item - 1) * mMaxMarginTop * (1 - pcOfFocusLayer_End)
-                    + pcOfFocusLayer_End * item * mMaxMarginTop);
+            scaleXY[item] = convertPixelToScaleX((item - 1) * maxMarginTop * (1 - pcOfFocusLayer_End)
+                    + pcOfFocusLayer_End * item * maxMarginTop);
 
             // khi scale một giá trị là scaleXY[item] thì layer sẽ nhỏ đi
             // và khi đó đó nó làm tăng viên trên thêm một giá trị trong pixel là:
-            float scale_marginY = ScreenSize[1] * (1 - scaleXY[item]) / 2.0f;
+            float scale_marginY = screenSize[1] * (1 - scaleXY[item]) / 2.0f;
 
             float need_marginY = 0;
             //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
             if (item == 1) {
                 // Layer này khác với các layer khác, nó phải đi từ vị trí getMaxPositionType() -> margin của tương ứng của nó
-                need_marginY = pcOfFocusLayer_End * (mCardLayerAttrs.get(position).getMaxPosition() - (ScreenSize[1] - status_height - 2 * oneDp - mMaxMarginTop));
+                need_marginY = pcOfFocusLayer_End * (mCardLayerAttrs.get(position).getMaxPosition() - (screenSize[1] - statusBarHeight - 2 * oneDp - maxMarginTop));
             } else
-                need_marginY = mCardLayerAttrs.get(position).getMaxPosition() - (ScreenSize[1] - status_height - 2 * oneDp - mMaxMarginTop);
+                need_marginY = mCardLayerAttrs.get(position).getMaxPosition() - (screenSize[1] - statusBarHeight - 2 * oneDp - maxMarginTop);
 
 
             if (activeSize == 2) {
-                need_marginY -= mMaxMarginTop * pcOfFocusLayer_End;
+                need_marginY -= maxMarginTop * pcOfFocusLayer_End;
             } else { // activeSize >=3
-                need_marginY -= mMaxMarginTop * (item - 1f) / (activeSize - 2f) + pcOfFocusLayer_End * (mMaxMarginTop * item / (activeSize - 1) - mMaxMarginTop * (item - 1) / (activeSize - 2));
+                need_marginY -= maxMarginTop * (item - 1f) / (activeSize - 2f) + pcOfFocusLayer_End * (maxMarginTop * item / (activeSize - 1) - maxMarginTop * (item - 1) / (activeSize - 2));
             }
             deltaTranslateY[item] = need_marginY - scale_marginY;
             //Log.d(TAG, "updateLayerChanged: item "+item +", delatTranslateY = "+deltaTranslateY[item]);
@@ -455,26 +459,26 @@ public class CardLayerController {
             // bắt đầu vòng lặp từ item 1
             int position = actives.get(item);
 
-            scaleXY[item] = convertPixelToScaleX((item - 1) * mMaxMarginTop * (1 - pcOfTopFocusLayer)
-                    + pcOfTopFocusLayer * item * mMaxMarginTop);
+            scaleXY[item] = convertPixelToScaleX((item - 1) * maxMarginTop * (1 - pcOfTopFocusLayer)
+                    + pcOfTopFocusLayer * item * maxMarginTop);
 
             // khi scale một giá trị là scaleXY[item] thì layer sẽ nhỏ đi
             // và khi đó đó nó làm tăng viên trên thêm một giá trị trong pixel là:
-            float scale_marginY = ScreenSize[1] * (1 - scaleXY[item]) / 2.0f;
+            float scale_marginY = screenSize[1] * (1 - scaleXY[item]) / 2.0f;
 
             float need_marginY = 0;
             //item này cần cộng thêm giá trị (khoảng cách max - vị trí "chuẩn")
             if (item == 1) {
                 // Layer này khác với các layer khác, nó phải đi từ vị trí getMaxPositionType() -> margin của tương ứng của nó
-                need_marginY = pcOfTopFocusLayer * (mCardLayerAttrs.get(position).getMaxPosition() - (ScreenSize[1] - status_height - 2 * oneDp - mMaxMarginTop));
+                need_marginY = pcOfTopFocusLayer * (mCardLayerAttrs.get(position).getMaxPosition() - (screenSize[1] - statusBarHeight - 2 * oneDp - maxMarginTop));
             } else
-                need_marginY = mCardLayerAttrs.get(position).getMaxPosition() - (ScreenSize[1] - status_height - 2 * oneDp - mMaxMarginTop);
+                need_marginY = mCardLayerAttrs.get(position).getMaxPosition() - (screenSize[1] - statusBarHeight - 2 * oneDp - maxMarginTop);
 
 
             if (activeSize == 2) {
-                need_marginY -= mMaxMarginTop * pcOfTopFocusLayer;
+                need_marginY -= maxMarginTop * pcOfTopFocusLayer;
             } else { // activeSize >=3
-                need_marginY -= mMaxMarginTop * (item - 1f) / (activeSize - 2f) + pcOfTopFocusLayer * (mMaxMarginTop * item / (activeSize - 1) - mMaxMarginTop * (item - 1) / (activeSize - 2));
+                need_marginY -= maxMarginTop * (item - 1f) / (activeSize - 2f) + pcOfTopFocusLayer * (maxMarginTop * item / (activeSize - 1) - maxMarginTop * (item - 1) / (activeSize - 2));
             }
             deltaTranslateY[item] = need_marginY - scale_marginY;
             //Log.d(TAG, "updateLayerChanged: item "+item +", delatTranslateY = "+deltaTranslateY[item]);
@@ -825,7 +829,7 @@ public class CardLayerController {
 
         public void animateOnInit() {
             parent.setTranslationY(getMaxPosition());
-            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
+            parent.animate().translationYBy(-getMaxPosition() + getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
             //  parent.animate().translationYBy(-getMaxPositionType()+getRealTranslateY()).setDuration(computeSettleDuration(0,(int) Math.abs(-getMaxPositionType() + getRealTranslateY()),0,(int)getMaxPositionType())).setInterpolator(Animation.sInterpolator);
             mCurrentTranslate = minHeight;
         }
@@ -866,13 +870,13 @@ public class CardLayerController {
                 animateLayerChanged();
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
+                    parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator)
                             .setUpdateListener(animation -> {
                                 if (item != -1)
                                     mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
                             });
                 } else {
-                    ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight));
+                    ObjectAnimator oa = ObjectAnimator.ofFloat(parent, View.TRANSLATION_Y, getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight));
                     oa.addUpdateListener(animation -> {
                         if (item != -1)
                             mCardLayers.get(item).onLayerHeightChanged(CardLayerAttribute.this);
@@ -887,7 +891,7 @@ public class CardLayerController {
             if (selfTranslateY == mCurrentTranslate) return;
             mCurrentTranslate = selfTranslateY;
             if (parent != null) {
-                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / ScreenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
+                parent.animate().translationY(getRealTranslateY()).setDuration((long) (350 + 150f / screenSize[1] * minHeight)).setInterpolator(InterpolatorUtil.sInterpolator);
             }
         }
 
@@ -917,7 +921,7 @@ public class CardLayerController {
                 return 0;
             }
 
-            final int width = ScreenSize[0];
+            final int width = screenSize[0];
             final int halfWidth = width / 2;
             final float distanceRatio = Math.min(1f, (float) Math.abs(delta) / width);
             final float distance = halfWidth + halfWidth *
@@ -1080,7 +1084,7 @@ public class CardLayerController {
 
         public CardLayerAttribute set(CardLayer l) {
             this.setTag(l.getCardLayerTag())
-                    .setMinHeight(l.getLayerMinHeight(activity, ScreenSize[1]))
+                    .setMinHeight(l.getLayerMinHeight(activity, screenSize[1]))
                     .setMaxPosition(l.isFullscreenLayer())
                     .setCurrentTranslate(this.getMinHeight());
 
@@ -1097,8 +1101,8 @@ public class CardLayerController {
         private boolean mM = true;
 
         public int getMaxPosition() {
-            if (mM) return ScreenSize[1];
-            else return (int) (ScreenSize[1] - status_height - 2 * oneDp - mMaxMarginTop);
+            if (mM) return screenSize[1];
+            else return (int) (screenSize[1] - statusBarHeight - 2 * oneDp - maxMarginTop);
         }
 
         public CardLayerAttribute setMaxPosition(boolean m) {
