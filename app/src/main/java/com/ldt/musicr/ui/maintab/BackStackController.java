@@ -34,6 +34,7 @@ import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.maintab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.widget.navigate.BackPressableFragment;
+import com.ldt.musicr.ui.widget.viewpager.GestureControlViewPager;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
     }
 
     @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    GestureControlViewPager mViewPager;
 
     @Nullable
     @Override
@@ -87,6 +88,7 @@ public class BackStackController extends CardLayerFragment implements ViewPager.
         mViewPager.setAdapter(mNavigationAdapter);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.addOnPageChangeListener(this);
+        mViewPager.setSwipeGestureEnabled(false);
         mViewPager.setOnTouchListener((v, event) -> mCardLayerController.dispatchOnTouchEvent(mRoot, event));
 
         onUsingArtistImagePreferenceChanged();

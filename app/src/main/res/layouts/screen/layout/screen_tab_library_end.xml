@@ -97,7 +97,7 @@
         app:tabTextColor="#88F5F5F5"
         android:overScrollMode="never"/>
 
-    <androidx.viewpager.widget.ViewPager
+    <com.ldt.musicr.ui.widget.viewpager.SmoothScrollerViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
