@@ -19,6 +19,7 @@ import com.ldt.musicr.model.Song
 import com.bumptech.glide.Glide
 import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.common.MediaManager
+import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.interactors.AppExecutors
 import com.ldt.musicr.interactors.runOnUiThread
 import com.ldt.musicr.model.item.DataItem
@@ -88,6 +89,7 @@ class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter.actionResponder = this
+        SongPreviewController.getInstance().addSongPreviewListener(adapter)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,6 +97,11 @@ class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedList
         initView(view)
         initSortOrder()
         refreshData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SongPreviewController.getInstance().removeAudioPreviewerListener(adapter)
     }
 
     private fun submitList(data: List<DataItem>) {

@@ -3,7 +3,9 @@ package com.ldt.musicr.ui.maintab.library.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.helper.songpreview.PreviewSong
+import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.helper.songpreview.SongPreviewListener
 import com.ldt.musicr.interactors.AppExecutors
 import com.ldt.musicr.interactors.postOnUiThread
@@ -114,6 +116,13 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
     }
 
     fun onPlayingStateChanged() {
+        if(!AppConfig.isApplyOptimizedFlowOnPlayingStateChanged) {
+            if(itemCount != 0) {
+                notifyItemRangeChanged(0, itemCount, PayLoadKey.CHANGE_PLAYING_STATE)
+            }
+            return
+        }
+
         AppExecutors.io().execute {
             val playingIdNew = MusicPlayerRemote.getCurrentSong().id
             val playingStateNew = MusicPlayerRemote.isPlaying()

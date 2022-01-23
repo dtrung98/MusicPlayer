@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
@@ -61,6 +62,12 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        if(AppConfig.hideIncompleteFeature) {
+            view.findViewById(R.id.list_type).setVisibility(View.GONE);
+            view.findViewById(R.id.search).setVisibility(View.GONE);
+        }
+        
         mSwipeRefreshLayout.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
         mSwipeRefreshLayout.setEnabled(false);

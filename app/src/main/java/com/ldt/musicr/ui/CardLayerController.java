@@ -229,11 +229,8 @@ public class CardLayerController {
                 @Override
                 public void handleOnBackPressed() {
                     boolean backPressed = onBackPressed();
-                    if (!backPressed) {
-                        setEnabled(false);
-                        if (activity != null) {
-                            activity.getOnBackPressedDispatcher().onBackPressed();
-                        }
+                    if (!backPressed && activity != null) {
+                        activity.finish();
                     }
                 }
             });

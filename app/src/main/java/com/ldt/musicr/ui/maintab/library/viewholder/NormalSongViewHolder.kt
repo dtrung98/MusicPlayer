@@ -92,7 +92,9 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
     }
 
     override fun bindPreviewState(previewSong: PreviewSong?) {
-        data?.also { bindPreviewButton(it.song, previewSong) }
+        data?.also {
+            bindPreviewButton(it.song, previewSong)
+        }
     }
 
     override fun bindPlayingState() {

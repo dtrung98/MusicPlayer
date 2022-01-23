@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.ui.maintab.library.artist.ArtistChildTab;
 import com.ldt.musicr.ui.maintab.library.genre.GenreChildTab;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
@@ -29,7 +30,7 @@ public class LibraryPagerAdapter extends FragmentPagerAdapter {
         mData.add(new PlaylistChildTab());
         mData.add(new ArtistChildTab());
 
-        if (!App.HIDE_INCOMPLETE_FEATURES) {
+        if (!AppConfig.hideIncompleteFeature) {
             mData.add(new GenreChildTab());
             mData.add(new FolderChildTab());
         }
