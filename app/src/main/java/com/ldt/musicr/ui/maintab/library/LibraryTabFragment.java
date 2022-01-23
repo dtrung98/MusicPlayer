@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.maintab.library;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +15,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
+import com.ldt.musicr.notification.EventKey;
+import com.ldt.musicr.ui.floating.SearchFragment;
 import com.ldt.musicr.ui.maintab.library.artist.ArtistChildTab;
 import com.ldt.musicr.ui.maintab.library.genre.GenreChildTab;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.maintab.library.song.LibrarySongTab;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.util.Tool;
+import com.zalo.gitlabmobile.notification.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +63,8 @@ public class LibraryTabFragment extends NavigationFragment {
     @BindView(R.id.root)
     MotionLayout mMotionLayout;
 
+    @BindView(R.id.search_view) View searchView;
+
     @Nullable
     @Override
     protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
@@ -63,6 +73,7 @@ public class LibraryTabFragment extends NavigationFragment {
 
     @OnClick(R.id.search_view)
     void searchLikelyViewClicked() {
+        new SearchFragment().show(getParentFragmentManager(), "search");
     }
 
     @Override
@@ -71,7 +82,7 @@ public class LibraryTabFragment extends NavigationFragment {
         ButterKnife.bind(this,view);
       //  mSearchView.onActionViewExpanded();
        // mSearchView.clearFocus();
-        mStatusView.getLayoutParams().height = Tool.getStatusHeight(getResources());
+        mStatusView.getLayoutParams().height = AppConfig.getSystemBarsInset()[1];
         mStatusView.requestLayout();
       //  mTouchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
 
@@ -109,6 +120,27 @@ public class LibraryTabFragment extends NavigationFragment {
                 return navigateToTab(4);
              default:
                  return null;
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(MessageEvent event) {
+        if(event.getKey() == EventKey.OnSearchInterfaceAppeared.INSTANCE) {
+            searchView.setVisibility(View.INVISIBLE);
+        } else if(event.getKey() == EventKey.OnSearchInterfaceDisappeared.INSTANCE) {
+            searchView.setVisibility(View.VISIBLE);
         }
     }
 }

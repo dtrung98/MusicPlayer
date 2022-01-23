@@ -12,7 +12,7 @@ import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.AppActivity;
-import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
+import com.ldt.musicr.ui.floating.LyricFragment;
 import com.ldt.musicr.ui.dialog.AddToPlaylistDialog;
 import com.ldt.musicr.ui.dialog.DeleteSongsDialog;
 import com.ldt.musicr.util.MusicUtil;
@@ -159,7 +159,7 @@ public class SongMenuHelper {
                 MusicPlayerRemote.enqueue(song);
                 return true;
             case R.string.show_lyric:
-                LyricBottomSheet.newInstance(song).show(activity.getSupportFragmentManager(),LyricBottomSheet.TAG);
+                LyricFragment.newInstance(song).show(activity.getSupportFragmentManager(), LyricFragment.TAG);
                 break;
             case R.string.edit_tag:
                 return true;

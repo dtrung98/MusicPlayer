@@ -44,8 +44,8 @@ public class CardLayerController {
     public static int SINGLE_TAP_UP = 3;
     public static int LONG_PRESSED = 2;
 
-    private static final TimeInterpolator sCardAutoInterpolator = InterpolatorUtil.getInterpolator(11);
-    private static final int sCardAutoDuration = 450;
+    private static final TimeInterpolator sCardAutoInterpolator = InterpolatorUtil.getInterpolator(7);
+    private static final int sCardAutoDuration = 625;
 
     public void onConfigurationChanged(Configuration newConfig) {
         if (activity != null) {
@@ -115,7 +115,7 @@ public class CardLayerController {
         return activity;
     }
 
-    private AppCompatActivity activity;
+    private final AppCompatActivity activity;
     public float maxMarginDp = 12f;
     public float maxMarginTop;
     public float oneDp;
@@ -223,17 +223,15 @@ public class CardLayerController {
         }
         assign(4);
 
-        if (activity != null) {
-            activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
-                @Override
-                public void handleOnBackPressed() {
-                    boolean backPressed = onBackPressed();
-                    if (!backPressed && activity != null) {
-                        activity.finish();
-                    }
+        activity.getOnBackPressedDispatcher().addCallback(activity, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                boolean backPressed = onBackPressed();
+                if (!backPressed) {
+                    activity.finish();
                 }
-            });
-        }
+            }
+        });
     }
 
 
@@ -497,9 +495,9 @@ public class CardLayerController {
 
     }
 
-    private ArrayList<CardLayerFragment> mCardLayers;
-    private ArrayList<CardLayerAttribute> mCardLayerAttrs;
-    private View.OnTouchListener mTouchListener;
+    private final ArrayList<CardLayerFragment> mCardLayers;
+    private final ArrayList<CardLayerAttribute> mCardLayerAttrs;
+    private final View.OnTouchListener mTouchListener;
 
     enum MOVE_DIRECTION {
         NONE,
@@ -507,7 +505,7 @@ public class CardLayerController {
         MOVE_DOWN
     }
 
-    private GestureDetector mGestureDetector;
+    private final GestureDetector mGestureDetector;
     public SwipeGestureListener mGestureListener = new SwipeGestureListener();
 
     static class SwipeGestureListener extends SwipeDetectorGestureListener {
@@ -666,34 +664,6 @@ public class CardLayerController {
         return b || c;
     }
 
-    private String logAction(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                return "Down";
-            case MotionEvent.ACTION_MOVE:
-                return "Move";
-            case MotionEvent.ACTION_UP:
-                return "UP";
-        }
-        return "Unsupported";
-    }
-
-    /**
-     * Tất cả sự kiện chạm của tất cả các view được xử lý trong hàm này
-     * Xử lý sự kiện của một view hiện thời đang xảy ra sự kiện chạm :
-     * <br>Capture gestures as slide up, slide down, click ..
-     *
-     * @param view View đã gửi sự kiện tới
-     * @param event Sự kiện chạm
-     * @return true nếu sự kiện được xử lý, false nếu sự kiện bị bỏ qua
-     */
-    int currentLayerEvent = -1;
-    private int topMargin;
-    private int _xDelta;
-    private int _yDelta;
-    private boolean onDown = true;
-    private long timeDown = 0;
-
     private boolean onTouchEvent(int i, View view, MotionEvent event) {
         return onLayerTouchEvent(i, view, event);
 
@@ -735,16 +705,6 @@ public class CardLayerController {
         return false;
 
     }
-
-    /**
-     * Giả lập rằng có sự kiện chạm của rootView của Layer có tag là tagLayer
-     * <br>Truyền trực tiếp sự kiện chạm tới hàm này
-     *
-     * @param tagLayer
-     * @param view
-     * @param motionEvent
-     * @return
-     */
 
     private int mCardLayerCount = 0;
 

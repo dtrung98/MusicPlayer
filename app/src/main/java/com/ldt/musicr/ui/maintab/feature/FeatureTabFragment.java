@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.maintab.feature;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -15,16 +16,22 @@ import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.common.AppConfig;
+import com.ldt.musicr.notification.EventKey;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.floating.SearchFragment;
 import com.ldt.musicr.ui.maintab.CardLayerFragment;
 import com.ldt.musicr.ui.maintab.MusicServiceNavigationFragment;
-import com.ldt.musicr.ui.maintab.subpages.singleplaylist.SinglePlaylistCardLayerFragment;
+import com.ldt.musicr.ui.maintab.subpages.viewplaylist.ViewPlaylistCardLayerFragment;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Playlist;
-import com.ldt.musicr.ui.maintab.subpages.singleplaylist.SinglePlaylistFragment;
+import com.ldt.musicr.ui.maintab.subpages.viewplaylist.ViewPlaylistFragment;
+import com.zalo.gitlabmobile.notification.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,10 +51,11 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
     @OnClick(R.id.search)
     void showSearchScreen() {
-        if (getActivity() instanceof AppActivity) {
-            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(SinglePlaylistCardLayerFragment.newInstance(PlaylistLoader.getAllPlaylistsWithAuto(requireContext()).get(0), null), 0);
+        new SearchFragment().show(getParentFragmentManager(), "search");
+        /*if (getActivity() instanceof AppActivity) {
+            CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(ViewPlaylistCardLayerFragment.newInstance(PlaylistLoader.getAllPlaylistsWithAuto(requireContext()).get(0), null), 0);
             attribute.animateToMax();
-        }
+        }*/
     }
 
     FeatureLinearHolder mFeatureLinearHolder;
@@ -65,25 +73,23 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
 
         if(AppConfig.hideIncompleteFeature) {
             view.findViewById(R.id.list_type).setVisibility(View.GONE);
-            view.findViewById(R.id.search).setVisibility(View.GONE);
+            //view.findViewById(R.id.search).setVisibility(View.GONE);
         }
         
         mSwipeRefreshLayout.setColorSchemeResources(R.color.flatOrange);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshData);
         mSwipeRefreshLayout.setEnabled(false);
-        ViewCompat.setOnApplyWindowInsetsListener(mNestedScrollView, (v, insets) -> {
-            v.setPadding(
-                    insets.getSystemWindowInsetLeft(),
-                    0,
-                    insets.getSystemWindowInsetRight(),
-                    (int) (insets.getSystemWindowInsetBottom() + v.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
-            return ViewCompat.onApplyWindowInsets(v, insets);
-        });
 
         mFeatureLinearHolder = new FeatureLinearHolder(getActivity(), mNestedScrollView);
         mFeatureLinearHolder.setPlaylistItemClick(this);
-
+        updateInsets();
         refreshData();
+    }
+
+    private void updateInsets() {
+        final int[] insets = AppConfig.getSystemBarsInset();
+        mNestedScrollView.setPadding(insets[0], 0, insets[2], (int) (insets[3] + mNestedScrollView.getResources().getDimension(R.dimen.bottom_back_stack_spacing)));
+        mStatusView.getLayoutParams().height = insets[1];
     }
 
     private void refreshData() {
@@ -110,9 +116,9 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
         boolean showInCardLayer = false;
 
         if(!showInCardLayer) {
-            getNavigationController().presentFragment(SinglePlaylistFragment.newInstance(playlist, bitmap));
+            getNavigationController().presentFragment(ViewPlaylistFragment.newInstance(playlist, bitmap));
         } else if (getActivity() instanceof AppActivity) {
-            CardLayerFragment sf = SinglePlaylistCardLayerFragment.newInstance(playlist, bitmap);
+            CardLayerFragment sf = ViewPlaylistCardLayerFragment.newInstance(playlist, bitmap);
 
             CardLayerController.CardLayerAttribute attribute = ((AppActivity) getActivity()).getCardLayerController().addCardLayerFragment(sf, 0);
             attribute.expandImmediately();
@@ -121,38 +127,22 @@ public class FeatureTabFragment extends MusicServiceNavigationFragment implement
     }
 
     @Override
-    public void onServiceConnected() {
-
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
     }
 
     @Override
-    public void onServiceDisconnected() {
-
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
     }
 
-    @Override
-    public void onQueueChanged() {
-
-    }
-
-    @Override
-    public void onPlayingMetaChanged() {
-
-    }
-
-    @Override
-    public void onPlayStateChanged() {
-
-    }
-
-    @Override
-    public void onRepeatModeChanged() {
-
-    }
-
-    @Override
-    public void onShuffleModeChanged() {
-
+    @Subscribe
+    public void onEvent(MessageEvent event) {
+        if(event.getKey() == EventKey.OnSystemBarsInsetUpdated.INSTANCE) {
+           updateInsets();
+        }
     }
 
     @Override

@@ -28,5 +28,7 @@ sealed class EventKey {
     object OnLoadedArtists: EventKey()
     object OnLoadedMedia: EventKey()
 
-
+    object OnSystemBarsInsetUpdated: EventKey()
+    object OnSearchInterfaceAppeared: EventKey()
+    object OnSearchInterfaceDisappeared: EventKey()
 }

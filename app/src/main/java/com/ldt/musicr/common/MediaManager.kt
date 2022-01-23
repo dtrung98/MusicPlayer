@@ -37,9 +37,9 @@ object MediaManager {
     val isLoadedPlaylists: Boolean get() = isLoadedMediaInternal.get()
     val isLoadedArtists: Boolean get() = isLoadedMediaInternal.get()
 
-
+    @JvmStatic
     fun loadMediaIfNeeded() {
-        if(isLoadedMediaInternal.get()) return
+        if(isLoadedMediaInternal.get() || isLoadingMediaInternal.get()) return
         isLoadingMediaInternal.set(true)
 
         // Load Media
@@ -99,6 +99,7 @@ object MediaManager {
         EventKey.OnLoadedArtists.post()
     }
 
+    @JvmStatic
     fun clearMedia() {
         mapIdToSong.clear()
         mapIdToPlaylist.clear()

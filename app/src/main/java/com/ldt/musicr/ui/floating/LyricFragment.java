@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.bottomsheet;
+package com.ldt.musicr.ui.floating;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,9 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.model.Song;
+import com.ldt.musicr.notification.EventKey;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.MusicServiceActivity;
@@ -29,8 +30,11 @@ import com.ldt.musicr.ui.dialog.WriteTagDialog;
 import com.ldt.musicr.util.MusicUtil;
 import com.ldt.musicr.util.Tool;
 import com.ldt.musicr.util.Util;
-import com.squareup.picasso.Picasso;
+import com.ldt.musicr.utils.ArtworkUtils;
+import com.zalo.gitlabmobile.notification.MessageEvent;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.jaudiotagger.tag.FieldKey;
 
 import java.util.ArrayList;
@@ -43,7 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LyricBottomSheet extends FloatingViewFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
+public class LyricFragment extends FloatingViewFragment implements MusicServiceEventListener, WriteTagDialog.WriteTagResultListener {
     public static final String TAG = "LyricBottomSheet";
     private static final String SONG_KEY = "song";
     private static final String SHOULD_AUTO_UPDATE_KEY = "should_auto_update";
@@ -62,6 +66,8 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
 
     @BindView(R.id.menu) ImageView mMenuButton;
 
+    @BindView(R.id.topInsetView) View topInsetView;
+
     @OnClick(R.id.menu)
     void playOrPause() {
         MusicPlayerRemote.playOrPause();
@@ -78,13 +84,13 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
         dismiss();
     }
 
-    public static LyricBottomSheet newInstance(Song song) {
+    public static LyricFragment newInstance(Song song) {
 
         Bundle args = new Bundle();
         args.putParcelable(SONG_KEY, song);
         args.putBoolean(SHOULD_AUTO_UPDATE_KEY,false);
 
-        LyricBottomSheet fragment = new LyricBottomSheet();
+        LyricFragment fragment = new LyricFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -96,12 +102,12 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
         return R.style.BottomSheetDialogTheme;
     }*/
 
-    public static LyricBottomSheet newInstance() {
+    public static LyricFragment newInstance() {
 
         Bundle args = new Bundle();
         args.putParcelable(SONG_KEY, MusicPlayerRemote.getCurrentSong());
         args.putBoolean(SHOULD_AUTO_UPDATE_KEY,true);
-        LyricBottomSheet fragment = new LyricBottomSheet();
+        LyricFragment fragment = new LyricFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -155,7 +161,7 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
 
         // onViewCreated();
         Bundle bundle = getArguments();
-        if(bundle !=null) {
+        if(bundle != null) {
             mSong = bundle.getParcelable(SONG_KEY);
             mShouldAutoUpdate = bundle.getBoolean(SHOULD_AUTO_UPDATE_KEY,false);
         }
@@ -163,6 +169,7 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
         updateMenuButton();
         if(getActivity() instanceof MusicServiceActivity)
             ((MusicServiceActivity)getActivity()).addMusicServiceEventListener(this);
+        updateInsets();
     }
 
     @Override
@@ -177,26 +184,27 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
     @BindView(R.id.image)
     ImageView mImageView;
     private void updateLyric() {
-        if(mSong !=null) {
-            mLyricString = MusicUtil.getLyrics(mSong);
-            if(mLyricString==null||mLyricString.isEmpty())
-                mLyricString = "This song has no lyric.";
-
-            boolean isHtml = isHtml(mLyricString);
-            if(isHtml) {
-                Spanned spanned = Html.fromHtml(mLyricString);
-                mLyricContent.setText(spanned);
-            } else
-                mLyricContent.setText(mLyricString);
-
-            Log.d(TAG, "updateLyric: "+mLyricString);
-            mTitle.setText(mSong.title);
-            mDescription.setText(mSong.artistName);
-            if(getContext() !=null)
-                Glide.with(getContext()).load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
-            else Picasso.get().load(MusicUtil.getMediaStoreAlbumCoverUri(mSong.albumId)).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
+        if(mSong == null) {
+            Log.d(TAG, "updateLyric: Song is null");
+            return;
         }
-        else Log.d(TAG, "updateLyric: Song is null");
+
+        mLyricString = MusicUtil.getLyrics(mSong);
+        if(mLyricString==null || mLyricString.isEmpty()) {
+            mLyricString = "This song has no lyric.";
+        }
+
+        boolean isHtml = isHtml(mLyricString);
+        if(isHtml) {
+            Spanned spanned = Html.fromHtml(mLyricString);
+            mLyricContent.setText(spanned);
+        } else {
+            mLyricContent.setText(mLyricString);
+        }
+
+        mTitle.setText(mSong.title);
+        mDescription.setText(mSong.artistName);
+        ArtworkUtils.getBitmapRequestBuilder(mImageView.getContext(), mSong).placeholder(R.drawable.music_style).error(R.drawable.music_style).into(mImageView);
     }
     private void setClipboard(Context context, String text) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -309,5 +317,30 @@ public class LyricBottomSheet extends FloatingViewFragment implements MusicServi
         mLyricConstraintRoot.setVisibility(View.VISIBLE);
 
         updateLyric();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void updateInsets() {
+        topInsetView.getLayoutParams().height = AppConfig.getSystemBarsInset()[1];
+        mLyricConstraintRoot.setPadding(0, 0, 0, AppConfig.getSystemBarsInset()[3]);
+        mEditConstraintRoot.setPadding(0, 0, 0, AppConfig.getSystemBarsInset()[3]);
+    }
+
+    @Subscribe
+    public void onEvent(MessageEvent event) {
+        if(event.getKey() == EventKey.OnSystemBarsInsetUpdated.INSTANCE) {
+            updateInsets();
+        }
     }
 }

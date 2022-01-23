@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.maintab.subpages.singleplaylist;
+package com.ldt.musicr.ui.maintab.subpages.viewplaylist;
 
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -21,7 +21,7 @@ import com.ldt.musicr.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SinglePlaylistViewModel extends MPViewModel {
+public class ViewPlaylistViewModel extends MPViewModel {
     public static class State {
         public Playlist mPlaylist;
         public String mTitle = "";

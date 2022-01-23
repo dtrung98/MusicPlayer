@@ -32,8 +32,8 @@ import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.service.MusicServiceEventListener;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
+import com.ldt.musicr.ui.floating.LyricFragment;
 import com.ldt.musicr.ui.maintab.CardLayerFragment;
-import com.ldt.musicr.ui.bottomsheet.LyricBottomSheet;
 import com.ldt.musicr.util.Tool;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class PlayingQueueLayerFragment extends CardLayerFragment implements Musi
     @OnClick(R.id.lyric)
     void showLyric() {
         if (getActivity() != null)
-            LyricBottomSheet.newInstance().show(getActivity().getSupportFragmentManager(), "LyricBottomSheet");
+            LyricFragment.newInstance().show(getActivity().getSupportFragmentManager(), "LyricBottomSheet");
     }
 
     @OnClick(R.id.save)

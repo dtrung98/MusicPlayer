@@ -30,6 +30,7 @@ import android.widget.FrameLayout;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.ui.intro.IntroController;
@@ -98,7 +99,7 @@ public class AppActivity extends MusicServiceActivity {
         return mCurrentSystemInsets;
     }
 
-    private int[] mCurrentSystemInsets = new int[]{0, 0, 0, 0};
+    private final int[] mCurrentSystemInsets = new int[]{0, 0, 0, 0};
 
     public void setPermissionListener(PermissionListener listener) {
         mPermissionListener = listener;
@@ -146,6 +147,7 @@ public class AppActivity extends MusicServiceActivity {
             mCurrentSystemInsets[1] = insets.getSystemWindowInsetTop();
             mCurrentSystemInsets[2] = insets.getSystemWindowInsetRight();
             mCurrentSystemInsets[3] = insets.getSystemWindowInsetBottom();
+            AppConfig.setSystemBarsInset(mCurrentSystemInsets);
             return ViewCompat.onApplyWindowInsets(v, insets);
         });
         bindView();

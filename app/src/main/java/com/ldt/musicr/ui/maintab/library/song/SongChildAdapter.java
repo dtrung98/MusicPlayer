@@ -25,10 +25,6 @@ import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 import org.jetbrains.annotations.NotNull;
 import java.util.Random;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class SongChildAdapter extends AbsSongAdapter
         implements FastScrollRecyclerView.SectionedAdapter,
         FastScrollRecyclerView.MeasurableAdapter,
@@ -194,25 +190,25 @@ public class SongChildAdapter extends AbsSongAdapter
     }
 
     public class SortHolder extends AbsBindAbleHolder {
-        @BindView(R.id.sort_text) TextView mSortText;
-        @OnClick(R.id.sort_parent)
+        TextView mSortText;
         void sortClicked() {
             sortHolderClicked();
         }
 
         public SortHolder(View view) {
             super(view);
-            ButterKnife.bind(this,view);
+            mSortText = view.findViewById(R.id.sort_text);
+            view.findViewById(R.id.sort_parent).setOnClickListener((v)->sortClicked());
         }
 
         @Override
         public void bind(Object object) {
             if(mSortOrderListener!=null) {
-              String str =  getContext().getResources().getString(
+                String str =  getContext().getResources().getString(
                         SortOrderBottomSheet.mSortStringRes[mSortOrderListener.getSavedOrder()]);
-              mSortText.setText(str);
+                mSortText.setText(str);
             }
-            }
+        }
     }
 
     public class ItemHolder extends AbsSongAdapter.SongHolder {

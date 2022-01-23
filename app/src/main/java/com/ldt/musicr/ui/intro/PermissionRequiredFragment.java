@@ -5,29 +5,19 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.MediaManager;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class PermissionRequiredFragment extends NavigationFragment implements AppActivity.PermissionListener {
-    private static final String TAG ="IntroStepOneFragment";
-
-
-    @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
+    View mAllowButton;
 
-    @BindView(R.id.allow_button) View mAllowButton;
-
-    @OnClick(R.id.allow_button)
     void allowAccess() {
         getMainActivity().requestPermission();
     }
@@ -42,7 +32,9 @@ public class PermissionRequiredFragment extends NavigationFragment implements Ap
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
+        mSwipeRefresh = view.findViewById(R.id.swipe_refresh);
+        mAllowButton = view.findViewById(R.id.allow_button);
+        mAllowButton.setOnClickListener((v)-> allowAccess());
         mSwipeRefresh.setColorSchemeResources(R.color.flatBlue);
         mSwipeRefresh.setOnRefreshListener(this::refreshData);
     }
@@ -62,13 +54,13 @@ public class PermissionRequiredFragment extends NavigationFragment implements Ap
     @Override
     public void onPermissionGranted() {
         mSwipeRefresh.setRefreshing(false);
-        Log.d(TAG, "onPermissionGranted");
+        MediaManager.clearMedia();
+        MediaManager.loadMediaIfNeeded();
         getMainActivity().showMainUI();
     }
 
     @Override
     public void onPermissionDenied() {
         mSwipeRefresh.setRefreshing(false);
-        Log.d(TAG, "onPermissionDenied");
     }
 }
