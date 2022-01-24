@@ -25,15 +25,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <View
             android:id="@+id/bottom_gradient"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_gradient"
+            android:background="@color/lyric_end_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:background="@color/lyric_end_color"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_gradient" />
         <FrameLayout
             android:id="@+id/topInsetViewParent"
             android:layout_width="match_parent"

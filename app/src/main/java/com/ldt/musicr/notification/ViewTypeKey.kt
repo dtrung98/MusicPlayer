@@ -9,5 +9,7 @@ object ViewTypeKey {
     const val TYPE_TILE_SECTION_FEATURE = 12
 
     const val TYPE_EMPTY = 3
+    const val TYPE_TOP_GRADIENT_DIM = 4
+    const val TYPE_BOTTOM_GRADIENT_DIM = 5
 
 }

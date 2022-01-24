@@ -135,7 +135,7 @@ class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedList
 
             playlist.songs.forEach { songId ->
                 MediaManager.getSong(songId)?.also { song ->
-                    songs.add(DataItem.SongItem(song, songs.size, playlist.id))
+                    songs.add(DataItem.SongItem(0, song, songs.size, playlist.id))
                 }
             }
 

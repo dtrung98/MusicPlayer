@@ -61,7 +61,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/status_bar_parent" />
 
-    <com.ldt.musicr.ui.widget.view.MPSearchLikelyView
+    <com.ldt.musicr.ui.widget.view.MPSearchLikeView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="45dp"

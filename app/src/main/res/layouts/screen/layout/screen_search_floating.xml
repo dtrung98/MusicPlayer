@@ -4,9 +4,12 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:clickable="true"
-    android:focusable="true"
     android:background="@android:color/transparent">
+    <View
+        android:id="@+id/dimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"/>
     <FrameLayout
         android:id="@+id/status_bar_parent"
         android:layout_width="match_parent"
@@ -19,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"/>
     </FrameLayout>
-    <com.ldt.musicr.ui.widget.view.MPSearchLikelyView
+    <com.ldt.musicr.ui.widget.view.MPSearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="45dp"
@@ -35,6 +38,18 @@
         android:alpha="0"
         tools:alpha="1"
         tools:translationY="0dp"
-        tools:layout_marginTop="32dp"
         android:elevation="14dp"/>
+    <com.ldt.springback.view.SpringBackLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_song_normal"
+        android:overScrollMode="never"
+        android:paddingHorizontal="20dp"/>
+    </com.ldt.springback.view.SpringBackLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

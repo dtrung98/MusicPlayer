@@ -3,11 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/panel"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_song_child_height"
-    android:background="@drawable/ripple_effect"
+    android:background="@android:color/transparent"
     tools:background="@color/library_back_color">
+    <View
+        android:id="@+id/panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ripple_effect"/>
     <TextView
         android:id="@+id/number"
         android:layout_width="45dp"

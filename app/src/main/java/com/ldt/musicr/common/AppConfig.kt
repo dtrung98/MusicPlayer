@@ -10,6 +10,8 @@ object AppConfig {
     const val isShowShuffleTileInLibrarySongTab = false
     const val isApplyOptimizedFlowOnPlayingStateChanged = false
 
+    const val isSearchInterfaceByPassTouchEvent = true
+
     @JvmStatic
     var systemBarsInset = intArrayOf(0, 0, 0, 0)
     set(value) {
