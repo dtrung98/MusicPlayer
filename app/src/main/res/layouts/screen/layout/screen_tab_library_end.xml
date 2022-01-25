@@ -57,7 +57,7 @@
         android:scaleY="0.5"
         android:alpha="0"
         />
-    <com.ldt.musicr.ui.widget.view.MPSearchLikelyView
+    <com.ldt.musicr.ui.widget.view.MPSearchLikeView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="45dp"

@@ -62,6 +62,7 @@
             app:layout_constraintTop_toTopOf="@id/back_top_header"
             app:layout_constraintBottom_toBottomOf="@id/back_top_header"
             app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"
             />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

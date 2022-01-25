@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.maintab.subpages.singleplaylist;
+package com.ldt.musicr.ui.maintab.subpages.viewplaylist;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,31 +16,31 @@ import com.ldt.musicr.helper.ReliableEvent;
 
 import java.util.List;
 
-public class SinglePlaylistHeaderAdapter extends RecyclerView.Adapter<SinglePlaylistHeaderAdapter.HeaderViewHolder> {
+public class ViewPlaylistHeaderAdapter extends RecyclerView.Adapter<ViewPlaylistHeaderAdapter.HeaderViewHolder> {
     public static final String ACTION_CLICK_MENU = "action-click-menu";
     public static final String ACTION_CLICK_PLAY_ALL = "action-click-play-all";
     public static final String ACTION_CLICK_SHUFFLE = "action-click-shuffle";
 
-    private SinglePlaylistViewModel.State mState;
+    private ViewPlaylistViewModel.State mState;
 
-    public SinglePlaylistViewModel.State getData() {
+    public ViewPlaylistViewModel.State getData() {
         return mState;
     }
 
-    public void setData(SinglePlaylistViewModel.State state) {
+    public void setData(ViewPlaylistViewModel.State state) {
         mState = state;
         notifyItemChanged(0);
     }
 
-    public void setEventListener(EventListener<SinglePlaylistViewModel.State> eventListener) {
+    public void setEventListener(EventListener<ViewPlaylistViewModel.State> eventListener) {
         mEventListener = eventListener;
     }
 
-    public EventListener<SinglePlaylistViewModel.State> getEventListener() {
+    public EventListener<ViewPlaylistViewModel.State> getEventListener() {
         return mEventListener;
     }
 
-    private EventListener<SinglePlaylistViewModel.State> mEventListener;
+    private EventListener<ViewPlaylistViewModel.State> mEventListener;
 
     @NonNull
     @Override

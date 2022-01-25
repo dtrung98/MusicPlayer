@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backward_color"
-    tools:context="com.ldt.musicr.ui.maintab.subpages.singleplaylist.SinglePlaylistFragment">
+    tools:context="com.ldt.musicr.ui.maintab.subpages.viewplaylist.ViewPlaylistFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

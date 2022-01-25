@@ -271,4 +271,6 @@
     <string name="left_right_audio_balance">Cân bằng âm trái phải</string>
     <string name="play_preview_all">Nghe thử (tất cả)</string>
     <string name="str_number_placeholder">%1$d</string>
+    <string name="str_stop_play_preview">Dừng trình nghe thử</string>
+    <string name="str_error_general">Có lỗi xảy ra. Vui lòng thử lại sau!</string>
 </resources>

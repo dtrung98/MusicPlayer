@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/search_view_background"
+    android:clickable="true"
+    android:focusable="true"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+<ImageView
+    android:id="@+id/icon"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintDimensionRatio="1:1"
+    android:padding="6dp"
+    android:contentDescription="@string/search"
+    android:src="@drawable/ic_action_search"/>
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@+id/icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:hint="@string/search"
+        android:textColor="@color/FlatWhite"
+        android:gravity="center_vertical"
+        android:textSize="15sp"
+        android:fontFamily="sans-serif-medium"
+        android:inputType="text"
+        android:importantForAutofill="no"
+        android:layout_marginEnd="16dp"
+        android:background="@android:color/transparent"/>
+</merge>

@@ -8,7 +8,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "com.ldt.musicr"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 4
         versionName '1.2.5'

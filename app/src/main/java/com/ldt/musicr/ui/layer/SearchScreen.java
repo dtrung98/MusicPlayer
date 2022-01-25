@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.floating;
+package com.ldt.musicr.ui.layer;
 
 import android.content.Context;
 import android.os.Bundle;

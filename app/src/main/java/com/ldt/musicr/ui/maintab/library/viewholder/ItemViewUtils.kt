@@ -8,16 +8,33 @@ import com.ldt.musicr.contract.AbsSongAdapter
 import com.ldt.musicr.helper.menu.SongMenuHelper
 import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.interactors.postDelayedOnUiThread
+import com.ldt.musicr.model.Media
 import com.ldt.musicr.model.Song
 import com.ldt.musicr.service.MusicPlayerRemote
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet
+import com.ldt.musicr.utils.KeyboardUtils
+import com.ldt.musicr.utils.Utils
 
 object ItemViewUtils {
     private val mOptionRes = SongMenuHelper.SONG_OPTION
+
+    fun selectOptionByMediaType(media: Media?): IntArray? {
+        return when(media) {
+            is Song -> {
+                if(SongPreviewController.getInstance().isPlayingPreview) SongMenuHelper.SONG_OPTION_STOP_PREVIEW else SongMenuHelper.SONG_OPTION
+            }
+            else -> null
+        }
+    }
     fun handleMenuClickOnNormalSongItem(viewHolder: RecyclerView.ViewHolder, song: Song?, position: Int) {
         song ?: return
+        val options = selectOptionByMediaType(song) ?: run {
+            Utils.showGeneralErrorToast()
+            return
+        }
+        KeyboardUtils.hideSoftInput(viewHolder.itemView)
         OptionBottomSheet
-            .newInstance(mOptionRes, song)
+            .newInstance(options, song)
             .show((viewHolder.itemView.context as AppCompatActivity).supportFragmentManager, "song_popup_menu")
     }
 

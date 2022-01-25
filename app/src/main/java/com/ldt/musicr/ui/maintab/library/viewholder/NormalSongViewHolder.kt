@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.maintab.library.viewholder
 
+import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import com.ldt.musicr.R
 import android.widget.TextView
@@ -46,25 +47,18 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         previewView.setOnClickListener {
             data?.also { ItemViewUtils.previewSongsOrStopCurrent(it.song) }
         }
-
-        menuView.setOnClickListener {
-            actionResponder?.invoke(ActionKey.SHOW_POPUP_OPTIONS, bindingAdapterPosition)
-        }
     }
 
-    fun bind(songItem: DataItem.SongItem, previewingSong: PreviewSong ?= null) {
-        this.data = songItem
-        bind(songItem.song, songItem.positionInData, previewingSong)
-    }
+    fun bind(item: DataItem.SongItem, previewingSong: PreviewSong? = null) {
+        this.data = item
 
-    private fun bind(song: Song, positionInData: Int, previewingSong: PreviewSong? = null) {
-        numberView.text = numberView.resources.getString(R.string.str_number_placeholder, positionInData + 1)
-        titleTextView.text = song.title
-        descriptionTextView.text = song.artistName
+        numberView.text = numberView.resources.getString(R.string.str_number_placeholder, item.positionInData + 1)
+        titleTextView.text = item.name
+        descriptionTextView.text = item.subName
         bindPlayingState()
-        bindPreviewButton(song, previewingSong)
+        bindPreviewButton(item.song, previewingSong)
         bindTheme()
-        ArtworkUtils.loadAlbumArtworkBySong(imageView, song)
+        ArtworkUtils.loadAlbumArtworkBySong(imageView,item.song)
     }
 
     override fun bindTheme() {
@@ -76,6 +70,15 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
             (panelView.background as RippleDrawable).setColor(baseColorStateList)
             (menuView.background as RippleDrawable).setColor(baseColorStateList)
             (previewView.background as RippleDrawable).setColor(baseColorStateList)
+        }
+
+        data?.also {
+            if(DataItem.hasFlag(it.flags, DataItem.FLAG_DIM)) {
+                //itemView.setBackgroundColor((0xFF212121).toInt())
+                itemView.setBackgroundResource(R.drawable.search_song_normal_background)
+            } else {
+                itemView.setBackgroundColor(Color.TRANSPARENT)
+            }
         }
     }
 
@@ -122,7 +125,7 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         if(playState[0]) {
             titleTextView.setTextColor(ColorProvider.baseColorL60)
             descriptionTextView.setTextColor(ColorProvider.baseColorAaa)
-            quickPlayPauseView.setColorFilter(ColorProvider.baseColor)
+            quickPlayPauseView.setColorFilter(ColorProvider.baseColorL60)
         } else {
             // not current song
             titleTextView.setTextColor(ColorProvider.flatWhite)

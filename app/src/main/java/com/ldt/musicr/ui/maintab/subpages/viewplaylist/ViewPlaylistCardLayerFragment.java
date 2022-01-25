@@ -1,4 +1,4 @@
-package com.ldt.musicr.ui.maintab.subpages.singleplaylist;
+package com.ldt.musicr.ui.maintab.subpages.viewplaylist;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class SinglePlaylistCardLayerFragment extends CardLayerFragment implements MusicServiceEventListener, SortOrderBottomSheet.SortOrderChangedListener, EventListener<SinglePlaylistViewModel.State> {
+public class ViewPlaylistCardLayerFragment extends CardLayerFragment implements MusicServiceEventListener, SortOrderBottomSheet.SortOrderChangedListener, EventListener<ViewPlaylistViewModel.State> {
     private static final String TAG = "PlaylistPagerFragment";
     public static final String PLAYLIST = "playlist";
 
@@ -52,9 +52,9 @@ public class SinglePlaylistCardLayerFragment extends CardLayerFragment implement
     SwipeRefreshLayout mSwipeRefresh;
 
     private final SongChildAdapter mAdapter = new SongChildAdapter();
-    private final SinglePlaylistHeaderAdapter mHeaderAdapter = new SinglePlaylistHeaderAdapter();
+    private final ViewPlaylistHeaderAdapter mHeaderAdapter = new ViewPlaylistHeaderAdapter();
 
-    private SinglePlaylistViewModel mViewModel;
+    private ViewPlaylistViewModel mViewModel;
 
     void onClickMenu() {
         Playlist playlist = mHeaderAdapter.getData() != null ? mHeaderAdapter.getData().mPlaylist : null;
@@ -125,8 +125,8 @@ public class SinglePlaylistCardLayerFragment extends CardLayerFragment implement
 
     Bitmap mPreviewBitmap;
 
-    public static SinglePlaylistCardLayerFragment newInstance(Playlist playlist, @Nullable Bitmap previewBitmap) {
-        SinglePlaylistCardLayerFragment fragment = new SinglePlaylistCardLayerFragment();
+    public static ViewPlaylistCardLayerFragment newInstance(Playlist playlist, @Nullable Bitmap previewBitmap) {
+        ViewPlaylistCardLayerFragment fragment = new ViewPlaylistCardLayerFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable(PLAYLIST, playlist);
         fragment.setArguments(bundle);
@@ -173,17 +173,17 @@ public class SinglePlaylistCardLayerFragment extends CardLayerFragment implement
         mHeaderAdapter.setEventListener(this);
         mAdapter.setSortOrderChangedListener(this);
 
-        mViewModel = ViewModelProviders.of(this).get(SinglePlaylistViewModel.class);
-        ReliableEvent<SinglePlaylistViewModel.State> event = mViewModel.getStateLiveData().getValue();
+        mViewModel = ViewModelProviders.of(this).get(ViewPlaylistViewModel.class);
+        ReliableEvent<ViewPlaylistViewModel.State> event = mViewModel.getStateLiveData().getValue();
         if (event == null || event.getReliable().getData() == null) {
-            SinglePlaylistViewModel.State state = new SinglePlaylistViewModel.State();
+            ViewPlaylistViewModel.State state = new ViewPlaylistViewModel.State();
             Bundle bundle = getArguments();
             state.mPlaylist = bundle == null ? null : bundle.getParcelable(PLAYLIST);
             state.mCoverImage = mPreviewBitmap;
             mViewModel.getStateLiveData().setValue(new ReliableEvent<>(Reliable.success(state), MPViewModel.ACTION_SET_PARAMS));
         }
         mViewModel.getStateLiveData().observe(this, _event -> {
-            SinglePlaylistViewModel.State state = _event == null ? null : _event.getReliable().getData();
+            ViewPlaylistViewModel.State state = _event == null ? null : _event.getReliable().getData();
             mHeaderAdapter.setData(state);
             mAdapter.setData(state == null ? null : state.songs);
 
@@ -284,19 +284,19 @@ public class SinglePlaylistCardLayerFragment extends CardLayerFragment implement
     }
 
     @Override
-    public boolean handleEvent(ReliableEvent<SinglePlaylistViewModel.State> event, SinglePlaylistViewModel.State data) {
+    public boolean handleEvent(ReliableEvent<ViewPlaylistViewModel.State> event, ViewPlaylistViewModel.State data) {
         String action = event.getAction();
         if (action == null) {
             return false;
         }
         switch (action) {
-            case SinglePlaylistHeaderAdapter.ACTION_CLICK_MENU:
+            case ViewPlaylistHeaderAdapter.ACTION_CLICK_MENU:
                 onClickMenu();
                 break;
-            case SinglePlaylistHeaderAdapter.ACTION_CLICK_PLAY_ALL:
+            case ViewPlaylistHeaderAdapter.ACTION_CLICK_PLAY_ALL:
                 mAdapter.playAll(0, true);
                 break;
-            case SinglePlaylistHeaderAdapter.ACTION_CLICK_SHUFFLE:
+            case ViewPlaylistHeaderAdapter.ACTION_CLICK_SHUFFLE:
                 mAdapter.shuffle();
                 break;
         }

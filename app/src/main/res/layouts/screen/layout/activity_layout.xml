@@ -29,44 +29,37 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent" />
 
-        <com.dtrung98.insetsview.viewgroup.InsetsConstraintLayout
+        <FrameLayout
             android:id="@+id/bottom_navigation_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:applySystemBarsInsets_Bottom="ignore"
-            app:dispatchSystemBarsInsets_Bottom="not_consumed"
-            app:dispatchSystemBarsInsets_Top="consumed"
-            app:dispatchSystemBarsInsets_End="consumed"
-            app:dispatchSystemBarsInsets_Start="consumed"
             android:background="@color/background_panel_color"
             android:clickable="true"
             android:focusable="true"
             >
 
-            <View
-                android:id="@+id/divider_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#22555555"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_navigation_view"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
+                android:layout_gravity="bottom|center_horizontal"
                 android:background="@android:color/transparent"
                 app:elevation="0dp"
                 app:itemIconSize="28dp"
                 app:itemIconTint="@color/bottom_navigation_icon_color"
                 app:itemTextColor="@color/bottom_navigation_icon_color"
                 app:labelVisibilityMode="unlabeled"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/divider_bottom"
+                android:layout_marginTop="1dp"
                 app:menu="@menu/bottom_navigation_menu" />
-        </com.dtrung98.insetsview.viewgroup.InsetsConstraintLayout>
+
+            <View
+                android:id="@+id/divider_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#22555555"
+                android:layout_gravity="top" />
+        </FrameLayout>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

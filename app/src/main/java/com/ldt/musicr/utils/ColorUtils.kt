@@ -1,4 +1,4 @@
-package com.ldt.musicr.util
+package com.ldt.musicr.utils
 
 import android.graphics.Color
 

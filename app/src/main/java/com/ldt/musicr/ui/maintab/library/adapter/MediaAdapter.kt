@@ -1,11 +1,12 @@
 package com.ldt.musicr.ui.maintab.library.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.MainThread
 import androidx.recyclerview.widget.RecyclerView
 import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.helper.songpreview.PreviewSong
-import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.helper.songpreview.SongPreviewListener
 import com.ldt.musicr.interactors.AppExecutors
 import com.ldt.musicr.interactors.postOnUiThread
@@ -39,6 +40,8 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
                 DataItem.SortingTile -> ViewTypeKey.TYPE_TILE_SORTING_NORMAL_SONG
                 is DataItem.FeatureSectionTile -> ViewTypeKey.TYPE_TILE_SECTION_FEATURE
                 is DataItem.Empty -> ViewTypeKey.TYPE_EMPTY
+                is DataItem.Dim.TopGradientDim -> ViewTypeKey.TYPE_TOP_GRADIENT_DIM
+                is DataItem.Dim.BottomGradientDim -> ViewTypeKey.TYPE_BOTTOM_GRADIENT_DIM
             }
         }
     }
@@ -47,6 +50,8 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
         return when(viewType) {
             ViewTypeKey.TYPE_NORMAL_SONG -> NormalSongViewHolder(parent, this)
             ViewTypeKey.TYPE_TILE_SORTING_NORMAL_SONG -> SortingTileViewHolder(parent, this)
+            ViewTypeKey.TYPE_TOP_GRADIENT_DIM -> TopGradientDimViewHolder(parent)
+            ViewTypeKey.TYPE_BOTTOM_GRADIENT_DIM -> BottomGradientDimViewHolder(parent)
             else -> throw IllegalArgumentException("View type $viewType is not supported by this adapter")
         }
     }
@@ -156,11 +161,11 @@ abstract class AbsListAdapter<T, V> : RecyclerView.Adapter<V>() where V : Recycl
     fun getItem(position: Int): T = currentList[position]
     override fun getItemCount(): Int = currentList.size
 
+    @SuppressLint("NotifyDataSetChanged")
+    @MainThread
     fun submitList(list: List<T>) {
-        synchronized(currentList) {
-            currentList.clear()
-            currentList.addAll(list)
-        }
+        currentList.clear()
+        currentList.addAll(list)
 
         notifyDataSetChanged()
     }

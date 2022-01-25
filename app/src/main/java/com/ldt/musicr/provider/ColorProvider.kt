@@ -7,7 +7,7 @@ import com.ldt.musicr.App
 import com.ldt.musicr.R
 import com.ldt.musicr.helper.extension.ResettableLazyManager
 import com.ldt.musicr.helper.extension.resettableLazy
-import com.ldt.musicr.util.ColorUtils
+import com.ldt.musicr.utils.ColorUtils
 import com.ldt.musicr.util.Tool
 
 object ColorProvider {
@@ -21,6 +21,7 @@ object ColorProvider {
 
     val baseColor by resettableLazy(paletteRelatedLM) { Tool.getBaseColor() }
 
+    val baseColorL45 by resettableLazy(paletteRelatedLM) { ColorUtils.lighterInternal(baseColor, 0.45f) }
     val baseColorL60 by resettableLazy(paletteRelatedLM) { ColorUtils.lighterInternal(baseColor, 0.6f) }
     val baseColorL25 by resettableLazy(paletteRelatedLM) { ColorUtils.lighterInternal(baseColor, 0.25f) }
     val baseColorAaa by resettableLazy(paletteRelatedLM) { Color.argb(0xAA, Color.red(baseColor), Color.green(baseColor), Color.blue(baseColor))}

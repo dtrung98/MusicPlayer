@@ -61,7 +61,7 @@ public class SongGlideRequest {
             return createBaseRequest(requestManager, song, ignoreMediaStore)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
+                    //.transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .signature(createSignature(song));
         }
     }

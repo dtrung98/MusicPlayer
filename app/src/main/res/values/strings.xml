@@ -321,4 +321,6 @@
     <string name="left_right_audio_balance">Left Right Audio Balance</string>
     <string name="play_preview_all">Play preview all</string>
     <string name="str_number_placeholder">%1$d</string>
+    <string name="str_stop_play_preview">Stop play preview</string>
+    <string name="str_error_general">Unknown error. Please try again later!</string>
 </resources>

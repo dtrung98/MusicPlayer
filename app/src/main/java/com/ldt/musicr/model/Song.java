@@ -3,14 +3,22 @@ package com.ldt.musicr.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.ldt.musicr.model.core.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Karim Abou Zeid (kabouzeid)
  */
-public class Song extends Media implements Parcelable {
+public class Song extends Media implements Parcelable, Entity {
     public static final Song EMPTY_SONG = new Song(-1, "", -1, -1, -1, "", -1, -1, "", -1, "");
 
     public final int id;
-    public final String title;
+    public String title;
     public final int trackNumber;
     public final int year;
     public final long duration;
@@ -20,6 +28,11 @@ public class Song extends Media implements Parcelable {
     public final String albumName;
     public final int artistId;
     public final String artistName;
+
+    private final String uid;
+    private float searchScore = 0f;
+    private final List<Integer> spanPosArray = new ArrayList<>();
+    private String logMessage = null;
 
     public Song(int id, String title, int trackNumber, int year, long duration, String data, long dateModified, int albumId, String albumName, int artistId, String artistName) {
         this.id = id;
@@ -33,6 +46,7 @@ public class Song extends Media implements Parcelable {
         this.albumName = albumName;
         this.artistId = artistId;
         this.artistName = artistName;
+        this.uid = "song_" + id;
     }
 
     @Override
@@ -73,6 +87,7 @@ public class Song extends Media implements Parcelable {
         return result;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Song{" +
@@ -123,6 +138,7 @@ public class Song extends Media implements Parcelable {
         this.albumName = in.readString();
         this.artistId = in.readInt();
         this.artistName = in.readString();
+        this.uid = "song_"+ this.id;
     }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -134,4 +150,44 @@ public class Song extends Media implements Parcelable {
             return new Song[size];
         }
     };
+
+
+    @NonNull
+    @Override
+    public String getUid() {
+        return uid;
+    }
+
+    @NonNull
+    @Override
+    public String getDisplayName() {
+        return title;
+    }
+
+    @Override
+    public float getSearchScore() {
+        return searchScore;
+    }
+
+    @Override
+    public void setSearchScore(float searchScore) {
+        this.searchScore = searchScore;
+    }
+
+    @Nullable
+    @Override
+    public String getLogMessage() {
+        return logMessage;
+    }
+
+    @Override
+    public void setLogMessage(@Nullable String logMessage) {
+        this.logMessage = logMessage;
+    }
+
+    @NonNull
+    @Override
+    public List<Integer> getSpanPosList() {
+        return spanPosArray;
+    }
 }

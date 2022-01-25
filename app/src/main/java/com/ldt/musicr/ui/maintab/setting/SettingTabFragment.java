@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.ldt.musicr.App;
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.maintab.MusicServiceNavigationFragment;
@@ -54,6 +55,8 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
     SwitchCompat mUseArtistImgAsBg;
 
     @BindView(R.id.create_now) View mCreateNowView;
+    @BindView(R.id.more_setting) View mMoreSettingView;
+    @BindView(R.id.more_setting_icon) View mMoreSettingIcon;
 
     @OnCheckedChanged(R.id.hide_switch)
     void onChangedUseArtistImgAsBg(boolean value) {
@@ -73,6 +76,10 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this,view);
+        if(AppConfig.hideIncompleteFeature) {
+            mMoreSettingView.setVisibility(View.GONE);
+            mMoreSettingIcon.setVisibility(View.GONE);
+        }
         mAppVolumeSeekBar.setOnRangeChangedListener(this);
         mBalanceSeekBar.setOnRangeChangedListener(this);
         refreshData();
@@ -245,8 +252,7 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
     public void onStopTrackingTouch(RangeSeekBar view, boolean isLeft) {
 
     }
-    @BindView(R.id.more_setting) View mMoreSettingView;
-    @BindView(R.id.more_setting_icon) View mMoreSettingIcon;
+
     @OnClick(R.id.more_setting)
     void goToMoreSetting() {
         getNavigationController().presentFragment(MoreOptionFragment.newInstance());
