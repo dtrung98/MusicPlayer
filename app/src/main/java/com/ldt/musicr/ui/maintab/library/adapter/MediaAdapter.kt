@@ -3,6 +3,7 @@ package com.ldt.musicr.ui.maintab.library.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.MainThread
 import androidx.recyclerview.widget.RecyclerView
 import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.helper.songpreview.PreviewSong
@@ -39,8 +40,8 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
                 DataItem.SortingTile -> ViewTypeKey.TYPE_TILE_SORTING_NORMAL_SONG
                 is DataItem.FeatureSectionTile -> ViewTypeKey.TYPE_TILE_SECTION_FEATURE
                 is DataItem.Empty -> ViewTypeKey.TYPE_EMPTY
-                is DataItem.Decor.TopGradientDim -> ViewTypeKey.TYPE_TOP_GRADIENT_DIM
-                is DataItem.Decor.BottomGradientDim -> ViewTypeKey.TYPE_BOTTOM_GRADIENT_DIM
+                is DataItem.Dim.TopGradientDim -> ViewTypeKey.TYPE_TOP_GRADIENT_DIM
+                is DataItem.Dim.BottomGradientDim -> ViewTypeKey.TYPE_BOTTOM_GRADIENT_DIM
             }
         }
     }
@@ -161,11 +162,10 @@ abstract class AbsListAdapter<T, V> : RecyclerView.Adapter<V>() where V : Recycl
     override fun getItemCount(): Int = currentList.size
 
     @SuppressLint("NotifyDataSetChanged")
+    @MainThread
     fun submitList(list: List<T>) {
-        synchronized(currentList) {
-            currentList.clear()
-            currentList.addAll(list)
-        }
+        currentList.clear()
+        currentList.addAll(list)
 
         notifyDataSetChanged()
     }

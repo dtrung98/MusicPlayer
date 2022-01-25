@@ -3,6 +3,11 @@ package com.ldt.musicr.utils
 import com.ldt.musicr.model.core.Entity
 import java.util.*
 
+/**
+ * Utils class handles search functionality
+ *
+ * @author github.com/dtrung98
+ */
 object SearchUtils {
     private const val splitWordExtendTypeKeyEnabled = false
     private const val splitWordEnhancedTypeKeyEnabled = true

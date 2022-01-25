@@ -13,9 +13,9 @@ sealed class DataItem: AdapterDataItem {
         object NoResult: Empty()
     }
 
-    sealed class Decor: Control() {
-        object TopGradientDim: Decor()
-        object BottomGradientDim: Decor()
+    sealed class Dim: Control() {
+        object TopGradientDim: Dim()
+        object BottomGradientDim: Dim()
     }
 
     companion object {

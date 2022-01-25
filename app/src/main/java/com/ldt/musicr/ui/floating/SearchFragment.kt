@@ -204,7 +204,7 @@ class SearchFragment: FloatingViewFragment(R.layout.screen_search_floating) {
             desTopHitSongs.sortByDescending { it.searchScore }
 
             desTopHitSongs.forEach { song ->
-                songs.add(DataItem.SongItem(DataItem.FLAG_DIM, song, songs.size, playlist.id, name = ViewUtils.getHighlightedText(song.title, song.spanPosList, ColorProvider.baseColor, ViewUtils.MEDIUM)))
+                songs.add(DataItem.SongItem(DataItem.FLAG_DIM, song, songs.size, playlist.id, name = ViewUtils.getHighlightedText(song.title, song.spanPosList, ColorProvider.baseColorL45, ViewUtils.MEDIUM)))
             }
 
             result.addAll(songs)
@@ -215,8 +215,8 @@ class SearchFragment: FloatingViewFragment(R.layout.screen_search_floating) {
             }
 
             if(result.isNotEmpty()) {
-                result.add(0, DataItem.Decor.TopGradientDim)
-                result.add(DataItem.Decor.BottomGradientDim)
+                result.add(0, DataItem.Dim.TopGradientDim)
+                result.add(DataItem.Dim.BottomGradientDim)
             }
 
             submitList(result)

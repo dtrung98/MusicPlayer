@@ -14,8 +14,21 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 object MediaManager {
     private val allSongs = Collections.synchronizedList(mutableListOf<Song>())
+
+    /**
+     * Song Id to Song
+     */
     private val mapIdToSong = Collections.synchronizedMap(hashMapOf<Int, Song>())
+
+    /**
+     * Playlist Id to Playlist
+     */
     private val mapIdToPlaylist = Collections.synchronizedMap(hashMapOf<Int, MPPlaylist>())
+
+    /**
+     * Song Id to Top Hit Score
+     */
+    private val mapSongIdToTopHit = Collections.synchronizedMap(hashMapOf<Int, Float>())
 
     private val isLoadedMediaInternal = AtomicBoolean(false)
     private val isLoadingMediaInternal = AtomicBoolean(false)

@@ -47,10 +47,6 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         previewView.setOnClickListener {
             data?.also { ItemViewUtils.previewSongsOrStopCurrent(it.song) }
         }
-
-        menuView.setOnClickListener {
-            actionResponder?.invoke(ActionKey.SHOW_POPUP_OPTIONS, bindingAdapterPosition)
-        }
     }
 
     fun bind(item: DataItem.SongItem, previewingSong: PreviewSong? = null) {
@@ -129,7 +125,7 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         if(playState[0]) {
             titleTextView.setTextColor(ColorProvider.baseColorL60)
             descriptionTextView.setTextColor(ColorProvider.baseColorAaa)
-            quickPlayPauseView.setColorFilter(ColorProvider.baseColor)
+            quickPlayPauseView.setColorFilter(ColorProvider.baseColorL60)
         } else {
             // not current song
             titleTextView.setTextColor(ColorProvider.flatWhite)
