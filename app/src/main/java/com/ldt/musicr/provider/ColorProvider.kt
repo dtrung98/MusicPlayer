@@ -7,7 +7,7 @@ import com.ldt.musicr.App
 import com.ldt.musicr.R
 import com.ldt.musicr.helper.extension.ResettableLazyManager
 import com.ldt.musicr.helper.extension.resettableLazy
-import com.ldt.musicr.util.ColorUtils
+import com.ldt.musicr.utils.ColorUtils
 import com.ldt.musicr.util.Tool
 
 object ColorProvider {

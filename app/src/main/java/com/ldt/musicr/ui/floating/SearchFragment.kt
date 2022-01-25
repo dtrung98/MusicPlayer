@@ -2,15 +2,12 @@ package com.ldt.musicr.ui.floating
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.GestureDetectorCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,12 +20,15 @@ import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.interactors.AppExecutors
 import com.ldt.musicr.interactors.postDelayedOnUiThread
 import com.ldt.musicr.interactors.runOnUiThread
+import com.ldt.musicr.model.Song
 import com.ldt.musicr.model.item.DataItem
 import com.ldt.musicr.notification.EventKey
 import com.ldt.musicr.notification.MediaKey
+import com.ldt.musicr.provider.ColorProvider
 import com.ldt.musicr.ui.base.FloatingViewFragment
 import com.ldt.musicr.ui.maintab.library.adapter.MediaAdapter
 import com.ldt.musicr.ui.widget.view.MPSearchView
+import com.ldt.musicr.utils.SearchUtils
 import com.ldt.musicr.util.Tool
 import com.ldt.musicr.utils.KeyboardUtils
 import com.ldt.musicr.utils.ViewUtils
@@ -191,12 +191,20 @@ class SearchFragment: FloatingViewFragment(R.layout.screen_search_floating) {
             }
 
             val songs = mutableListOf<DataItem.SongItem>()
+            val srcTopHitSongs = mutableListOf<Song>()
 
             playlist.songs.forEach { songId ->
                 MediaManager.getSong(songId)?.also { song ->
-                    if(song.title.indexOf(keyword, 0 , true) != -1)
-                    songs.add(DataItem.SongItem(DataItem.FLAG_DIM, song, songs.size, playlist.id))
+                    srcTopHitSongs.add(song)
                 }
+            }
+
+            val desTopHitSongs = mutableListOf<Song>()
+            SearchUtils.filterTopHitEntities(srcTopHitSongs, desTopHitSongs, keyword, 0)
+            desTopHitSongs.sortByDescending { it.searchScore }
+
+            desTopHitSongs.forEach { song ->
+                songs.add(DataItem.SongItem(DataItem.FLAG_DIM, song, songs.size, playlist.id, name = ViewUtils.getHighlightedText(song.title, song.spanPosList, ColorProvider.baseColor, ViewUtils.MEDIUM)))
             }
 
             result.addAll(songs)

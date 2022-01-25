@@ -8,4 +8,8 @@ object Utils {
     fun getApp(): Application {
         return App.getInstance()
     }
+
+    fun hasFlags(flags: Int, flagsNeedToCheck: Int): Boolean {
+        return flags and flagsNeedToCheck != 0
+    }
 }
