@@ -74,11 +74,9 @@ public class SongGlideRequest {
         }
 
         public RequestBuilder<Bitmap> build() {
-            //noinspection unchecked
             return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)
                     .error(DEFAULT_ERROR_IMAGE)
-                    .transition(GenericTransitionOptions.with(DEFAULT_ANIMATION))
                     .signature(createSignature(builder.song));
         }
     }
@@ -93,7 +91,6 @@ public class SongGlideRequest {
         }
 
         public RequestBuilder<Bitmap> build() {
-            //noinspection unchecked
             return createBaseRequest(builder.requestManager, builder.song, builder.ignoreMediaStore)
               //     .transcode(new BitmapPaletteTranscoder(context), BitmapPaletteWrapper.class)
                     .diskCacheStrategy(DEFAULT_DISK_CACHE_STRATEGY)

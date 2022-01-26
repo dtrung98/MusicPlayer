@@ -6,9 +6,9 @@ import com.ldt.musicr.R
 import android.widget.TextView
 import com.ldt.musicr.ui.widget.CircularPlayPauseProgressBar
 import com.ldt.musicr.model.Song
-import com.makeramen.roundedimageview.RoundedImageView
 import android.os.Build
 import android.graphics.drawable.RippleDrawable
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +16,7 @@ import android.widget.ImageView
 import com.ldt.musicr.helper.songpreview.PreviewSong
 import com.ldt.musicr.service.MusicPlayerRemote
 import com.ldt.musicr.model.item.DataItem
-import com.ldt.musicr.notification.ActionKey
 import com.ldt.musicr.notification.ActionResponder
-import com.ldt.musicr.notification.invoke
 import com.ldt.musicr.provider.ColorProvider
 import com.ldt.musicr.utils.ArtworkUtils
 
@@ -26,7 +24,7 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
     private val numberView: TextView = itemView.findViewById(R.id.number)
     private val titleTextView: TextView = itemView.findViewById(R.id.title)
     private val descriptionTextView: TextView = itemView.findViewById(R.id.description)
-    private val imageView: RoundedImageView = itemView.findViewById(R.id.image)
+    private val imageView: ImageView = itemView.findViewById(R.id.image)
     private val quickPlayPauseView: ImageView = itemView.findViewById(R.id.quick_play_pause)
     private val menuView: View = itemView.findViewById(R.id.menu_button)
     private val panelView: View = itemView.findViewById(R.id.panel)
@@ -50,6 +48,7 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
     }
 
     fun bind(item: DataItem.SongItem, previewingSong: PreviewSong? = null) {
+        val isTheSame = this.data?.song?.id == item.song.id
         this.data = item
 
         numberView.text = numberView.resources.getString(R.string.str_number_placeholder, item.positionInData + 1)
@@ -58,7 +57,9 @@ open class NormalSongViewHolder(parent: ViewGroup, private val actionResponder: 
         bindPlayingState()
         bindPreviewButton(item.song, previewingSong)
         bindTheme()
-        ArtworkUtils.loadAlbumArtworkBySong(imageView,item.song)
+        if(!isTheSame) {
+            ArtworkUtils.loadAlbumArtworkBySong(imageView, item.song)
+        }
     }
 
     override fun bindTheme() {
