@@ -1,4 +1,4 @@
-# RD Music Player - Redefined Music Player
+# Musicr - Redefine the Music Player
 **A pretty UI&UX Music Player**
 
 ## Features
