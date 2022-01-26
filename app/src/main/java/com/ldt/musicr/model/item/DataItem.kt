@@ -1,9 +1,11 @@
 package com.ldt.musicr.model.item
 
 import com.ldt.musicr.model.Song
+import com.ldt.musicr.model.mp.MPPlaylist
 
 sealed class DataItem: AdapterDataItem {
     class SongItem(val flags: Long, val song: Song, val positionInData: Int, val playlistId: Int, val name: CharSequence = song.title, val subName: CharSequence = song.artistName): DataItem()
+    class PlaylistItem(val flags: Long, val playlist: MPPlaylist, val name: CharSequence = playlist.name): DataItem()
 
     sealed class Control: DataItem()
     object SortingTile: Control()

@@ -36,6 +36,7 @@ open class MediaAdapter: AbsListAdapter<DataItem, RecyclerView.ViewHolder>(), So
     override fun getItemViewType(position: Int): Int {
         return when(val it = currentList[position]) {
             is DataItem.SongItem -> ViewTypeKey.TYPE_NORMAL_SONG
+            is DataItem.PlaylistItem -> 0
             is DataItem.Control -> when(it) {
                 DataItem.SortingTile -> ViewTypeKey.TYPE_TILE_SORTING_NORMAL_SONG
                 is DataItem.FeatureSectionTile -> ViewTypeKey.TYPE_TILE_SECTION_FEATURE
