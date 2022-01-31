@@ -31,4 +31,8 @@ sealed class EventKey {
     object OnSystemBarsInsetUpdated: EventKey()
     object OnSearchInterfaceAppeared: EventKey()
     object OnSearchInterfaceDisappeared: EventKey()
+
+    sealed class SettingKey: EventKey() {
+        object ChangedSetArtistArtworkAsBackground: SettingKey()
+    }
 }

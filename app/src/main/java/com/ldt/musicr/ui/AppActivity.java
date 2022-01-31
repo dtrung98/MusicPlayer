@@ -275,8 +275,8 @@ public class AppActivity extends MusicServiceActivity {
 
     }
 
-    public boolean backStackStreamOnTouchEvent(MotionEvent event) {
-        if (mBackStackController != null) return mBackStackController.streamOnTouchEvent(event);
+    public boolean dispatchOnTouchEvent(MotionEvent event) {
+        if (mBackStackController != null) return mBackStackController.dispatchOnTouchEvent(event);
         return false;
     }
 

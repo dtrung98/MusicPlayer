@@ -31,16 +31,16 @@ import butterknife.OnClick;
 import butterknife.OnTouch;
 import butterknife.Unbinder;
 
-public class ArtistPagerFragment extends MusicServiceNavigationFragment {
+public class ViewArtistFragment extends MusicServiceNavigationFragment {
     private static final String TAG = "ArtistPagerFragment";
     private static final String ARTIST = "artist";
-    public static ArtistPagerFragment newInstance(Artist artist) {
+    public static ViewArtistFragment newInstance(Artist artist) {
 
         Bundle args = new Bundle();
         if(artist!=null)
         args.putParcelable(ARTIST,artist);
 
-        ArtistPagerFragment fragment = new ArtistPagerFragment();
+        ViewArtistFragment fragment = new ViewArtistFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -125,7 +125,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private final SongInArtistPagerAdapter mAdapter = new SongInArtistPagerAdapter();
+    private final ViewArtistSongAdapter mAdapter = new ViewArtistSongAdapter();
 
     @Override
     public void onDestroyView() {
@@ -182,7 +182,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
 
         if(getContext() !=null) {
             ArtistGlideRequest.Builder.from(GlideApp.with(getContext()), mArtist)
-                    .tryToLoadOriginal(true)
+                    .requestHighResolutionArt(true)
                     .generateBuilder(getContext())
                     .build()
                     /*    .error(
@@ -196,7 +196,7 @@ public class ArtistPagerFragment extends MusicServiceNavigationFragment {
                             ArtistGlideRequest
                                     .Builder
                                     .from(GlideApp.with(getContext()), mArtist)
-                                    .tryToLoadOriginal(false)
+                                    .requestHighResolutionArt(false)
                                     .generateBuilder(getContext())
                                     .build())
                     .into(mBigImage);

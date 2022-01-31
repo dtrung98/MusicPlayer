@@ -1,7 +1,6 @@
 package com.ldt.musicr.ui.maintab
 
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import com.ldt.musicr.service.MusicServiceEventListener
 import androidx.cardview.widget.CardView
 import com.ldt.musicr.ui.widget.viewpager.GestureControlViewPager
 import com.ldt.musicr.R
@@ -9,7 +8,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import com.ldt.musicr.ui.MusicServiceActivity
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.ldt.musicr.ui.CardLayerController.CardLayerAttribute
@@ -17,20 +15,25 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ldt.musicr.ui.AppActivity
 import com.ldt.musicr.ui.maintab.library.LibraryTabFragment
 import com.ldt.musicr.ui.widget.navigate.BackPressableFragment
-import com.ldt.musicr.loader.medialoader.ArtistLoader
 import com.ldt.musicr.service.MusicPlayerRemote
 import com.ldt.musicr.glide.ArtistGlideRequest
 import com.ldt.musicr.glide.GlideApp
 import com.ldt.musicr.App
+import com.ldt.musicr.common.MediaManager
+import com.ldt.musicr.interactors.AppExecutors
+import com.ldt.musicr.interactors.postOnUiThread
+import com.ldt.musicr.notification.EventKey
 import com.ldt.musicr.util.Tool
+import com.zalo.gitlabmobile.notification.MessageEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.util.ArrayList
 
-class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServiceEventListener {
+class BackStackController : CardLayerFragment(), OnPageChangeListener {
     private var mRoot: CardView? = null
     private lateinit var mDimView: View
     private lateinit var backgroundImageView: ImageView
     private lateinit var mViewPager: GestureControlViewPager
-    private var mIsUsingAIAsBg = true
     private var mNavigationHeight = 0f
     private var mNavigationAdapter: BottomNavigationPagerAdapter? = null
     private var dpX1 = 1f
@@ -42,16 +45,14 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         bindView(view)
-        (activity as? MusicServiceActivity)?.addMusicServiceEventListener(this)
         dpX1 = resources.getDimension(R.dimen.oneDP)
         mNavigationHeight = view.resources.getDimension(R.dimen.bottom_navigation_height)
         mNavigationAdapter = BottomNavigationPagerAdapter(activity, childFragmentManager)
         mViewPager.adapter = mNavigationAdapter
         mViewPager.offscreenPageLimit = 3
-        mViewPager.addOnPageChangeListener(this)
         mViewPager.isSwipeGestureEnabled = false
         mViewPager.setOnTouchListener { _: View?, event: MotionEvent? -> mCardLayerController.dispatchOnTouchEvent(mRoot, event) }
-        onUsingArtistImagePreferenceChanged()
+        updateBackImage()
     }
 
     private fun bindView(view: View) {
@@ -61,7 +62,7 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
         mViewPager = view.findViewById(R.id.view_pager)
     }
 
-    fun streamOnTouchEvent(event: MotionEvent?): Boolean {
+    fun dispatchOnTouchEvent(event: MotionEvent?): Boolean {
         return mCardLayerController.dispatchOnTouchEvent(mRoot, event)
     }
 
@@ -80,10 +81,10 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
             // max = 0.45
             val min = 0.3f
             val max = 0.65f
-            val hieu = max - min
+            val distance = max - min
             val postFactor = (me - 1.0f) / (me - 0.75f) // 1/2, 2/3,3/4, 4/5, 5/6 ...
             val preFactor = (me - 2.0f) / (me - 0.75f) // 0/1, 1/2, 2/3, ...
-            var darken = min + hieu * preFactor + hieu * (postFactor - preFactor) * attrs[actives[0]].runtimePercent
+            var darken = min + distance * preFactor + distance * (postFactor - preFactor) * attrs[actives[0]].runtimePercent
             // Log.d(TAG, "darken = " + darken);
             //  mRoot.setDarken(darken,false);
             if (darken < 0) darken = 0f
@@ -98,27 +99,27 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
     }
 
     private fun doTranslateNavigation(attrs: ArrayList<CardLayerAttribute>, actives: ArrayList<Int>, me: Int) {
-        if (bottomNavigationParent != null) {
-            val bnpHeight = bottomNavigationParent!!.height
+        bottomNavigationParent?.also {
+            val bnpHeight = it.height
             if (me == 1) {
                 var pc = attrs[actives[0]].runtimePercent
                 if (pc > 1) pc = 1f else if (pc < 0) pc = 0f
-                bottomNavigationParent!!.translationY = pc * bnpHeight
+                it.translationY = pc * bnpHeight
             } else if (me != 0) {
-                bottomNavigationParent!!.translationY = bnpHeight.toFloat()
+                it.translationY = bnpHeight.toFloat()
             }
         }
     }
 
     override fun onLayerHeightChanged(attr: CardLayerAttribute) {
-        if (mRoot != null) {
+        mRoot?.also {
             var pc = attr.mCurrentTranslate / attr.maxPosition
             if (pc > 1) pc = 1f else if (pc < 0) pc = 0f
             val scale = 0.2f + pc * 0.8f
             var radius = 1 - pc
             if (radius < 0.1f) radius = 0f else if (radius > 1) radius = 1f
-            mRoot!!.radius = dpX1 * 14 * radius
-            mRoot!!.alpha = scale
+            it.radius = dpX1 * 14 * radius
+            it.alpha = scale
         }
     }
 
@@ -143,13 +144,13 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
     }
 
     fun navigateToLibraryTab(go: Boolean): LibraryTabFragment? {
-        val fragment = navigateToTab(1, go)
+        val fragment = navigateToTab(go)
         return if (fragment is LibraryTabFragment) {
             fragment
         } else null
     }
 
-    private fun navigateToTab(item: Int, go: Boolean): Fragment? {
+    private fun navigateToTab(go: Boolean, item: Int = 1): Fragment? {
         if (go) mViewPager.currentItem = item
         val fragment = mNavigationAdapter!!.getItem(1)
         if (fragment is BackPressableFragment) {
@@ -185,19 +186,20 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
         }
         false
     }
-    var mNavigationStack = ArrayList<Int>()
+    private var navigationStack = ArrayList<Int>()
     private fun bringToTopThisTab(tabPosition: Int) {
-        Tool.vibrate(context)
-        mNavigationStack.remove(tabPosition)
-        mNavigationStack.add(tabPosition)
+        //Tool.vibrate(context)
+        view?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        navigationStack.remove(tabPosition)
+        navigationStack.add(tabPosition)
     }
 
     override fun onBackPressed(): Boolean {
-        if (mNavigationStack.isNotEmpty()) {
-            if (!mNavigationAdapter!!.onBackPressed(mNavigationStack[mNavigationStack.size - 1])) {
-                mNavigationStack.removeAt(mNavigationStack.size - 1)
-                if (mNavigationStack.isEmpty()) return onBackPressed()
-                mViewPager.setCurrentItem(mNavigationStack[mNavigationStack.size - 1], true)
+        if (navigationStack.isNotEmpty()) {
+            if (!mNavigationAdapter!!.onBackPressed(navigationStack[navigationStack.size - 1])) {
+                navigationStack.removeAt(navigationStack.size - 1)
+                if (navigationStack.isEmpty()) return onBackPressed()
+                mViewPager.setCurrentItem(navigationStack[navigationStack.size - 1], true)
             }
         } else if (mViewPager.currentItem != 0) mViewPager.setCurrentItem(0, true) else return mViewPager.currentItem != 0 || mNavigationAdapter!!.onBackPressed(0)
         return true
@@ -215,50 +217,50 @@ class BackStackController : CardLayerFragment(), OnPageChangeListener, MusicServ
     }
 
     override fun onPageScrollStateChanged(i: Int) {}
-    override fun onServiceConnected() {}
-    override fun onServiceDisconnected() {}
-    override fun onQueueChanged() {}
-    override fun onPlayingMetaChanged() {
-        if (context != null) {
-            val artist = ArtistLoader.getArtist(requireContext(), MusicPlayerRemote.getCurrentSong().artistId)
-            if (backgroundImageView.visibility == View.VISIBLE) ArtistGlideRequest.Builder.from(GlideApp.with(requireContext()), artist)
-                .tryToLoadOriginal(true)
-                .generateBuilder(context)
-                .build() /*    .error(
-                                    ArtistGlideRequest
-                                            .Builder
-                                            .from(GlideApp.with(getContext()),mArtist)
-                                            .tryToLoadOriginal(false)
-                                            .generateBuilder(getContext())
-                                            .build())*/
-                .thumbnail(
-                    ArtistGlideRequest.Builder
-                        .from(GlideApp.with(requireContext()), artist)
-                        .tryToLoadOriginal(false)
+
+    private fun updateBackImage() {
+        AppExecutors.io().execute {
+            val isUseArtistImageAsBackground = App.getInstance().preferencesUtility.isUsingArtistImageAsBackground
+            val currentSong = if(isUseArtistImageAsBackground) MusicPlayerRemote.getCurrentSong() else null
+            val artist = currentSong?.let { MediaManager.getArtist(it.artistId) }
+            postOnUiThread {
+                if(isAdded && !isRemoving) {
+                    backgroundImageView.visibility = if(isUseArtistImageAsBackground) View.VISIBLE else View.GONE
+                    artist ?: return@postOnUiThread
+                    ArtistGlideRequest.Builder.from(GlideApp.with(requireContext()), artist)
+                        .requestHighResolutionArt(true)
                         .generateBuilder(context)
                         .build()
-                )
-                .into(backgroundImageView)
+                        .thumbnail(
+                            ArtistGlideRequest.Builder
+                                .from(GlideApp.with(requireContext()), artist)
+                                .requestHighResolutionArt(false)
+                                .generateBuilder(context)
+                                .build()
+                        )
+                        .into(backgroundImageView)
+                }
+            }
         }
     }
 
-    override fun onPlayStateChanged() {}
-    override fun onRepeatModeChanged() {}
-    override fun onShuffleModeChanged() {}
-    override fun onMediaStoreChanged() {}
-    override fun onPaletteChanged() {}
-    override fun onDestroyView() {
-        if (activity is MusicServiceActivity) (activity as MusicServiceActivity?)!!.removeMusicServiceEventListener(this)
-        super.onDestroyView()
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        EventBus.getDefault().register(this)
     }
 
-    fun onUsingArtistImagePreferenceChanged() {
-        mIsUsingAIAsBg = App.getInstance().preferencesUtility.isUsingArtistImageAsBackground
-        if (mIsUsingAIAsBg) {
-            backgroundImageView.visibility = View.VISIBLE
-            onPlayingMetaChanged()
-        } else {
-            backgroundImageView.visibility = View.GONE
+    override fun onDetach() {
+        super.onDetach()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun onEvent(messageEvent: MessageEvent) {
+        when (messageEvent.key) {
+            EventKey.OnLoadedArtists, EventKey.OnPlayingMetaChanged, EventKey.SettingKey.ChangedSetArtistArtworkAsBackground -> {
+                updateBackImage()
+            }
+            else -> {}
         }
     }
 

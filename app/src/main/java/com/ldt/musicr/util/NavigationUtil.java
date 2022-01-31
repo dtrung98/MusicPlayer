@@ -21,6 +21,7 @@ import android.media.audiofx.AudioEffect;
 import androidx.annotation.NonNull;
 
 import com.ldt.musicr.R;
+import com.ldt.musicr.common.MediaManager;
 import com.ldt.musicr.loader.medialoader.ArtistLoader;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;
@@ -28,7 +29,7 @@ import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.CardLayerController;
 import com.ldt.musicr.ui.maintab.library.LibraryTabFragment;
-import com.ldt.musicr.ui.maintab.subpages.ArtistPagerFragment;
+import com.ldt.musicr.ui.maintab.subpages.ViewArtistFragment;
 import com.ldt.musicr.ui.maintab.subpages.viewplaylist.ViewPlaylistFragment;
 
 import es.dmoral.toasty.Toasty;
@@ -85,7 +86,7 @@ public class NavigationUtil {
 
             LibraryTabFragment fragment = appActivity.getBackStackController().navigateToLibraryTab(true);
             if (fragment != null)
-                fragment.getNavigationController().presentFragment(ArtistPagerFragment.newInstance(ArtistLoader.getArtist(activity, artistId)));
+                fragment.getNavigationController().presentFragment(ViewArtistFragment.newInstance(MediaManager.INSTANCE.getArtist(artistId)));
 
             navigateToBackStackController(appActivity);
         }

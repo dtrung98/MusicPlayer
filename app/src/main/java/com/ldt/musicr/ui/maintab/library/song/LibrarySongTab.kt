@@ -117,7 +117,7 @@ class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedList
     private fun refreshData() {
         AppExecutors.io().execute {
 
-            if(!MediaManager.isLoadedSongs) {
+            if(!MediaManager.isLoadedPlaylists) {
                 // fetch later
                 return@execute
             }
@@ -189,9 +189,9 @@ class LibrarySongTab : Fragment(R.layout.screen_songs_tab), SortOrderChangedList
     }
 
     @Subscribe
-    fun onReceivedEvent(messageEvent: MessageEvent) {
+    fun onReceiveEvent(messageEvent: MessageEvent) {
         when(messageEvent.key) {
-            EventKey.OnLoadedSongs -> {
+            EventKey.OnLoadedPlaylists -> {
                 refreshData()
             }
             EventKey.OnMediaStoreChanged -> {
