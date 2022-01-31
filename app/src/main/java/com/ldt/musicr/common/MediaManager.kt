@@ -2,13 +2,20 @@ package com.ldt.musicr.common
 
 import com.ldt.musicr.App
 import com.ldt.musicr.helper.extension.post
+import com.ldt.musicr.loader.medialoader.ArtistLoader
 import com.ldt.musicr.loader.medialoader.PlaylistLoader
 import com.ldt.musicr.loader.medialoader.PlaylistSongLoader
 import com.ldt.musicr.loader.medialoader.SongLoader
+import com.ldt.musicr.model.Artist
 import com.ldt.musicr.model.Song
 import com.ldt.musicr.model.mp.MPPlaylist
 import com.ldt.musicr.notification.EventKey
 import com.ldt.musicr.notification.MediaKey
+import com.ldt.musicr.utils.Utils
+import com.zalo.gitlabmobile.notification.MessageEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -30,6 +37,12 @@ object MediaManager {
      */
     private val mapSongIdToTopHit = Collections.synchronizedMap(hashMapOf<Int, Float>())
 
+    /**
+     * Artist Id to Artist
+     */
+    private val mapArtistIdToArtist = Collections.synchronizedMap(hashMapOf<Int, Artist>())
+    private val allArtists = Collections.synchronizedList(mutableListOf<Artist>())
+
     private val isLoadedMediaInternal = AtomicBoolean(false)
     private val isLoadingMediaInternal = AtomicBoolean(false)
     private val isLoadedSongsInternal = AtomicBoolean(false)
@@ -42,6 +55,10 @@ object MediaManager {
 
     fun getPlaylist(id: Int): MPPlaylist? {
         return mapIdToPlaylist[id]
+    }
+
+    fun getArtist(id: Int): Artist? {
+        return mapArtistIdToArtist[id]
     }
 
     val isLoadedMedia: Boolean get() = isLoadedMediaInternal.get()
@@ -107,6 +124,13 @@ object MediaManager {
     }
 
     private fun loadAllArtists() {
+        mapArtistIdToArtist.clear()
+        allArtists.clear()
+        val systemArtists = ArtistLoader.getAllArtists(Utils.getApp())
+        allArtists.addAll(systemArtists)
+        systemArtists.forEach {
+            mapArtistIdToArtist[it.id] = it
+        }
 
         isLoadedArtistsInternal.set(true)
         EventKey.OnLoadedArtists.post()

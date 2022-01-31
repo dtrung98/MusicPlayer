@@ -1,5 +1,6 @@
 package com.ldt.musicr.ui.maintab.library;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -23,7 +24,6 @@ import com.ldt.musicr.ui.maintab.library.genre.GenreChildTab;
 import com.ldt.musicr.ui.maintab.library.playlist.PlaylistChildTab;
 import com.ldt.musicr.ui.maintab.library.song.LibrarySongTab;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
-import com.ldt.musicr.util.Tool;
 import com.zalo.gitlabmobile.notification.MessageEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +76,7 @@ public class LibraryTabFragment extends NavigationFragment {
         new SearchFragment().show(getParentFragmentManager(), "search");
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -88,7 +89,7 @@ public class LibraryTabFragment extends NavigationFragment {
 
 
         //if(true) return;
-        mViewPager.setOnTouchListener((v, event) -> getMainActivity().backStackStreamOnTouchEvent(event));
+        mViewPager.setOnTouchListener((v, event) -> getMainActivity().dispatchOnTouchEvent(event));
         mPagerAdapter = new LibraryPagerAdapter(getActivity(),getChildFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(5);

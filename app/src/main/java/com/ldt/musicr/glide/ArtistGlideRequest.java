@@ -63,7 +63,7 @@ public class ArtistGlideRequest {
             this.forceDownload = forceDownload;
             return this;
         }
-        public Builder tryToLoadOriginal(boolean b) {
+        public Builder requestHighResolutionArt(boolean b) {
             this.mLoadOriginalImage = b;
             return this;
         }

@@ -20,12 +20,17 @@ import com.ldt.musicr.App;
 import com.ldt.musicr.R;
 import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.helper.LocaleHelper;
+import com.ldt.musicr.helper.extension.GeneralsKt;
+import com.ldt.musicr.notification.EventKey;
 import com.ldt.musicr.ui.AppActivity;
 import com.ldt.musicr.ui.maintab.MusicServiceNavigationFragment;
 import com.ldt.musicr.ui.maintab.subpages.MoreOptionFragment;
 import com.ldt.musicr.ui.widget.rangeseekbar.OnRangeChangedListener;
 import com.ldt.musicr.ui.widget.rangeseekbar.RangeSeekBar;
 import com.ldt.musicr.util.Tool;
+import com.zalo.gitlabmobile.notification.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,9 +66,7 @@ public class SettingTabFragment extends MusicServiceNavigationFragment implement
     @OnCheckedChanged(R.id.hide_switch)
     void onChangedUseArtistImgAsBg(boolean value) {
         App.getInstance().getPreferencesUtility().setIsUsingArtistImageAsBackground(value);
-        if(getActivity() instanceof AppActivity) {
-            ((AppActivity)getActivity()).getBackStackController().onUsingArtistImagePreferenceChanged();
-        }
+        EventBus.getDefault().post(new MessageEvent(EventKey.SettingKey.ChangedSetArtistArtworkAsBackground.INSTANCE, null, null, null));
     }
 
     @Nullable
