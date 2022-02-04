@@ -28,40 +28,11 @@ https://github.com/dtrung98/Source/raw/master/musicr.apk
    <table align="center" border="0" >
   <tr>
     <td>
-<img width="360"
-src="https://user-images.githubusercontent.com/33343210/61610738-2c46aa80-ac84-11e9-80fa-bbe8c6d4119a.png"/>
-       <td><img width="360"
-src="https://user-images.githubusercontent.com/33343210/61610968-c3abfd80-ac84-11e9-9c8a-7ac5c9e257ff.jpg"/>
+![image](https://user-images.githubusercontent.com/69512372/152618448-dec1397b-6970-499a-95a0-cc8e05e5f99c.png)
+       <td>![image](https://user-images.githubusercontent.com/69512372/152618551-b3ad8834-ec07-4b26-a95a-c500c0641bc7.png)
     </td>
-     <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61610657-edb0f000-ac83-11e9-8b89-eb205d8ac518.png"/></td>
-  </table>
-  </div>
-</br>
-<div align="center">
-  <table align="center" border="0" >
-  <tr>
-    <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61611561-45e8f180-ac86-11e9-932a-d0cbcd388048.png"/></td>
-     <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61611407-e38ff100-ac85-11e9-8b70-f083436cf3d4.png"/></td>
-     <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61611355-c6f3b900-ac85-11e9-9b0c-c3c3a4734474.png"/></td>
-  </tr>
-</table>
-  </div>
-</br>
-<div align="center">
-  <table align="center" border="0" >
-  <tr>
-    <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61610594-c3f7c900-ac83-11e9-8ccf-1a6d989631d2.png"/></td>
-    <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61611516-2d78d700-ac86-11e9-9187-c53e91a2b891.png"/></td>
-     <td> <img width="360"
-src="https://user-images.githubusercontent.com/33343210/61764970-4eb40180-ae05-11e9-9903-241fa144582b.png"/></td>
-  </tr>
-</table>
+      </tr>
+   </table>
   </div>
 </br>
 
