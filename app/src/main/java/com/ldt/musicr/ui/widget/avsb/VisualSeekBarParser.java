@@ -102,19 +102,22 @@ class VisualSeekBarParser implements ProgressListener {
 
     @WorkerThread
     private void parseSoundFileData() {
-        mNumFrames = mSoundFile.getNumFrames();
-        //Log.d(TAG, "calculateSound: "+mNumFrames);
-        mSampleRate = mSoundFile.getSampleRate();
-        mSamplesPerFrame = mSoundFile.getSamplesPerFrame();
-        mParseDuration = mNumFrames * mSamplesPerFrame / mSampleRate + 0.0f;
-        mIntDuration = (int) mParseDuration;
-        mFrameGain = mSoundFile.getFrameGains();
-        mMaxGain = 0;
-        mMinGain = 255;
-        for (int i = 0; i < mNumFrames; i++) {
-            if (mMaxGain < mFrameGain[i]) mMaxGain = mFrameGain[i];
-            if (mMinGain > mFrameGain[i]) mMinGain = mFrameGain[i];
+        if (mSoundFile != null) {
+            mNumFrames = mSoundFile.getNumFrames();
+            mSampleRate = mSoundFile.getSampleRate();
+            //Log.d(TAG, "calculateSound: "+mNumFrames);
+            mSamplesPerFrame = mSoundFile.getSamplesPerFrame();
+            mParseDuration = mNumFrames * mSamplesPerFrame / mSampleRate + 0.0f;
+            mIntDuration = (int) mParseDuration;
+            mFrameGain = mSoundFile.getFrameGains();
+            mMaxGain = 0;
+            mMinGain = 255;
+            for (int i = 0; i < mNumFrames; i++) {
+                if (mMaxGain < mFrameGain[i]) mMaxGain = mFrameGain[i];
+                if (mMinGain > mFrameGain[i]) mMinGain = mFrameGain[i];
+            }
         }
+
     }
 
     @WorkerThread
