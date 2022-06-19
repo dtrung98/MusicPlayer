@@ -3,7 +3,7 @@ package com.ldt.musicr.ui.maintab.library.viewholder
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.utils.ViewUtils
 
 class BottomGradientDimViewHolder(parent: ViewGroup) :

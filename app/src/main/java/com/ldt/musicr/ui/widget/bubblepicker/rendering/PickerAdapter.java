@@ -7,7 +7,7 @@ import android.graphics.Typeface;
 import androidx.core.content.ContextCompat;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener;
 import com.ldt.musicr.ui.widget.bubblepicker.model.BubbleGradient;
 import com.ldt.musicr.ui.widget.bubblepicker.model.PickerItem;

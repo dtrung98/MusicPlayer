@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.Util;
 

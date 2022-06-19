@@ -38,7 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.io.File;
 import java.util.Objects;

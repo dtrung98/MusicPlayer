@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 
 public class CircularPlayPauseProgressBar extends View {

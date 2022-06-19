@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 public class SuccessTickView extends View {
   private float mDensity = -1;

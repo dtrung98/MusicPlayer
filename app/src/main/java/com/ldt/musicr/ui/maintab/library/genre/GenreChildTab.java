@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.ui.maintab.MusicServiceFragment;
 
 import butterknife.BindDimen;

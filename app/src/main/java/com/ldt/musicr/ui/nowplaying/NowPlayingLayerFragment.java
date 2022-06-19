@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;

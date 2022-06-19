@@ -3,7 +3,7 @@ package com.ldt.musicr.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 
 public class CategoryInfo implements Parcelable {

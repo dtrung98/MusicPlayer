@@ -25,7 +25,7 @@ import androidx.core.view.ViewCompat;
 import com.dtrung98.insetsview.ext.WindowThemingKt;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.service.MusicPlayerRemote;
 import com.ldt.musicr.service.MusicService;

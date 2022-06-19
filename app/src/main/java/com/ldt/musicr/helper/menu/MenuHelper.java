@@ -8,7 +8,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.helper.songpreview.SongPreviewController;
 import com.ldt.musicr.model.Artist;
 import com.ldt.musicr.model.Playlist;

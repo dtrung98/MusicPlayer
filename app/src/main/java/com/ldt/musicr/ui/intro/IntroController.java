@@ -7,7 +7,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationControllerFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.NavigationFragment;
 import com.ldt.musicr.ui.widget.fragmentnavigationcontroller.PresentStyle;

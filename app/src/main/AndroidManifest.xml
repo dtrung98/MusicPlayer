@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  package="com.ldt.musicr">
+  package="com.elmurzaev.music">
 
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -16,7 +16,7 @@
   <uses-permission android:name="android.permission.VIBRATE" />
 
   <application
-    android:name=".App"
+    android:name="com.ldt.musicr.App"
     android:allowBackup="true"
     android:fullBackupContent="true"
     android:icon="@mipmap/ic_launcher"
@@ -26,7 +26,7 @@
     android:theme="@style/AppThemeNoWallpaper"
     tools:ignore="UnusedAttribute">
     <activity
-      android:name=".ui.AppActivity"
+      android:name="com.ldt.musicr.ui.AppActivity"
       android:configChanges="keyboardHidden|orientation|screenSize"
       android:exported="true"
       android:launchMode="singleInstance"
@@ -100,7 +100,7 @@
       </intent-filter>
     </activity>
     <service
-      android:name=".service.MusicService"
+      android:name="com.ldt.musicr.service.MusicService"
       android:enabled="true" />
     <meta-data
       android:name="android.max_aspect"
@@ -117,14 +117,14 @@
     </provider>
 
     <receiver
-      android:name=".service.MediaButtonIntentReceiver"
+      android:name="com.ldt.musicr.service.MediaButtonIntentReceiver"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MEDIA_BUTTON" />
       </intent-filter>
     </receiver>
     <receiver
-      android:name=".appwidgets.BootReceiver"
+      android:name="com.ldt.musicr.appwidgets.BootReceiver"
       android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -132,7 +132,7 @@
       </intent-filter>
     </receiver>
     <receiver
-      android:name=".appwidgets.AppWidgetBig"
+      android:name="com.ldt.musicr.appwidgets.AppWidgetBig"
       android:exported="false"
       android:label="@string/app_widget_big_name">
       <intent-filter>
@@ -144,7 +144,7 @@
         android:resource="@xml/app_widget_big_info" />
     </receiver>
     <receiver
-      android:name=".appwidgets.AppWidgetClassic"
+      android:name="com.ldt.musicr.appwidgets.AppWidgetClassic"
       android:exported="false"
       android:label="@string/app_widget_classic_name">
       <intent-filter>
@@ -156,7 +156,7 @@
         android:resource="@xml/app_widget_classic_info" />
     </receiver>
     <receiver
-      android:name=".appwidgets.AppWidgetSmall"
+      android:name="com.ldt.musicr.appwidgets.AppWidgetSmall"
       android:exported="false"
       android:label="@string/app_widget_small_name">
       <intent-filter>
@@ -168,7 +168,7 @@
         android:resource="@xml/app_widget_small_info" />
     </receiver>
     <receiver
-      android:name=".appwidgets.AppWidgetCard"
+      android:name="com.ldt.musicr.appwidgets.AppWidgetCard"
       android:exported="false"
       android:label="@string/app_widget_card_name">
       <intent-filter>

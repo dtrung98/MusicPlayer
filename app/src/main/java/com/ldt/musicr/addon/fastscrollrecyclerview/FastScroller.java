@@ -24,7 +24,7 @@ import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.lang.annotation.Retention;
 

@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.lang.ref.WeakReference;
 

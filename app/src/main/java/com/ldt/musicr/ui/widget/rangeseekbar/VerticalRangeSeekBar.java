@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 
 /**

@@ -12,7 +12,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.Key;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.signature.MediaStoreSignature;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.glide.audiocover.AudioFileCover;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.MusicUtil;

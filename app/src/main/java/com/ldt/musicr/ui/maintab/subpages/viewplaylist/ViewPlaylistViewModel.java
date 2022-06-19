@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.helper.AppExecutors;
 import com.ldt.musicr.helper.Reliable;
 import com.ldt.musicr.helper.ReliableEvent;

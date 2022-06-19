@@ -10,7 +10,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.ui.widget.rounded.RoundColorable;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;

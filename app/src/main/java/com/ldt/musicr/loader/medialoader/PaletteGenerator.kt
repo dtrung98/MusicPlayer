@@ -9,7 +9,7 @@ import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.res.ResourcesCompat
 import androidx.palette.graphics.Palette
 import com.ldt.musicr.App
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.interactors.AppExecutors
 import com.ldt.musicr.provider.ColorProvider
 import com.ldt.musicr.service.MusicPlayerRemote

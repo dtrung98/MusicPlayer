@@ -1,7 +1,7 @@
 package com.ldt.musicr.glide
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 
 object MediaCoverRequest {
   val defaultDiskCacheStrategy: DiskCacheStrategy = DiskCacheStrategy.NONE

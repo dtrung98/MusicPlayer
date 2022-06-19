@@ -2,7 +2,7 @@ package com.ldt.musicr.utils
 
 import android.app.Application
 import com.ldt.musicr.App
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.interactors.runOnUiThread
 import es.dmoral.toasty.Toasty
 

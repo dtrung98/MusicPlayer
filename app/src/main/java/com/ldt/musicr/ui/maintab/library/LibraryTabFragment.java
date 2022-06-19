@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.notification.EventKey;
 import com.ldt.musicr.ui.floating.SearchFragment;

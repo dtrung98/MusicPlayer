@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.ldt.musicr.BuildConfig;
+import com.elmurzaev.music.BuildConfig;
 import com.ldt.musicr.helper.StackBlur;
 import com.ldt.musicr.util.ImageUtil;
 

@@ -3,7 +3,7 @@ package com.ldt.musicr.helper.menu
 import android.content.Intent
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.helper.songpreview.SongPreviewController
 import com.ldt.musicr.loader.medialoader.SongLoader
 import com.ldt.musicr.model.Song

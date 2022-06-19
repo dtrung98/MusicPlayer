@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.ui.widget.GLTextureView
 import com.ldt.musicr.ui.widget.bubblepicker.BubblePickerListener
 import com.ldt.musicr.ui.widget.bubblepicker.model.Color

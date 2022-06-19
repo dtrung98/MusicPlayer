@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.ldt.musicr.App
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.helper.extension.ResettableLazyManager
 import com.ldt.musicr.helper.extension.resettableLazy
 import com.ldt.musicr.util.Tool

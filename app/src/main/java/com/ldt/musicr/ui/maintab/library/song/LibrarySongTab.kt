@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ldt.musicr.App
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.common.MediaManager
 import com.ldt.musicr.helper.songpreview.SongPreviewController

@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 /**
  * Created by trung on 9/29/2017.

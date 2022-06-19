@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 public class RingtoneManager {
 

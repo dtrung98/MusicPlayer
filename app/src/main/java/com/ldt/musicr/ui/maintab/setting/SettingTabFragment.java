@@ -18,7 +18,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.common.AppConfig;
 import com.ldt.musicr.helper.LocaleHelper;
 import com.ldt.musicr.notification.EventKey;

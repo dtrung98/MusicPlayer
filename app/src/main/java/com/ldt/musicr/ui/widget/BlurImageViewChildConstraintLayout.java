@@ -13,7 +13,7 @@ import android.widget.ImageView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.util.BitmapEditor;
 
 public class BlurImageViewChildConstraintLayout extends ConstraintLayout {

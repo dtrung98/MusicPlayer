@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.helper.songpreview.PreviewSong
 import com.ldt.musicr.model.Song
 import com.ldt.musicr.model.item.DataItem

@@ -19,7 +19,7 @@ import android.util.AttributeSet;
 
 import androidx.core.content.ContextCompat;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.text.DecimalFormat;
 

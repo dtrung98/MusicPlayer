@@ -11,7 +11,7 @@ import android.view.View
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.common.AppConfig
 import com.ldt.musicr.common.AppConfig.systemBarsInset
 import com.ldt.musicr.common.MediaManager

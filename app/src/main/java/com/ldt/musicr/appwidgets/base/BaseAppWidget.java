@@ -18,7 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.widget.RemoteViews;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;
 import com.ldt.musicr.util.MusicUtil;

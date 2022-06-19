@@ -11,7 +11,7 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.coordinate.MCoordinate.MPoint;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;

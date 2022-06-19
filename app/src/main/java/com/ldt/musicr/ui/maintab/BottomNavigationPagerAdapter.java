@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.ui.maintab.feature.FeatureTabFragment;
 import com.ldt.musicr.ui.maintab.library.LibraryTabFragment;
 import com.ldt.musicr.ui.maintab.setting.SettingTabFragment;

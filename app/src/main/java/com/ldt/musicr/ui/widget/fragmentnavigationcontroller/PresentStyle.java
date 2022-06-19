@@ -1,7 +1,7 @@
 package com.ldt.musicr.ui.widget.fragmentnavigationcontroller;
 
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 /**
  * Created by burt on 2016. 5. 26..

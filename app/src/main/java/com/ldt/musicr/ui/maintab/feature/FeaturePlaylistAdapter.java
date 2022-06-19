@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 import com.ldt.musicr.loader.medialoader.PlaylistSongLoader;
 import com.ldt.musicr.loader.medialoader.TopAndRecentlyPlayedTracksLoader;

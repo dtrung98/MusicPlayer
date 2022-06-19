@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.helper.EventListener;
 import com.ldt.musicr.helper.Reliable;
 import com.ldt.musicr.helper.ReliableEvent;

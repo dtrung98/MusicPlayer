@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.glide.palette.BitmapPaletteTarget;
 import com.ldt.musicr.glide.palette.BitmapPaletteWrapper;
 import com.ldt.musicr.util.PhonographColorUtil;

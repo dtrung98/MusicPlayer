@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.ldt.musicr.App
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.common.MediaManager
 import com.ldt.musicr.glide.ArtistGlideRequest
 import com.ldt.musicr.glide.GlideApp

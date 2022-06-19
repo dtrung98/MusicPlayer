@@ -21,7 +21,7 @@ import androidx.media.app.NotificationCompat.MediaStyle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.glide.SongGlideRequest;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.service.MusicService;

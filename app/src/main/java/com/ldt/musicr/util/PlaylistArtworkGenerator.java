@@ -10,7 +10,7 @@ import android.graphics.RectF;
 
 import androidx.annotation.NonNull;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.utils.ArtworkUtils;
 

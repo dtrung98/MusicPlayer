@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import butterknife.ButterKnife;
 

@@ -12,7 +12,7 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 public class RoundSeeThroughTextView extends SeeThroughTranslucentTextView {
   private static final String TAG = "RoundSeeThroughTextView";

@@ -22,7 +22,7 @@ import android.media.audiofx.AudioEffect;
 
 import androidx.annotation.NonNull;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.common.MediaManager;
 import com.ldt.musicr.model.Genre;
 import com.ldt.musicr.model.Playlist;

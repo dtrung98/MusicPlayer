@@ -10,7 +10,7 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.io.File;
 

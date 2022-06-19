@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.loader.medialoader.PlaylistLoader;
 import com.ldt.musicr.model.Playlist;
 import com.ldt.musicr.ui.MusicServiceActivity;

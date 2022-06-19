@@ -2,7 +2,7 @@ package com.ldt.musicr.model;
 
 import android.content.Context;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 public class Playable {
   public static final int UNDEFINED = 0;

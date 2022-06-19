@@ -2,7 +2,7 @@ package com.ldt.musicr.ui.maintab.subpages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.helper.menu.SongMenuHelper;
 import com.ldt.musicr.ui.bottomsheet.OptionBottomSheet;
 import com.ldt.musicr.ui.maintab.library.song.SongChildAdapter;

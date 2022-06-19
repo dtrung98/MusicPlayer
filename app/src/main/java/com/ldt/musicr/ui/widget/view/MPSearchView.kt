@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.EditText
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 
 class MPSearchView @JvmOverloads constructor(
   context: Context,

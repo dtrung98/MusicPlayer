@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.addon.lastfm.rest.LastFMRestClient;
 import com.ldt.musicr.addon.lastfm.rest.model.LastFmArtist;
 import com.ldt.musicr.model.Artist;

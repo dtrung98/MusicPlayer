@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.contract.AbsMediaAdapter;
 import com.ldt.musicr.helper.EventListener;
 import com.ldt.musicr.helper.Reliable;

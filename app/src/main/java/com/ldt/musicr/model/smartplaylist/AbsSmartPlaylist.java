@@ -6,7 +6,7 @@ import android.os.Parcel;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.model.AbsCustomPlaylist;
 
 /**

@@ -39,7 +39,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ldt.musicr.App;
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.appwidgets.AppWidgetBig;
 import com.ldt.musicr.appwidgets.AppWidgetCard;
 import com.ldt.musicr.appwidgets.AppWidgetClassic;
@@ -273,7 +273,7 @@ public class MusicService extends Service implements
 
     mediaSession.setActive(true);
 
-    sendBroadcast(new Intent("com.ldt.musicr.R_MUSIC_SERVICE_CREATED"));
+    sendBroadcast(new Intent("com.elmurzaev.music.R_MUSIC_SERVICE_CREATED"));
   }
 
   private AudioManager getAudioManager() {
@@ -429,7 +429,7 @@ public class MusicService extends Service implements
     PreferenceUtil.getInstance(this).unregisterOnSharedPreferenceChangedListener(this);
     wakeLock.release();
 
-    sendBroadcast(new Intent("com.ldt.musicr.R_MUSIC_SERVICE_DESTROYED"));
+    sendBroadcast(new Intent("com.elmurzaev.music.R_MUSIC_SERVICE_DESTROYED"));
   }
 
   @Override

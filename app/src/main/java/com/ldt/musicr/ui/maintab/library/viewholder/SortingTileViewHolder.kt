@@ -3,7 +3,7 @@ package com.ldt.musicr.ui.maintab.library.viewholder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 import com.ldt.musicr.notification.ActionResponder
 
 class SortingTileViewHolder(parent: ViewGroup, actionResponder: ActionResponder?) :

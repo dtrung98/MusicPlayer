@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.TextureView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import java.util.ArrayList;
 import java.util.Random;

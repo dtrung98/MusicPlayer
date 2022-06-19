@@ -3,7 +3,7 @@ package com.ldt.musicr.ui.widget.view
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.ldt.musicr.R
+import com.elmurzaev.music.R
 
 class MPSearchLikeView @JvmOverloads constructor(
   context: Context,

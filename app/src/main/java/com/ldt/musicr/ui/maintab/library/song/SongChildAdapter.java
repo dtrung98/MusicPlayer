@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.contract.AbsBindAbleHolder;
 import com.ldt.musicr.contract.AbsSongAdapter;
 import com.ldt.musicr.helper.menu.SongMenuHelper;
