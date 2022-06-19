@@ -11,237 +11,254 @@ import org.jbox2d.dynamics.*
 /**
  * Created by irinagalata on 1/26/17.
  */
-class CircleBody(val id: Int, val world: World, var position: Vec2, var sizePerUnit: Float, var sizeUnit : Float) {
+class CircleBody(
+  val id: Int,
+  val world: World,
+  var position: Vec2,
+  var sizePerUnit: Float,
+  var sizeUnit: Float
+) {
 
 
-    companion object {
-        var count = 1
-        const val STATE_JUST_CREATE = 0
-        const val STATE_MOTION_APPEAR = 1
-        const val STATE_NO_MOTION = 2
-        const val STATE_MOTION_HIDE = 3
-        const val STATE_DEATH = 4
-        const val STATE_MOTION_ENHANCE = 5
-        const val STATE_ENHANCED = 6
-        const val STATE_MOTION_ENHANCE_REVERSE = 7
+  companion object {
+    var count = 1
+    const val STATE_JUST_CREATE = 0
+    const val STATE_MOTION_APPEAR = 1
+    const val STATE_NO_MOTION = 2
+    const val STATE_MOTION_HIDE = 3
+    const val STATE_DEATH = 4
+    const val STATE_MOTION_ENHANCE = 5
+    const val STATE_ENHANCED = 6
+    const val STATE_MOTION_ENHANCE_REVERSE = 7
 
-        fun stateName(st: Int) : String {
-           return when(st) {
-                STATE_JUST_CREATE -> "Just Create"
-               STATE_MOTION_APPEAR -> "Motion Appear"
-               STATE_NO_MOTION -> "No Motion"
-               STATE_MOTION_HIDE -> "Motion Hide"
-               STATE_DEATH -> "Death"
-               STATE_MOTION_ENHANCE -> "Motion Enhance"
-               STATE_ENHANCED -> "Enhanced"
-               STATE_MOTION_ENHANCE_REVERSE -> "Motion Enhance Reverse"
-               else -> "Invalid State"
-            }
-        }
-
-        const val DURATION_APPEAR = 0.65f
-        const val DURATION_HIDE = 1.65f
-        const val DURATION_ENHANCE = 0.35f
-        const val ENHANCE_VALUE = 1.25f
-        val nextId : Int
-         get() = count++
-
+    fun stateName(st: Int): String {
+      return when (st) {
+        STATE_JUST_CREATE -> "Just Create"
+        STATE_MOTION_APPEAR -> "Motion Appear"
+        STATE_NO_MOTION -> "No Motion"
+        STATE_MOTION_HIDE -> "Motion Hide"
+        STATE_DEATH -> "Death"
+        STATE_MOTION_ENHANCE -> "Motion Enhance"
+        STATE_ENHANCED -> "Enhanced"
+        STATE_MOTION_ENHANCE_REVERSE -> "Motion Enhance Reverse"
+        else -> "Invalid State"
+      }
     }
 
-    var state : Int = STATE_JUST_CREATE
-    var nextState : Int = STATE_MOTION_APPEAR
-    var motionRunningTime = 0f
-    var isBusy = false
+    const val DURATION_APPEAR = 0.65f
+    const val DURATION_HIDE = 1.65f
+    const val DURATION_ENHANCE = 0.35f
+    const val ENHANCE_VALUE = 1.25f
+    val nextId: Int
+      get() = count++
 
-    val density: Float
+  }
+
+  var state: Int = STATE_JUST_CREATE
+  var nextState: Int = STATE_MOTION_APPEAR
+  var motionRunningTime = 0f
+  var isBusy = false
+
+  val density: Float
     get() {
-        return 0.5f//PhysicsEngine.interpolate(0.8f,0.2f, currentRadius/2f)
+      return 0.5f//PhysicsEngine.interpolate(0.8f,0.2f, currentRadius/2f)
     }
 
-    fun runMotion(which : Int, endState : Int) : Boolean {
-        if(!isBusy) {
-            state = which
-            this.nextState = endState
-            motionRunningTime = 0f
-            isBusy = true
-            return true
-        }
-        return false
+  fun runMotion(which: Int, endState: Int): Boolean {
+    if (!isBusy) {
+      state = which
+      this.nextState = endState
+      motionRunningTime = 0f
+      isBusy = true
+      return true
+    }
+    return false
+  }
+
+  fun runMotion(which: Int, endState: Int, interpolator: Interpolator): Boolean {
+    if (!isBusy) {
+      state = which
+      this.nextState = endState
+      motionRunningTime = 0f
+      this.interpolator = interpolator
+      isBusy = true
+      return true
+    }
+    return false
+  }
+
+  fun isDeath(): Boolean {
+    return state == STATE_DEATH
+  }
+
+  fun isEnhanced(): Boolean {
+    return state == STATE_ENHANCED || state == STATE_MOTION_ENHANCE
+  }
+
+  private fun endMotion() {
+    motionRunningTime = 0f
+    state = nextState
+    isBusy = false
+  }
+
+  private var interpolator: Interpolator = OvershootInterpolator()
+
+  fun step(deltaInSecond: Float) {
+    motionRunningTime += deltaInSecond
+    when (state) {
+      STATE_JUST_CREATE -> {
+        endMotion()
+        runMotion(STATE_MOTION_APPEAR, STATE_NO_MOTION)
+      }
+
+      STATE_MOTION_APPEAR -> {
+        var animatedValue = motionRunningTime / DURATION_APPEAR
+        if (animatedValue > 1f) animatedValue = 1f
+        currentRatio =
+          PhysicsEngine.interpolate(0f, 1f, interpolator.getInterpolation(animatedValue))
+        updateSize()
+        if (animatedValue == 1f)
+          endMotion()
+      }
+
+      STATE_NO_MOTION -> {
+
+      }
+
+      STATE_MOTION_HIDE -> {
+        var animatedValue = motionRunningTime / DURATION_HIDE
+        if (animatedValue > 1f) animatedValue = 1f
+        currentRatio =
+          PhysicsEngine.interpolate(1f, 0f, interpolator.getInterpolation(animatedValue))
+        updateSize()
+        if (animatedValue == 1f) endMotion()
+      }
+
+      STATE_DEATH -> {
+
+      }
+
+      STATE_MOTION_ENHANCE -> {
+        var animatedValue = motionRunningTime / DURATION_ENHANCE
+        if (animatedValue > 1f) animatedValue = 1f
+        currentRatio =
+          PhysicsEngine.interpolate(1f, ENHANCE_VALUE, interpolator.getInterpolation(animatedValue))
+        updateSize()
+        if (animatedValue == 1f) endMotion()
+      }
+
+      STATE_MOTION_ENHANCE_REVERSE -> {
+        var animatedValue = motionRunningTime / DURATION_APPEAR
+        if (animatedValue > 1f) animatedValue = 1f
+        currentRatio =
+          PhysicsEngine.interpolate(ENHANCE_VALUE, 1f, interpolator.getInterpolation(animatedValue))
+        updateSize()
+        if (animatedValue == 1f) endMotion()
+      }
     }
 
-    fun runMotion(which : Int, endState : Int, interpolator: Interpolator) : Boolean {
-        if(!isBusy) {
-            state = which
-            this.nextState = endState
-            motionRunningTime = 0f
-            this.interpolator = interpolator
-            isBusy = true
-            return true
-        }
-        return false
+    applyGravityEffect(deltaInSecond)
+    Log.d(
+      "CircleBody",
+      "Circle " + id + " with sizeUnit = " + sizeUnit + ", radius = " + currentRadius + ", state = " + stateName(
+        state
+      ) + ", pos = (" + physicalBody.position.x + ", " + physicalBody.position.y + ")"
+    )
+  }
+
+  private fun applyGravityEffect(deltaInSecond: Float) {
+    // isVisible = PhysicsEngine.centerImmediately.not()
+    val direction = PhysicsEngine.gravityPoint.sub(physicalBody.position)
+    val distance = direction.length()
+    if (distance > deltaInSecond * 200f) {
+      var gravity =
+        if (state == STATE_ENHANCED) PhysicsEngine.enhanceGravityValue else PhysicsEngine.currentGravityValue
+      //  gravity = (gravity /PhysicsEngine.step) * deltaInSecond
+      physicalBody.applyForce(direction.mul(gravity / distance.sqr()), physicalBody.position)
     }
-    fun isDeath() : Boolean {
-        return state == STATE_DEATH
-    }
+  }
 
-    fun isEnhanced() : Boolean {
-        return state == STATE_ENHANCED || state == STATE_MOTION_ENHANCE
-    }
+  lateinit var physicalBody: Body
 
-    private fun endMotion() {
-        motionRunningTime = 0f
-        state = nextState
-        isBusy = false
-    }
+  var isVisible = true
 
-    private var interpolator : Interpolator = OvershootInterpolator()
+  private val marginSizeUnit = 0.1f
 
-    fun step(deltaInSecond : Float) {
-        motionRunningTime +=deltaInSecond
-        when (state) {
-            STATE_JUST_CREATE -> {
-            endMotion()
-                runMotion(STATE_MOTION_APPEAR, STATE_NO_MOTION)
-            }
-
-            STATE_MOTION_APPEAR -> {
-                var animatedValue = motionRunningTime/ DURATION_APPEAR
-                if(animatedValue>1f) animatedValue = 1f
-                currentRatio = PhysicsEngine.interpolate(0f,1f,interpolator.getInterpolation(animatedValue))
-                updateSize()
-                if(animatedValue==1f)
-                    endMotion()
-            }
-
-            STATE_NO_MOTION -> {
-
-            }
-
-            STATE_MOTION_HIDE -> {
-                var animatedValue = motionRunningTime/ DURATION_HIDE
-                if(animatedValue>1f) animatedValue = 1f
-                currentRatio = PhysicsEngine.interpolate(1f,0f,interpolator.getInterpolation(animatedValue))
-                updateSize()
-                if(animatedValue==1f) endMotion()
-            }
-
-            STATE_DEATH -> {
-
-            }
-
-            STATE_MOTION_ENHANCE -> {
-                var animatedValue = motionRunningTime/ DURATION_ENHANCE
-                if(animatedValue>1f) animatedValue = 1f
-                currentRatio = PhysicsEngine.interpolate(1f,ENHANCE_VALUE,interpolator.getInterpolation(animatedValue))
-                updateSize()
-                if(animatedValue ==1f) endMotion()
-            }
-
-            STATE_MOTION_ENHANCE_REVERSE -> {
-                var animatedValue = motionRunningTime/ DURATION_APPEAR
-                if(animatedValue>1f) animatedValue = 1f
-                currentRatio= PhysicsEngine.interpolate( ENHANCE_VALUE,1f,interpolator.getInterpolation(animatedValue))
-                updateSize()
-                if(animatedValue==1f) endMotion()
-            }
-        }
-
-        applyGravityEffect(deltaInSecond)
-        Log.d("CircleBody","Circle "+id+" with sizeUnit = "+sizeUnit+", radius = "+ currentRadius+", state = "+ stateName(state)+", pos = ("+physicalBody.position.x+", "+physicalBody.position.y+")")
-    }
-
-    private fun applyGravityEffect(deltaInSecond: Float) {
-       // isVisible = PhysicsEngine.centerImmediately.not()
-        val direction = PhysicsEngine.gravityPoint.sub(physicalBody.position)
-        val distance = direction.length()
-        if (distance > deltaInSecond* 200f) {
-            var gravity = if (state== STATE_ENHANCED) PhysicsEngine.enhanceGravityValue else PhysicsEngine.currentGravityValue
-          //  gravity = (gravity /PhysicsEngine.step) * deltaInSecond
-            physicalBody.applyForce(direction.mul(gravity / distance.sqr()), physicalBody.position)
-        }
-    }
-
-    lateinit var physicalBody: Body
-
-    var isVisible = true
-
-    private val marginSizeUnit = 0.1f
-
-    private val marginSize : Float
+  private val marginSize: Float
     get() {
-        return marginSizeUnit * sizePerUnit
+      return marginSizeUnit * sizePerUnit
     }
-    private val damping = 25f
-    private val shape: CircleShape
-        get() = CircleShape().apply {
-            m_radius = currentRadius + marginSize
-            m_p.setZero()
-        }
-
-    init {
-        while (true) {
-            if (world.isLocked.not()) {
-                initializeBody()
-                break
-            }
-        }
+  private val damping = 25f
+  private val shape: CircleShape
+    get() = CircleShape().apply {
+      m_radius = currentRadius + marginSize
+      m_p.setZero()
     }
 
-    private fun initializeBody() {
+  init {
+    while (true) {
+      if (world.isLocked.not()) {
+        initializeBody()
+        break
+      }
+    }
+  }
 
-        val fixture = FixtureDef().apply {
-            this.shape = this@CircleBody.shape
-            this.density = this@CircleBody.density
-        }
+  private fun initializeBody() {
 
-        val bodyDef = BodyDef().apply {
-            type = BodyType.DYNAMIC
-            this.position = this@CircleBody.position
-        }
-
-
-        physicalBody = world.createBody(bodyDef)
-
-        physicalBody.apply {
-            createFixture(fixture)
-            linearDamping = damping
-        }
+    val fixture = FixtureDef().apply {
+      this.shape = this@CircleBody.shape
+      this.density = this@CircleBody.density
     }
 
-    fun enhance() {
-        runMotion(STATE_MOTION_ENHANCE, STATE_ENHANCED)
+    val bodyDef = BodyDef().apply {
+      type = BodyType.DYNAMIC
+      this.position = this@CircleBody.position
     }
 
-    fun reverseEnhance() {
-        runMotion(STATE_MOTION_ENHANCE_REVERSE, STATE_NO_MOTION)
+
+    physicalBody = world.createBody(bodyDef)
+
+    physicalBody.apply {
+      createFixture(fixture)
+      linearDamping = damping
     }
+  }
 
-    var currentRatio : Float = 1f
+  fun enhance() {
+    runMotion(STATE_MOTION_ENHANCE, STATE_ENHANCED)
+  }
 
-/*    val normalRadius : Float
-        get() =  sizePerUnit * sizeUnit*/
-    val currentRadius : Float
-        get()= sizePerUnit * sizeUnit* currentRatio
+  fun reverseEnhance() {
+    runMotion(STATE_MOTION_ENHANCE_REVERSE, STATE_NO_MOTION)
+  }
 
-    fun updateSizePerUnitValue(value :Float) {
-        sizePerUnit = value
-        updateSize()
-    }
+  var currentRatio: Float = 1f
 
-    private fun updateSize() {
-        if(currentRatio<0f) currentRatio = 0f
-        physicalBody.fixtureList?.shape?.m_radius = currentRadius + marginSize
-        physicalBody.fixtureList?.density = density
-    }
+  /*    val normalRadius : Float
+          get() =  sizePerUnit * sizeUnit*/
+  val currentRadius: Float
+    get() = sizePerUnit * sizeUnit * currentRatio
 
-    private fun clear() {
-        currentRatio = 1f
-        updateSize()
-        state = STATE_NO_MOTION
-        isBusy = false
-    }
+  fun updateSizePerUnitValue(value: Float) {
+    sizePerUnit = value
+    updateSize()
+  }
 
-    fun destroy() {
-        PhysicsEngine.destroyBody(physicalBody)
-    }
+  private fun updateSize() {
+    if (currentRatio < 0f) currentRatio = 0f
+    physicalBody.fixtureList?.shape?.m_radius = currentRadius + marginSize
+    physicalBody.fixtureList?.density = density
+  }
+
+  private fun clear() {
+    currentRatio = 1f
+    updateSize()
+    state = STATE_NO_MOTION
+    isBusy = false
+  }
+
+  fun destroy() {
+    PhysicsEngine.destroyBody(physicalBody)
+  }
 }

@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:motion="http://schemas.android.com/apk/res-auto">
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Transition
-        app:constraintSetStart="@layout/screen_now_playing"
-        app:constraintSetEnd="@layout/screen_now_playing_expanded"
-        app:duration="350">
-    </Transition>
+  <Transition
+    app:constraintSetEnd="@layout/screen_now_playing_expanded"
+    app:constraintSetStart="@layout/screen_now_playing"
+    app:duration="350"></Transition>
 </MotionScene>

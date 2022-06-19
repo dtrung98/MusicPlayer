@@ -1,119 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.motion.widget.MotionLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
-    tools:ignore="MotionLayoutInvalidSceneFileReference">
-    <ImageView
-        android:id="@+id/back_image"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/photo"
-        android:scaleType="centerCrop"
-        android:visibility="gone"
-        android:contentDescription="@string/back_description" />
-    <View
-        android:id="@+id/gradient_back"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        app:layout_constraintBottom_toBottomOf="@id/tab_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="@drawable/library_back_gradient"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <FrameLayout
-        android:id="@+id/status_bar_parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <View
-            android:id="@+id/status_bar"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-    </FrameLayout>
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="0dp"
-        android:layout_height="75dp"
-        app:layout_constraintBottom_toTopOf="@id/search_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/library"
-        android:textColor="@color/FlatWhite"
-        android:textSize="26sp"
-        android:paddingStart="25dp"
-        android:paddingEnd="0dp"
-        android:textStyle="bold"
-        android:gravity="center_vertical"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        android:alpha="0"
-        />
-    <com.ldt.musicr.ui.widget.view.MPSearchLikeView
-        android:id="@+id/search_view"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:focusable="true"
-        android:background="@drawable/search_view_background"
-        android:clickable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/status_bar_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:alpha="0"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
-        />
-    <View
-        android:id="@+id/back_color_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/library_back_color"
-        app:layout_constraintTop_toBottomOf="@id/gradient_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/status_bar_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tabGravity="fill"
-        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabIndicatorColor="@color/FlatWhite"
-        app:tabSelectedTextColor="@color/FlatWhite"
-        app:tabMode="scrollable"
-        app:tabTextColor="#88F5F5F5"
-        android:overScrollMode="never"/>
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:ignore="MotionLayoutInvalidSceneFileReference">
 
-    <com.ldt.musicr.ui.widget.viewpager.SmoothScrollerViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:overScrollMode="never"
-        />
+  <ImageView
+    android:id="@+id/back_image"
+    android:layout_width="0dp"
+    android:layout_height="200dp"
+    android:contentDescription="@string/back_description"
+    android:scaleType="centerCrop"
+    android:src="@drawable/photo"
+    android:visibility="gone"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <View
+    android:id="@+id/gradient_back"
+    android:layout_width="0dp"
+    android:layout_height="120dp"
+    android:background="@drawable/library_back_gradient"
+    app:layout_constraintBottom_toBottomOf="@id/tab_layout"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <FrameLayout
+    android:id="@+id/status_bar_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
     <View
-        android:id="@+id/gradient_line"
-        android:layout_width="0dp"
-        android:layout_height="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
-        android:background="@drawable/gradient_shadow"
-        android:alpha="1"/>
+      android:id="@+id/status_bar"
+      android:layout_width="match_parent"
+      android:layout_height="0dp" />
+  </FrameLayout>
+
+  <TextView
+    android:id="@+id/header"
+    android:layout_width="0dp"
+    android:layout_height="75dp"
+    android:alpha="0"
+    android:gravity="center_vertical"
+    android:paddingStart="25dp"
+    android:paddingEnd="0dp"
+    android:scaleX="0.5"
+    android:scaleY="0.5"
+    android:text="@string/library"
+    android:textColor="@color/FlatWhite"
+    android:textSize="26sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toTopOf="@id/search_view"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <com.ldt.musicr.ui.widget.view.MPSearchLikeView
+    android:id="@+id/search_view"
+    android:layout_width="0dp"
+    android:layout_height="45dp"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:alpha="0"
+    android:background="@drawable/search_view_background"
+    android:clickable="true"
+    android:focusable="true"
+    android:scaleX="0.5"
+    android:scaleY="0.5"
+    app:layout_constraintBottom_toBottomOf="@id/status_bar_parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <View
+    android:id="@+id/back_color_view"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@color/library_back_color"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/gradient_back" />
+
+  <com.google.android.material.tabs.TabLayout
+    android:id="@+id/tab_layout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/status_bar_parent"
+    app:tabGravity="fill"
+    app:tabIndicatorColor="@color/FlatWhite"
+    app:tabMode="scrollable"
+    app:tabSelectedTextColor="@color/FlatWhite"
+    app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
+    app:tabTextColor="#88F5F5F5" />
+
+  <com.ldt.musicr.ui.widget.viewpager.SmoothScrollerViewPager
+    android:id="@+id/view_pager"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:overScrollMode="never"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tab_layout" />
+
+  <View
+    android:id="@+id/gradient_line"
+    android:layout_width="0dp"
+    android:layout_height="8dp"
+    android:alpha="1"
+    android:background="@drawable/gradient_shadow"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 </androidx.constraintlayout.motion.widget.MotionLayout>

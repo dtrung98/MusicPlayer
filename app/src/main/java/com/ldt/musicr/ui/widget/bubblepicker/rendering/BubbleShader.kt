@@ -5,16 +5,16 @@ package com.ldt.musicr.ui.widget.bubblepicker.rendering
  */
 object BubbleShader {
 
-    const val U_MATRIX = "u_Matrix"
-    const val U_BACKGROUND = "u_Background"
-    const val U_TEXT = "u_Text"
-    const val U_VISIBILITY = "u_Visibility"
+  const val U_MATRIX = "u_Matrix"
+  const val U_BACKGROUND = "u_Background"
+  const val U_TEXT = "u_Text"
+  const val U_VISIBILITY = "u_Visibility"
 
-    const val A_POSITION = "a_Position"
-    const val A_UV = "a_UV"
+  const val A_POSITION = "a_Position"
+  const val A_UV = "a_UV"
 
-    // language=GLSL
-    const val vertexShader = """
+  // language=GLSL
+  const val vertexShader = """
         uniform mat4 u_Matrix;
 
         attribute vec4 a_Position;
@@ -29,8 +29,8 @@ object BubbleShader {
         }
     """
 
-    // language=GLSL
-    const val fragmentShader = """
+  // language=GLSL
+  const val fragmentShader = """
         precision mediump float;
 
         uniform vec4 u_Background;

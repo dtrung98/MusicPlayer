@@ -20,56 +20,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SliderAdapter extends PagerAdapter {
-    private static final String TAG ="SliderAdapter";
+  private static final String TAG = "SliderAdapter";
 
-    private Context mContext;
+  private Context mContext;
 
-    private ArrayList<Song> mData = new ArrayList<>();
+  private ArrayList<Song> mData = new ArrayList<>();
 
-    public SliderAdapter(Context context) {
-        this.mContext = context;
+  public SliderAdapter(Context context) {
+    this.mContext = context;
+  }
+
+  public void setData(List<Song> data) {
+    if (mData.equals(data)) {
+      Log.d(TAG, "setData: equal");
+      return;
     }
-
-    public void setData(List<Song> data) {
-        if(mData.equals(data)) {
-            Log.d(TAG, "setData: equal");
-            return;
-        }
-        mData.clear();
-        if(data!=null) {
-            mData.addAll(data);
-        }
-        this.notifyDataSetChanged();
+    mData.clear();
+    if (data != null) {
+      mData.addAll(data);
     }
+    this.notifyDataSetChanged();
+  }
 
 
-    @Override
-    public int getCount() {
-        return mData.size();
-    }
+  @Override
+  public int getCount() {
+    return mData.size();
+  }
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return (view == object);
-    }
+  @Override
+  public boolean isViewFromObject(View view, Object object) {
+    return (view == object);
+  }
 
-    @NotNull
-    @Override
-    public Object instantiateItem(final ViewGroup container, int position) {
-        final Song song = mData.get(position);
+  @NotNull
+  @Override
+  public Object instantiateItem(final ViewGroup container, int position) {
+    final Song song = mData.get(position);
 
-        View cardLayout =  LayoutInflater.from(mContext).inflate(R.layout.item_art_now_playing, container, false);
-        ImageView image =(cardLayout instanceof ImageView) ?((ImageView)cardLayout) : cardLayout.findViewById(R.id.image);
+    View cardLayout = LayoutInflater.from(mContext)
+       .inflate(R.layout.item_art_now_playing, container, false);
+    ImageView image = (cardLayout instanceof ImageView) ? ((ImageView) cardLayout) :
+       cardLayout.findViewById(
+       R.id.image);
 
-        Glide.with(mContext).load(Util.getAlbumArtUri(song.albumId)).error(R.drawable.music_empty).placeholder(R.drawable.music_empty).into(image);
-        container.addView(cardLayout);
-        return cardLayout;
-    }
+    Glide.with(mContext)
+       .load(Util.getAlbumArtUri(song.albumId))
+       .error(R.drawable.music_empty)
+       .placeholder(R.drawable.music_empty)
+       .into(image);
+    container.addView(cardLayout);
+    return cardLayout;
+  }
 
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((View) object);
-    }
+  @Override
+  public void destroyItem(ViewGroup container, int position, Object object) {
+    container.removeView((View) object);
+  }
 
 }

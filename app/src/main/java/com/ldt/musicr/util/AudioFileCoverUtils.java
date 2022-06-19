@@ -6,12 +6,17 @@ import org.jaudiotagger.audio.mp3.MP3File;
 import org.jaudiotagger.tag.TagException;
 import org.jaudiotagger.tag.images.Artwork;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class AudioFileCoverUtils {
 
   public static final String[] FALLBACKS = {
-    "cover.jpg", "album.jpg", "folder.jpg", "cover.png", "album.png", "folder.png"
+     "cover.jpg", "album.jpg", "folder.jpg", "cover.png", "album.png", "folder.png"
   };
 
   public static InputStream fallback(String path) throws FileNotFoundException {

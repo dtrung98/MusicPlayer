@@ -2,15 +2,14 @@ package com.ldt.musicr.ui.maintab.feature;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ldt.musicr.R;
 import com.ldt.musicr.model.Playlist;
@@ -31,164 +30,174 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class FeatureLinearHolder {
 
-    private Context mContext;
+  @BindView(R.id.playlist_frame)
+  ViewGroup mPlayListFrame;
+  @BindView(R.id.song_frame)
+  ViewGroup mSongFrame;
+  PlaylistMiniAdapter mPlaylistMiniAdapter;
+  SongMiniAdapter mSongMiniAdapter;
+  private Context mContext;
+  public FeatureLinearHolder(Context context, ViewGroup linearLayout) {
+    this.mContext = context;
+    View v = LayoutInflater.from(context).inflate(R.layout.feature_tab_body, linearLayout, false);
+    ButterKnife.bind(this, v);
+    mPlayListFrame.setVisibility(View.GONE);
 
-    @BindView(R.id.playlist_frame)
-    ViewGroup mPlayListFrame;
+    linearLayout.removeAllViews();
+    linearLayout.addView(v);
 
-    @BindView(R.id.song_frame)
-    ViewGroup mSongFrame;
+    mPlaylistMiniAdapter = new PlaylistMiniAdapter(mPlayListFrame);
+    mSongMiniAdapter = new SongMiniAdapter(mSongFrame);
+  }
 
-    public PlaylistMiniAdapter getPlaylistMiniAdapter() {
-        return mPlaylistMiniAdapter;
+  public PlaylistMiniAdapter getPlaylistMiniAdapter() {
+    return mPlaylistMiniAdapter;
+  }
+
+  public void setPlaylistItemClick(FeaturePlaylistAdapter.PlaylistClickListener listener) {
+    if (mPlaylistMiniAdapter != null) mPlaylistMiniAdapter.setItemClickListener(listener);
+  }
+
+  public void setSuggestedPlaylists(List<Playlist> list) {
+    mPlaylistMiniAdapter.bind(list);
+    if (mPlaylistMiniAdapter.getItemCount() != 0) {
+      mPlayListFrame.setVisibility(View.VISIBLE);
+    } else {
+      mPlayListFrame.setVisibility(View.GONE);
+    }
+  }
+
+  public void setSuggestedSongs(List<Song> song) {
+    mSongMiniAdapter.bind(song);
+    if (mSongMiniAdapter.getItemCount() != 0) {
+      mSongFrame.setVisibility(View.VISIBLE);
+    } else {
+      mSongFrame.setVisibility(View.GONE);
+    }
+  }
+
+  public class PlaylistMiniAdapter {
+    @BindView(R.id.back_top_header)
+    View mHeaderPanel;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.number)
+    TextView mCount;
+    FeaturePlaylistAdapter mPlaylistAdapter;
+    private View mItemView;
+
+    PlaylistMiniAdapter(View v) {
+      this.mItemView = v;
+      ButterKnife.bind(this, v);
+      mPlaylistAdapter = new FeaturePlaylistAdapter(mContext, true);
+      mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,
+         LinearLayoutManager.HORIZONTAL,
+         false));
+
+      mRecyclerView.setAdapter(mPlaylistAdapter);
+      OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView,
+         OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
+
     }
 
-    PlaylistMiniAdapter mPlaylistMiniAdapter;
-    SongMiniAdapter mSongMiniAdapter;
-
-    public void setPlaylistItemClick(FeaturePlaylistAdapter.PlaylistClickListener listener) {
-        if (mPlaylistMiniAdapter != null) mPlaylistMiniAdapter.setItemClickListener(listener);
+    @OnClick(R.id.back_top_header)
+    void goToPlaylistChildTab() {
+      if (mContext instanceof AppActivity) {
+        BackStackController controller = ((AppActivity) mContext).getBackStackController();
+        if (controller != null) {
+          LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
+          if (libraryTabFragment != null) {
+            libraryTabFragment.navigateToTab(PlaylistChildTab.TAG);
+          }
+        }
+      }
     }
 
-    public FeatureLinearHolder(Context context, ViewGroup linearLayout) {
-        this.mContext = context;
-        View v = LayoutInflater.from(context).inflate(R.layout.feature_tab_body, linearLayout, false);
-        ButterKnife.bind(this, v);
-        mPlayListFrame.setVisibility(View.GONE);
-
-        linearLayout.removeAllViews();
-        linearLayout.addView(v);
-
-        mPlaylistMiniAdapter = new PlaylistMiniAdapter(mPlayListFrame);
-        mSongMiniAdapter = new SongMiniAdapter(mSongFrame);
+    private void setItemClickListener(FeaturePlaylistAdapter.PlaylistClickListener listener) {
+      if (mPlaylistAdapter != null) mPlaylistAdapter.setListener(listener);
     }
 
-    public void setSuggestedPlaylists(List<Playlist> list) {
-        mPlaylistMiniAdapter.bind(list);
-        if (mPlaylistMiniAdapter.getItemCount() != 0) mPlayListFrame.setVisibility(View.VISIBLE);
-        else mPlayListFrame.setVisibility(View.GONE);
+    @SuppressLint("DefaultLocale")
+    public void bind(List<Playlist> playlists) {
+
+      mPlaylistAdapter.setData(playlists);
+      mCount.setText(String.format("%d", mPlaylistAdapter.getItemCount()));
     }
 
-    public void setSuggestedSongs(List<Song> song) {
-        mSongMiniAdapter.bind(song);
-        if (mSongMiniAdapter.getItemCount() != 0) mSongFrame.setVisibility(View.VISIBLE);
-        else mSongFrame.setVisibility(View.GONE);
+    public void notifyDataSetChanged() {
+      mPlaylistAdapter.notifyDataSetChanged();
     }
 
-    public class PlaylistMiniAdapter {
-        private View mItemView;
-        @BindView(R.id.back_top_header)
-        View mHeaderPanel;
-        @BindView(R.id.title)
-        TextView mTitle;
-        @BindView(R.id.recycler_view)
-        RecyclerView mRecyclerView;
-        @BindView(R.id.number)
-        TextView mCount;
+    public int getItemCount() {
+      return mPlaylistAdapter.getItemCount();
+    }
+  }
 
-        FeaturePlaylistAdapter mPlaylistAdapter;
+  public class SongMiniAdapter {
+    private final FeatureSongAdapter mAdapter = new FeatureSongAdapter();
+    @BindView(R.id.back_top_header)
+    View mHeaderPanel;
+    @BindView(R.id.title)
+    TextView mTitle;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.number)
+    TextView mCount;
+    @BindView(R.id.refresh)
+    ImageView mRefreshButton;
+    private View mItemView;
 
-        @OnClick(R.id.back_top_header)
-        void goToPlaylistChildTab() {
-            if (mContext instanceof AppActivity) {
-                BackStackController controller = ((AppActivity) mContext).getBackStackController();
-                if (controller != null) {
-                    LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
-                    if (libraryTabFragment != null)
-                        libraryTabFragment.navigateToTab(PlaylistChildTab.TAG);
-                }
-            }
-        }
+    SongMiniAdapter(View v) {
+      this.mItemView = v;
+      ButterKnife.bind(this, v);
+      mAdapter.init(mContext);
+      mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,
+         LinearLayoutManager.VERTICAL,
+         false));
 
-        private void setItemClickListener(FeaturePlaylistAdapter.PlaylistClickListener listener) {
-            if (mPlaylistAdapter != null) mPlaylistAdapter.setListener(listener);
-        }
+      mRecyclerView.setAdapter(mAdapter);
 
-        PlaylistMiniAdapter(View v) {
-            this.mItemView = v;
-            ButterKnife.bind(this, v);
-            mPlaylistAdapter = new FeaturePlaylistAdapter(mContext, true);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-
-            mRecyclerView.setAdapter(mPlaylistAdapter);
-            OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_HORIZONTAL);
-
-        }
-
-        @SuppressLint("DefaultLocale")
-        public void bind(List<Playlist> playlists) {
-
-            mPlaylistAdapter.setData(playlists);
-            mCount.setText(String.format("%d", mPlaylistAdapter.getItemCount()));
-        }
-
-        public void notifyDataSetChanged() {
-            mPlaylistAdapter.notifyDataSetChanged();
-        }
-
-        public int getItemCount() {
-            return mPlaylistAdapter.getItemCount();
-        }
     }
 
-    public class SongMiniAdapter {
-        private View mItemView;
-        @BindView(R.id.back_top_header)
-        View mHeaderPanel;
-        @BindView(R.id.title)
-        TextView mTitle;
-        @BindView(R.id.recycler_view)
-        RecyclerView mRecyclerView;
-        @BindView(R.id.number)
-        TextView mCount;
-        @BindView(R.id.refresh)
-        ImageView mRefreshButton;
-
-        @OnClick({R.id.see_all, R.id.back_top_header})
-        void seeAll() {
-            if (mContext instanceof AppActivity) {
-                BackStackController controller = ((AppActivity) mContext).getBackStackController();
-                if (controller != null) {
-                    LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
-                    if (libraryTabFragment != null)
-                        libraryTabFragment.navigateToTab(LibrarySongTab.TAG);
-                }
-            }
+    @OnClick({R.id.see_all, R.id.back_top_header})
+    void seeAll() {
+      if (mContext instanceof AppActivity) {
+        BackStackController controller = ((AppActivity) mContext).getBackStackController();
+        if (controller != null) {
+          LibraryTabFragment libraryTabFragment = controller.navigateToLibraryTab(true);
+          if (libraryTabFragment != null) {
+            libraryTabFragment.navigateToTab(LibrarySongTab.TAG);
+          }
         }
-
-        @OnClick(R.id.refresh_front)
-        void refresh() {
-            mRefreshButton.animate().rotationBy(360).setInterpolator(InterpolatorUtil.getInterpolator(6)).setDuration(650);
-            mAdapter.initializeSong();
-        }
-
-        private final FeatureSongAdapter mAdapter = new FeatureSongAdapter();
-
-        SongMiniAdapter(View v) {
-            this.mItemView = v;
-            ButterKnife.bind(this, v);
-            mAdapter.init(mContext);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-
-            mRecyclerView.setAdapter(mAdapter);
-
-        }
-
-        @SuppressLint("DefaultLocale")
-        public void bind(List<Song> playlists) {
-
-            mAdapter.setData(playlists);
-            mCount.setText(String.format("%d", mAdapter.getAllItemCount()));
-        }
-
-        public void notifyDataSetChanged() {
-            mAdapter.notifyDataSetChanged();
-        }
-
-        public int getItemCount() {
-            return mAdapter.getItemCount();
-        }
+      }
     }
+
+    @OnClick(R.id.refresh_front)
+    void refresh() {
+      mRefreshButton.animate()
+         .rotationBy(360)
+         .setInterpolator(InterpolatorUtil.getInterpolator(6))
+         .setDuration(650);
+      mAdapter.initializeSong();
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void bind(List<Song> playlists) {
+
+      mAdapter.setData(playlists);
+      mCount.setText(String.format("%d", mAdapter.getAllItemCount()));
+    }
+
+    public void notifyDataSetChanged() {
+      mAdapter.notifyDataSetChanged();
+    }
+
+    public int getItemCount() {
+      return mAdapter.getItemCount();
+    }
+  }
 
 
 }

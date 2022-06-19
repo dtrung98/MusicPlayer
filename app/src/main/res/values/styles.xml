@@ -1,142 +1,147 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@color/SplashColor</item>
-        <item name="colorPrimaryDark">@color/FlatWhite</item>
-        <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/flatOrange</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="colorControlHighlight">#66000000</item>
-    </style>
-    <style name="AppThemeNoWallpaper" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@color/FlatWhite</item>
-        <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/flatOrange</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="colorControlHighlight">#66000000</item>
-    </style>
-    <style name="SplashThemeV2" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-        <item name="colorPrimaryDark">@color/FlatWhite</item>
-        <item name="colorPrimary">@color/FlatWhite</item>
-        <item name="colorAccent">@color/flatOrange</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
-        <item name="colorControlHighlight">#66000000</item>
-    </style>
 
-    <style name="ToolbarColoredBackArrow" parent="AppTheme">
-        <item name="android:textColorSecondary">@color/FlatWhite</item>
-    </style>
+  <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
+    <item name="android:windowShowWallpaper">true</item>
+    <item name="android:windowBackground">@color/SplashColor</item>
+    <item name="colorPrimaryDark">@color/FlatWhite</item>
+    <item name="colorPrimary">@color/FlatWhite</item>
+    <item name="colorAccent">@color/flatOrange</item>
+    <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+    <item name="colorControlHighlight">#66000000</item>
+  </style>
 
-    <style name="Widget.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
-        <item name="android:contentDescription">@string/accessibility_overflow</item>
-    </style>
+  <style name="AppThemeNoWallpaper" parent="Theme.MaterialComponents.NoActionBar">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="colorPrimaryDark">@color/FlatWhite</item>
+    <item name="colorPrimary">@color/FlatWhite</item>
+    <item name="colorAccent">@color/flatOrange</item>
+    <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+    <item name="colorControlHighlight">#66000000</item>
+  </style>
 
-    <!-- Base application theme. -->
-    <style name="SplashThemeX" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-    <!-- Splash Screen theme. -->
-    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
-        <!--item name="android:windowLightStatusBar" tools:targetApi="m">true</item-->
-        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
-        <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
-        <item name="windowActionBarOverlay">true</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@color/FlatWhite</item>
-        <item name="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
-    </style>
+  <style name="SplashThemeV2" parent="Theme.MaterialComponents.NoActionBar">
+    <item name="android:windowBackground">@drawable/splash</item>
+    <item name="colorPrimaryDark">@color/FlatWhite</item>
+    <item name="colorPrimary">@color/FlatWhite</item>
+    <item name="colorAccent">@color/flatOrange</item>
+    <item name="android:actionOverflowButtonStyle">@style/Widget.ActionButton.Overflow</item>
+    <item name="colorControlHighlight">#66000000</item>
+  </style>
 
-    <style name="AudioFileInfoOverlayText">
-        <item name="android:paddingLeft">4px</item>
-        <item name="android:paddingBottom">4px</item>
-        <item name="android:textColor">#000000</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:focusable">true</item>
-    </style>
+  <style name="ToolbarColoredBackArrow" parent="AppTheme">
+    <item name="android:textColorSecondary">@color/FlatWhite</item>
+  </style>
 
-    <style name="ToolbarBackground">
-        <item name="android:background">#FFF5F5F5</item>
-    </style>
+  <style name="Widget.ActionButton.Overflow" parent="@android:style/Widget.Holo.ActionButton.Overflow">
+    <item name="android:contentDescription">@string/accessibility_overflow</item>
+  </style>
 
-    <style name="HorizontalDividerTop">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">1px</item>
-        <item name="android:background">#666677</item>
-    </style>
+  <!-- Base application theme. -->
+  <style name="SplashThemeX" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+  </style>
+  <!-- Splash Screen theme. -->
+  <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <item name="android:windowBackground">@drawable/splash_background</item>
+    <!--item name="android:windowLightStatusBar" tools:targetApi="m">true</item-->
+    <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+    <item name="android:windowDrawsSystemBarBackgrounds" tools:targetApi="lollipop">true</item>
+    <item name="windowActionBarOverlay">true</item>
+    <item name="android:navigationBarColor" tools:ignore="NewApi">@color/FlatWhite</item>
+    <item name="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
+  </style>
 
-    <style name="HorizontalDividerBottom">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">1px</item>
-        <item name="android:background">#000022</item>
-    </style>
+  <style name="AudioFileInfoOverlayText">
+    <item name="android:paddingLeft">4px</item>
+    <item name="android:paddingBottom">4px</item>
+    <item name="android:textColor">#000000</item>
+    <item name="android:textSize">12sp</item>
+    <item name="android:focusable">true</item>
+  </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+  <style name="ToolbarBackground">
+    <item name="android:background">#FFF5F5F5</item>
+  </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <!-- set the rounded drawable as background to your bottom sheet -->
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_bottom_sheet_drawable</item>
-    </style>
+  <style name="HorizontalDividerTop">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">1px</item>
+    <item name="android:background">#666677</item>
+  </style>
 
-    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
-    </style>
+  <style name="HorizontalDividerBottom">
+    <item name="android:layout_width">fill_parent</item>
+    <item name="android:layout_height">1px</item>
+    <item name="android:background">#000022</item>
+  </style>
 
-    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
+  <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <string name="accessibility_overflow">Accessibility Overflow</string>
-    <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-    <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
-        <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
+  <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+  <!-- set the rounded drawable as background to your bottom sheet -->
+  <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+    <item name="android:background">@drawable/rounded_bottom_sheet_drawable</item>
+  </style>
 
-    <style name="Theme.Phonograph.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
+  <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.BottomSheetDialog">
+    <item name="android:windowIsFloating">false</item>
+    <item name="bottomSheetStyle">@style/BottomSheet</item>
+  </style>
 
-    <style name="Theme.Phonograph.Notification.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title" />
+  <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
-    <!-- Transparent Bottom Sheet Style -->
-    <style name="TransparentBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/TransparentBottomSheetDialogTheme</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+  <string name="accessibility_overflow">Accessibility Overflow</string>
 
-    </style>
+  <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textAllCaps">false</item>
+  </style>
 
-    <style name="TransparentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
-    </style>
+  <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+    <item name="android:textSize">15sp</item>
+    <item name="android:textStyle">bold</item>
+  </style>
 
-    <style name="DialogDimDisabled" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.65</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
+  <style name="Theme.Phonograph.Notification" parent="@android:style/TextAppearance.StatusBar.EventContent" />
 
-    </style>
+  <style name="Theme.Phonograph.Notification.Title" parent="@android:style/TextAppearance.StatusBar.EventContent.Title" />
 
-    <style name="CardLayerStyle" parent="@style/Widget.MaterialComponents.CardView">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
-    </style>
+  <!-- Transparent Bottom Sheet Style -->
+  <style name="TransparentBottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+    <item name="bottomSheetStyle">@style/TransparentBottomSheetDialogTheme</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="android:windowContentOverlay">@null</item>
+
+  </style>
+
+  <style name="TransparentBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+    <item name="android:background">@android:color/transparent</item>
+  </style>
+
+  <style name="DialogDimDisabled" parent="Theme.AppCompat.Dialog">
+    <item name="android:windowBackground">@android:color/transparent</item>
+    <item name="android:colorBackgroundCacheHint">@null</item>
+    <item name="android:backgroundDimEnabled">true</item>
+    <item name="android:backgroundDimAmount">0.65</item>
+    <item name="android:windowSoftInputMode">adjustResize</item>
+
+  </style>
+
+  <style name="CardLayerStyle" parent="@style/Widget.MaterialComponents.CardView">
+    <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay_card_custom_corners</item>
+  </style>
 
 
-    <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopRight">18dp</item>
-        <item name="cornerSizeTopLeft">18dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-    </style>
+  <style name="ShapeAppearanceOverlay_card_custom_corners" parent="">
+    <item name="cornerFamily">rounded</item>
+    <item name="cornerSizeTopRight">18dp</item>
+    <item name="cornerSizeTopLeft">18dp</item>
+    <item name="cornerSizeBottomRight">0dp</item>
+    <item name="cornerSizeBottomLeft">0dp</item>
+  </style>
 </resources>

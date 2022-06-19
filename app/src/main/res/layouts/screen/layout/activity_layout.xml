@@ -1,65 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/appRoot"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/appRoot"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:visibility="visible"
+  tools:context="com.ldt.musicr.ui.AppActivity">
+  <!-- back_wall_containerswitch_page_containeriner chứa layout khung nền-->
+  <FrameLayout
+    android:id="@+id/back_wall_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+  <!-- container_of_containerswitch_page_containeriner cha của switch_page_containeriner :
+         fragment,control,status_bar,navigation_bar -->
+  <FrameLayout
+    android:id="@+id/layer_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    tools:context="com.ldt.musicr.ui.AppActivity">
-    <!-- back_wall_containerswitch_page_containeriner chứa layout khung nền-->
+    android:background="@android:color/transparent"
+    android:visibility="gone"
+    tools:visibility="visible">
+    <!--switch_page_container inner đảm nhiệm switching các trang fragment -->
     <FrameLayout
-        android:id="@+id/back_wall_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <!-- container_of_containerswitch_page_containeriner cha của switch_page_containeriner :
-           fragment,control,status_bar,navigation_bar -->
+      android:id="@+id/child_layer_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:background="@android:color/transparent" />
+
     <FrameLayout
-        android:id="@+id/layer_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+      android:id="@+id/bottom_navigation_parent"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:background="@color/background_panel_color"
+      android:clickable="true"
+      android:focusable="true">
+
+      <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="1dp"
         android:background="@android:color/transparent"
-        android:visibility="gone"
-        tools:visibility="visible">
-        <!--switch_page_container inner đảm nhiệm switching các trang fragment -->
-        <FrameLayout
-            android:id="@+id/child_layer_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent" />
+        app:elevation="0dp"
+        app:itemIconSize="28dp"
+        app:itemIconTint="@color/bottom_navigation_icon_color"
+        app:itemTextColor="@color/bottom_navigation_icon_color"
+        app:labelVisibilityMode="unlabeled"
+        app:menu="@menu/bottom_navigation_menu" />
 
-        <FrameLayout
-            android:id="@+id/bottom_navigation_parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/background_panel_color"
-            android:clickable="true"
-            android:focusable="true"
-            >
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation_view"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:background="@android:color/transparent"
-                app:elevation="0dp"
-                app:itemIconSize="28dp"
-                app:itemIconTint="@color/bottom_navigation_icon_color"
-                app:itemTextColor="@color/bottom_navigation_icon_color"
-                app:labelVisibilityMode="unlabeled"
-                android:layout_marginTop="1dp"
-                app:menu="@menu/bottom_navigation_menu" />
-
-            <View
-                android:id="@+id/divider_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#22555555"
-                android:layout_gravity="top" />
-        </FrameLayout>
+      <View
+        android:id="@+id/divider_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="top"
+        android:background="#22555555" />
     </FrameLayout>
+  </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

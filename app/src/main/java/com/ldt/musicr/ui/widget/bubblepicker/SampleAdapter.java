@@ -10,22 +10,26 @@ import java.util.Random;
 
 public class SampleAdapter extends PickerAdapter<String> {
 
-    public SampleAdapter(Context context) {
-        super(context);
-    }
-    Random rnd = new Random();
-    @Override
-    public boolean onBindItem(PickerItem item, boolean create, int i) {
-        super.onBindItem(item,create,i);
-        String name = mData.get(i);
-        item.setTitle(name);
-        item.setRadiusUnit(PhysicsEngine.INSTANCE.interpolate(1,2f,((float) rnd.nextInt(getItemCount()))/getItemCount()));
+  Random rnd = new Random();
 
-        return true;
-    }
+  public SampleAdapter(Context context) {
+    super(context);
+  }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-    }
+  @Override
+  public boolean onBindItem(PickerItem item, boolean create, int i) {
+    super.onBindItem(item, create, i);
+    String name = mData.get(i);
+    item.setTitle(name);
+    item.setRadiusUnit(PhysicsEngine.INSTANCE.interpolate(1,
+       2f,
+       ((float) rnd.nextInt(getItemCount())) / getItemCount()));
+
+    return true;
+  }
+
+  @Override
+  public void destroy() {
+    super.destroy();
+  }
 }

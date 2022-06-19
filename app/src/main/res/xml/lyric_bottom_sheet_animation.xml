@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:motion="http://schemas.android.com/apk/res-auto">
-    <Transition
-        app:constraintSetStart="@layout/screen_lyric_viewer"
-        app:constraintSetEnd="@layout/screen_lyric_viewer_end"
-        app:duration="350">
-            <OnSwipe
-                app:dragDirection="dragUp"
-                app:touchAnchorId="@id/nested_scroll_view"
-                app:touchAnchorSide="top"
-                />
-    </Transition>
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
+  <Transition
+    app:constraintSetEnd="@layout/screen_lyric_viewer_end"
+    app:constraintSetStart="@layout/screen_lyric_viewer"
+    app:duration="350">
+    <OnSwipe
+      app:dragDirection="dragUp"
+      app:touchAnchorId="@id/nested_scroll_view"
+      app:touchAnchorSide="top" />
+  </Transition>
 </MotionScene>

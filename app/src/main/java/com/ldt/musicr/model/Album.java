@@ -2,6 +2,7 @@ package com.ldt.musicr.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -10,93 +11,92 @@ import java.util.ArrayList;
  * @author Karim Abou Zeid (kabouzeid)
  */
 public class Album extends Media implements Parcelable {
-    public final ArrayList<Song> songs;
-
-    public Album(ArrayList<Song> songs) {
-        this.songs = songs;
+  public static final Creator<Album> CREATOR = new Creator<Album>() {
+    public Album createFromParcel(Parcel source) {
+      return new Album(source);
     }
 
-    public Album() {
-        this.songs = new ArrayList<>();
+    public Album[] newArray(int size) {
+      return new Album[size];
     }
+  };
+  public final ArrayList<Song> songs;
 
-    public int getId() {
-        return safeGetFirstSong().albumId;
-    }
+  public Album(ArrayList<Song> songs) {
+    this.songs = songs;
+  }
 
-    public String getTitle() {
-        return safeGetFirstSong().albumName;
-    }
+  public Album() {
+    this.songs = new ArrayList<>();
+  }
 
-    public int getArtistId() {
-        return safeGetFirstSong().artistId;
-    }
+  protected Album(Parcel in) {
+    this.songs = in.createTypedArrayList(Song.CREATOR);
+  }
 
-    public String getArtistName() {
-        return safeGetFirstSong().artistName;
-    }
+  public int getId() {
+    return safeGetFirstSong().albumId;
+  }
 
-    public int getYear() {
-        return safeGetFirstSong().year;
-    }
+  public String getTitle() {
+    return safeGetFirstSong().albumName;
+  }
 
-    public long getDateModified() {
-        return safeGetFirstSong().dateModified;
-    }
+  public int getArtistId() {
+    return safeGetFirstSong().artistId;
+  }
 
-    public int getSongCount() {
-        return songs.size();
-    }
+  public String getArtistName() {
+    return safeGetFirstSong().artistName;
+  }
 
-    @NonNull
-    public Song safeGetFirstSong() {
-        return songs.isEmpty() ? Song.EMPTY_SONG : songs.get(0);
-    }
+  public int getYear() {
+    return safeGetFirstSong().year;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  public long getDateModified() {
+    return safeGetFirstSong().dateModified;
+  }
 
-        Album that = (Album) o;
+  public int getSongCount() {
+    return songs.size();
+  }
 
-        return songs != null ? songs.equals(that.songs) : that.songs == null;
+  @NonNull
+  public Song safeGetFirstSong() {
+    return songs.isEmpty() ? Song.EMPTY_SONG : songs.get(0);
+  }
 
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public int hashCode() {
-        return songs != null ? songs.hashCode() : 0;
-    }
+    Album that = (Album) o;
 
-    @Override
-    public String toString() {
-        return "Album{" +
-                "songs=" + songs +
-                '}';
-    }
+    return songs != null ? songs.equals(that.songs) : that.songs == null;
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+  }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(songs);
-    }
+  @Override
+  public int hashCode() {
+    return songs != null ? songs.hashCode() : 0;
+  }
 
-    protected Album(Parcel in) {
-        this.songs = in.createTypedArrayList(Song.CREATOR);
-    }
+  @Override
+  public String toString() {
+    return "Album{" +
+       "songs=" + songs +
+       '}';
+  }
 
-    public static final Creator<Album> CREATOR = new Creator<Album>() {
-        public Album createFromParcel(Parcel source) {
-            return new Album(source);
-        }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-        public Album[] newArray(int size) {
-            return new Album[size];
-        }
-    };
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeTypedList(songs);
+  }
 }
