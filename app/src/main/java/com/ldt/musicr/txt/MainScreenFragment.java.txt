@@ -55,7 +55,7 @@ import SongAdapter;
 import com.ldt.musicr.util.BitmapEditor;
 import com.ldt.musicr.util.Tool;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 
 import com.ldt.musicr.ui.MusicServiceActivity;
 import com.ldt.musicr.ui.main.SupportFragmentPlusActivity;

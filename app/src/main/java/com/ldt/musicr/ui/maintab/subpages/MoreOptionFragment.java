@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.loader.medialoader.SongLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.ui.maintab.MusicServiceNavigationFragment;
@@ -27,83 +27,83 @@ import butterknife.Unbinder;
 import es.dmoral.toasty.Toasty;
 
 public class MoreOptionFragment extends MusicServiceNavigationFragment {
-    private static final String TAG = "MoreOptionFragment";
+  private static final String TAG = "MoreOptionFragment";
 
-    @BindView(R.id.status_bar)
-    View mStatusBar;
+  @BindView(R.id.status_bar)
+  View mStatusBar;
 
-    @BindView(R.id.root)
-    View mRoot;
+  @BindView(R.id.root)
+  View mRoot;
+  private Unbinder mUnbinder;
 
-    public static MoreOptionFragment newInstance() {
-        return new MoreOptionFragment();
+  public static MoreOptionFragment newInstance() {
+    return new MoreOptionFragment();
+  }
+
+  @Nullable
+  @Override
+  protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
+    return inflater.inflate(R.layout.screen_setting_advance, container, false);
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    mUnbinder = ButterKnife.bind(this, view);
+    onPaletteChanged();
+  }
+
+  @Override
+  public void onDestroyView() {
+    if (mUnbinder != null) {
+      mUnbinder.unbind();
+      mUnbinder = null;
     }
+    super.onDestroyView();
+  }
 
-    @Nullable
-    @Override
-    protected View onCreateView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.screen_setting_advance,container, false);
-    }
+  @OnClick(R.id.back_button)
+  void back() {
+    getNavigationController().dismissFragment();
+  }
 
-    private Unbinder mUnbinder;
+  @Override
+  public void onSetStatusBarMargin(int value) {
+    mStatusBar.getLayoutParams().height = value;
+  }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mUnbinder = ButterKnife.bind(this,view);
-        onPaletteChanged();
-    }
+  @Override
+  public void onPaletteChanged() {
+    super.onPaletteChanged();
+    int color = Tool.getBaseColor();
+    ((TextView) mRoot.findViewById(R.id.title)).setTextColor(color);
+    ((ImageView) mRoot.findViewById(R.id.back_button)).setColorFilter(color);
 
-    @Override
-    public void onDestroyView() {
-        if(mUnbinder!=null) {
-            mUnbinder.unbind();
-            mUnbinder = null;
-        }
-        super.onDestroyView();
-    }
+  }
 
-    @OnClick(R.id.back_button)
-    void back() {
-        getNavigationController().dismissFragment();
-    }
-
-    @Override
-    public void onSetStatusBarMargin(int value) {
-        mStatusBar.getLayoutParams().height = value;
-    }
-
-    @Override
-    public void onPaletteChanged() {
-        super.onPaletteChanged();
-        int color = Tool.getBaseColor();
-        ((TextView)mRoot.findViewById(R.id.title)).setTextColor(color);
-        ((ImageView)mRoot.findViewById(R.id.back_button)).setColorFilter(color);
-
-    }
-
-    @OnClick(R.id.button_one)
-    void ButtonOneClick() {
-        if(getContext()!=null) {
-            ArrayList<Song> songs = SongLoader.getAllSongs(getContext());
-            MediaPlayer mediaPlayer = new MediaPlayer();
+  @OnClick(R.id.button_one)
+  void ButtonOneClick() {
+    if (getContext() != null) {
+      ArrayList<Song> songs = SongLoader.getAllSongs(getContext());
+      MediaPlayer mediaPlayer = new MediaPlayer();
+      try {
+        mediaPlayer.setDataSource(songs.get(new Random().nextInt(songs.size())).data);
+        mediaPlayer.prepare();
+        mediaPlayer.seekTo(1000 * 25);
+        mRoot.postDelayed(new Runnable() {
+          @Override
+          public void run() {
             try {
-                mediaPlayer.setDataSource(songs.get(new Random().nextInt(songs.size())).data);
-                mediaPlayer.prepare();
-                mediaPlayer.seekTo(1000*25);
-                mRoot.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            mediaPlayer.release();
-                        } catch (Exception ignored) {}
-                    }
-                },20*1000);
-                mediaPlayer.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Toasty.error(getContext(),"Couldn't play songs").show();
+              mediaPlayer.release();
+            } catch (Exception ignored) {
             }
-        }
+          }
+        }, 20 * 1000);
+        mediaPlayer.start();
+      } catch (Exception e) {
+        e.printStackTrace();
+        Toasty.error(getContext(), "Couldn't play songs").show();
+      }
     }
+  }
 }

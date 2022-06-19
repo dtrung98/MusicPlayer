@@ -16,25 +16,30 @@ import com.ldt.musicr.util.MusicUtil;
 
 public class SongPickerAdapter extends PickerAdapter<Song> {
 
-    public SongPickerAdapter(Context context) {
-        super(context);
-    }
+  public SongPickerAdapter(Context context) {
+    super(context);
+  }
 
-    @Override
-    public boolean onBindItem(PickerItem item, boolean create, int i) {
-        super.onBindItem(item,create,i);
-        Song song = mData.get(i);
-        item.setTitle(song.title);
-        item.setRadiusUnit(PickerItem.SIZE_RANDOM);
-        // Glide
-        Glide.with(mContext).load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId)).into(new SimpleTarget<Drawable>() {
-            @Override
-            public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                item.setBackgroundImage(resource);
-                SongPickerAdapter.this.notifyBackImageUpdated(i);
-            }
-        });
+  @Override
+  public boolean onBindItem(PickerItem item, boolean create, int i) {
+    super.onBindItem(item, create, i);
+    Song song = mData.get(i);
+    item.setTitle(song.title);
+    item.setRadiusUnit(PickerItem.SIZE_RANDOM);
+    // Glide
+    Glide.with(mContext)
+       .load(MusicUtil.getMediaStoreAlbumCoverUri(song.albumId))
+       .into(new SimpleTarget<Drawable>() {
+         @Override
+         public void onResourceReady(
+            @NonNull Drawable resource,
+            @Nullable Transition<? super Drawable> transition
+         ) {
+           item.setBackgroundImage(resource);
+           SongPickerAdapter.this.notifyBackImageUpdated(i);
+         }
+       });
 
-        return true;
-    }
+    return true;
+  }
 }

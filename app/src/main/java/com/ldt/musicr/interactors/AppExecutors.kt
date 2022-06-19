@@ -10,16 +10,16 @@ import java.util.concurrent.Executors
  * webservice requests).
  */
 object AppExecutors {
-    private val singleThreadExecutor: Executor by lazy { Executors.newSingleThreadExecutor() }
-    private val defaultExecutor: Executor by lazy { Executors.newFixedThreadPool(24) }
+  private val singleThreadExecutor: Executor by lazy { Executors.newSingleThreadExecutor() }
+  private val defaultExecutor: Executor by lazy { Executors.newFixedThreadPool(24) }
 
-    @JvmStatic
-    fun single(): Executor {
-        return singleThreadExecutor
-    }
+  @JvmStatic
+  fun single(): Executor {
+    return singleThreadExecutor
+  }
 
-    @JvmStatic
-    fun io(): Executor {
-        return defaultExecutor
-    }
+  @JvmStatic
+  fun io(): Executor {
+    return defaultExecutor
+  }
 }

@@ -13,45 +13,44 @@ import android.view.View;
  * ================================================
  */
 class SavedState extends View.BaseSavedState {
-    public float minValue;
-    public float maxValue;
-    public float rangeInterval;
-    public int tickNumber;
-    public float currSelectedMin;
-    public float currSelectedMax;
-
-    SavedState(Parcelable superState) {
-        super(superState);
+  public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+    public SavedState createFromParcel(Parcel in) {
+      return new SavedState(in);
     }
 
-    private SavedState(Parcel in) {
-        super(in);
-        minValue = in.readFloat();
-        maxValue = in.readFloat();
-        rangeInterval = in.readFloat();
-        tickNumber = in.readInt();
-        currSelectedMin = in.readFloat();
-        currSelectedMax = in.readFloat();
+    public SavedState[] newArray(int size) {
+      return new SavedState[size];
     }
+  };
+  public float minValue;
+  public float maxValue;
+  public float rangeInterval;
+  public int tickNumber;
+  public float currSelectedMin;
+  public float currSelectedMax;
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        super.writeToParcel(out, flags);
-        out.writeFloat(minValue);
-        out.writeFloat(maxValue);
-        out.writeFloat(rangeInterval);
-        out.writeInt(tickNumber);
-        out.writeFloat(currSelectedMin);
-        out.writeFloat(currSelectedMax);
-    }
+  SavedState(Parcelable superState) {
+    super(superState);
+  }
 
-    public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-        public SavedState createFromParcel(Parcel in) {
-            return new SavedState(in);
-        }
+  private SavedState(Parcel in) {
+    super(in);
+    minValue = in.readFloat();
+    maxValue = in.readFloat();
+    rangeInterval = in.readFloat();
+    tickNumber = in.readInt();
+    currSelectedMin = in.readFloat();
+    currSelectedMax = in.readFloat();
+  }
 
-        public SavedState[] newArray(int size) {
-            return new SavedState[size];
-        }
-    };
+  @Override
+  public void writeToParcel(Parcel out, int flags) {
+    super.writeToParcel(out, flags);
+    out.writeFloat(minValue);
+    out.writeFloat(maxValue);
+    out.writeFloat(rangeInterval);
+    out.writeInt(tickNumber);
+    out.writeFloat(currSelectedMin);
+    out.writeFloat(currSelectedMax);
+  }
 }

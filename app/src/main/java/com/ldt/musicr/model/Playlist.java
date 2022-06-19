@@ -3,78 +3,77 @@ package com.ldt.musicr.model;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 public class Playlist extends Media implements Parcelable {
-    public final int id;
-    public final String name;
-
-    public Playlist(final int id, final String name) {
-        this.id = id;
-        this.name = name;
+  public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
+    public Playlist createFromParcel(Parcel source) {
+      return new Playlist(source);
     }
 
-    public Playlist() {
-        this.id = -1;
-        this.name = "";
+    public Playlist[] newArray(int size) {
+      return new Playlist[size];
     }
+  };
+  public final int id;
+  public final String name;
 
-    @NonNull
-    public String getInfoString(@NonNull Context context) {
-        return "";
-    }
+  public Playlist(final int id, final String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  public Playlist() {
+    this.id = -1;
+    this.name = "";
+  }
 
-        Playlist playlist = (Playlist) o;
+  protected Playlist(Parcel in) {
+    this.id = in.readInt();
+    this.name = in.readString();
+  }
 
-        if (id != playlist.id) return false;
-        return name != null ? name.equals(playlist.name) : playlist.name == null;
+  @NonNull
+  public String getInfoString(@NonNull Context context) {
+    return "";
+  }
 
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
+    Playlist playlist = (Playlist) o;
 
-    @Override
-    public String toString() {
-        return "Playlist{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+    if (id != playlist.id) return false;
+    return name != null ? name.equals(playlist.name) : playlist.name == null;
 
+  }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+  @Override
+  public int hashCode() {
+    int result = id;
+    result = 31 * result + (name != null ? name.hashCode() : 0);
+    return result;
+  }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
-        dest.writeString(this.name);
-    }
+  @Override
+  public String toString() {
+    return "Playlist{" +
+       "id=" + id +
+       ", name='" + name + '\'' +
+       '}';
+  }
 
-    protected Playlist(Parcel in) {
-        this.id = in.readInt();
-        this.name = in.readString();
-    }
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 
-    public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
-        public Playlist createFromParcel(Parcel source) {
-            return new Playlist(source);
-        }
-
-        public Playlist[] newArray(int size) {
-            return new Playlist[size];
-        }
-    };
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeInt(this.id);
+    dest.writeString(this.name);
+  }
 }

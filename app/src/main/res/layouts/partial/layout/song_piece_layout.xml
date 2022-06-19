@@ -1,106 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
-    <View
-        android:layout_width="0dp"
-        android:layout_height="55dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/ripple_effect"
-        android:clickable="true"
-        android:id="@+id/back_top_header"/>
-    <TextView
-        android:tag="sticky|-hastransparancy"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/back_top_header"
-        app:layout_constraintStart_toStartOf="@id/back_top_header"
-        app:layout_constraintBottom_toBottomOf="@id/back_top_header"
-        android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:id="@+id/title"
-        android:textSize="@dimen/header1_text_size"
-        android:textStyle="bold"
-        android:text="@string/songs"
-        android:textColor="@color/FlatWhite"/>
-    <TextView
-        android:id="@+id/number"
-        android:layout_width="wrap_content"
-        android:minWidth="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_centerInParent="true"
-        app:layout_constraintTop_toTopOf="@id/back_top_header"
-        app:layout_constraintBottom_toBottomOf="@id/back_top_header"
-        app:layout_constraintStart_toEndOf="@id/title"
-        android:text="0"
-        android:singleLine="true"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:gravity="center"
-        android:textColor="@color/flatOrange"
-        android:background="@drawable/count_round_drawable"/>
-    <View
-        android:id="@+id/refresh_front"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="@id/refresh"
-        app:layout_constraintBottom_toBottomOf="@id/refresh"
-        app:layout_constraintStart_toStartOf="@id/refresh"
-        app:layout_constraintEnd_toEndOf="@id/refresh"
-        android:background="@drawable/ripple_effect"/>
-<ImageView
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical">
+
+  <View
+    android:id="@+id/back_top_header"
+    android:layout_width="0dp"
+    android:layout_height="55dp"
+    android:background="@drawable/ripple_effect"
+    android:clickable="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent" />
+
+  <TextView
+    android:id="@+id/title"
+    android:layout_width="wrap_content"
+    android:layout_height="0dp"
+    android:gravity="center_vertical"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:tag="sticky|-hastransparancy"
+    android:text="@string/songs"
+    android:textColor="@color/FlatWhite"
+    android:textSize="@dimen/header1_text_size"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="@id/back_top_header"
+    app:layout_constraintStart_toStartOf="@id/back_top_header"
+    app:layout_constraintTop_toTopOf="@id/back_top_header" />
+
+  <TextView
+    android:id="@+id/number"
+    android:layout_width="wrap_content"
+    android:layout_height="30dp"
+    android:layout_centerInParent="true"
+    android:layout_marginLeft="10dp"
+    android:background="@drawable/count_round_drawable"
+    android:gravity="center"
+    android:minWidth="30dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:singleLine="true"
+    android:text="0"
+    android:textColor="@color/flatOrange"
+    app:layout_constraintBottom_toBottomOf="@id/back_top_header"
+    app:layout_constraintStart_toEndOf="@id/title"
+    app:layout_constraintTop_toTopOf="@id/back_top_header" />
+
+  <View
+    android:id="@+id/refresh_front"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:background="@drawable/ripple_effect"
+    app:layout_constraintBottom_toBottomOf="@id/refresh"
+    app:layout_constraintEnd_toEndOf="@id/refresh"
+    app:layout_constraintStart_toStartOf="@id/refresh"
+    app:layout_constraintTop_toTopOf="@id/refresh" />
+
+  <ImageView
     android:id="@+id/refresh"
     android:layout_width="76dp"
     android:layout_height="55dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintBottom_toBottomOf="@id/back_top_header"
-    android:src="@drawable/refresh"
+    android:elevation="1dp"
     android:padding="18dp"
     android:rotation="180"
-    app:tint="#AAF5F5F5"
-    android:elevation="1dp"
-    />
+    android:src="@drawable/refresh"
+    app:layout_constraintBottom_toBottomOf="@id/back_top_header"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:tint="#AAF5F5F5" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/back_top_header"
-        tools:listitem="@layout/item_feature_song"
-        tools:orientation="vertical"
-        tools:layoutManager="LinearLayoutManager"
-        android:overScrollMode="never"
-        />
-    <TextView
-        android:id="@+id/see_all"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recycler_view"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/see_all_songs"
-        android:textColor="@color/FlatWhite"
-        android:background="@drawable/ripple_effect_15dp_radius"
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/back_top_header"
+    tools:layoutManager="LinearLayoutManager"
+    tools:listitem="@layout/item_feature_song"
+    tools:orientation="vertical" />
 
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:padding="10dp"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:focusable="true"
-        android:clickable="true"/>
+  <TextView
+    android:id="@+id/see_all"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="30dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/ripple_effect_15dp_radius"
+    android:clickable="true"
+    android:focusable="true"
+
+    android:gravity="center"
+    android:padding="10dp"
+    android:text="@string/see_all_songs"
+    android:textColor="@color/FlatWhite"
+    android:textSize="16sp"
+    android:textStyle="bold"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/recycler_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

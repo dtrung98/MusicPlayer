@@ -17,28 +17,34 @@ import java.io.InputStream;
 
 public class AudioFileCoverLoader implements ModelLoader<AudioFileCover, InputStream> {
 
-    @Nullable
+  @Nullable
+  @Override
+  public LoadData<InputStream> buildLoadData(
+     @NonNull AudioFileCover audioFileCover,
+     int width,
+     int height,
+     @NonNull Options options
+  ) {
+    return new LoadData<>(new ObjectKey(audioFileCover.filePath),
+       new AudioFileCoverFetcher(audioFileCover));
+  }
+
+  @Override
+  public boolean handles(@NonNull AudioFileCover audioFileCover) {
+    return audioFileCover.filePath != null;
+  }
+
+  public static class Factory implements ModelLoaderFactory<AudioFileCover, InputStream> {
+
+    @NonNull
     @Override
-    public LoadData<InputStream> buildLoadData(@NonNull AudioFileCover audioFileCover, int width, int height, @NonNull Options options) {
-        return new LoadData<>(new ObjectKey(audioFileCover.filePath),new AudioFileCoverFetcher(audioFileCover));
+    public ModelLoader<AudioFileCover, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
+      return new AudioFileCoverLoader();
     }
 
     @Override
-    public boolean handles(@NonNull AudioFileCover audioFileCover) {
-        return audioFileCover.filePath != null;
+    public void teardown() {
     }
-
-    public static class Factory implements ModelLoaderFactory<AudioFileCover, InputStream> {
-
-        @NonNull
-        @Override
-        public ModelLoader<AudioFileCover, InputStream> build(@NonNull MultiModelLoaderFactory multiFactory) {
-            return new AudioFileCoverLoader();
-        }
-
-        @Override
-        public void teardown() {
-        }
-    }
+  }
 }
 

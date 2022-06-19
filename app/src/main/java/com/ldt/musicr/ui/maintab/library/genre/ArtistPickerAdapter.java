@@ -17,30 +17,35 @@ import com.ldt.musicr.ui.widget.bubblepicker.rendering.PickerAdapter;
 
 public class ArtistPickerAdapter extends PickerAdapter<Artist> {
 
-    public ArtistPickerAdapter(Context context) {
-        super(context);
-    }
+  public ArtistPickerAdapter(Context context) {
+    super(context);
+  }
 
-    @Override
-    public boolean onBindItem(PickerItem item, boolean create, int i) {
-        Artist artist = mData.get(i);
-        item.setTitle(artist.getName());
-        item.setRadiusUnit(PhysicsEngine.INSTANCE.interpolate(1,2f,((float) artist.getSongCount())/getItemCount()));
-        // Glide
-        ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist)
-                // .tryToLoadOriginal(true)
-                .generateBuilder(mContext)
-                .buildRequestDrawable()
-                .centerCrop()
-               // .error(R.drawable.music_style)
-                .into(new SimpleTarget<Drawable>() {
-                    @Override
-                    public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        item.setBackgroundImage(resource);
-                    }
-                });
+  @Override
+  public boolean onBindItem(PickerItem item, boolean create, int i) {
+    Artist artist = mData.get(i);
+    item.setTitle(artist.getName());
+    item.setRadiusUnit(PhysicsEngine.INSTANCE.interpolate(1,
+       2f,
+       ((float) artist.getSongCount()) / getItemCount()));
+    // Glide
+    ArtistGlideRequest.Builder.from(GlideApp.with(mContext), artist)
+       // .tryToLoadOriginal(true)
+       .generateBuilder(mContext)
+       .buildRequestDrawable()
+       .centerCrop()
+       // .error(R.drawable.music_style)
+       .into(new SimpleTarget<Drawable>() {
+         @Override
+         public void onResourceReady(
+            @NonNull Drawable resource,
+            @Nullable Transition<? super Drawable> transition
+         ) {
+           item.setBackgroundImage(resource);
+         }
+       });
 
-        return true;
-    }
+    return true;
+  }
 
 }

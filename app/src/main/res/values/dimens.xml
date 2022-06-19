@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="activity_horizontal_margin">0dp</dimen>
-    <dimen name="activity_vertical_margin">0dp</dimen>
-    <dimen name="text14sp">14sp</dimen>
-    <dimen name="oneDP">1dp</dimen>
-    <dimen name="button_control_center_size">45dp</dimen>
-    <dimen name="header1_text_size">20sp</dimen>
-    <dimen name="title_text_margin_left">5dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
-    <dimen name="padding_button_option_center">15dp</dimen>
-    <dimen name="action_bar_size">?android:attr/actionBarSize</dimen>
+  <dimen name="activity_horizontal_margin">0dp</dimen>
+  <dimen name="activity_vertical_margin">0dp</dimen>
+  <dimen name="text14sp">14sp</dimen>
+  <dimen name="oneDP">1dp</dimen>
+  <dimen name="button_control_center_size">45dp</dimen>
+  <dimen name="header1_text_size">20sp</dimen>
+  <dimen name="title_text_margin_left">5dp</dimen>
+  <dimen name="nav_header_vertical_spacing">8dp</dimen>
+  <dimen name="nav_header_height">176dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
+  <dimen name="padding_button_option_center">15dp</dimen>
+  <dimen name="action_bar_size">?android:attr/actionBarSize</dimen>
 
-    <!-- Bottom Sheet Fragment -->
-    <dimen name="_8dp">8dp</dimen>
-    <dimen name="_16dp">16dp</dimen>
-    <dimen name="_24dp">24dp</dimen>
-    <dimen name="_32dp">32dp</dimen>
-    <dimen name="_40dp">40dp</dimen>
-    <dimen name="_48dp">48dp</dimen>
-    <dimen name="_56dp">56dp</dimen>
-    <dimen name="_64dp">64dp</dimen>
-    <dimen name="_72dp">72dp</dimen>
-    <dimen name="_80dp">80dp</dimen>
-    <dimen name="_160dp">160dp</dimen>
+  <!-- Bottom Sheet Fragment -->
+  <dimen name="_8dp">8dp</dimen>
+  <dimen name="_16dp">16dp</dimen>
+  <dimen name="_24dp">24dp</dimen>
+  <dimen name="_32dp">32dp</dimen>
+  <dimen name="_40dp">40dp</dimen>
+  <dimen name="_48dp">48dp</dimen>
+  <dimen name="_56dp">56dp</dimen>
+  <dimen name="_64dp">64dp</dimen>
+  <dimen name="_72dp">72dp</dimen>
+  <dimen name="_80dp">80dp</dimen>
+  <dimen name="_160dp">160dp</dimen>
 
-    <dimen name="md_bottom_sheet_separator_top_margin">7dp</dimen>
-    <string-array name="spinner_main_screen_array">
-        <item>@string/app_title</item>
-        <item>@string/playlists</item>
-        <item>@string/songs</item>
-        <item>@string/albums</item>
-    </string-array>
+  <dimen name="md_bottom_sheet_separator_top_margin">7dp</dimen>
+  <string-array name="spinner_main_screen_array">
+    <item>@string/app_title</item>
+    <item>@string/playlists</item>
+    <item>@string/songs</item>
+    <item>@string/albums</item>
+  </string-array>
 
-    <dimen name="design_bottom_navigation_text_size" tools:override="true">11sp</dimen>
-    <dimen name="design_bottom_navigation_active_text_size" tools:override="true">11sp</dimen>
-    <dimen name="bottom_navigation_height">57dp</dimen>
-    <dimen name="now_laying_height_in_minimize_mode">50dp</dimen>
-    <dimen name="bottom_back_stack_spacing">107dp</dimen>
-    <dimen name="highest_back_margin">2dp</dimen>
-    <dimen name="layer_margin_top">10dp</dimen>
-    <dimen name="item_sort_song_child_height">50dp</dimen>
-    <dimen name="item_song_child_height">54dp</dimen>
-    <dimen name="item_song_child_loader_width">24dp</dimen>
-    <dimen name="min_padding_image_playlist">42dp</dimen>
-    <dimen name="max_radius_layer">18dp</dimen>
-    <dimen name="bottom_line_height_card_view">50dp</dimen>
-    <dimen name="item_feature_playlist_size">135dp</dimen>
+  <dimen name="design_bottom_navigation_text_size" tools:override="true">11sp</dimen>
+  <dimen name="design_bottom_navigation_active_text_size" tools:override="true">11sp</dimen>
+  <dimen name="bottom_navigation_height">57dp</dimen>
+  <dimen name="now_laying_height_in_minimize_mode">50dp</dimen>
+  <dimen name="bottom_back_stack_spacing">107dp</dimen>
+  <dimen name="highest_back_margin">2dp</dimen>
+  <dimen name="layer_margin_top">10dp</dimen>
+  <dimen name="item_sort_song_child_height">50dp</dimen>
+  <dimen name="item_song_child_height">54dp</dimen>
+  <dimen name="item_song_child_loader_width">24dp</dimen>
+  <dimen name="min_padding_image_playlist">42dp</dimen>
+  <dimen name="max_radius_layer">18dp</dimen>
+  <dimen name="bottom_line_height_card_view">50dp</dimen>
+  <dimen name="item_feature_playlist_size">135dp</dimen>
 
-    <!--App Widgets-->
-    <dimen name="app_widget_classic_image_size">96dp</dimen>
-    <dimen name="app_widget_classic_min_width">250dp</dimen>
-    <dimen name="app_widget_classic_min_height">40dp</dimen>
+  <!--App Widgets-->
+  <dimen name="app_widget_classic_image_size">96dp</dimen>
+  <dimen name="app_widget_classic_min_width">250dp</dimen>
+  <dimen name="app_widget_classic_min_height">40dp</dimen>
 
-    <dimen name="app_widget_small_button_height">48dp</dimen>
-    <dimen name="app_widget_small_image_size">48dp</dimen>
-    <dimen name="app_widget_small_min_width">250dp</dimen>
-    <dimen name="app_widget_small_min_height">40dp</dimen>
+  <dimen name="app_widget_small_button_height">48dp</dimen>
+  <dimen name="app_widget_small_image_size">48dp</dimen>
+  <dimen name="app_widget_small_min_width">250dp</dimen>
+  <dimen name="app_widget_small_min_height">40dp</dimen>
 
-    <dimen name="app_widget_big_min_width">250dp</dimen>
-    <dimen name="app_widget_big_min_height">110dp</dimen>
+  <dimen name="app_widget_big_min_width">250dp</dimen>
+  <dimen name="app_widget_big_min_height">110dp</dimen>
 
-    <dimen name="app_widget_card_image_size">56dp</dimen>
-    <dimen name="app_widget_card_min_width">250dp</dimen>
-    <dimen name="app_widget_card_min_height">40dp</dimen>
-    <dimen name="app_widget_card_buttons_width">128dp</dimen>
-    <dimen name="app_widget_card_radius">2dp</dimen>
+  <dimen name="app_widget_card_image_size">56dp</dimen>
+  <dimen name="app_widget_card_min_width">250dp</dimen>
+  <dimen name="app_widget_card_min_height">40dp</dimen>
+  <dimen name="app_widget_card_buttons_width">128dp</dimen>
+  <dimen name="app_widget_card_radius">2dp</dimen>
 
-    <dimen name="card_on_app_bar_side_padding">8dp</dimen>
-    <dimen name="notification_big_image_size">128dp</dimen>
+  <dimen name="card_on_app_bar_side_padding">8dp</dimen>
+  <dimen name="notification_big_image_size">128dp</dimen>
 </resources>

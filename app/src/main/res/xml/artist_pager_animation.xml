@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:motion="http://schemas.android.com/apk/res-auto">
-    <Transition
-        app:constraintSetStart="@layout/screen_single_artist_primary"
-        app:constraintSetEnd="@layout/screen_single_artist_top"
-        app:duration="350">
-        <OnSwipe
-            app:dragDirection="dragUp"
-            app:touchAnchorId="@id/springBackLayout"
-            app:touchAnchorSide="top"
-            />
-    </Transition>
- <!--   <Transition
-        app:constraintSetStart="@layout/screen_single_artist_below"
-        app:constraintSetEnd="@layout/artist_pager_middle"
-        app:duration="350">
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto">
+  <Transition
+    app:constraintSetEnd="@layout/screen_single_artist_top"
+    app:constraintSetStart="@layout/screen_single_artist_primary"
+    app:duration="350">
+    <OnSwipe
+      app:dragDirection="dragUp"
+      app:touchAnchorId="@id/springBackLayout"
+      app:touchAnchorSide="top" />
+  </Transition>
+  <!--   <Transition
+         app:constraintSetStart="@layout/screen_single_artist_below"
+         app:constraintSetEnd="@layout/artist_pager_middle"
+         app:duration="350">
 
-    </Transition>-->
+     </Transition>-->
 </MotionScene>

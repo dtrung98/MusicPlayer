@@ -13,25 +13,41 @@ import com.ldt.musicr.glide.SongGlideRequest
 import com.ldt.musicr.model.Song
 
 object ArtworkUtils {
-    @JvmStatic
-    fun getBitmapRequestBuilder(context: Context, song: Song): RequestBuilder<Bitmap> {
-        return SongGlideRequest.Builder.from(Glide.with(context), song)
-            .ignoreMediaStore(true)
-            .asBitmap().build()
-    }
+  @JvmStatic
+  fun getBitmapRequestBuilder(context: Context, song: Song): RequestBuilder<Bitmap> {
+    return SongGlideRequest.Builder.from(Glide.with(context), song)
+      .ignoreMediaStore(true)
+      .asBitmap().build()
+  }
 
-    @JvmStatic
-    fun loadAlbumArtworkBySong(view: ImageView, song: Song, onLoadFailed: ()-> Boolean = { false }, onLoadSuccess: (Bitmap?)-> Boolean = { false }) {
-        getBitmapRequestBuilder(view.context, song)
-            .listener(object : RequestListener<Bitmap?> {
-                override fun onResourceReady(resource: Bitmap?, model: Any, target: Target<Bitmap?>, dataSource: DataSource, isFirstResource: Boolean): Boolean {
-                    return onLoadSuccess(resource)
-                }
+  @JvmStatic
+  fun loadAlbumArtworkBySong(
+    view: ImageView,
+    song: Song,
+    onLoadFailed: () -> Boolean = { false },
+    onLoadSuccess: (Bitmap?) -> Boolean = { false }
+  ) {
+    getBitmapRequestBuilder(view.context, song)
+      .listener(object : RequestListener<Bitmap?> {
+        override fun onResourceReady(
+          resource: Bitmap?,
+          model: Any,
+          target: Target<Bitmap?>,
+          dataSource: DataSource,
+          isFirstResource: Boolean
+        ): Boolean {
+          return onLoadSuccess(resource)
+        }
 
-                override fun onLoadFailed(e: GlideException?, model: Any, target: Target<Bitmap?>, isFirstResource: Boolean): Boolean {
-                    return onLoadFailed()
-                }
-            })
-            .into(view)
-    }
+        override fun onLoadFailed(
+          e: GlideException?,
+          model: Any,
+          target: Target<Bitmap?>,
+          isFirstResource: Boolean
+        ): Boolean {
+          return onLoadFailed()
+        }
+      })
+      .into(view)
+  }
 }

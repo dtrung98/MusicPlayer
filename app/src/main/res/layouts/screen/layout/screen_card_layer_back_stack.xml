@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/root"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/root"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@android:color/transparent"
+  app:cardBackgroundColor="@android:color/transparent">
+
+  <ImageView
+    android:id="@+id/back_image"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/transparent"
-    app:cardBackgroundColor="@android:color/transparent"
-    >
-    <ImageView
-        android:id="@+id/back_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:visibility="gone"/>
-    <com.ldt.musicr.ui.widget.viewpager.SmoothScrollerViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"/>
-    <View
-        android:id="@+id/dim_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/black"
-        android:alpha="0"/>
+    android:scaleType="centerCrop"
+    android:visibility="gone" />
+
+  <com.ldt.musicr.ui.widget.viewpager.SmoothScrollerViewPager
+    android:id="@+id/view_pager"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never" />
+
+  <View
+    android:id="@+id/dim_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:alpha="0"
+    android:background="@android:color/black" />
 </androidx.cardview.widget.CardView>

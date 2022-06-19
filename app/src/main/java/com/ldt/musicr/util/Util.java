@@ -5,7 +5,8 @@
  *
  * This is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or (at your option) any later
+ * version.
  *
  * This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -27,121 +28,129 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.ldt.musicr.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.elmurzaev.music.R;
 
 import java.io.File;
 import java.util.Objects;
 
 public class Util {
 
-    public static boolean equals(Object a, Object b) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return Objects.equals(a, b);
-        } else {
-            return (a == b) || (a != null && a.equals(b));
-        }
+  public static final String MUSIC_ONLY_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + "=1"
+     + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''";
+
+  public static boolean equals(Object a, Object b) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      return Objects.equals(a, b);
+    } else {
+      return (a == b) || (a != null && a.equals(b));
+    }
+  }
+
+  public static boolean isOreo() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+  }
+
+
+  public static boolean isMarshmallow() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+  }
+
+  public static boolean isLollipop() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+  }
+
+
+  public static boolean isJellyBeanMR2() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
+  }
+
+  public static boolean isJellyBean() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+  }
+
+  public static boolean isJellyBeanMR1() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
+  }
+
+  public static Uri getAlbumArtUri(long albumId) {
+    return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"),
+       albumId);
+  }
+
+  public static String getAlbumArtForFile(String filePath) {
+    MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+    mmr.setDataSource(filePath);
+
+    return mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+  }
+
+  public static final String makeCombinedString(
+     final Context context, final String first,
+     final String second
+  ) {
+    final String formatter = context.getResources().getString(R.string.combine_two_strings);
+    return String.format(formatter, first, second);
+  }
+
+  public static final String makeLabel(
+     final Context context, final int pluralInt,
+     final int number
+  ) {
+    return context.getResources().getQuantityString(pluralInt, number, number);
+  }
+
+  public static final String makeShortTimeString(final Context context, long secs) {
+    long hours, mins;
+
+    hours = secs / 3600;
+    secs %= 3600;
+    mins = secs / 60;
+    secs %= 60;
+
+    final String durationFormat = context.getResources().getString(
+       hours == 0 ? R.string.durationformatshort : R.string.durationformatlong);
+    return String.format(durationFormat, hours, mins, secs);
+  }
+
+  public static int getActionBarHeight(Context context) {
+    int mActionBarHeight;
+    TypedValue mTypedValue = new TypedValue();
+
+    context.getTheme().resolveAttribute(R.attr.actionBarSize, mTypedValue, true);
+
+    mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data,
+       context.getResources().getDisplayMetrics());
+
+    return mActionBarHeight;
+  }
+
+  public static final int getSongCountForPlaylist(final Context context, final long playlistId) {
+    Cursor c = context.getContentResolver().query(
+       MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId),
+       new String[]{BaseColumns._ID}, MUSIC_ONLY_SELECTION, null, null);
+
+    if (c != null) {
+      int count = 0;
+      if (c.moveToFirst()) {
+        count = c.getCount();
+      }
+      c.close();
+      c = null;
+      return count;
     }
 
-    public static final String MUSIC_ONLY_SELECTION = MediaStore.Audio.AudioColumns.IS_MUSIC + "=1"
-            + " AND " + MediaStore.Audio.AudioColumns.TITLE + " != ''";
-
-    public static boolean isOreo() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
-    }
-
-
-    public static boolean isMarshmallow() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
-    }
-
-    public static boolean isLollipop() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-    }
-
-
-    public static boolean isJellyBeanMR2() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2;
-    }
-
-    public static boolean isJellyBean() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-    }
-
-    public static boolean isJellyBeanMR1() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
-    }
-
-    public static Uri getAlbumArtUri(long albumId) {
-        return ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);
-    }
-    public static String getAlbumArtForFile(String filePath) {
-        MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(filePath);
-
-        return mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-    }
-
-    public static final String makeCombinedString(final Context context, final String first,
-                                                  final String second) {
-        final String formatter = context.getResources().getString(R.string.combine_two_strings);
-        return String.format(formatter, first, second);
-    }
-
-    public static final String makeLabel(final Context context, final int pluralInt,
-                                         final int number) {
-        return context.getResources().getQuantityString(pluralInt, number, number);
-    }
-
-    public static final String makeShortTimeString(final Context context, long secs) {
-        long hours, mins;
-
-        hours = secs / 3600;
-        secs %= 3600;
-        mins = secs / 60;
-        secs %= 60;
-
-        final String durationFormat = context.getResources().getString(
-                hours == 0 ? R.string.durationformatshort : R.string.durationformatlong);
-        return String.format(durationFormat, hours, mins, secs);
-    }
-
-    public static int getActionBarHeight(Context context) {
-        int mActionBarHeight;
-        TypedValue mTypedValue = new TypedValue();
-
-        context.getTheme().resolveAttribute(R.attr.actionBarSize, mTypedValue, true);
-
-        mActionBarHeight = TypedValue.complexToDimensionPixelSize(mTypedValue.data, context.getResources().getDisplayMetrics());
-
-        return mActionBarHeight;
-    }
-
-    public static final int getSongCountForPlaylist(final Context context, final long playlistId) {
-        Cursor c = context.getContentResolver().query(
-                MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId),
-                new String[]{BaseColumns._ID}, MUSIC_ONLY_SELECTION, null, null);
-
-        if (c != null) {
-            int count = 0;
-            if (c.moveToFirst()) {
-                count = c.getCount();
-            }
-            c.close();
-            c = null;
-            return count;
-        }
-
-        return 0;
-    }
+    return 0;
+  }
 
 /*    public static boolean hasEffectsPanel(final Activity activity) {
         final PackageManager packageManager = activity.getPackageManager();
@@ -155,68 +164,88 @@ public class Util {
         return effects;
     }*/
 
-    public static int getBlackWhiteColor(int color) {
-        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
-        if (darkness >= 0.5) {
-            return Color.WHITE;
-        } else return Color.BLACK;
+  public static int getBlackWhiteColor(int color) {
+    double darkness = 1 -
+       (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+    if (darkness >= 0.5) {
+      return Color.WHITE;
+    } else {
+      return Color.BLACK;
     }
+  }
 
-    public enum IdType {
-        NA(0),
-        Artist(1),
-        Album(2),
-        Playlist(3);
+  public static void removeFromPlaylist(
+     final Context context, final long id,
+     final long playlistId
+  ) {
+    final Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId);
+    final ContentResolver resolver = context.getContentResolver();
+    resolver.delete(uri, MediaStore.Audio.Playlists.Members.AUDIO_ID + " = ? ", new String[]{
+       Long.toString(id)
+    });
+  }
 
-        public final int mId;
+  public static void showDeleteDialog(
+     final Context context,
+     final String name,
+     final long[] list,
+     final RecyclerView.Adapter adapter,
+     final int pos
+  ) {
+/*
+        new MaterialDialog.Builder(context)
+                .title("Delete song?")
+                .content("Are you sure you want to delete " + name + " ?")
+                .positiveText("Delete")
+                .negativeText("Cancel")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction
+                    which) {
+                        Util.deleteTracks(context, list);
+                        adapter.notifyItemRemoved(pos);
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction
+                    which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
 
-        IdType(final int id) {
-            mId = id;
-        }
 
-        public static IdType getTypeById(int id) {
-            for (IdType type : values()) {
-                if (type.mId == id) {
-                    return type;
-                }
-            }
+*/
+  }
 
-            throw new IllegalArgumentException("Unrecognized id: " + id);
-        }
+  public static void shareTrack(final Context context, long id) {
+
+    final String[] projection = new String[]{
+       BaseColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM_ID
+    };
+    final StringBuilder selection = new StringBuilder();
+    selection.append(BaseColumns._ID + " IN (");
+    selection.append(id);
+    selection.append(")");
+    final Cursor c = context.getContentResolver().query(
+       MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection.toString(),
+       null, null);
+
+    if (c == null) {
+      return;
     }
-
-    public enum PlaylistType {
-        LastAdded(-1, R.string.playlist_last_added),
-        RecentlyPlayed(-2, R.string.playlist_recently_played),
-        TopTracks(-3, R.string.playlist_top_tracks);
-
-        public long mId;
-        public int mTitleId;
-
-        PlaylistType(long id, int titleId) {
-            mId = id;
-            mTitleId = titleId;
-        }
-
-        public static PlaylistType getTypeById(long id) {
-            for (PlaylistType type : PlaylistType.values()) {
-                if (type.mId == id) {
-                    return type;
-                }
-            }
-
-            return null;
-        }
+    c.moveToFirst();
+    try {
+      Intent share = new Intent(Intent.ACTION_SEND);
+      share.setType("audio/*");
+      share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(c.getString(1))));
+      context.startActivity(Intent.createChooser(share, "Share"));
+      c.close();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-
-    public static void removeFromPlaylist(final Context context, final long id,
-                                          final long playlistId) {
-        final Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId);
-        final ContentResolver resolver = context.getContentResolver();
-        resolver.delete(uri, MediaStore.Audio.Playlists.Members.AUDIO_ID + " = ? ", new String[]{
-                Long.toString(id)
-        });
-    }
+  }
 /*
     public static void clearTopTracks(Context context) {
         SongPlayCount.getInstance(context).deleteAll();
@@ -231,34 +260,17 @@ public class Util {
                 .setLastAddedCutoff(System.currentTimeMillis());
     }*/
 
-    public static void showDeleteDialog(final Context context, final String name, final long[] list, final RecyclerView.Adapter adapter, final int pos) {
-/*
-        new MaterialDialog.Builder(context)
-                .title("Delete song?")
-                .content("Are you sure you want to delete " + name + " ?")
-                .positiveText("Delete")
-                .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        Util.deleteTracks(context, list);
-                        adapter.notifyItemRemoved(pos);
-                    }
-                })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
-                .show();
-
-
-*/
-    }
+  public static Point getScreenSize(@NonNull Context c) {
+    Display display =
+       ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+    Point size = new Point();
+    display.getSize(size);
+    return size;
+  }
     /*public static void deleteTracks(final Context context, final long[] list) {
         final String[] projection = new String[]{
-                BaseColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM_ID
+                BaseColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.Audio.AudioColumns
+                .ALBUM_ID
         };
         final StringBuilder selection = new StringBuilder();
         selection.append(BaseColumns._ID + " IN (");
@@ -317,47 +329,61 @@ public class Util {
         MusicPlayer.refresh();
     }*/
 
-    public static void shareTrack(final Context context, long id) {
+  public static void hideSoftKeyboard(@Nullable Activity activity) {
+    if (activity != null) {
+      View currentFocus = activity.getCurrentFocus();
+      if (currentFocus != null) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(
+           Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
+      }
+    }
+  }
 
-        final String[] projection = new String[]{
-                BaseColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.Audio.AudioColumns.ALBUM_ID
-        };
-        final StringBuilder selection = new StringBuilder();
-        selection.append(BaseColumns._ID + " IN (");
-        selection.append(id);
-        selection.append(")");
-        final Cursor c = context.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection.toString(),
-                null, null);
+  public enum IdType {
+    NA(0),
+    Artist(1),
+    Album(2),
+    Playlist(3);
 
-        if (c == null) {
-            return;
-        }
-        c.moveToFirst();
-        try {
-            Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("audio/*");
-            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(c.getString(1))));
-            context.startActivity(Intent.createChooser(share, "Share"));
-            c.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public final int mId;
+
+    IdType(final int id) {
+      mId = id;
     }
 
-    public static Point getScreenSize(@NonNull Context c) {
-        Display display = ((WindowManager) c.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        return size;
-    }
-    public static void hideSoftKeyboard(@Nullable Activity activity) {
-        if (activity != null) {
-            View currentFocus = activity.getCurrentFocus();
-            if (currentFocus != null) {
-                InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(currentFocus.getWindowToken(), 0);
-            }
+    public static IdType getTypeById(int id) {
+      for (IdType type : values()) {
+        if (type.mId == id) {
+          return type;
         }
+      }
+
+      throw new IllegalArgumentException("Unrecognized id: " + id);
     }
+  }
+
+  public enum PlaylistType {
+    LastAdded(-1, R.string.playlist_last_added),
+    RecentlyPlayed(-2, R.string.playlist_recently_played),
+    TopTracks(-3, R.string.playlist_top_tracks);
+
+    public long mId;
+    public int mTitleId;
+
+    PlaylistType(long id, int titleId) {
+      mId = id;
+      mTitleId = titleId;
+    }
+
+    public static PlaylistType getTypeById(long id) {
+      for (PlaylistType type : PlaylistType.values()) {
+        if (type.mId == id) {
+          return type;
+        }
+      }
+
+      return null;
+    }
+  }
 }

@@ -1,4 +1,5 @@
 package com.ldt.musicr.notification
+
 /**
  * Created by dtrung98
  */
@@ -68,5 +69,16 @@ typealias ActionResponderType<T> = (Action<T>) -> Action<Any>?
  * ```
  */
 interface ActionResponder : ActionResponderType<Any>
-open class Action<T>(val name: String, val data: T? = null, val subData: Any? = null, val subSubData: Any? = null)
-fun ActionResponder.invoke(name: String, data: Any? = null, subData: Any? = null, subSubData: Any? = null) = invoke(Action(name, data, subData, subSubData))
+open class Action<T>(
+  val name: String,
+  val data: T? = null,
+  val subData: Any? = null,
+  val subSubData: Any? = null
+)
+
+fun ActionResponder.invoke(
+  name: String,
+  data: Any? = null,
+  subData: Any? = null,
+  subSubData: Any? = null
+) = invoke(Action(name, data, subData, subSubData))

@@ -1,91 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name= "SurfaceColor">#FFCC00</color>
-    <color name="BackwardColorHeavy">#B0000000</color>
-    <color name="backward_color">#DD000000</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">@color/flatOrange</color>
-    <color name = "Gray">#22000000</color>
-    <color name="NearlyWhite">#44ffffff</color>
-    <color name="flatRed">#FF3B30</color>
-    <color name="FlatGreen">#4CD964</color>
-    <color name="flatOrange">#FF9500</color>
-    <color name="FlatYellow">#FFCC00</color>
-    <color name="FlatTealBlue">#5AC8FA</color>
-    <color name="flatPurple">#5856D6</color>
-    <color name="FlatPink">#FF2D55</color>
-    <color name="flatBlue">#007AFF</color>
+  <color name="SurfaceColor">#FFCC00</color>
+  <color name="BackwardColorHeavy">#B0000000</color>
+  <color name="backward_color">#DD000000</color>
+  <color name="colorPrimary">#3F51B5</color>
+  <color name="colorPrimaryDark">#303F9F</color>
+  <color name="colorAccent">@color/flatOrange</color>
+  <color name="Gray">#22000000</color>
+  <color name="NearlyWhite">#44ffffff</color>
+  <color name="flatRed">#FF3B30</color>
+  <color name="FlatGreen">#4CD964</color>
+  <color name="flatOrange">#FF9500</color>
+  <color name="FlatYellow">#FFCC00</color>
+  <color name="FlatTealBlue">#5AC8FA</color>
+  <color name="flatPurple">#5856D6</color>
+  <color name="FlatPink">#FF2D55</color>
+  <color name="flatBlue">#007AFF</color>
 
-    <color name="HeavyOrange">#AF8700</color>
-    <color name="HeavyRed">#770000</color>
-    <color name="HeavyTealBlue">#0058AA</color>
-    <color name="HeavyYellow">#802D00</color>
-    <color name="HeavyGreen">#005800</color>
-    <color name="HeavyBlue">#00218B</color>
-    <color name="HeavyPurple">#162EA6</color>
-    <color name="HeavyPink">#B60024</color>
+  <color name="HeavyOrange">#AF8700</color>
+  <color name="HeavyRed">#770000</color>
+  <color name="HeavyTealBlue">#0058AA</color>
+  <color name="HeavyYellow">#802D00</color>
+  <color name="HeavyGreen">#005800</color>
+  <color name="HeavyBlue">#00218B</color>
+  <color name="HeavyPurple">#162EA6</color>
+  <color name="HeavyPink">#B60024</color>
 
-    <item name="yellow" type="color">#F7B500</item>
-    <item name="yellow_dark" type="color">#AC7E00</item>
-   <item name="FlatWhite" type="color">#F5F5F5</item>
-    <item name="SplashBackground" type ="color">#f0f0f0</item>
-    <integer-array name="androidcolors">
-        <item>@color/yellow</item>
-        <item>@color/yellow_dark</item>
-    </integer-array>
-    <color name="waveform_selected">#FB5606</color>
-    <color name="waveform_unselected">#A7B2B9</color>
-    <color name="waveform_unselected_bkgnd_overlay">#A1725E</color>
-    <color name="selection_border">#ffffff</color>
-    <color name="playback_indicator">#ffff66</color>
-    <color name="grid_line">#6D6D6D</color>
-    <color name="timecode">#000000</color>
-    <color name="timecode_shadow">#aa000000</color>
-    <color name="md_bottom_sheet_text_color">@color/FlatWhite</color>
-    <color name="background_panel_color">#080808</color>
-    <color name="library_back_color">#FB181818</color>
-    <color name="library_back_color_dd">#DD181818</color>
-    <color name="library_back_color_88">#88181818</color>
-    <color name="shuffle_panel_color">#22FFFFFF</color>
-    <color name="color_aaa">#aaa</color>
-    <color name="white_flat_blue">#DBF0FF</color>
+  <item name="yellow" type="color">#F7B500</item>
+  <item name="yellow_dark" type="color">#AC7E00</item>
+  <item name="FlatWhite" type="color">#F5F5F5</item>
+  <item name="SplashBackground" type="color">#f0f0f0</item>
+  <integer-array name="androidcolors">
+    <item>@color/yellow</item>
+    <item>@color/yellow_dark</item>
+  </integer-array>
+  <color name="waveform_selected">#FB5606</color>
+  <color name="waveform_unselected">#A7B2B9</color>
+  <color name="waveform_unselected_bkgnd_overlay">#A1725E</color>
+  <color name="selection_border">#ffffff</color>
+  <color name="playback_indicator">#ffff66</color>
+  <color name="grid_line">#6D6D6D</color>
+  <color name="timecode">#000000</color>
+  <color name="timecode_shadow">#aa000000</color>
+  <color name="md_bottom_sheet_text_color">@color/FlatWhite</color>
+  <color name="background_panel_color">#080808</color>
+  <color name="library_back_color">#FB181818</color>
+  <color name="library_back_color_dd">#DD181818</color>
+  <color name="library_back_color_88">#88181818</color>
+  <color name="shuffle_panel_color">#22FFFFFF</color>
+  <color name="color_aaa">#aaa</color>
+  <color name="white_flat_blue">#DBF0FF</color>
 
-    <!--grey 300-->
-    <color name="ic_launcher_background">#E0E0E0</color>
+  <!--grey 300-->
+  <color name="ic_launcher_background">#E0E0E0</color>
 
-    <color name="twenty_percent_black_overlay">#34000000</color>
-    <color name="fifty_percent_black_overlay">#88000000</color>
+  <color name="twenty_percent_black_overlay">#34000000</color>
+  <color name="fifty_percent_black_overlay">#88000000</color>
 
-    <color name="app_shortcut_default_foreground">@color/flatBlue</color>
-    <color name="app_shortcut_default_background">@color/FlatTealBlue</color>
-    <color name="lyric_end_color">#DD080808</color>
-    <color name="lyric_center_color">#66080808</color>
-    <color name="background_artist_header_color">#88080808</color>
-    <color name="success_stroke_color">#A5DC86</color>
+  <color name="app_shortcut_default_foreground">@color/flatBlue</color>
+  <color name="app_shortcut_default_background">@color/FlatTealBlue</color>
+  <color name="lyric_end_color">#DD080808</color>
+  <color name="lyric_center_color">#66080808</color>
+  <color name="background_artist_header_color">#88080808</color>
+  <color name="success_stroke_color">#A5DC86</color>
 
-    <color name="rsbColorSeekBarDefault">#c3c3c3</color>
-    <color name="rsbColorThumbPressed">#FFE7E7E7</color>
-    <color name="rsbColorThumbDefault">#FFFFFF</color>
-    <color name="rsbColorThumbBorder">#FFD7D7D7</color>
-    <color name="colorProgress">#ffffbb33</color>
-    <color name="FloatingButtonColor">#FBFFBD</color>
-    <color name="SplashColor">@android:color/black</color>
+  <color name="rsbColorSeekBarDefault">#c3c3c3</color>
+  <color name="rsbColorThumbPressed">#FFE7E7E7</color>
+  <color name="rsbColorThumbDefault">#FFFFFF</color>
+  <color name="rsbColorThumbBorder">#FFD7D7D7</color>
+  <color name="colorProgress">#ffffbb33</color>
+  <color name="FloatingButtonColor">#FBFFBD</color>
+  <color name="SplashColor">@android:color/black</color>
 
-    <color name="Tomato">#ff6347</color>
-    <color name="lightOrange">#ffaa00</color>
-    <color name="lightGreen">#3dcc3d</color>
-    <color name="lightBlue">#00aaff</color>
-    <color name="lightTealBlue">#2bd9d9</color>
-    <color name="LightYellow">#ffd426</color>
+  <color name="Tomato">#ff6347</color>
+  <color name="lightOrange">#ffaa00</color>
+  <color name="lightGreen">#3dcc3d</color>
+  <color name="lightBlue">#00aaff</color>
+  <color name="lightTealBlue">#2bd9d9</color>
+  <color name="LightYellow">#ffd426</color>
 
-    <color name="blueStart">#4EFFF3</color>
-    <color name="blueEnd">#0ca6f9</color>
-    <color name="purpleStart">#a369ff</color>
-    <color name="purpleEnd">#0e56ff</color>
-    <color name="roseStart">#FF6A00</color>
-    <color name="roseEnd">#ef0276</color>
-    <color name="greenStart">#a7f56e</color>
-    <color name="greenEnd">#11c612</color>
-    <color name="flatGreenEnd">#00BF84</color>
+  <color name="blueStart">#4EFFF3</color>
+  <color name="blueEnd">#0ca6f9</color>
+  <color name="purpleStart">#a369ff</color>
+  <color name="purpleEnd">#0e56ff</color>
+  <color name="roseStart">#FF6A00</color>
+  <color name="roseEnd">#ef0276</color>
+  <color name="greenStart">#a7f56e</color>
+  <color name="greenEnd">#11c612</color>
+  <color name="flatGreenEnd">#00BF84</color>
 </resources>

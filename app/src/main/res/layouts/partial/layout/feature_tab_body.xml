@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-android:id="@+id/main_content_linear"
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:orientation="vertical"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:animateLayoutChanges="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/main_content_linear"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:animateLayoutChanges="true"
+  android:orientation="vertical">
 
-<include android:id="@+id/playlist_frame"
-    layout="@layout/playlists_piece_layout"/>
-<include android:id="@+id/song_frame"
-    layout="@layout/song_piece_layout"/>
-<!--<include layout = "@layout/main_screen_album_piece"/>-->
+  <include
+    android:id="@+id/playlist_frame"
+    layout="@layout/playlists_piece_layout" />
+
+  <include
+    android:id="@+id/song_frame"
+    layout="@layout/song_piece_layout" />
+  <!--<include layout = "@layout/main_screen_album_piece"/>-->
 
 </LinearLayout>

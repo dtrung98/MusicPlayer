@@ -5,15 +5,15 @@ import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
 public class ImageBackRelativeLayout extends RelativeLayout {
-    public ImageBackRelativeLayout(Context context) {
-        super(context);
-    }
+  public ImageBackRelativeLayout(Context context) {
+    super(context);
+  }
 
-    public ImageBackRelativeLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+  public ImageBackRelativeLayout(Context context, AttributeSet attrs) {
+    super(context, attrs);
+  }
 
-    public ImageBackRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+  public ImageBackRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+  }
 }

@@ -11,13 +11,14 @@ import android.widget.Scroller
  * animation in response to the fling gesture of the viewpager. DurationScrollMillis
  * defines the duration for scroll animation.
  */
-class SmoothScroller(context: Context, durationScroll: Int) : Scroller(context, DecelerateInterpolator()) {
-    private var durationScrollMillis = 1
-    override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
-        super.startScroll(startX, startY, dx, dy, durationScrollMillis)
-    }
+class SmoothScroller(context: Context, durationScroll: Int) :
+  Scroller(context, DecelerateInterpolator()) {
+  private var durationScrollMillis = 1
+  override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
+    super.startScroll(startX, startY, dx, dy, durationScrollMillis)
+  }
 
-    init {
-        durationScrollMillis = durationScroll
-    }
+  init {
+    durationScrollMillis = durationScroll
+  }
 }

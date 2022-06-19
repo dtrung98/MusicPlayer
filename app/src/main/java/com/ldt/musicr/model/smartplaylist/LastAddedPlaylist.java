@@ -3,9 +3,10 @@ package com.ldt.musicr.model.smartplaylist;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
-import com.ldt.musicr.R;
+import com.elmurzaev.music.R;
 import com.ldt.musicr.loader.medialoader.LastAddedLoader;
 import com.ldt.musicr.model.Song;
 import com.ldt.musicr.util.MusicUtil;
@@ -18,52 +19,53 @@ import java.util.ArrayList;
  */
 public class LastAddedPlaylist extends AbsSmartPlaylist {
 
-    public LastAddedPlaylist(@NonNull Context context) {
-        super(context.getString(R.string.playlist_last_added), R.drawable.ic_library_add_white_24dp);
+  public static final Parcelable.Creator<LastAddedPlaylist> CREATOR =
+     new Parcelable.Creator<LastAddedPlaylist>() {
+    public LastAddedPlaylist createFromParcel(Parcel source) {
+      return new LastAddedPlaylist(source);
     }
 
-    @NonNull
-    @Override
-    public String getInfoString(@NonNull Context context) {
-        String cutoff = PreferenceUtil.getInstance(context).getLastAddedCutoffText(context);
-
-        return MusicUtil.buildInfoString(
-            cutoff,
-            super.getInfoString(context)
-        );
+    public LastAddedPlaylist[] newArray(int size) {
+      return new LastAddedPlaylist[size];
     }
+  };
 
-    @NonNull
-    @Override
-    public ArrayList<Song> getSongs(@NonNull Context context) {
-        return LastAddedLoader.getLastAddedSongs(context, null);
-    }
+  public LastAddedPlaylist(@NonNull Context context) {
+    super(context.getString(R.string.playlist_last_added), R.drawable.ic_library_add_white_24dp);
+  }
 
-    @Override
-    public void clear(@NonNull Context context) {
-    }
+  protected LastAddedPlaylist(Parcel in) {
+    super(in);
+  }
 
-    @Override
-    public boolean isClearable() {
-        return false;
-    }
+  @NonNull
+  @Override
+  public String getInfoString(@NonNull Context context) {
+    String cutoff = PreferenceUtil.getInstance(context).getLastAddedCutoffText(context);
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
+    return MusicUtil.buildInfoString(
+       cutoff,
+       super.getInfoString(context)
+    );
+  }
 
-    protected LastAddedPlaylist(Parcel in) {
-        super(in);
-    }
+  @NonNull
+  @Override
+  public ArrayList<Song> getSongs(@NonNull Context context) {
+    return LastAddedLoader.getLastAddedSongs(context, null);
+  }
 
-    public static final Parcelable.Creator<LastAddedPlaylist> CREATOR = new Parcelable.Creator<LastAddedPlaylist>() {
-        public LastAddedPlaylist createFromParcel(Parcel source) {
-            return new LastAddedPlaylist(source);
-        }
+  @Override
+  public void clear(@NonNull Context context) {
+  }
 
-        public LastAddedPlaylist[] newArray(int size) {
-            return new LastAddedPlaylist[size];
-        }
-    };
+  @Override
+  public boolean isClearable() {
+    return false;
+  }
+
+  @Override
+  public int describeContents() {
+    return 0;
+  }
 }
