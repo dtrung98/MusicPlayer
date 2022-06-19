@@ -10,10 +10,10 @@ android {
 
   defaultConfig {
     applicationId 'com.elmurzaev.music'
-    minSdkVersion 21
+    minSdkVersion 23
     targetSdkVersion 32
-    versionCode 4
-    versionName '1.2.5'
+    versionCode 15
+    versionName '1.5'
 
     renderscriptTargetApi 29
     renderscriptSupportModeEnabled true
